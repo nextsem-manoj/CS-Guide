@@ -91,29 +91,12 @@ function GitLayoutContent({ children }: { children: React.ReactNode }) {
     return () => document.removeEventListener('fullscreenchange', onFsChange);
   }, []);
 
-  const pathname = typeof window !== 'undefined' ? window.location.pathname : '';
-  useEffect(() => {
-    const isLesson = pathname?.includes('/git/');
-    if (isLesson && mounted) {
-      const t = setTimeout(() => enterFullscreen(), 600);
-      return () => clearTimeout(t);
-    }
-  }, [pathname, mounted, enterFullscreen]);
-
   return (
     <div ref={lessonContainerRef} className="min-h-screen flex flex-col bg-[#060813] text-slate-100 font-sans selection:bg-[#c1a648]/30 transition-colors duration-300">
-      {isFullscreen && showFsHint && (
-        <div className="fixed top-4 left-1/2 -translate-x-1/2 z-[9999] bg-black/80 text-white text-xs px-4 py-2 rounded-full backdrop-blur-md pointer-events-none shadow-lg">
-          📖 Tap anywhere to exit fullscreen
-        </div>
-      )}
-      {!isFullscreen && (
-        <NsSubjectNavBar currentUser={currentUser} onSignIn={handleSignIn} onToggleSidebar={() => setSidebarOpen(prev => !prev)} />
-      )}
+      <NsSubjectNavBar currentUser={currentUser} onSignIn={handleSignIn} onToggleSidebar={() => setSidebarOpen(prev => !prev)} />
       <div
         className="flex-1 flex flex-col md:flex-row w-full min-w-0 bg-[#060813]"
         style={mounted && !isMobile ? { paddingLeft: `calc(5vw + ${effectiveSidebarWidth}px)`, paddingRight: '5vw' } : undefined}
-        onClick={isFullscreen ? exitFullscreen : undefined}
       >
         <BookSidebar
           isOpen={sidebarOpen}
