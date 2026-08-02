@@ -1,6 +1,6 @@
 # understand current workspace
 
-*Saved on: 2/8/2026, 11:13:34 pm*
+*Saved on: 2/8/2026, 11:14:14 pm*
 *Conversation ID: 39b50c14-558e-4d94-a8c2-8d1bed3fb3e7*
 
 ---
@@ -1651,6 +1651,12 @@ Could you specify which particular errors or areas you'd like me to correct firs
 2. **Layout & UI**: Fix layout wrapping, duplicate titles, or screen overflow issues across lesson pages.
 3. **Interactive Quizzes & Exercises**: Fix MCQ answer states or progress saving logic.
 4. **All of the above**: Perform a comprehensive overhaul of all detected issues.
+
+---
+
+### 👤 User
+
+instead of this ugly design put current lessons title or topic and remove every thing but keep prev next and save buttons only
 
 ---
 
