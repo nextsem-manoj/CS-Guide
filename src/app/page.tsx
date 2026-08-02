@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import SemesterSubjectsDashboard from './bca/[semester]/SemesterClient';
+import HomeClient from './HomeClient';
 
 export const metadata: Metadata = {
   title: "IGNOU BCA 1st Semester Hub | Er. Manoj Kumar | Nextsem Online",
@@ -18,5 +18,6 @@ export const metadata: Metadata = {
 };
 
 export default function Home() {
-  return <SemesterSubjectsDashboard semester="1" />;
+  return <HomeClient />;
 }
+
