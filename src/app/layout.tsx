@@ -1,7 +1,14 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono, Inter, Lora, Outfit } from "next/font/google";
-
+import Script from "next/script";
 import "./globals.css";
+import { ThemeProvider } from "@/components/ThemeProvider";
+import { ProgressProvider } from "@/context/ProgressContext";
+import OfflineGuard from "@/components/OfflineGuard";
+import { FontScaleHydrator } from "@/components/FontSizeControl";
+import SplashScreen from "@/components/SplashScreen";
+import GlobalNavigationWidget from "@/components/layout/GlobalNavigationWidget";
+import BottomNavigation from "@/components/layout/BottomNavigation";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,22 +35,10 @@ const outfit = Outfit({
   subsets: ["latin"],
 });
 
-export const viewport: Viewport = {
-  width: "device-width",
-  initialScale: 1,
-  minimumScale: 0.5,
-  maximumScale: 5,
-  userScalable: true,
-};
-
-
 export const metadata: Metadata = {
-  metadataBase: new URL("https://nextsem.online"),
-  title: {
-    default: "Nextsem Academy — India's #1 Free Multilingual Full Stack Learning Platform",
-    template: "%s | Nextsem Academy",
-  },
-  description: "Learn Full Stack Web Development for FREE in Hindi, Hinglish & English. HTML, CSS, JavaScript, React, Node.js, Next.js, Python, DSA, SQL, MongoDB & more — with interactive lessons, MCQ quizzes, and Kid + Pro mode. India's #1 multilingual developer learning platform.",
+  title: "IGNOU BCA 1st Semester Hub | Er. Manoj Kumar | Nextsem Online",
+  description: "Official IGNOU BCA 1st Semester learning dashboard featuring line-by-line textbook units, bilingual English & Hinglish lessons, MCQs, and practical lab simulators by Er. Manoj Kumar.",
+  manifest: "/manifest.json",
   keywords: [
     "full stack web development course free",
     "learn html css javascript in hindi",
@@ -62,45 +57,39 @@ export const metadata: Metadata = {
     "typescript course free hindi",
     "devops docker course hindi",
     "sql database tutorial hindi",
-    "git github tutorial hindi free",
-    "system design course hindi",
-    "windows cmd cli tutorial hindi",
+    "git github tutorial hindi free"
   ],
-  manifest: "/manifest.json",
-  icons: {
-    icon: [
-      { url: "/logo.svg", type: "image/svg+xml" },
-      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
-      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
-      { url: "/favicon.png", sizes: "512x512", type: "image/png" },
-    ],
-    apple: [
-      { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
-    ],
+  authors: [{ name: "Er. Manoj Kumar", url: "https://nextsem.online" }],
+  creator: "Er. Manoj Kumar",
+  publisher: "Nextsem Academy",
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
   },
   openGraph: {
-    title: "Nextsem Academy — India's #1 Free Multilingual Full Stack Platform",
-    description: "Learn Full Stack Web Development FREE in Hindi, Hinglish & English. HTML, CSS, JS, React, Node.js, Next.js, Python, DSA, SQL, MongoDB & more — interactive lessons with MCQ quizzes.",
-    url: "https://nextsem.online",
+    title: "IGNOU BCA 1st Semester Hub | Er. Manoj Kumar",
+    description: "Line-by-line IGNOU BCA Semester 1 curriculum with interactive units, bilingual support, and exam preparation by Er. Manoj Kumar.",
+    url: "https://ignou.nextsem.online",
     siteName: "Nextsem Academy",
-    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Nextsem Academy — Free Full Stack Web Dev in Hindi" }],
+    images: [
+      {
+        url: "https://nextsem.online/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Nextsem Academy - Multilingual Coding & IT Education Platform",
+      },
+    ],
+    locale: "en_US",
     type: "website",
-    locale: "en_IN",
   },
   twitter: {
     card: "summary_large_image",
-    site: "@nextsem",
-    title: "Nextsem Academy — Free Full Stack Course in Hindi & English",
-    description: "India's #1 multilingual coding platform. Learn HTML, React, Node.js, Python, DSA & more for FREE!",
-    images: ["/og-image.png"],
+    title: "IGNOU BCA 1st Semester Hub | Er. Manoj Kumar",
+    description: "Bilingual IGNOU BCA 1st Semester courses, lab simulators, and interactive MCQs.",
+    images: ["https://nextsem.online/og-image.png"],
+    creator: "@nextsemacademy",
   },
-  verification: {
-    google: "FjEmb6Ud3RTb754EJVil2PWI7iZoNiNs-C--fAatkzo",
-  },
-  alternates: {
-    canonical: "https://nextsem.online",
-  },
-  category: "education",
   robots: {
     index: true,
     follow: true,
@@ -112,31 +101,23 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
-  other: {
-    "google-adsense-account": "ca-pub-4242865347895866",
+  icons: {
+    icon: "/icon.svg",
+    apple: "/apple-touch-icon.png",
   },
 };
 
-
-import Script from "next/script";
-import { ThemeProvider } from "../components/ThemeProvider";
-import { ProgressProvider } from "../context/ProgressContext";
-import BottomNavigation from "../components/BottomNavigation";
-import AndroidBackButtonHandler from "../components/AndroidBackButtonHandler";
-import CookieBanner from "../components/CookieBanner";
-
-
-import TranslateWidget from "../components/TranslateWidget";
-import SearchWidget from "../components/SearchWidget";
-import GlobalNavigationWidget from "../components/GlobalNavigationWidget";
-import OnboardingTour from "../components/OnboardingTour";
-import UpdateBanner from "../components/UpdateBanner";
-import SplashScreen from "../components/SplashScreen";
-
-import RateAppPrompt from "../components/RateAppPrompt";
-import OfflineGuard from "../components/OfflineGuard";
-import { FontScaleHydrator } from "../components/FontSizeControl";
-
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#060c18" },
+    { media: "(prefers-color-scheme: dark)", color: "#060c18" },
+  ],
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  minimumScale: 0.5,
+  userScalable: true,
+};
 
 export default function RootLayout({
   children,
@@ -157,24 +138,6 @@ export default function RootLayout({
           strategy="beforeInteractive"
         />
 
-        <Script
-          id="amp-ad-script"
-          async
-          src="https://cdn.ampproject.org/v0/amp-ad-0.1.js"
-          custom-element="amp-ad"
-          strategy="afterInteractive"
-        />
-
-        {/* Google AdSense Verification */}
-        <Script
-          id="adsense-verification"
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4242865347895866"
-          crossOrigin="anonymous"
-          strategy="afterInteractive"
-        />
-
-
         <ThemeProvider
           attribute="class"
           themes={["dark"]}
@@ -188,22 +151,17 @@ export default function RootLayout({
             <OfflineGuard />
             <SplashScreen />
 
-            <RateAppPrompt />
-            <UpdateBanner />
-            {children}
-            <CookieBanner />
-            <AndroidBackButtonHandler />
-            <TranslateWidget />
-            <SearchWidget />
+            {/* Global Sticky Navigation (Search bar + Subject Selector) */}
             <GlobalNavigationWidget />
+
+            <div className="flex-1 w-full pb-20 md:pb-0">
+              {children}
+            </div>
 
             <BottomNavigation />
           </ProgressProvider>
         </ThemeProvider>
       </body>
-
-
-
     </html>
   );
 }
