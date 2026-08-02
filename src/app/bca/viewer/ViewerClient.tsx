@@ -73,11 +73,16 @@ export default function TextbookViewer() {
     ? fileUrl
     : `https://nextsem.online${fileUrl.startsWith('/') ? '' : '/'}${fileUrl}`;
 
-  const isPdfFile = fileUrl.toLowerCase().endsWith('.pdf') || fileUrl.includes('/BCA_NEW_Books/');
+  const isExternalPdf = fileUrl.startsWith('http') && !fileUrl.includes('nextsem.online');
+  const isPdfFile = fileUrl.toLowerCase().endsWith('.pdf') || fileUrl.includes('/BCA_NEW_Books/') || isExternalPdf;
+
+  const mozillaDocsUrl = `https://mozilla.github.io/pdf.js/web/viewer.html?file=${encodeURIComponent(absolutePdfUrl)}`;
   const googleDocsUrl = `https://docs.google.com/gview?embedded=true&url=${encodeURIComponent(absolutePdfUrl)}`;
 
-  // Default to direct PDF in-app viewer (false = direct native viewer, true = google docs)
-  const [useGoogleDocs, setUseGoogleDocs] = useState<boolean>(false);
+  // Default viewer mode: 'mozilla' for external PDFs, 'direct' for local/CDN PDFs
+  const [viewMode, setViewMode] = useState<'mozilla' | 'direct' | 'google'>(
+    isExternalPdf ? 'mozilla' : 'direct'
+  );
   const [showLaunchModal, setShowLaunchModal] = useState<boolean>(false);
   const [isOpeningNative, setIsOpeningNative] = useState<boolean>(false);
 
@@ -86,9 +91,15 @@ export default function TextbookViewer() {
   const [iframeTimedOut, setIframeTimedOut] = useState<boolean>(false);
   const [autoDownloaded, setAutoDownloaded] = useState<boolean>(false);
 
-  let iframeSrc = useGoogleDocs && isPdfFile ? googleDocsUrl : fileUrl;
-  if (fileUrl && pageParam && !fileUrl.includes('#page=') && !useGoogleDocs) {
-    iframeSrc = `${fileUrl}#page=${pageParam}`;
+  let iframeSrc = fileUrl;
+  if (viewMode === 'mozilla') {
+    iframeSrc = mozillaDocsUrl;
+  } else if (viewMode === 'google') {
+    iframeSrc = googleDocsUrl;
+  } else {
+    if (fileUrl && pageParam && !fileUrl.includes('#page=')) {
+      iframeSrc = `${fileUrl}#page=${pageParam}`;
+    }
   }
 
   // Trigger browser file download automatically
@@ -384,12 +395,25 @@ export default function TextbookViewer() {
           <div className="hidden sm:flex items-center bg-slate-900 p-0.5 rounded-xl border border-slate-800 text-[10px]">
             <button
               onClick={() => {
-                setUseGoogleDocs(false);
+                setViewMode('mozilla');
                 setIframeLoaded(false);
                 setIframeTimedOut(false);
               }}
               className={`px-2.5 py-1 rounded-lg font-bold transition-all cursor-pointer ${
-                !useGoogleDocs ? "bg-cyan-600 text-white shadow-sm" : "text-slate-400 hover:text-white"
+                viewMode === 'mozilla' ? "bg-emerald-600 text-white shadow-sm" : "text-slate-400 hover:text-white"
+              }`}
+              title="View PDF via Mozilla PDF.js Engine"
+            >
+              ⚡ Mozilla Engine
+            </button>
+            <button
+              onClick={() => {
+                setViewMode('direct');
+                setIframeLoaded(false);
+                setIframeTimedOut(false);
+              }}
+              className={`px-2.5 py-1 rounded-lg font-bold transition-all cursor-pointer ${
+                viewMode === 'direct' ? "bg-cyan-600 text-white shadow-sm" : "text-slate-400 hover:text-white"
               }`}
               title="View PDF directly in browser"
             >
@@ -397,12 +421,12 @@ export default function TextbookViewer() {
             </button>
             <button
               onClick={() => {
-                setUseGoogleDocs(true);
+                setViewMode('google');
                 setIframeLoaded(false);
                 setIframeTimedOut(false);
               }}
               className={`px-2.5 py-1 rounded-lg font-bold transition-all cursor-pointer ${
-                useGoogleDocs ? "bg-cyan-600 text-white shadow-sm" : "text-slate-400 hover:text-white"
+                viewMode === 'google' ? "bg-cyan-600 text-white shadow-sm" : "text-slate-400 hover:text-white"
               }`}
               title="View PDF via Google Docs"
             >
