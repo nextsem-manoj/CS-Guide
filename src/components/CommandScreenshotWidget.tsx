@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import { Camera, Upload, Trash2, CheckCircle2, Image as ImageIcon, ZoomIn, X } from "lucide-react";
+import { Camera, Upload, Trash2, ZoomIn, X } from "lucide-react";
 
 interface CommandScreenshotWidgetProps {
   lessonId: number;
@@ -16,17 +16,34 @@ export default function CommandScreenshotWidget({
 }: CommandScreenshotWidgetProps) {
   const [imageSrc, setImageSrc] = useState<string | null>(null);
   const [isZoomed, setIsZoomed] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const storageKey = `nextsem_screenshot_${lessonSlug || lessonId}`;
 
+  // 1. Detect Admin / Author status (localhost or author email)
   useEffect(() => {
-    // 1. Try loading user uploaded screenshot from localStorage
+    if (typeof window !== "undefined") {
+      const isDev = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
+      const rawUser = localStorage.getItem("nextsem_user");
+      let userEmail = "";
+      try {
+        if (rawUser) userEmail = JSON.parse(rawUser)?.email || "";
+      } catch (_) {}
+      
+      const isAdminEmail = userEmail.includes("manoj") || userEmail.includes("admin") || userEmail.includes("nextsem");
+      const isAdminStorage = localStorage.getItem("nextsem_is_admin") === "true";
+
+      setIsAdmin(isDev || isAdminEmail || isAdminStorage);
+    }
+  }, []);
+
+  // 2. Load screenshot if available
+  useEffect(() => {
     const saved = localStorage.getItem(storageKey);
     if (saved) {
       setImageSrc(saved);
     } else {
-      // 2. Fallback check for static public image if available
       const staticPath = `/screenshots/cli/${lessonSlug}.png`;
       const img = new Image();
       img.src = staticPath;
@@ -62,8 +79,9 @@ export default function CommandScreenshotWidget({
     reader.readAsDataURL(file);
   };
 
-  // Handle Clipboard Paste
+  // Handle Clipboard Paste (Only when Admin is active)
   useEffect(() => {
+    if (!isAdmin) return;
     const handlePaste = (e: ClipboardEvent) => {
       const items = e.clipboardData?.items;
       if (items) {
@@ -77,12 +95,17 @@ export default function CommandScreenshotWidget({
     };
     window.addEventListener("paste", handlePaste);
     return () => window.removeEventListener("paste", handlePaste);
-  }, [storageKey]);
+  }, [storageKey, isAdmin]);
 
   const handleRemove = () => {
     setImageSrc(null);
     localStorage.removeItem(storageKey);
   };
+
+  // For Public Visitors: If NO screenshot is available, hide completely (return null)
+  if (!imageSrc && !isAdmin) {
+    return null;
+  }
 
   return (
     <div className="my-8 space-y-3 text-left">
@@ -103,14 +126,16 @@ export default function CommandScreenshotWidget({
               <ZoomIn size={14} />
               <span>Zoom</span>
             </button>
-            <button
-              onClick={handleRemove}
-              className="px-2.5 py-1 bg-red-950/40 hover:bg-red-900/60 border border-red-500/30 text-red-400 rounded-lg text-xs font-bold transition-all flex items-center gap-1 cursor-pointer"
-              title="Remove Screenshot"
-            >
-              <Trash2 size={14} />
-              <span>Replace</span>
-            </button>
+            {isAdmin && (
+              <button
+                onClick={handleRemove}
+                className="px-2.5 py-1 bg-red-950/40 hover:bg-red-900/60 border border-red-500/30 text-red-400 rounded-lg text-xs font-bold transition-all flex items-center gap-1 cursor-pointer"
+                title="Remove Screenshot"
+              >
+                <Trash2 size={14} />
+                <span>Replace</span>
+              </button>
+            )}
           </div>
         )}
       </div>
@@ -146,7 +171,7 @@ export default function CommandScreenshotWidget({
           </div>
         </div>
       ) : (
-        /* Dropzone Upload & Paste Box */
+        /* Dropzone Upload & Paste Box (Admin Only) */
         <div 
           onClick={() => fileInputRef.current?.click()}
           className="border-2 border-dashed border-slate-700 hover:border-[#04AA6D] bg-slate-900/30 hover:bg-slate-900/60 p-6 sm:p-8 rounded-2xl text-center transition-all cursor-pointer space-y-3 group"
@@ -156,11 +181,14 @@ export default function CommandScreenshotWidget({
           </div>
 
           <div className="space-y-1">
+            <div className="inline-block px-2.5 py-0.5 rounded bg-amber-950/60 border border-amber-500/30 text-amber-400 text-[10px] font-black uppercase tracking-wider mb-1">
+              🔒 Author Admin Controls Only
+            </div>
             <h4 className="text-base font-bold text-white">
               Upload / Paste PC Command Screenshot
             </h4>
             <p className="text-xs text-slate-400 max-w-md mx-auto leading-relaxed">
-              Take a screenshot of the actual command running on your PC terminal, then <strong className="text-emerald-400">paste (Ctrl+V)</strong> or click to select image.
+              Take a screenshot of the actual command running on your PC terminal, then <strong className="text-emerald-400">paste (Ctrl+V)</strong> or click to select image. Public users will see only the finished screenshot.
             </p>
           </div>
 
