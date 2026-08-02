@@ -686,7 +686,10 @@ export default function HomeClient() {
               </div>
             </div>
           </div>
-           {/* ── IGNOU BCA PRACTICAL LAB SIMULATORS BAND ── */}
+        </div>
+      </section>
+
+      {/* ── IGNOU BCA PRACTICAL LAB SIMULATORS BAND ── */}
       <section className="bg-[#0b1328] text-white py-16 px-4 md:px-8 border-t border-slate-800">
         <div className="max-w-[1200px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
           <div className="text-left space-y-4">
