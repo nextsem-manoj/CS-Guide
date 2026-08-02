@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { cliLessons } from "../data/cliLessonsData";
 import AdSenseBanner from "./AdSenseBanner";
+import CommandScreenshotWidget from "./CommandScreenshotWidget";
 import { useProgress } from "../context/ProgressContext";
 import { AdMob } from "@capacitor-community/admob";
 import { triggerCelebration } from "../lib/celebration";
@@ -358,8 +359,8 @@ export default function CliLessonClient({ lesson }: CliLessonClientProps) {
           {renderContentText(currentContent)}
         </article>
 
-        {/* Visual Demonstration Topic Animation GIF Card */}
-        <TopicAnimationWidget lessonId={lesson.id} lessonTitle={lesson.title} type="cli" />
+        {/* Actual PC Command Screenshot Widget (Upload / Paste / Preview) */}
+        <CommandScreenshotWidget lessonId={lesson.id} lessonSlug={lesson.slug} lessonTitle={lesson.title} />
       </div>
 
       {/* Nextsem Academy CLI Quiz Reminder Card (Replaces inline question block - Image 86) */}
@@ -383,29 +384,7 @@ export default function CliLessonClient({ lesson }: CliLessonClientProps) {
         </Link>
       </div>
 
-      {/* Rewarded Ad PDF Download Option */}
-      <div className="w-full flex justify-center pt-2">
-        <button
-          onClick={handlePdfDownload}
-          disabled={isDownloading}
-          className="flex items-center gap-2 px-5 py-3 rounded-2xl font-black text-xs bg-slate-900 border border-slate-850 hover:border-[#c1a648]/50 hover:bg-slate-850 text-[#c1a648] hover:text-white transition-all shadow-md active:scale-95 disabled:opacity-50 cursor-pointer"
-        >
-          {isDownloading ? (
-            <>
-              <Loader2 size={14} className="animate-spin text-[#c1a648]" />
-              <span>{downloadStatus}</span>
-            </>
-          ) : (
-            <>
-              <FileText size={14} />
-              <span>Download Lesson PDF</span>
-              <span className="flex items-center gap-0.5 px-1.5 py-0.5 rounded-md bg-[#c1a648]/20 text-[#c1a648] text-[8px] font-black tracking-wider uppercase animate-pulse">
-                <Sparkles size={8} /> Watch Ad
-              </span>
-            </>
-          )}
-        </button>
-      </div>
+
 
       {/* Lesson Foot Pagination — visible on desktop; mobile uses bottom 5-tab bar */}
       <div className="hidden md:flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-slate-850 pt-6">
