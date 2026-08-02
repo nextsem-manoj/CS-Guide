@@ -824,7 +824,7 @@ export default function HomeClient() {
               While using IGNOU BCA Study Hub, you agree to have read and accepted our <Link href="/terms" className="underline hover:text-slate-300">terms of use</Link>, <Link href="/privacy" className="underline hover:text-slate-300">cookie and privacy policy</Link>.
             </p>
             <p className="pt-2 text-[#c1a648] font-bold uppercase tracking-wider font-sans">
-              COPYRIGHT {new Date().getFullYear()} BY IGNOU BCA HUB • NEXTSEM.ONLINE. ALL RIGHTS RESERVED. AUTHOR: ER. MANOJ KUMAR.
+              COPYRIGHT 2026 BY IGNOU BCA HUB • NEXTSEM.ONLINE. ALL RIGHTS RESERVED. AUTHOR: ER. MANOJ KUMAR.
             </p>
           </div>
         </div>
