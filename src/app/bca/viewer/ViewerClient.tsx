@@ -64,8 +64,8 @@ export default function TextbookViewer() {
   const router = useRouter();
   const { completedChapters, markCompleted, markIncomplete } = useProgress();
 
-  const fileUrl = searchParams.get('file') || '';
-  const fileTitle = searchParams.get('title') || 'Textbook Unit';
+  const fileUrl = searchParams.get('url') || searchParams.get('file') || '';
+  const fileTitle = searchParams.get('title') || searchParams.get('fallback') || 'Textbook Unit';
   const pageParam = searchParams.get('page');
 
   // Compute canonical absolute PDF URL
