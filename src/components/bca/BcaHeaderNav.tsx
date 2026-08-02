@@ -47,17 +47,21 @@ export default function BcaHeaderNav({
           </button>
         </div>
 
-        {/* Right: Golden NS Logo Badge Header Link */}
+        {/* Right: IGNOU Logo Badge Header Link */}
         <div className="flex items-center gap-2">
           <Link
             href="/"
-            className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-[#0c1328] border border-amber-500/40 text-amber-300 hover:border-amber-400 text-xs font-black shadow-md transition-all active:scale-95 cursor-pointer"
+            className="flex items-center gap-2 px-2.5 py-1 rounded-xl bg-[#0c1328] border border-emerald-500/40 text-white hover:border-emerald-400 text-xs font-black shadow-md transition-all active:scale-95 cursor-pointer"
           >
-            <div className="w-5 h-5 rounded-lg bg-[#09101f] border border-amber-400/50 flex items-center justify-center text-amber-400 font-black text-[10px]">
-              NS
+            <img src="/logo.svg" alt="IGNOU Logo" className="w-6 h-6 rounded-md border border-emerald-500/20 shrink-0" />
+            <div className="flex flex-col leading-none text-left">
+              <span className="font-black text-xs tracking-tight text-white uppercase">
+                IGNOU
+              </span>
+              <span className="text-[8px] font-mono text-[#04AA6D] font-bold tracking-tight">
+                ignou.nextsem.online
+              </span>
             </div>
-            <span className="hidden sm:inline text-amber-200">NextSem</span>
-            <span className="text-[9px] bg-amber-400/20 text-amber-300 border border-amber-400/50 px-1.5 py-0.5 rounded-md font-black">v29</span>
           </Link>
         </div>
       </header>

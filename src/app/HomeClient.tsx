@@ -193,11 +193,16 @@ export default function HomeClient() {
           
           {/* Left Side Branding and Links */}
           <div className="flex items-center gap-4 lg:gap-6">
-            <Link href="/" className="flex items-center gap-2 select-none group">
-              <img src="/logo.svg" alt="Nextsem Logo" className="w-8 h-8 rounded-lg border border-emerald-500/20 group-hover:scale-105 transition-transform select-none" />
-              <span className="font-black text-base tracking-tight text-slate-800 dark:text-white uppercase">
-                Nextsem<span className="text-[#04AA6D] lowercase font-bold">.online</span>
-              </span>
+            <Link href="/" className="flex items-center gap-2.5 select-none group">
+              <img src="/logo.svg" alt="IGNOU Logo" className="w-8 h-8 rounded-lg border border-emerald-500/20 group-hover:scale-105 transition-transform select-none shrink-0" />
+              <div className="flex flex-col leading-none">
+                <span className="font-black text-lg tracking-tight text-slate-800 dark:text-white uppercase">
+                  IGNOU
+                </span>
+                <span className="text-[10px] font-mono text-[#04AA6D] font-bold tracking-tight mt-0.5">
+                  ignou.nextsem.online
+                </span>
+              </div>
             </Link>
 
             {/* Desktop Navbar Links */}
