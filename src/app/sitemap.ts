@@ -8,26 +8,43 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = "https://ignou.nextsem.online";
 
   // Base paths
-  const baseRoutes = ["", "/about", "/contact", "/playground", "/privacy", "/profile", "/terms", "/course", "/course/projects", "/cmd", "/html", "/bca/semester-1"].map((route) => ({
+  const baseRoutes = [
+    "",
+    "/bca",
+    "/bca/semester-1",
+    "/bca/1",
+    "/bca/2",
+    "/bca/3",
+    "/bca/4",
+    "/bca/5",
+    "/bca/6",
+    "/bca/semmy-ai",
+    "/cmd",
+    "/about",
+    "/contact",
+    "/privacy",
+    "/terms"
+  ].map((route) => ({
     url: `${baseUrl}${route}`,
     lastModified: new Date(),
     changeFrequency: "weekly" as const,
-    priority: route === "" ? 1.0 : route === "/bca/semester-1" ? 0.95 : 0.8,
+    priority: route === "" || route === "/bca/semester-1" || route === "/bca" ? 1.0 : 0.9,
   }));
 
   // BCA 1st Semester Subject routes
   const bcaSubjectRoutes = [
     "/bca/semester-1/bcs-011-computer-basics",
     "/bca/semester-1/bcs-011-computer-basics/unit-1-introduction-to-computer-systems",
-    "/bca/semester-1/bcsl-013-pc-software-lab",
-    "/bca/semester-1/bcs-012-mathematics",
+    "/bca/semester-1/bcs-011-computer-basics/unit-5-introduction-to-personal-computers",
+    "/bca/semester-1/bcsl-013-software-lab",
+    "/bca/semester-1/bcs-012-basic-mathematics",
     "/bca/semester-1/begla-136-english",
     "/bca/semester-1/bevae-181-environmental-studies",
   ].map((route) => ({
     url: `${baseUrl}${route}`,
     lastModified: new Date(),
     changeFrequency: "weekly" as const,
-    priority: 0.9,
+    priority: 0.95,
   }));
 
   // Dynamic course chapter paths for other lessons (filter out HTML lessons)
