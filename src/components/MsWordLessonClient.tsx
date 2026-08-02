@@ -32,41 +32,6 @@ export default function MsWordLessonClient({ lesson }: Props) {
   const prevLesson = currentIndex > 0 ? mswordLessons[currentIndex - 1] : null;
   const nextLesson = currentIndex < mswordLessons.length - 1 ? mswordLessons[currentIndex + 1] : null;
 
-  const [isFullscreen, setIsFullscreen] = useState(false);
-  const [showFsHint, setShowFsHint] = useState(false);
-  const lessonContainerRef = useRef<HTMLDivElement>(null);
-
-  const enterFullscreen = useCallback(async () => {
-    const el = lessonContainerRef.current || document.documentElement;
-    try {
-      if (el.requestFullscreen) await el.requestFullscreen();
-      else if ((el as any).webkitRequestFullscreen) await (el as any).webkitRequestFullscreen();
-      setIsFullscreen(true);
-      setShowFsHint(true);
-      setTimeout(() => setShowFsHint(false), 2500);
-    } catch (_) {}
-  }, []);
-
-  const exitFullscreen = useCallback(async () => {
-    try {
-      if (document.fullscreenElement) await document.exitFullscreen();
-    } catch (_) {}
-    setIsFullscreen(false);
-  }, []);
-
-  useEffect(() => {
-    const onFsChange = () => setIsFullscreen(!!document.fullscreenElement);
-    document.addEventListener("fullscreenchange", onFsChange);
-    return () => document.removeEventListener("fullscreenchange", onFsChange);
-  }, []);
-
-  useEffect(() => {
-    if (mounted) {
-      const t = setTimeout(() => enterFullscreen(), 600);
-      return () => clearTimeout(t);
-    }
-  }, [mounted, enterFullscreen]);
-
   useEffect(() => {
     setMounted(true);
     const raw = localStorage.getItem("nextsem_user");

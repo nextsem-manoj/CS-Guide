@@ -352,70 +352,8 @@ export default function CliLessonClient({ lesson }: CliLessonClientProps) {
         </div>
       </div>
 
-      {/* Interactive Tabs Menu */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-slate-950/40 border border-slate-850 p-2.5 rounded-2xl backdrop-blur-xl">
-        {/* Language Tabs */}
-        <div className="flex items-center gap-1.5 bg-slate-900/50 p-1 rounded-xl border border-slate-800/30">
-          <span className="text-[9px] font-black uppercase text-slate-500 tracking-wider pl-2 pr-1 hidden sm:inline">🌐 Lang:</span>
-          {(["english", "hinglish", "hindi"] as const).map((lang) => {
-            const labelMap = { english: "🇬🇧 English", hinglish: "🗣️ Hinglish", hindi: "🕉️ Hindi" };
-            return (
-              <button
-                key={lang}
-                onClick={() => handleLangChange(lang)}
-                className={`flex-1 py-1.5 text-[11px] font-black uppercase tracking-wider rounded-lg transition-all cursor-pointer ${
-                  selectedLang === lang
-                    ? "bg-[#04AA6D] text-white shadow-sm font-black"
-                    : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/40"
-                }`}
-              >
-                {labelMap[lang]}
-              </button>
-            );
-          })}
-        </div>
-
-        {/* Level Switcher */}
-        <div className="flex items-center gap-1.5 bg-slate-900/50 p-1 rounded-xl border border-slate-800/30">
-          <span className="text-[9px] font-black uppercase text-slate-500 tracking-wider pl-2 pr-1 hidden sm:inline">🧠 Level:</span>
-          {(["kid", "pro"] as const).map((level) => {
-            const labelMap = { kid: "🧒 Kid Mode (6th)", pro: "💻 Professional" };
-            return (
-              <button
-                key={level}
-                onClick={() => handleLevelChange(level)}
-                className={`flex-1 py-1.5 text-[11px] font-black uppercase tracking-wider rounded-lg transition-all cursor-pointer ${
-                  selectedLevel === level
-                    ? "bg-[#04AA6D] text-white shadow-sm font-black"
-                    : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/40"
-                }`}
-              >
-                {labelMap[level]}
-              </button>
-            );
-          })}
-        </div>
-      </div>
-
       {/* Main Content Area */}
       <div className="bg-slate-900/40 border border-slate-850 p-5 md:p-8 rounded-2xl shadow-xl backdrop-blur-xl relative overflow-hidden">
-        {/* Dynamic Mode Watermark */}
-        <div className="absolute top-2 right-4 text-[9px] font-black uppercase tracking-widest text-slate-700 pointer-events-none select-none">
-          {selectedLang} • {selectedLevel}
-        </div>
-
-        {selectedLevel === "kid" && (
-          <div className="mb-6 p-4 bg-emerald-950/20 border border-emerald-500/20 rounded-xl flex items-start gap-3">
-            <span className="text-2xl shrink-0">💡</span>
-            <div className="text-left">
-              <span className="text-[10px] font-black text-emerald-400 uppercase tracking-wider block">Simplified Analogy</span>
-              <p className="text-xs text-slate-300 font-semibold leading-relaxed mt-0.5">
-                We are using analogies here to make complex structures easy to visualize! Switch to **Professional** mode at the top once you understand the core idea.
-              </p>
-            </div>
-          </div>
-        )}
-
         <article className="prose prose-invert max-w-none text-left">
           {renderContentText(currentContent)}
         </article>

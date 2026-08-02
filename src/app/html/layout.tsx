@@ -161,57 +161,12 @@ function HtmlLayoutContent({ children }: { children: React.ReactNode }) {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // Fullscreen API: enter on lesson load, exit on click
-  const enterFullscreen = useCallback(async () => {
-    const el = lessonContainerRef.current || document.documentElement;
-    try {
-      if (el.requestFullscreen) await el.requestFullscreen();
-      else if ((el as any).webkitRequestFullscreen) await (el as any).webkitRequestFullscreen();
-      setIsFullscreen(true);
-      setShowFsHint(true);
-      setTimeout(() => setShowFsHint(false), 2500);
-    } catch (_) {}
-  }, []);
-
-  const exitFullscreen = useCallback(async () => {
-    try {
-      if (document.fullscreenElement) {
-        await document.exitFullscreen();
-      }
-    } catch (_) {}
-    setIsFullscreen(false);
-  }, []);
-
-  useEffect(() => {
-    const onFsChange = () => setIsFullscreen(!!document.fullscreenElement);
-    document.addEventListener('fullscreenchange', onFsChange);
-    return () => document.removeEventListener('fullscreenchange', onFsChange);
-  }, []);
-
-  // Auto-enter fullscreen when a lesson page opens (works on both native app and web)
-  useEffect(() => {
-    const isLesson = pathname?.includes('/html/');
-    if (isLesson && mounted) {
-      const t = setTimeout(() => enterFullscreen(), 600);
-      return () => clearTimeout(t);
-    }
-  }, [pathname, mounted, enterFullscreen]);
-
   return (
     <div ref={lessonContainerRef} className="min-h-screen flex flex-col bg-[#060c18] text-foreground font-sans selection:bg-[#c1a648]/30 transition-colors duration-300">
-      {/* Fullscreen exit hint */}
-      {isFullscreen && showFsHint && (
-        <div className="fixed top-4 left-1/2 -translate-x-1/2 z-[9999] bg-black/80 text-white text-xs px-4 py-2 rounded-full backdrop-blur-md pointer-events-none animate-fade-in-out shadow-lg">
-          📖 Tap anywhere to exit fullscreen
-        </div>
-      )}
-      {!isFullscreen && (
-        <NsSubjectNavBar currentUser={currentUser} onSignIn={handleSignIn} onToggleSidebar={() => setSidebarOpen(prev => !prev)} />
-      )}
+      <NsSubjectNavBar currentUser={currentUser} onSignIn={handleSignIn} onToggleSidebar={() => setSidebarOpen(prev => !prev)} />
       <div
         className="flex-1 flex flex-col md:flex-row w-full min-w-0 bg-[#060c18]"
         style={mounted && !isMobile ? { paddingLeft: `calc(5vw + ${effectiveSidebarWidth}px)`, paddingRight: '5vw' } : undefined}
-        onClick={isFullscreen ? exitFullscreen : undefined}
       >
         <BookSidebar
           isOpen={sidebarOpen}

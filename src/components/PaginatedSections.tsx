@@ -183,29 +183,7 @@ export default function PaginatedSections({
 
       </div>
 
-      {/* Rewarded Ad PDF Download Option */}
-      <div className="w-full flex justify-center pt-2">
-        <button
-          onClick={handlePdfDownload}
-          disabled={isDownloading}
-          className="flex items-center gap-2 px-5 py-3 rounded-2xl font-black text-xs bg-slate-900 border border-slate-850 hover:border-indigo-500/50 hover:bg-slate-850 text-indigo-400 hover:text-white transition-all shadow-md active:scale-95 disabled:opacity-50 cursor-pointer"
-        >
-          {isDownloading ? (
-            <>
-              <Loader2 size={14} className="animate-spin text-indigo-400" />
-              <span>{downloadStatus}</span>
-            </>
-          ) : (
-            <>
-              <FileText size={14} />
-              <span>Download Lesson PDF</span>
-              <span className="flex items-center gap-0.5 px-1.5 py-0.5 rounded-md bg-indigo-500/20 text-indigo-300 text-[8px] font-black tracking-wider uppercase animate-pulse">
-                <Sparkles size={8} /> Watch Ad
-              </span>
-            </>
-          )}
-        </button>
-      </div>
+
 
 
       <AdSenseBanner />
