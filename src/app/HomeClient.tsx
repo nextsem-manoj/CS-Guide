@@ -470,184 +470,220 @@ export default function HomeClient() {
         
         <div className="max-w-[800px] mx-auto relative z-10">
           <h2 className="text-3xl sm:text-5xl md:text-6xl font-black uppercase tracking-tight leading-tight text-white">
-            Learn to Code
+            LEARN IGNOU BCA
           </h2>
-          <p className="text-slate-300 text-xs sm:text-base font-extrabold uppercase mt-2 tracking-wider">
-            Free tutorials, examples and references.
+          <p className="text-[#c1a648] text-xs sm:text-base font-extrabold uppercase mt-2 tracking-wider">
+            Line-by-Line Textbook Units, Bilingual Lessons & Solved Assignments.
           </p>
           <p className="text-[#FFF4A3] text-xs sm:text-base font-black uppercase mt-1 tracking-wide">
-            No sign-up needed, just start learning.
+            100% Free Study Hub • Author: Er. Manoj Kumar
           </p>
 
-          {/* ── START IGNOU BCA FREE LESSONS BUTTON ── */}
-          <div className="mt-6 flex justify-center">
+          {/* ── HERO ACTION BUTTONS ── */}
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
             <Link
               href="/bca/semester-1"
               className="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-2xl bg-[#0c1328] hover:bg-[#101b38] text-white font-extrabold text-sm sm:text-base border border-[#04AA6D]/50 hover:border-[#04AA6D] shadow-xl shadow-cyan-950/30 transition-all transform active:scale-95 cursor-pointer group"
             >
               <BookOpen size={18} className="text-[#c1a648] group-hover:scale-110 transition-transform" />
-              <span className="bg-gradient-to-r from-white via-cyan-200 to-emerald-300 bg-clip-text text-transparent">Start IGNOU BCA Free Lessons</span>
+              <span className="bg-gradient-to-r from-white via-cyan-200 to-emerald-300 bg-clip-text text-transparent">Start IGNOU BCA 1st Sem Free Lessons</span>
               <ChevronRight size={18} className="text-[#04AA6D] group-hover:translate-x-1 transition-transform" />
+            </Link>
+
+            <Link
+              href="/curriculum"
+              className="inline-flex items-center gap-2 px-5 py-3.5 rounded-2xl bg-slate-900/90 hover:bg-slate-800 text-amber-300 font-extrabold text-xs sm:text-sm border border-amber-500/30 hover:border-amber-400 shadow-lg transition-all transform active:scale-95 cursor-pointer"
+            >
+              <Sparkles size={16} />
+              <span>Subject Phase Tracker »</span>
             </Link>
           </div>
 
-          {/* ── FULL STACK WEB DEVELOPER CAREER ROADMAP (Replaces image-88) ── */}
+          {/* ── IGNOU BCA 3-YEAR DEGREE LEARNING ROADMAP ── */}
           <div className="mt-12 max-w-5xl mx-auto text-left space-y-6">
             <div className="text-center space-y-2">
               <span className="px-3.5 py-1 rounded-full bg-[#04AA6D]/15 text-[#04AA6D] border border-[#04AA6D]/30 text-[10px] font-black uppercase tracking-widest inline-flex items-center gap-1.5">
-                <Sparkles size={12} />
-                <span>Complete Career Path</span>
+                <Sparkles size={12} className="text-[#c1a648]" />
+                <span>IGNOU BCA 3-Year Bachelor Degree</span>
               </span>
               <h2 className="text-2xl sm:text-4xl font-extrabold text-white tracking-tight">
-                Full Stack Web Developer Roadmap
+                IGNOU BCA Semester-by-Semester Roadmap
               </h2>
               <p className="text-xs sm:text-sm text-slate-300 max-w-2xl mx-auto leading-relaxed">
-                Follow our structured, step-by-step career path to master modern web development — from basic HTML tags to full-stack software engineering.
+                Follow our structured academic pathway covering all 6 semesters — from 1st Semester Computer Basics & PC Software to Final Year Major Capstone Project.
               </p>
             </div>
 
-            {/* Roadmap Grid Cards */}
+            {/* BCA Semester Roadmap Grid Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5 pt-4">
               
-              {/* Stage 1: Frontend Fundamentals */}
-              <div className="p-6 bg-[#16222f] border border-slate-700/60 rounded-2xl shadow-xl hover:border-[#04AA6D]/60 transition-all duration-300 group relative overflow-hidden flex flex-col justify-between">
+              {/* Semester 1: Computer Basics & PC Software */}
+              <div className="p-6 bg-[#0c1328] border border-[#04AA6D]/50 rounded-2xl shadow-xl hover:border-[#04AA6D] transition-all duration-300 group relative overflow-hidden flex flex-col justify-between">
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <span className="w-8 h-8 rounded-xl bg-[#04AA6D]/20 text-[#04AA6D] font-black text-xs flex items-center justify-center border border-[#04AA6D]/40">
                       01
                     </span>
                     <span className="text-[10px] font-extrabold uppercase tracking-wider text-emerald-400 bg-emerald-950/60 border border-emerald-800 px-2.5 py-1 rounded-md">
-                      Step 1 • Foundation
+                      100% Ready • Active
                     </span>
                   </div>
                   <div>
                     <h3 className="text-lg font-extrabold text-white group-hover:text-[#04AA6D] transition-colors">
-                      Frontend Web Fundamentals
+                      Semester 1: Foundation & PC Software
                     </h3>
                     <p className="text-xs text-slate-300 mt-1 leading-relaxed">
-                      Master document structuring with HTML5, visual styling with CSS, and interactive logic with JavaScript.
+                      Master BCS-111 Computer Basics, BCS-012 Basic Math, BCSL-013 Software Lab (Windows CMD, Linux, HTML5), BEGLA-136 English, and BEVAE-181.
                     </p>
                   </div>
                   <div className="flex flex-wrap gap-1.5 pt-1">
-                    <span className="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 text-xs font-mono font-bold text-slate-300">HTML5</span>
-                    <span className="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 text-xs font-mono font-bold text-slate-300">CSS3</span>
-                    <span className="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 text-xs font-mono font-bold text-slate-300">JavaScript ES6+</span>
+                    <span className="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 text-xs font-mono font-bold text-slate-300">BCS-111</span>
+                    <span className="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 text-xs font-mono font-bold text-slate-300">BCS-012</span>
+                    <span className="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 text-xs font-mono font-bold text-slate-300">BCSL-013</span>
+                    <span className="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 text-xs font-mono font-bold text-slate-300">BEGLA-136</span>
                   </div>
                 </div>
                 <div className="pt-6 mt-4 border-t border-slate-800/80 flex items-center justify-between gap-3">
                   <Link
-                    href="/html"
+                    href="/bca/semester-1"
                     className="px-4 py-2 bg-[#04AA6D] hover:bg-[#039861] text-white font-extrabold text-xs rounded-xl shadow-md transition-all flex items-center gap-1.5 cursor-pointer"
                   >
-                    <span>Start HTML Tutorials »</span>
+                    <span>Start 1st Sem Lessons »</span>
                   </Link>
                   <Link
-                    href="/html/quiz"
-                    className="text-xs font-bold text-slate-400 hover:text-white transition-colors"
+                    href="/bca/semester-1/bcs-011-computer-basics"
+                    className="text-xs font-bold text-[#c1a648] hover:text-white transition-colors"
                   >
-                    Take HTML Quiz ➔
+                    BCS-111 Computer Basics ➔
                   </Link>
                 </div>
               </div>
 
-              {/* Stage 2: Command Line & Version Control */}
-              <div className="p-6 bg-[#16222f] border border-slate-700/60 rounded-2xl shadow-xl hover:border-indigo-500/60 transition-all duration-300 group relative overflow-hidden flex flex-col justify-between">
+              {/* Semester 2: C Programming & Computer Organization */}
+              <div className="p-6 bg-[#0c1328] border border-cyan-500/40 rounded-2xl shadow-xl hover:border-cyan-400 transition-all duration-300 group relative overflow-hidden flex flex-col justify-between">
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <span className="w-8 h-8 rounded-xl bg-indigo-500/20 text-indigo-400 font-black text-xs flex items-center justify-center border border-indigo-500/40">
+                    <span className="w-8 h-8 rounded-xl bg-cyan-500/20 text-cyan-400 font-black text-xs flex items-center justify-center border border-cyan-500/40">
                       02
                     </span>
-                    <span className="text-[10px] font-extrabold uppercase tracking-wider text-indigo-400 bg-indigo-950/60 border border-indigo-800 px-2.5 py-1 rounded-md">
-                      Step 2 • Workflows
+                    <span className="text-[10px] font-extrabold uppercase tracking-wider text-cyan-400 bg-cyan-950/60 border border-cyan-800 px-2.5 py-1 rounded-md">
+                      75% Ready • Active
                     </span>
                   </div>
                   <div>
-                    <h3 className="text-lg font-extrabold text-white group-hover:text-indigo-400 transition-colors">
-                      Command Line & Git Version Control
+                    <h3 className="text-lg font-extrabold text-white group-hover:text-cyan-400 transition-colors">
+                      Semester 2: C Programming & Assembly
                     </h3>
                     <p className="text-xs text-slate-300 mt-1 leading-relaxed">
-                      Learn terminal commands in Windows Command Prompt and track project code versions using Git & GitHub.
+                      Master MCS-011 Problem Solving in C, MCS-012 Computer Organization & Assembly, MCS-013 Discrete Math, and MCSL-017 Practical Lab.
                     </p>
                   </div>
                   <div className="flex flex-wrap gap-1.5 pt-1">
-                    <span className="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 text-xs font-mono font-bold text-slate-300">Windows CMD</span>
-                    <span className="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 text-xs font-mono font-bold text-slate-300">Git Basics</span>
-                    <span className="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 text-xs font-mono font-bold text-slate-300">GitHub Repos</span>
+                    <span className="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 text-xs font-mono font-bold text-slate-300">MCS-011</span>
+                    <span className="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 text-xs font-mono font-bold text-slate-300">MCS-012</span>
+                    <span className="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 text-xs font-mono font-bold text-slate-300">MCS-013</span>
+                    <span className="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 text-xs font-mono font-bold text-slate-300">MCSL-017</span>
                   </div>
                 </div>
                 <div className="pt-6 mt-4 border-t border-slate-800/80 flex items-center justify-between gap-3">
                   <Link
-                    href="/cli"
-                    className="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white font-extrabold text-xs rounded-xl shadow-md transition-all flex items-center gap-1.5 cursor-pointer"
+                    href="/bca/2"
+                    className="px-4 py-2 bg-cyan-600 hover:bg-cyan-500 text-white font-extrabold text-xs rounded-xl shadow-md transition-all flex items-center gap-1.5 cursor-pointer"
                   >
-                    <span>Learn Windows CMD »</span>
+                    <span>Explore 2nd Sem Subjects »</span>
                   </Link>
                   <Link
-                    href="/git/terminal"
+                    href="/bca/2/mcs-011"
                     className="text-xs font-bold text-slate-400 hover:text-white transition-colors"
                   >
-                    Git Terminal ➔
+                    MCS-011 C Language ➔
                   </Link>
                 </div>
               </div>
 
-              {/* Stage 3: Modern UI & Frameworks */}
-              <div className="p-6 bg-[#16222f] border border-slate-700/60 rounded-2xl shadow-xl hover:border-sky-500/60 transition-all duration-300 group relative overflow-hidden flex flex-col justify-between">
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <span className="w-8 h-8 rounded-xl bg-sky-500/20 text-sky-400 font-black text-xs flex items-center justify-center border border-sky-500/40">
-                      03
-                    </span>
-                    <span className="text-[10px] font-extrabold uppercase tracking-wider text-sky-400 bg-sky-950/60 border border-sky-800 px-2.5 py-1 rounded-md">
-                      Step 3 • Frameworks
-                    </span>
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-extrabold text-white group-hover:text-sky-400 transition-colors">
-                      React.js, Next.js & UI Frameworks
-                    </h3>
-                    <p className="text-xs text-slate-300 mt-1 leading-relaxed">
-                      Build reactive user interfaces, component architectures, client-side state management, and full-stack Next.js applications.
-                    </p>
-                  </div>
-                  <div className="flex flex-wrap gap-1.5 pt-1">
-                    <span className="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 text-xs font-mono font-bold text-slate-300">React.js</span>
-                    <span className="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 text-xs font-mono font-bold text-slate-300">Next.js App Router</span>
-                    <span className="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 text-xs font-mono font-bold text-slate-300">Tailwind CSS</span>
-                  </div>
-                </div>
-                <div className="pt-6 mt-4 border-t border-slate-800/80 flex items-center justify-between gap-3">
-                  <Link
-                    href="/playground"
-                    className="px-4 py-2 bg-sky-600 hover:bg-sky-500 text-white font-extrabold text-xs rounded-xl shadow-md transition-all flex items-center gap-1.5 cursor-pointer"
-                  >
-                    <span>Open Code Playground »</span>
-                  </Link>
-                  <Link
-                    href="/course/projects"
-                    className="text-xs font-bold text-slate-400 hover:text-white transition-colors"
-                  >
-                    Build Real Projects ➔
-                  </Link>
-                </div>
-              </div>
-
-              {/* Stage 4: Computer Science & Full Stack Integration */}
-              <div className="p-6 bg-[#16222f] border border-slate-700/60 rounded-2xl shadow-xl hover:border-amber-500/60 transition-all duration-300 group relative overflow-hidden flex flex-col justify-between">
+              {/* Semester 3: Data Structures & DBMS */}
+              <div className="p-6 bg-[#0c1328] border border-amber-500/40 rounded-2xl shadow-xl hover:border-amber-400 transition-all duration-300 group relative overflow-hidden flex flex-col justify-between">
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <span className="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-400 font-black text-xs flex items-center justify-center border border-amber-500/40">
-                      04
+                      03
                     </span>
                     <span className="text-[10px] font-extrabold uppercase tracking-wider text-amber-400 bg-amber-950/60 border border-amber-800 px-2.5 py-1 rounded-md">
-                      Step 4 • CS Mastery
+                      60% Ready • In Progress
                     </span>
                   </div>
                   <div>
                     <h3 className="text-lg font-extrabold text-white group-hover:text-amber-400 transition-colors">
-                      Backend Systems & Computer Science (BCA)
+                      Semester 3: Data Structures & DBMS SQL
                     </h3>
                     <p className="text-xs text-slate-300 mt-1 leading-relaxed">
+                      Deep dive into MCS-021 Data Structures (Trees, Graphs), MCS-023 DBMS (SQL, Relational Algebra), MCS-014 SAD, and MCSL-025 Lab.
+                    </p>
+                  </div>
+                  <div className="flex flex-wrap gap-1.5 pt-1">
+                    <span className="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 text-xs font-mono font-bold text-slate-300">MCS-021</span>
+                    <span className="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 text-xs font-mono font-bold text-slate-300">MCS-023</span>
+                    <span className="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 text-xs font-mono font-bold text-slate-300">MCS-014</span>
+                    <span className="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 text-xs font-mono font-bold text-slate-300">MCSL-025</span>
+                  </div>
+                </div>
+                <div className="pt-6 mt-4 border-t border-slate-800/80 flex items-center justify-between gap-3">
+                  <Link
+                    href="/bca/3"
+                    className="px-4 py-2 bg-amber-600 hover:bg-amber-500 text-white font-extrabold text-xs rounded-xl shadow-md transition-all flex items-center gap-1.5 cursor-pointer"
+                  >
+                    <span>Explore 3rd Sem Subjects »</span>
+                  </Link>
+                  <Link
+                    href="/curriculum"
+                    className="text-xs font-bold text-slate-400 hover:text-white transition-colors"
+                  >
+                    Phase Breakdown ➔
+                  </Link>
+                </div>
+              </div>
+
+              {/* Semester 4: Java OOP & Operating Systems */}
+              <div className="p-6 bg-[#0c1328] border border-indigo-500/40 rounded-2xl shadow-xl hover:border-indigo-400 transition-all duration-300 group relative overflow-hidden flex flex-col justify-between">
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <span className="w-8 h-8 rounded-xl bg-indigo-500/20 text-indigo-400 font-black text-xs flex items-center justify-center border border-indigo-500/40">
+                      04
+                    </span>
+                    <span className="text-[10px] font-extrabold uppercase tracking-wider text-indigo-400 bg-indigo-950/60 border border-indigo-800 px-2.5 py-1 rounded-md">
+                      45% Ready • Phase 4
+                    </span>
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-extrabold text-white group-hover:text-indigo-400 transition-colors">
+                      Semester 4: Java OOP & Operating Systems
+                    </h3>
+                    <p className="text-xs text-slate-300 mt-1 leading-relaxed">
+                      Master MCS-024 Object Oriented Java, MCS-022 OS Kernels & Linux, BCS-040 Statistics, and MCSL-036 Practical Lab.
+                    </p>
+                  </div>
+                  <div className="flex flex-wrap gap-1.5 pt-1">
+                    <span className="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 text-xs font-mono font-bold text-slate-300">MCS-024</span>
+                    <span className="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 text-xs font-mono font-bold text-slate-300">MCS-022</span>
+                    <span className="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 text-xs font-mono font-bold text-slate-300">BCS-040</span>
+                    <span className="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 text-xs font-mono font-bold text-slate-300">MCSL-036</span>
+                  </div>
+                </div>
+                <div className="pt-6 mt-4 border-t border-slate-800/80 flex items-center justify-between gap-3">
+                  <Link
+                    href="/curriculum"
+                    className="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white font-extrabold text-xs rounded-xl shadow-md transition-all flex items-center gap-1.5 cursor-pointer"
+                  >
+                    <span>View Java & OS Syllabus »</span>
+                  </Link>
+                  <Link
+                    href="/bca"
+                    className="text-xs font-bold text-slate-400 hover:text-white transition-colors"
+                  >
+                    All Semesters ➔
+                  </Link>
+                </div>
+              </div>
                       Understand computer hardware basics, operating systems, data structures, and university degree fundamentals.
                     </p>
                   </div>
