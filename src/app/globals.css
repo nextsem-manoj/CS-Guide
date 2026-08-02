@@ -494,13 +494,7 @@ html.night-light,
   --profile-card-field-bg: rgba(235, 220, 185, 0.6) !important;
 }
 
-/* Ensure Google AdSense containers inherit transparency to match active theme */
-.adsbygoogle,
-.adsbygoogle iframe,
-.adsbygoogle ins {
-  background: transparent !important;
-  background-color: transparent !important;
-}
+
 
 /* body.sepia-mode background/color is now handled by CSS variables above */
 

@@ -21,11 +21,11 @@ try {
 
   // Define critical URLs to verify
   const requiredUrls = [
-    'https://nextsem.online/',
-    'https://nextsem.online/about',
-    'https://nextsem.online/course',
-    'https://nextsem.online/cmd',
-    'https://nextsem.online/profile'
+    'https://ignou.nextsem.online/',
+    'https://ignou.nextsem.online/about',
+    'https://ignou.nextsem.online/bca',
+    'https://ignou.nextsem.online/bca/semester-1',
+    'https://ignou.nextsem.online/profile'
   ];
 
   let missingCount = 0;

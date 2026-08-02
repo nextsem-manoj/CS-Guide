@@ -36,6 +36,7 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://ignou.nextsem.online"),
   title: "IGNOU BCA 1st Semester Hub | Er. Manoj Kumar | Nextsem Online",
   description: "Official IGNOU BCA 1st Semester learning dashboard featuring line-by-line textbook units, bilingual English & Hinglish lessons, MCQs, and practical lab simulators by Er. Manoj Kumar.",
   manifest: "/manifest.json",

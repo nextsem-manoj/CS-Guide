@@ -5,7 +5,7 @@ import { htmlLessons } from "../data/htmlLessonsData";
 export const dynamic = "force-static";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://nextsem.online";
+  const baseUrl = "https://ignou.nextsem.online";
 
   // Base paths
   const baseRoutes = ["", "/about", "/contact", "/playground", "/privacy", "/profile", "/terms", "/course", "/course/projects", "/cmd", "/html", "/bca/semester-1"].map((route) => ({

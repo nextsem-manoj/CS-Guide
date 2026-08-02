@@ -765,26 +765,10 @@ export default function TerminalClient() {
                   </button>
                 )}
               </div>
+
             </div>
           </div>
-
-          {/* Ad Placement 2: Bottom Responsive Banner */}
-          <div className="w-full mt-4 shrink-0">
-            <AdSenseBanner />
-          </div>
-
         </div>
-
-        {/* ── RIGHT ADSENSE SKYSCRAPER SIDEBAR (Desktop Only) ── */}
-        <aside className={`hidden md:flex w-52 p-4 h-full shrink-0 flex-col justify-start items-center gap-4 z-25 border-l ${isLight ? 'bg-slate-50 border-slate-200' : 'bg-[#070b19]/35 border-slate-800/80'}`}>
-          <span className={`text-[8px] font-black uppercase tracking-wider ${isLight ? 'text-slate-400' : 'text-slate-500'}`}>Advertisement</span>
-          
-          {/* Centered Ad Unit */}
-          <div className={`w-full flex justify-center border rounded-xl p-2.5 ${isLight ? 'bg-white border-slate-200' : 'bg-slate-950/40 border-slate-850'}`}>
-            <AdSenseBanner />
-          </div>
-        </aside>
-
       </div>
     </div>
   );
