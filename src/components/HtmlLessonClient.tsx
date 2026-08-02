@@ -395,46 +395,73 @@ export default function HtmlLessonClient({ lesson }: HtmlLessonClientProps) {
     <div className="space-y-6">
       {/* Top Banner Ad */}
       <AdSenseBanner />
-
-      {/* Nextsem Academy Exact Header (Image 69 Pattern) */}
-      <div className="space-y-4 pb-4 border-b border-slate-800/60 pt-2">
-        {/* Title Row with Bookmark Icon */}
-        <div className="flex items-center justify-between gap-4">
-          <h1 className="text-2xl sm:text-4xl font-extrabold text-white tracking-tight">
-            {
-              lesson.id === 1 ? "HTML Introduction" :
-              `HTML ${
-                lesson.title
-                  .replace(/^(Lesson\s+\d+:|Learn HTML5?|Introduction to|What is|How)\s*/i, '')
-                  .replace(/\s*-\s*Free Web Development.*$/i, '')
-                  .replace(/\s*-\s*Comprehensive Guide.*$/i, '')
-                  .trim()
-              }`
-            }
-          </h1>
-
-          <div className="flex items-center gap-2">
-            <button
-              onClick={handleDownloadPdf}
-              className="p-2 rounded-lg border border-amber-500/40 bg-amber-950/30 text-amber-400 hover:text-amber-300 transition-all cursor-pointer shrink-0 flex items-center gap-1.5 shadow-md"
-              title="Download Lesson PDF (Rewarded Ad)"
+      {/* Nextsem Academy Clean Header (Previous + Title + Save/PDF + Next) */}
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pb-4 border-b border-slate-800/60 pt-2">
+        {/* Left: Previous Lesson */}
+        <div className="flex items-center gap-2 shrink-0">
+          {prevLesson ? (
+            <Link
+              href={prevLesson.id === 1 ? "/html" : `/html/${prevLesson.slug}`}
+              className="px-3.5 py-2 bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-300 hover:text-white rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-sm"
             >
-              <Download size={20} className="stroke-[2.5]" />
-              <span className="hidden sm:inline text-xs font-bold">PDF</span>
-            </button>
+              <ChevronLeft size={16} className="stroke-[2.5]" />
+              <span>Previous</span>
+            </Link>
+          ) : (
+            <div className="px-3.5 py-2 bg-slate-950/60 border border-slate-850 text-slate-600 rounded-xl text-xs font-bold flex items-center gap-1.5 cursor-not-allowed">
+              <ChevronLeft size={16} />
+              <span>Previous</span>
+            </div>
+          )}
+        </div>
 
-            <button
-              onClick={toggleBookmark}
-              className={`p-2 rounded-lg border transition-all cursor-pointer shrink-0 flex items-center gap-1.5 ${
-                isBookmarked
-                  ? "bg-emerald-950/40 border-emerald-500/40 text-[#04AA6D]"
-                  : "bg-slate-900/60 border-slate-800 text-slate-400 hover:text-white"
-              }`}
-              title={isBookmarked ? "Remove Bookmark" : "Save Bookmark"}
+        {/* Center: Clean Topic Title */}
+        <h1 className="text-xl sm:text-3xl font-extrabold text-white tracking-tight text-center truncate">
+          {
+            lesson.id === 1 ? "HTML Introduction" :
+            `HTML ${
+              lesson.title
+                .replace(/^(Lesson\s+\d+:|Learn HTML5?|Introduction to|What is|How)\s*/i, '')
+                .replace(/\s*-\s*Free Web Development.*$/i, '')
+                .replace(/\s*-\s*Comprehensive Guide.*$/i, '')
+                .trim()
+            }`
+          }
+        </h1>
+
+        {/* Right: PDF + Save + Next Lesson */}
+        <div className="flex items-center gap-2 shrink-0">
+          <button
+            onClick={handleDownloadPdf}
+            className="px-3 py-2 rounded-xl border border-amber-500/40 bg-amber-950/30 text-amber-400 hover:text-amber-300 transition-all cursor-pointer shrink-0 flex items-center gap-1.5 shadow-md"
+            title="Download Lesson PDF (Rewarded Ad)"
+          >
+            <Download size={18} className="stroke-[2.5]" />
+            <span className="hidden sm:inline text-xs font-bold">PDF</span>
+          </button>
+
+          <button
+            onClick={toggleBookmark}
+            className={`px-3 py-2 rounded-xl border transition-all cursor-pointer shrink-0 flex items-center gap-1.5 ${
+              isBookmarked
+                ? "bg-emerald-950/40 border-emerald-500/40 text-[#04AA6D]"
+                : "bg-slate-900/60 border-slate-800 text-slate-400 hover:text-white"
+            }`}
+            title={isBookmarked ? "Remove Bookmark" : "Save Bookmark"}
+          >
+            <Bookmark size={18} className={`stroke-[2.5] ${isBookmarked ? "fill-[#04AA6D] text-[#04AA6D]" : ""}`} />
+            <span className="text-xs font-bold">{isBookmarked ? "Saved" : "Save"}</span>
+          </button>
+
+          {nextLesson ? (
+            <Link
+              href={`/html/${nextLesson.slug}`}
+              className="px-4 py-2 bg-[#04AA6D] hover:bg-[#039861] text-white rounded-xl text-xs font-extrabold transition-all flex items-center gap-1.5 shadow-md shadow-[#04AA6D]/20 cursor-pointer"
             >
-              <Bookmark size={22} className={`stroke-[2.5] ${isBookmarked ? "fill-[#04AA6D] text-[#04AA6D]" : ""}`} />
-            </button>
-          </div>
+              <span>Next</span>
+              <ChevronRight size={16} className="stroke-[2.5]" />
+            </Link>
+          ) : null}
         </div>
       </div>
 

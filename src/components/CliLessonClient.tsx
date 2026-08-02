@@ -300,69 +300,62 @@ export default function CliLessonClient({ lesson }: CliLessonClientProps) {
       {/* Top Banner Ad */}
       <AdSenseBanner />
 
-      {/* Nextsem Academy Exact Header (Image 69 Pattern) */}
-      <div className="space-y-4 pb-4 border-b border-slate-800/60 pt-2">
-        {/* Title Row with Bookmark Icon */}
-        <div className="flex items-center justify-between gap-4">
-          <h1 className="text-2xl sm:text-4xl font-extrabold text-white tracking-tight">
-            {
-              lesson.id === 1 ? "CLI Introduction" :
-              `CLI ${
-                lesson.title
-                  .replace(/^(Lesson\s+\d+:|Learn CLI|Introduction to|What is|How)\s*/i, '')
-                  .trim()
-              }`
-            }
-          </h1>
+      {/* Nextsem Academy Clean Header (Title + Pre/Next + Save) */}
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pb-4 border-b border-slate-800/60 pt-2">
+        {/* Left: Previous Lesson */}
+        <div className="flex items-center gap-2 shrink-0">
+          {prevLesson ? (
+            <Link
+              href={prevLesson.id === 1 ? "/cli" : `/cli/${prevLesson.slug}`}
+              className="px-3.5 py-2 bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-300 hover:text-white rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-sm"
+            >
+              <ChevronLeft size={16} className="stroke-[2.5]" />
+              <span>Previous</span>
+            </Link>
+          ) : (
+            <div className="px-3.5 py-2 bg-slate-950/60 border border-slate-850 text-slate-600 rounded-xl text-xs font-bold flex items-center gap-1.5 cursor-not-allowed">
+              <ChevronLeft size={16} />
+              <span>Previous</span>
+            </div>
+          )}
+        </div>
 
+        {/* Center: Clean Topic Title */}
+        <h1 className="text-xl sm:text-3xl font-extrabold text-white tracking-tight text-center truncate">
+          {
+            lesson.id === 1 ? "CLI Introduction" :
+            `CLI ${
+              lesson.title
+                .replace(/^(Lesson\s+\d+:|Learn CLI|Introduction to|What is|How)\s*/i, '')
+                .trim()
+            }`
+          }
+        </h1>
+
+        {/* Right: Save Options + Next Lesson */}
+        <div className="flex items-center gap-2 shrink-0">
           <button
             onClick={toggleBookmark}
-            className={`p-2 rounded-lg border transition-all cursor-pointer shrink-0 flex items-center gap-1.5 ${
+            className={`px-3 py-2 rounded-xl border transition-all cursor-pointer shrink-0 flex items-center gap-1.5 ${
               isBookmarked
                 ? "bg-emerald-950/40 border-emerald-500/40 text-[#04AA6D]"
                 : "bg-slate-900/60 border-slate-800 text-slate-400 hover:text-white"
             }`}
             title={isBookmarked ? "Remove Bookmark" : "Save Bookmark"}
           >
-            <Bookmark size={22} className={`stroke-[2.5] ${isBookmarked ? "fill-[#04AA6D] text-[#04AA6D]" : ""}`} />
+            <Bookmark size={18} className={`stroke-[2.5] ${isBookmarked ? "fill-[#04AA6D] text-[#04AA6D]" : ""}`} />
+            <span className="text-xs font-bold">{isBookmarked ? "Saved" : "Save"}</span>
           </button>
-        </div>
 
-        {/* Navigation Buttons Row: Previous on Left, Next on Right (Image 69) */}
-        <div className="flex items-center justify-between gap-4">
-          {(() => {
-            const currentIndex = cliLessons.findIndex((l: any) => l.id === lesson.id);
-            const prevLesson = currentIndex > 0 ? cliLessons[currentIndex - 1] : null;
-            const nextLesson = currentIndex < cliLessons.length - 1 ? cliLessons[currentIndex + 1] : null;
-            return (
-              <>
-                {prevLesson ? (
-                  <Link
-                    href={prevLesson.id === 1 ? "/cli" : `/cli/${prevLesson.slug}`}
-                    className="px-4 py-2 bg-[#9daec8] hover:bg-[#b5c5dd] text-slate-950 rounded-lg text-sm font-bold transition-all flex items-center gap-1 cursor-pointer shadow-sm"
-                  >
-                    <ChevronLeft size={18} className="stroke-[2.5]" />
-                    <span>Previous</span>
-                  </Link>
-                ) : (
-                  <div className="px-4 py-2 bg-slate-900/60 text-slate-600 rounded-lg text-sm font-bold flex items-center gap-1 border border-slate-850 cursor-not-allowed">
-                    <ChevronLeft size={18} />
-                    <span>Previous</span>
-                  </div>
-                )}
-
-                {nextLesson ? (
-                  <Link
-                    href={`/cli/${nextLesson.slug}`}
-                    className="px-5 py-2 bg-[#04AA6D] hover:bg-[#039861] text-white rounded-lg text-sm font-extrabold transition-all flex items-center gap-1 shadow-md shadow-[#04AA6D]/20 cursor-pointer"
-                  >
-                    <span>Next</span>
-                    <ChevronRight size={18} className="stroke-[2.5]" />
-                  </Link>
-                ) : null}
-              </>
-            );
-          })()}
+          {nextLesson ? (
+            <Link
+              href={`/cli/${nextLesson.slug}`}
+              className="px-4 py-2 bg-[#04AA6D] hover:bg-[#039861] text-white rounded-xl text-xs font-extrabold transition-all flex items-center gap-1.5 shadow-md shadow-[#04AA6D]/20 cursor-pointer"
+            >
+              <span>Next</span>
+              <ChevronRight size={16} className="stroke-[2.5]" />
+            </Link>
+          ) : null}
         </div>
       </div>
 
