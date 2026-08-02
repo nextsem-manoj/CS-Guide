@@ -300,8 +300,8 @@ export default function CliLessonClient({ lesson }: CliLessonClientProps) {
       {/* Top Banner Ad */}
       <AdSenseBanner />
 
-      {/* Nextsem Academy Clean Header (Title + Pre/Next + Save) */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pb-4 border-b border-slate-800/60 pt-2">
+      {/* Nextsem Academy Clean Header (Previous + Exact Lesson Title + Save + Next) */}
+      <div className="flex items-center justify-between gap-3 pb-4 border-b border-slate-800/60 pt-2">
         {/* Left: Previous Lesson */}
         <div className="flex items-center gap-2 shrink-0">
           {prevLesson ? (
@@ -310,26 +310,19 @@ export default function CliLessonClient({ lesson }: CliLessonClientProps) {
               className="px-3.5 py-2 bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-300 hover:text-white rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-sm"
             >
               <ChevronLeft size={16} className="stroke-[2.5]" />
-              <span>Previous</span>
+              <span className="hidden sm:inline">Previous</span>
             </Link>
           ) : (
             <div className="px-3.5 py-2 bg-slate-950/60 border border-slate-850 text-slate-600 rounded-xl text-xs font-bold flex items-center gap-1.5 cursor-not-allowed">
               <ChevronLeft size={16} />
-              <span>Previous</span>
+              <span className="hidden sm:inline">Previous</span>
             </div>
           )}
         </div>
 
-        {/* Center: Clean Topic Title */}
-        <h1 className="text-xl sm:text-3xl font-extrabold text-white tracking-tight text-center truncate">
-          {
-            lesson.id === 1 ? "CLI Introduction" :
-            `CLI ${
-              lesson.title
-                .replace(/^(Lesson\s+\d+:|Learn CLI|Introduction to|What is|How)\s*/i, '')
-                .trim()
-            }`
-          }
+        {/* Center: Exact Clean Topic Title */}
+        <h1 className="text-lg sm:text-2xl md:text-3xl font-extrabold text-white tracking-tight text-center truncate px-2">
+          {lesson.title}
         </h1>
 
         {/* Right: Save Options + Next Lesson */}
@@ -352,7 +345,7 @@ export default function CliLessonClient({ lesson }: CliLessonClientProps) {
               href={`/cli/${nextLesson.slug}`}
               className="px-4 py-2 bg-[#04AA6D] hover:bg-[#039861] text-white rounded-xl text-xs font-extrabold transition-all flex items-center gap-1.5 shadow-md shadow-[#04AA6D]/20 cursor-pointer"
             >
-              <span>Next</span>
+              <span className="hidden sm:inline">Next</span>
               <ChevronRight size={16} className="stroke-[2.5]" />
             </Link>
           ) : null}

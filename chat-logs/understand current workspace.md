@@ -1,6 +1,6 @@
 # understand current workspace
 
-*Saved on: 2/8/2026, 11:12:20 pm*
+*Saved on: 2/8/2026, 11:13:34 pm*
 *Conversation ID: 39b50c14-558e-4d94-a8c2-8d1bed3fb3e7*
 
 ---
@@ -1632,6 +1632,25 @@ on all pages over nextsem.onlne
 ### 👤 User
 
 do not deploy on prod unitl a say to do so
+
+---
+
+### 👤 User
+
+there are many errors to be corrected on nextsem.online
+
+---
+
+### 🤖 Antigravity AI
+
+I am currently running a full **`npm run build`** diagnostic scan on `nextsem.online` to detect any compilation errors, broken page routes, or TypeScript issues.
+
+Could you specify which particular errors or areas you'd like me to correct first?
+
+1. **Navigation & Links**: Fix any broken links or header/footer navigation items.
+2. **Layout & UI**: Fix layout wrapping, duplicate titles, or screen overflow issues across lesson pages.
+3. **Interactive Quizzes & Exercises**: Fix MCQ answer states or progress saving logic.
+4. **All of the above**: Perform a comprehensive overhaul of all detected issues.
 
 ---
 
