@@ -1,0 +1,97 @@
+---
+title: "P4.6: Refs and useRef"
+description: "Mastering direct DOM references, focus controls, and persistent state-less values using the useRef hook."
+---
+
+# P4.6: Refs and useRef
+
+Sometimes, you need to step outside React's virtual model to interact directly with the real browser DOM. Common examples include:
+* Auto-focusing a text input field when a page loads.
+* Measuring the size or scroll position of a box.
+* Controlling a video or audio playback node.
+
+To do this, we use the `useRef` Hook.
+
+---
+
+## 1. What is a Ref?
+
+A Ref is like a box that can hold any mutable value inside its `.current` property. It has two main properties:
+1. **Direct Access**: You can bind a ref to a DOM node to read or modify it directly.
+2. **No Re-renders**: Modifying a ref does **NOT** trigger React to re-render the page (unlike modifying state).
+
+---
+
+## 2. Accessing a DOM Element
+
+To reference a DOM element:
+1. Call `useRef(null)` to create a ref container.
+2. Pass it to the target tag's `ref` attribute.
+3. Access the actual DOM element using `refName.current`.
+
+```jsx
+import React, { useRef } from 'react';
+
+export default function AutoFocusInput() {
+  // 1. Create the ref container
+  const inputRef = useRef(null);
+
+  const handleFocus = () => {
+    // 3. Access the DOM node directly and focus it
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  };
+
+  return (
+    <div className="p-4 space-y-4">
+      {/* 2. Bind the ref container to the input tag */}
+      <input 
+        ref={inputRef} 
+        type="text" 
+        placeholder="Type here..." 
+        className="p-2 border rounded-xl"
+      />
+      <button 
+        onClick={handleFocus}
+        className="ml-2 px-3 py-1.5 bg-blue-600 text-white rounded-lg"
+      >
+        Focus Input
+      </button>
+    </div>
+  );
+}
+```
+
+---
+
+## 3. Comparing Ref vs State
+
+| Feature | State (`useState`) | Ref (`useRef`) |
+| :--- | :--- | :--- |
+| **Triggers Re-render?** | Yes | No |
+| **Persists across renders?** | Yes | Yes |
+| **Used for:?** | UI elements, text fields, toggles | DOM nodes, timers, focus control |
+
+---
+
+<DeveloperProfile
+  name="Dan Abramov"
+  role="React Core Developer"
+  salary="₹70 Lakhs/yr equivalent"
+  company="Meta / React Core Team"
+  experience="11 Years"
+  avatar="⚛️"
+  photoUrl="https://github.com/gaearon.png"
+  profileUrl="https://github.com/gaearon"
+  stack="React, Redux, Virtual DOM Diffing, Hooks"
+  quote="Use refs only when you need to escape from React. Focus management, scroll positions, or external layout measurement are perfect use-cases!"
+/>
+
+---
+
+## 🎓 Practice Assignment
+
+1. Build a component with a text input field and a "Clear" button.
+2. Clicking "Clear" should empty the input field's value directly and immediately focus the input field using `useRef`.
+3. Verify that the clear action behaves correctly in your local browser sandbox.

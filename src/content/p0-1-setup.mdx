@@ -1,0 +1,125 @@
+---
+title: "P0.2: Introduction to HTML & Developer Setup"
+description: "Learn the core concepts of HTML based on standard industry curriculum, and set up your local web developer toolchain."
+---
+
+# P0.2: Introduction to HTML & Developer Setup
+
+Welcome to your journey as a web developer! Before writing your first program, you need to understand what HTML is and configure your local computer environment with the tools used by industry professionals.
+
+---
+
+## 1. What is HTML?
+Based on the standard HTML curriculum:
+* **HTML** stands for **H**yper**T**ext **M**arkup **L**anguage.
+* It is the standard markup language for creating Web pages.
+* It defines the structure of a Web page and consists of a series of elements.
+* HTML elements tell the browser how to display the content.
+* Elements label pieces of content such as "this is a heading", "this is a paragraph", "this is a link", etc.
+
+---
+
+## 2. A Simple HTML Document
+Here is the basic HTML template used by developers to start every new webpage:
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Page Title</title>
+</head>
+<body>
+
+  <h1>My First Heading</h1>
+  <p>My first paragraph.</p>
+
+</body>
+</html>
+```
+
+### Explanation of Tags:
+* `<!DOCTYPE html>` defines that this document is an HTML5 document.
+* `<html>` is the root element of an HTML page.
+* `<head>` contains meta information about the HTML page (such as the page title).
+* `<title>` specifies a title for the HTML page (shown in the browser's title bar or tab).
+* `<body>` defines the document's body, and is a container for all the visible contents, such as headings, paragraphs, images, hyperlinks, tables, lists, etc.
+* `<h1>` defines a large heading.
+* `<p>` defines a paragraph.
+
+---
+
+## 3. HTML Elements & Browser Rendering
+An HTML element is defined by a start tag, some content, and an end tag:
+
+<div className="py-3 px-4 bg-slate-900 border border-slate-800 rounded-xl my-4 font-mono text-xs text-left">
+  <strong>&lt;tagname&gt;</strong> Content goes here... <strong>&lt;/tagname&gt;</strong>
+</div>
+
+* The HTML element is everything from the start tag to the end tag:
+  * `<h1>My First Heading</h1>`
+  * `<p>My first paragraph.</p>`
+* **Web Browsers:** The purpose of a web browser (Chrome, Edge, Safari, Firefox) is to read HTML documents and display them correctly. A browser does not display the HTML tags, but uses them to determine how to document and style the page.
+
+---
+
+## 4. Software Downloads & Setup
+To start building HTML pages locally, download and install the following core developer tools:
+
+### 1. Google Chrome Browser
+Google Chrome is the primary browser used by developers because of its fast rendering engine and powerful built-in developer tools.
+* **Download:** [Download Google Chrome](https://www.google.com/chrome/)
+
+### 2. Visual Studio Code (VS Code)
+VS Code is the most popular code editor in the world. It provides syntax highlighting, auto-completion, and extensions to make writing code incredibly fast.
+* **Download:** [Download VS Code](https://code.visualstudio.com/)
+* **Tip:** During installation, check the box that says **"Add to PATH"** so you can open projects directly from the terminal.
+
+### 3. Git & Node.js
+* **Git (Version Control):** Download and install [Git for Windows](https://git-scm.com/download/win) or Open Terminal on macOS and run `git --version`.
+* **Node.js (JavaScript Runtime):** Download and install [Node.js (LTS Version)](https://nodejs.org/) to get access to **npm** (Node Package Manager).
+
+---
+
+## 5. Verification Commands & Extensions
+Open your terminal (Terminal on macOS/Linux, or Git Bash on Windows) and run the following commands to verify your setup:
+
+```bash
+# Check Node.js version
+node -v
+
+# Check npm version
+npm -v
+
+# Check Git version
+git --version
+```
+
+### Recommended VS Code Extensions
+Install these from the extension marketplace (Ctrl+Shift+X) for an optimal environment:
+
+| Extension Name | Developer | Purpose |
+| :--- | :--- | :--- |
+| **Live Server** | Ritwick Dey | Starts a local development server with auto-refresh on save |
+| **Prettier** | Prettier | Formats your HTML, CSS, and JS automatically on save |
+
+---
+
+<DeveloperProfile
+  name="Brad Traversy"
+  role="Full Stack Developer & Educator"
+  salary="₹45 Lakhs/yr equivalent"
+  company="Traversy Media"
+  experience="12 Years"
+  avatar="⚙️"
+  photoUrl="https://github.com/bradtraversy.png"
+  profileUrl="https://github.com/bradtraversy"
+  stack="VS Code, Git, Node.js, React, HTML5, CSS3"
+  quote="I started with nothing, struggling to install local tools. Once I set up VS Code and git, the world opened up. Don't worry about complexity. Take it one download at a time!"
+/>
+
+---
+
+## 🎓 Practice Assignment
+1. Install Google Chrome, VS Code, Git, and Node.js.
+2. Install the **Prettier** and **Live Server** extensions in VS Code.
+3. Open VS Code, create a new file named `index.html`, paste the Simple HTML Document code block from Section 2, save it, and open it in Google Chrome via Live Server to verify it renders.

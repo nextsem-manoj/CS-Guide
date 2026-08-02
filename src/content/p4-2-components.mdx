@@ -1,0 +1,112 @@
+---
+title: "P4.2: Functional Components"
+description: "Building re-usable user interfaces using functional components, nesting layouts, and composition."
+---
+
+# P4.2: Functional Components
+
+Components are the building blocks of any React application. In this lesson, we will focus on **Functional Components**, which are standard JavaScript functions that return JSX markup.
+
+---
+
+## 1. What is a Component?
+
+A React component is a self-contained, reusable piece of user interface. Instead of building a website as one giant page, you break it down into modular pieces:
+
+```
+┌──────────────────────────────────────────┐
+│              App Component               │
+│  ┌────────────────────────────────────┐  │
+│  │          Header Component          │  │
+│  └────────────────────────────────────┘  │
+│  ┌───────────────┐    ┌───────────────┐  │
+│  │ Sidebar Comp  │    │ Main Content  │  │
+│  └───────────────┘    └───────────────┘  │
+└──────────────────────────────────────────┘
+```
+
+---
+
+## 2. Declaring a Functional Component
+
+Declaring a component is as simple as writing a JavaScript function. The function's name **must start with a capital letter** (e.g. `Header`, not `header`). This tells React to distinguish it from standard HTML5 tags.
+
+```jsx
+// 1. Declare the functional component
+function WelcomeBanner() {
+  return (
+    <div className="banner bg-blue-500/10 p-4 rounded-xl border border-blue-500/20">
+      <h2 className="text-sm font-black text-blue-400">Welcome to React!</h2>
+      <p className="text-xs text-slate-400">Your coding journey starts here.</p>
+    </div>
+  );
+}
+
+// 2. Export it for use in other files
+export default WelcomeBanner;
+```
+
+---
+
+## 3. Nesting and Composition
+
+You can combine components inside other components (composition). This allows you to construct complex layouts out of simple, testable pieces.
+
+```jsx
+import WelcomeBanner from "./WelcomeBanner";
+
+function Dashboard() {
+  return (
+    <div className="p-6 space-y-4">
+      <h1 className="text-xl font-bold">Admin Panel</h1>
+      
+      {/* Rendering our component nested inside Dashboard */}
+      <WelcomeBanner />
+      
+      <p className="text-xs text-slate-500">All systems operational.</p>
+    </div>
+  );
+}
+```
+
+> [!CAUTION]
+> **Never Nest Component Definitions!**
+> You should always declare components at the top level of your files. Nesting a component definition *inside* another component function will cause React to rebuild the inner component type on every render, causing severe performance issues and bugs.
+
+---
+
+## 4. Why Use Functional Components?
+
+Historically, React used Class Components, but modern React applications use Functional Components exclusively.
+
+<GraphBar
+  title="Curriculum adoption of Functional vs Class Components"
+  subtitle="Percentage of modern web dev teams using Functional Components with Hooks."
+  items={[
+    { label: "Modern React Hooks/Functions", value: 98, displayValue: "98% (Standard)" },
+    { label: "Legacy Class Components", value: 2, displayValue: "2% (Legacy)" }
+  ]}
+/>
+
+---
+
+<DeveloperProfile
+  name="Kent C. Dodds"
+  role="JavaScript Engineer & Educator"
+  salary="₹65 Lakhs/yr equivalent"
+  company="Epic Web / Remix Team"
+  experience="10 Years"
+  avatar="👨‍💻"
+  photoUrl="https://github.com/kentcdodds.png"
+  profileUrl="https://github.com/kentcdodds"
+  stack="React, TypeScript, Testing Library, Component Patterns"
+  quote="Break your UI down into components that do exactly one thing well. Start with a single file, and separate elements as they grow!"
+/>
+
+---
+
+## 🎓 Practice Assignment
+
+1. Create a `Card` component that displays a heading, brief paragraph, and a button.
+2. Nest three copies of your `Card` component side-by-side inside a main `App` layout wrapper.
+3. Verify that the cards render correctly in your browser without styling conflicts.

@@ -1,1 +1,29 @@
-{"flutter":{"platforms":{"android":{"default":{"projectId":"ignou-study-notes-by-nextsem","appId":"1:498697546118:android:e1be7944afea568f83a407","fileOutput":"android/app/google-services.json"}},"dart":{"lib/firebase_options.dart":{"projectId":"ignou-study-notes-by-nextsem","configurations":{"android":"1:498697546118:android:e1be7944afea568f83a407","ios":"1:498697546118:ios:1102412fada54bb483a407","web":"1:498697546118:web:4630ab76b34fcc3d83a407"}}}}}}
+{
+  "firestore": {
+    "rules": "firestore.rules"
+  },
+  "hosting": {
+    "public": "out",
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "cleanUrls": true,
+    "trailingSlash": true,
+    "rewrites": [
+      { "source": "/bca/1/BCS-111/**", "destination": "/bca/1/bcs-111/index.html" },
+      { "source": "/bca/1/BCS-111", "destination": "/bca/1/bcs-111/index.html" },
+      { "source": "/bca/1/BCS-011/**", "destination": "/bca/1/bcs-011/index.html" },
+      { "source": "/bca/1/BCS-011", "destination": "/bca/1/bcs-011/index.html" },
+      { "source": "/bca/1/BCS-012/**", "destination": "/bca/1/bcs-012/index.html" },
+      { "source": "/bca/1/BCS-012", "destination": "/bca/1/bcs-012/index.html" },
+      { "source": "/bca/1/BCSL-013/**", "destination": "/bca/1/bcsl-013/index.html" },
+      { "source": "/bca/1/BCSL-013", "destination": "/bca/1/bcsl-013/index.html" },
+      { "source": "/bca/1/BEGLA-136/**", "destination": "/bca/1/begla-136/index.html" },
+      { "source": "/bca/1/BEGLA-136", "destination": "/bca/1/begla-136/index.html" },
+      { "source": "/bca/1/BEVAE-181/**", "destination": "/bca/1/bevae-181/index.html" },
+      { "source": "/bca/1/BEVAE-181", "destination": "/bca/1/bevae-181/index.html" },
+      { "source": "/bca/semester-1/BCS-111/**", "destination": "/bca/1/bcs-111/index.html" },
+      { "source": "/bca/semester-1/BCS-111", "destination": "/bca/1/bcs-111/index.html" },
+      { "source": "/bca/semester-1/BCS-011/**", "destination": "/bca/1/bcs-011/index.html" },
+      { "source": "/bca/semester-1/BCS-011", "destination": "/bca/1/bcs-011/index.html" }
+    ]
+  }
+}

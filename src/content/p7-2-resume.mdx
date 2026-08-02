@@ -1,0 +1,73 @@
+---
+title: "P7.2: ATS Resume Writing"
+description: "Optimizing your developer resume for Applicant Tracking Systems (ATS), using impact formulas, and mapping keywords."
+---
+
+# P7.2: ATS Resume Writing
+
+Most tech companies use **Applicant Tracking Systems (ATS)** to filter resumes before a human recruiter ever sees them. If your resume is not formatted to be easily readable by these bots, you will be automatically rejected.
+
+In this lesson, we will restructure your resume using standard single-column formats and impact-driven action formulas.
+
+---
+
+## 1. ATS Layout Rules
+
+To ensure tracking systems parse your resume text correctly:
+* **Single Column Only**: Avoid two-column layouts, tables, grids, text boxes, and sidebars. Bots read text top-to-bottom and left-to-right, and columns confuse them.
+* **Standard Fonts**: Use clean, web-safe sans-serif fonts (like Arial, Calibri, or Inter).
+* **Text Format**: Avoid saving your resume as an image. Always export it as a clean PDF or Docx containing selectable text.
+* **No icons/graphics**: Remove stars, meters, and progress bars showing "skill percentages". These cannot be parsed by bots.
+
+---
+
+## 2. Writing Impact-Driven Bullet Points
+
+Hiring managers want to see results, not just a list of responsibilities. Use the **Google XY-Z Formula** to write your project descriptions:
+
+> **Google X-Y-Z Formula:**
+> **Accomplished [X]**, as measured by **[Y]**, by doing **[Z]**
+
+### Examples:
+* **❌ Poor**: "Responsible for writing Express APIs and connecting them to MongoDB."
+* ** Good**: "Built a secure Express task API connected to MongoDB, decreasing query latency by **24%** through the implementation of database indexing."
+* **❌ Poor**: "Made the dashboard layout responsive on mobile screens."
+* ** Good**: "Redesigned the curriculum layout using responsive CSS Grid, reducing mobile bounce rate by **15%** and improving accessibility scores."
+
+---
+
+## 3. Skill Keywords Mapping
+
+Ensure your resume explicitly lists the target technologies mentioned in the job description. An ATS counts keyword occurrences to evaluate job fit:
+
+<GraphBar
+  title="ATS Keyword Matching Relevance"
+  subtitle="Relative importance score calculated by recruiting filters."
+  items={[
+    { label: "Technical Skills (React, Express, SQL)", value: 85, displayValue: "85% (Critical)" },
+    { label: "Soft Skills (Communication, Agility)", value: 30, displayValue: "30% (Secondary)" }
+  ]}
+/>
+
+---
+
+<DeveloperProfile
+  name="Kent C. Dodds"
+  role="JavaScript Engineer & Educator"
+  salary="₹65 Lakhs/yr equivalent"
+  company="Epic Web / Remix Team"
+  experience="10 Years"
+  avatar="👨‍💻"
+  photoUrl="https://github.com/kentcdodds.png"
+  profileUrl="https://github.com/kentcdodds"
+  stack="React, TypeScript, Testing Library, Component Patterns"
+  quote="Your resume gets you the interview; your portfolio gets you the job. Keep your resume format simple, clean, and filled with quantifiable impact!"
+/>
+
+---
+
+## 🎓 Practice Assignment
+
+1. Write a single-column markdown resume containing your profile summary, skills list, and capstone projects.
+2. Convert at least three project descriptions into the Google X-Y-Z formula.
+3. Export the file to a clean, ATS-compliant PDF.

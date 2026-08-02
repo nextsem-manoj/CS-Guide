@@ -1,0 +1,458 @@
+[
+  {
+    "code": "BCS-012",
+    "name": "Mathematics",
+    "isLab": false,
+    "path": "1st Semester/BCS-012 Mathematics",
+    "blocks": [
+      {
+        "name": "Block-1 Algebra-I",
+        "path": "1st Semester/BCS-012 Mathematics/Block-1 Algebra-I",
+        "units": [
+          {
+            "fileName": "Unit-4.pdf",
+            "displayName": "Unit-4&#x20;Mathematical&#x20;Induction",
+            "isInteractive": false
+          },
+          {
+            "fileName": "Unit-3.pdf",
+            "displayName": "Unit-3&#x20;Matrices-II",
+            "isInteractive": false
+          },
+          {
+            "fileName": "Unit-2.pdf",
+            "displayName": "Unit-2&#x20;Matrices-I",
+            "isInteractive": false
+          },
+          {
+            "fileName": "Unit-1.pdf",
+            "displayName": "Unit-1&#x20;Determinants",
+            "isInteractive": false
+          }
+        ]
+      },
+      {
+        "name": "Block-2 Algebra-II",
+        "path": "1st Semester/BCS-012 Mathematics/Block-2 Algebra-II",
+        "units": [
+          {
+            "fileName": "Unit-4.pdf",
+            "displayName": "Unit-4&#x20;Inequalities",
+            "isInteractive": false
+          },
+          {
+            "fileName": "Unit-3.pdf",
+            "displayName": "Unit-3&#x20;Equations",
+            "isInteractive": false
+          },
+          {
+            "fileName": "Unit-2.pdf",
+            "displayName": "Unit-2&#x20;Complex&#x20;Number",
+            "isInteractive": false
+          },
+          {
+            "fileName": "Unit-1.pdf",
+            "displayName": "Unit-1&#x20;Sequence&#x20;and&#x20;Series",
+            "isInteractive": false
+          }
+        ]
+      },
+      {
+        "name": "Block-3 Calculus",
+        "path": "1st Semester/BCS-012 Mathematics/Block-3 Calculus",
+        "units": [
+          {
+            "fileName": "Unit-4.pdf",
+            "displayName": "Unit-4&#x20;Application&#x20;of&#x20;Integral&#x20;Calculus",
+            "isInteractive": false
+          },
+          {
+            "fileName": "Unit-3.pdf",
+            "displayName": "Unit-3&#x20;Integration",
+            "isInteractive": false
+          },
+          {
+            "fileName": "Unit-2.pdf",
+            "displayName": "Unit-2&#x20;Simple&#x20;Application&#x20;of&#x20;Differential&#x20;Calculus",
+            "isInteractive": false
+          },
+          {
+            "fileName": "Unit-1.pdf",
+            "displayName": "Unit-1&#x20;Differential&#x20;Calculus",
+            "isInteractive": false
+          }
+        ]
+      },
+      {
+        "name": "Block-4 Vectors and Three-Dimensional Geometry",
+        "path": "1st Semester/BCS-012 Mathematics/Block-4 Vectors and Three-Dimensional Geometry",
+        "units": [
+          {
+            "fileName": "Unit-4.pdf",
+            "displayName": "Unit-4&#x20;Linear&#x20;Programming",
+            "isInteractive": false
+          },
+          {
+            "fileName": "Unit-3.pdf",
+            "displayName": "Unit-3&#x20;Three-&#x20;Dimensional&#x20;Geometry-I",
+            "isInteractive": false
+          },
+          {
+            "fileName": "Unit-2.pdf",
+            "displayName": "Unit-2&#x20;Vectors-II",
+            "isInteractive": false
+          },
+          {
+            "fileName": "Unit-1.pdf",
+            "displayName": "Unit-1&#x20;Vectors-I",
+            "isInteractive": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "code": "BCS-111",
+    "name": "Computer Basics and PC Software",
+    "isLab": false,
+    "path": "1st Semester/BCS-111 Computer Basics and PC Software",
+    "blocks": [
+      {
+        "name": "Block 1 Basics of Computer Hardware",
+        "path": "1st Semester/BCS-111 Computer Basics and PC Software/Block 1 Basics of Computer Hardware",
+        "units": [
+          {
+            "fileName": "Unit-5.pdf",
+            "displayName": "Unit-5&#x20;My&#x20;Personal&#x20;Computer",
+            "isInteractive": false
+          },
+          {
+            "fileName": "Unit-4.pdf",
+            "displayName": "Unit-4&#x20;Input&#x20;Output&#x20;Devices",
+            "isInteractive": false
+          },
+          {
+            "fileName": "Unit-3.pdf",
+            "displayName": "Unit-3&#x20;Memory&#x20;System",
+            "isInteractive": false
+          },
+          {
+            "fileName": "Unit-2.pdf",
+            "displayName": "Unit-2&#x20;Functioning&#x20;of&#x20;a&#x20;Computer",
+            "isInteractive": false
+          },
+          {
+            "fileName": "Unit-1.pdf",
+            "displayName": "Unit-1&#x20;Computer&#x20;their&#x20;Origin&#x20;and&#x20;Applications",
+            "isInteractive": false
+          }
+        ]
+      },
+      {
+        "name": "Block 2 Basics of Computer Software",
+        "path": "1st Semester/BCS-111 Computer Basics and PC Software/Block 2 Basics of Computer Software",
+        "units": [
+          {
+            "fileName": "Unit-4.pdf",
+            "displayName": "Unit-4&#x20;Computer&#x20;Applications",
+            "isInteractive": false
+          },
+          {
+            "fileName": "Unit-3.pdf",
+            "displayName": "Unit-3&#x20;Concept&#x20;in&#x20;Programming&#x20;Language",
+            "isInteractive": false
+          },
+          {
+            "fileName": "Unit-2.pdf",
+            "displayName": "Unit-2&#x20;Operating&#x20;System",
+            "isInteractive": false
+          },
+          {
+            "fileName": "Unit-1.pdf",
+            "displayName": "Unit-1&#x20;Software&#x20;Evolution",
+            "isInteractive": false
+          }
+        ]
+      },
+      {
+        "name": "Block 3 Internet Technologies",
+        "path": "1st Semester/BCS-111 Computer Basics and PC Software/Block 3 Internet Technologies",
+        "units": [
+          {
+            "fileName": "Unit-3.pdf",
+            "displayName": "UNit-3&#x20;Web&#x20;Applications-II",
+            "isInteractive": false
+          },
+          {
+            "fileName": "Unit-2.pdf",
+            "displayName": "Unit-2&#x20;Web&#x20;Applications-I",
+            "isInteractive": false
+          },
+          {
+            "fileName": "Unit-1.pdf",
+            "displayName": "Unit-1&#x20;Networking&#x20;and&#x20;Internet",
+            "isInteractive": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "code": "BCSL-013",
+    "name": "Computer Basics and PC Software Lab",
+    "isLab": false,
+    "path": "1st Semester/BCSL-013 Computer Basics and PC Software Lab",
+    "blocks": [
+      {
+        "name": "Block-1 Lab Course",
+        "path": "1st Semester/BCSL-013 Computer Basics and PC Software Lab/Block-1 Lab Course",
+        "units": [
+          {
+            "fileName": "Unit-6.pdf",
+            "displayName": "Unit-6&#x20;Browsing&#x20;and&#x20;Discussion&#x20;Forum",
+            "isInteractive": false
+          },
+          {
+            "fileName": "Unit-5.pdf",
+            "displayName": "Unit-5&#x20;E-mail",
+            "isInteractive": false
+          },
+          {
+            "fileName": "Unit-4.pdf",
+            "displayName": "Unit-4&#x20;PowerPoint",
+            "isInteractive": false
+          },
+          {
+            "fileName": "Unit-3.pdf",
+            "displayName": "Unit-3&#x20;Spread&#x20;Sheet",
+            "isInteractive": false
+          },
+          {
+            "fileName": "Unit-2.pdf",
+            "displayName": "Unit-2&#x20;Word&#x20;Processor",
+            "isInteractive": false
+          },
+          {
+            "fileName": "Unit-1.pdf",
+            "displayName": "Unit-1&#x20;Operating&#x20;System",
+            "isInteractive": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "code": "BEGLA-136",
+    "name": "English at the Workplace",
+    "isLab": false,
+    "path": "1st Semester/BEGLA-136 English at the Workplace",
+    "blocks": [
+      {
+        "name": "Block-1 Exploring the Job Market",
+        "path": "1st Semester/BEGLA-136 English at the Workplace/Block-1 Exploring the Job Market",
+        "units": [
+          {
+            "fileName": "B-1U-4.pdf",
+            "displayName": "Unit-4&#x20;Preparing&#x20;for&#x20;the&#x20;Job",
+            "isInteractive": false
+          },
+          {
+            "fileName": "B-1U-3.pdf",
+            "displayName": "Unit-3&#x20;Responding&#x20;to&#x20;Job&#x20;Advertisements",
+            "isInteractive": false
+          },
+          {
+            "fileName": "B-1U-2.pdf",
+            "displayName": "Unit-2&#x20;Searching&#x20;for&#x20;a&#x20;Job",
+            "isInteractive": false
+          },
+          {
+            "fileName": "B-1U-1.pdf",
+            "displayName": "Unit-1&#x20;Profiling&#x20;Oneself&#x20;for&#x20;the&#x20;Job",
+            "isInteractive": false
+          }
+        ]
+      },
+      {
+        "name": "Block-2 Preparing for Job Interviews",
+        "path": "1st Semester/BEGLA-136 English at the Workplace/Block-2 Preparing for Job Interviews",
+        "units": [
+          {
+            "fileName": "B-2U-8.pdf",
+            "displayName": "Unit-8&#x20;Preparing&#x20;to&#x20;Face&#x20;an&#x20;Interview",
+            "isInteractive": false
+          },
+          {
+            "fileName": "B-2U-7.pdf",
+            "displayName": "Unit-7&#x20;Writing&#x20;Your&#x20;Curriculum&#x20;Vitae&#x20;(CV)",
+            "isInteractive": false
+          },
+          {
+            "fileName": "B-2U-6.pdf",
+            "displayName": "Unit-6&#x20;Portfolio&#x20;Making",
+            "isInteractive": false
+          },
+          {
+            "fileName": "B-2U-5.pdf",
+            "displayName": "Unit-5&#x20;Using&#x20;Body&#x20;Language&#x20;Effectively",
+            "isInteractive": false
+          }
+        ]
+      },
+      {
+        "name": "Block-3 Skills for the Workplace-I",
+        "path": "1st Semester/BEGLA-136 English at the Workplace/Block-3 Skills for the Workplace-I",
+        "units": [
+          {
+            "fileName": "B-3U-12.pdf",
+            "displayName": "Unit-12&#x20;Work&#x20;Ethics",
+            "isInteractive": false
+          },
+          {
+            "fileName": "B-3U-11.pdf",
+            "displayName": "Unit-11&#x20;Essentials&#x20;of&#x20;Customer&#x20;Service",
+            "isInteractive": false
+          },
+          {
+            "fileName": "B-3U-10.pdf",
+            "displayName": "Unit-10&#x20;Understanding&#x20;Customers",
+            "isInteractive": false
+          },
+          {
+            "fileName": "B-3U-9.pdf",
+            "displayName": "Unit-9&#x20;Etiquette,&#x20;Cultural&#x20;Awareness&#x20;and&#x20;Gender&#x20;Perceptions",
+            "isInteractive": false
+          }
+        ]
+      },
+      {
+        "name": "Block-4 Skills for the Workplace-II",
+        "path": "1st Semester/BEGLA-136 English at the Workplace/Block-4 Skills for the Workplace-II",
+        "units": [
+          {
+            "fileName": "B-4U-16.pdf",
+            "displayName": "Unit-16&#x20;Writing&#x20;Business&#x20;Emails",
+            "isInteractive": false
+          },
+          {
+            "fileName": "B-4U-15.pdf",
+            "displayName": "Unit-15&#x20;Writing&#x20;Business&#x20;Letters",
+            "isInteractive": false
+          },
+          {
+            "fileName": "B-4U-14.pdf",
+            "displayName": "Unit-14&#x20;Marking&#x20;Presentations",
+            "isInteractive": false
+          },
+          {
+            "fileName": "B-4U-13.pdf",
+            "displayName": "Unit-13&#x20;Participating&#x20;in&#x20;Discussions",
+            "isInteractive": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "code": "BEVAE-181",
+    "name": "Environmental Studies",
+    "isLab": false,
+    "path": "1st Semester/BEVAE-181 Environmental Studies",
+    "blocks": [
+      {
+        "name": "Block-1 An Introduction to Environment and Environmental Studies",
+        "path": "1st Semester/BEVAE-181 Environmental Studies/Block-1 An Introduction to Environment and Environmental Studies",
+        "units": [
+          {
+            "fileName": "Unit1.pdf",
+            "displayName": "Unit-1&#x20;Our&#x20;environment",
+            "isInteractive": false
+          },
+          {
+            "fileName": "Unit3.pdf",
+            "displayName": "Unit-3&#x20;Major&#x20;ecosystem",
+            "isInteractive": false
+          },
+          {
+            "fileName": "Unit1.pdf",
+            "displayName": "Unit-1&#x20;Our&#x20;environment",
+            "isInteractive": false
+          }
+        ]
+      },
+      {
+        "name": "Block-2 Natural Resources",
+        "path": "1st Semester/BEVAE-181 Environmental Studies/Block-2 Natural Resources",
+        "units": [
+          {
+            "fileName": "Unit7.pdf",
+            "displayName": "Unit-7&#x20;Energy&#x20;resources",
+            "isInteractive": false
+          },
+          {
+            "fileName": "Unit4.pdf",
+            "displayName": "Unit-4&#x20;Land&#x20;and&#x20;water&#x20;resources",
+            "isInteractive": false
+          },
+          {
+            "fileName": "Unit6.pdf",
+            "displayName": "Unit-6&#x20;Biodiversity:&#x20;value&#x20;and&#x20;services",
+            "isInteractive": false
+          },
+          {
+            "fileName": "Unit5.pdf",
+            "displayName": "Unit-5&#x20;Forest&#x20;resources",
+            "isInteractive": false
+          }
+        ]
+      },
+      {
+        "name": "Block-3 Environmental Issues and Concerns",
+        "path": "1st Semester/BEVAE-181 Environmental Studies/Block-3 Environmental Issues and Concerns",
+        "units": [
+          {
+            "fileName": "Unit11.pdf",
+            "displayName": "Unit-11&#x20;Global&#x20;environmental&#x20;issues",
+            "isInteractive": false
+          },
+          {
+            "fileName": "Unit10.pdf",
+            "displayName": "Unit-10&#x20;Waste&#x20;management",
+            "isInteractive": false
+          },
+          {
+            "fileName": "Unit9.pdf",
+            "displayName": "Unit-9&#x20;Environmental&#x20;pollution&#x20;and&#x20;hazards",
+            "isInteractive": false
+          },
+          {
+            "fileName": "Unit8.pdf",
+            "displayName": "Unit-8&#x20;Biodiversity:&#x20;threats&#x20;and&#x20;conservation",
+            "isInteractive": false
+          }
+        ]
+      },
+      {
+        "name": "Block-4 Protecting Our Environment: Policies and Practices",
+        "path": "1st Semester/BEVAE-181 Environmental Studies/Block-4 Protecting Our Environment- Policies and Practices",
+        "units": [
+          {
+            "fileName": "Unit14.pdf",
+            "displayName": "Unit-14&#x20;Environmental&#x20;ethics",
+            "isInteractive": false
+          },
+          {
+            "fileName": "Unit13.pdf",
+            "displayName": "Unit-13&#x20;Human&#x20;communities&#x20;and&#x20;environment",
+            "isInteractive": false
+          },
+          {
+            "fileName": "Unit12.pdf",
+            "displayName": "Unit-12&#x20;Environmental&#x20;legislation",
+            "isInteractive": false
+          }
+        ]
+      }
+    ]
+  }
+]

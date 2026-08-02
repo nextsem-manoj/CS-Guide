@@ -1,0 +1,109 @@
+---
+title: "P4.5: Lifecycle and useEffect"
+description: "Mastering component lifecycle states (Mounting, Updating, Unmounting), the useEffect hook, and side effect cleanup hooks."
+---
+
+# P4.5: Lifecycle and useEffect
+
+Every React component goes through a lifecycle:
+1. **Mounting**: When the component is first created and rendered on the browser page.
+2. **Updating**: When the component's state or props change, causing it to re-render.
+3. **Unmounting**: When the component is removed from the page.
+
+To perform side effects (fetching API data, setting up timers, or manual DOM adjustments) during these lifecycle stages, we use the `useEffect` Hook.
+
+---
+
+## 1. What is a Side Effect?
+
+A **side effect** is any operation that interacts with the outside world beyond returning JSX. Common examples include:
+* Fetching data from an external API server.
+* Setting up interval timers or event listeners.
+* Modifying local storage or document titles.
+
+---
+
+## 2. Using `useEffect`
+
+The `useEffect` hook takes two arguments:
+1. **The Effect Function**: The code that runs when the side effect is triggered.
+2. **The Dependency Array (Optional)**: An array of variables that React watches. The effect will run again whenever any variable in this array changes.
+
+```jsx
+import React, { useEffect } from 'react';
+
+useEffect(() => {
+  // Your side effect code goes here...
+}, [dependencies]);
+```
+
+---
+
+## 3. The 3 Behaviors of the Dependency Array
+
+How `useEffect` behaves depends entirely on how you write the dependency array:
+
+### Behavior A: No Dependency Array
+The effect runs on **every single render** (mounting and updating). *This is rarely used as it can cause performance issues.*
+```jsx
+useEffect(() => {
+  console.log("Runs on every render!");
+});
+```
+
+### Behavior B: Empty Dependency Array `[]`
+The effect runs **exactly once** when the component first mounts. *This is standard for API data fetches.*
+```jsx
+useEffect(() => {
+  console.log("Component has mounted!");
+}, []);
+```
+
+### Behavior C: With Dependencies `[value]`
+The effect runs on mount, and then runs again **only when the specified variables change**.
+```jsx
+useEffect(() => {
+  console.log("Count changed to:", count);
+}, [count]); // Runs whenever 'count' changes
+```
+
+---
+
+## 4. Effect Cleanup (Unmounting Stage)
+
+If your effect sets up something persistent (like an interval timer or a custom window event listener), you should return a **cleanup function** from your effect. React will run this cleanup function when the component is unmounted.
+
+```jsx
+useEffect(() => {
+  const handleResize = () => console.log(window.innerWidth);
+  window.addEventListener('resize', handleResize);
+
+  // Return clean-up handler
+  return () => {
+    window.removeEventListener('resize', handleResize);
+  };
+}, []);
+```
+
+---
+
+<DeveloperProfile
+  name="Dan Abramov"
+  role="React Core Developer"
+  salary="₹70 Lakhs/yr equivalent"
+  company="Meta / React Core Team"
+  experience="11 Years"
+  avatar="⚛️"
+  photoUrl="https://github.com/gaearon.png"
+  profileUrl="https://github.com/gaearon"
+  stack="React, Redux, Virtual DOM Diffing, Hooks"
+  quote="useEffect is not a lifecycle hook. It is a synchronization hook. It keeps your component's state synchronized with external systems!"
+/>
+
+---
+
+## 🎓 Practice Assignment
+
+1. Build a clock component that updates and displays the current local time every second.
+2. Ensure you return a cleanup function to clear the interval timer (`clearInterval`) when the clock component unmounts.
+3. Test loading and leaving the page to verify that no memory leaks occur in the browser console.

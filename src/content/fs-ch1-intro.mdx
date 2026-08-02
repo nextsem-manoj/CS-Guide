@@ -1,0 +1,78 @@
+---
+title: "FS.1: Full-Stack Web Architecture"
+description: "Master the client-server relationship, database request life cycles, and how data moves across the web."
+phase: "FS.1"
+duration: "5 mins read"
+color: "bg-[#8e44ad]"
+icon: "🌐"
+---
+
+🌐 Welcome to the Full-Stack Frontier! 🚀
+
+Full-Stack development means building both the parts of the app that users see (the **Frontend**) and the hidden machinery that stores data and runs logic behind the scenes (the **Backend** & **Databases**).
+
+Let's look at how these layers fit together:
+
+```
+  +------------------+         HTTP Requests         +------------------+
+  |     Frontend     |  ==========================>  |     Backend      |
+  |  (Web Browser /  |                               | (Node.js/Express |
+  |   Android App)   |  <==========================  |   Web Server)    |
+  +------------------+         JSON Responses        +--------+---------+
+                                                              |
+                                                    Database  |  CRUD
+                                                     Queries  |  Actions
+                                                              v
+                                                     +--------+---------+
+                                                     |    Database      |
+                                                     | (MongoDB/Atlas)  |
+                                                     +------------------+
+```
+
+---
+
+👥 The Client (Frontend)
+
+The **Client** is the user interface. It runs on the user's local device, such as a web browser or a native Android app.
+- **Languages**: HTML (structure), CSS (styling), and JavaScript/React (dynamic interactions).
+- **Responsibility**: Displaying information beautifully and collecting user inputs (like button clicks, form fields, and scroll swipes).
+
+> 💡 **Developer Joke:** Why did the frontend developer go to therapy? They had too many alignment issues! 🎨
+
+---
+
+⚙️ The Server (Backend)
+
+The **Server** is the brain of your web application. It runs on a remote computer and waits for instructions from the client.
+- **Runtime & Framework**: Node.js and Express.js.
+- **Responsibility**: Enforcing security, validating user logins, running business logic, and deciding what data to pull from the database.
+
+> 🍔 **The Restaurant Analogy:**
+> - The **Client** is the customer sitting at the table.
+> - The **Backend Server** is the waiter who takes the order, brings it to the kitchen, and delivers the food back to the customer.
+
+---
+
+🗄️ The Database (Storage)
+
+The **Database** is the permanent filing cabinet of your app. 
+- **System**: MongoDB (NoSQL) or PostgreSQL (SQL).
+- **Responsibility**: Keeping data safe even when the server restarts or the user closes the app.
+- **Data Examples**: User passwords (hashed!), profiles, shopping cart items, and forum posts.
+
+---
+
+🎯 Concept Check-in
+
+Test your web architecture layers:
+
+<MatchingQuiz
+  quizId="fs_matching_intro"
+  title="Full-Stack Layer Match"
+  pairs={[
+    { "left": "Client (Frontend)", "right": "Runs inside the browser or mobile app UI" },
+    { "left": "Server (Backend)", "right": "Runs system logic and processes database queries" },
+    { "left": "Database (Storage)", "right": "Retains persistent user profiles and hashed passwords" }
+  ]}
+  explanation="The Frontend Client presents the UI, the Backend Server executes application logic, and the Database stores persistent data tables."
+/>

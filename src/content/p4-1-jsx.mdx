@@ -1,0 +1,131 @@
+---
+title: "P4.1: JSX and Virtual DOM"
+description: "Mastering JSX compiling constraints, virtual node mapping, reconciliation diffing, and single-root wrapper rules."
+---
+
+# P4.1: JSX and Virtual DOM
+
+Welcome to React! Before we write components, we must understand the core engine of React: **JSX** (JavaScript XML) and the **Virtual DOM**.
+
+---
+
+## 1. What is JSX?
+
+**JSX** is a syntax extension for JavaScript that looks like HTML, but compiles down to standard JavaScript function calls. It allows you to write the layout of your user interface directly alongside your logic.
+
+> [!IMPORTANT]
+> **JSX is NOT HTML!**
+> Browsers do not understand JSX. A compiler like Babel or SWC converts JSX code into standard `React.createElement()` function calls before it reaches the browser.
+
+### Under the Hood: The Compilation Process
+
+When you write this JSX code:
+```jsx
+const element = <h1 className="title">Hello World</h1>;
+```
+
+It compiles down to this standard JavaScript:
+```javascript
+const element = React.createElement(
+  'h1',
+  { className: 'title' },
+  'Hello World'
+);
+```
+
+---
+
+## 2. JSX Syntax Rules
+
+To write valid JSX, you must follow three strict rules:
+
+### Rule 1: Always Return a Single Root Element
+JSX elements must be wrapped in a single parent tag (like a `<div>` or a React Fragment `<>...</>`).
+
+```jsx
+// ❌ INVALID
+return (
+  <h1>Welcome</h1>
+  <p>To React</p>
+);
+
+//  VALID
+return (
+  <>
+    <h1>Welcome</h1>
+    <p>To React</p>
+  </>
+);
+```
+
+### Rule 2: Close All Tags
+All tags must be explicitly closed, including self-closing tags like `<img>`, `<br>`, and `<input>`.
+
+```jsx
+// ❌ INVALID
+<img src="logo.png">
+<input type="text">
+
+//  VALID
+<img src="logo.png" />
+<input type="text" />
+```
+
+### Rule 3: Use camelCase for Attributes
+Since JSX compiles to JavaScript objects, HTML attribute names are mapped to camelCase JavaScript properties.
+* Use `className` instead of `class`.
+* Use `htmlFor` instead of `for`.
+* Use `tabIndex` instead of `tabindex`.
+
+---
+
+## 3. JavaScript Expressions in JSX
+
+You can embed any valid JavaScript expression (variables, functions, math) inside JSX by wrapping it in curly braces `{}`.
+
+```jsx
+const username = "Manoj";
+const element = <h1>Welcome back, {username}!</h1>;
+```
+
+---
+
+## 4. The Virtual DOM Mechanics
+
+React uses a **Virtual DOM** to make rendering fast. Instead of modifying the real browser DOM directly (which is slow), React follows a three-step process:
+
+1. **Virtual Copy**: When state changes, React creates a new virtual representation of the entire UI page in memory.
+2. **Diffing Algorithm**: React compares the new Virtual DOM with the previous snapshot to identify exactly which elements changed.
+3. **Reconciliation (Patching)**: React updates *only* those specific modified nodes in the real browser DOM.
+
+<GraphBar
+  title="DOM Update Performance Comparison"
+  subtitle="Time taken (ms) to update 1,000 list items dynamically."
+  items={[
+    { label: "Native DOM Manipulation", value: 85, displayValue: "85ms" },
+    { label: "React Virtual DOM Diffing", value: 12, displayValue: "12ms" }
+  ]}
+/>
+
+---
+
+<DeveloperProfile
+  name="Dan Abramov"
+  role="React Core Developer"
+  salary="₹70 Lakhs/yr equivalent"
+  company="Meta / React Core Team"
+  experience="11 Years"
+  avatar="⚛️"
+  photoUrl="https://github.com/gaearon.png"
+  profileUrl="https://github.com/gaearon"
+  stack="React, Redux, Virtual DOM Diffing, Hooks"
+  quote="JSX looks like HTML but compiles down to standard React.createElement function calls. Once you understand that JSX is just expressions, combining markup with JS logic becomes natural!"
+/>
+
+---
+
+## 🎓 Practice Assignment
+
+1. Create a simple React element using a Fragment wrapper.
+2. Render a dynamic list containing three developer skills using JavaScript `.map()` inside curly braces `{}`.
+3. Run the compiler and inspect the browser console to verify no compilation errors occur.

@@ -1,0 +1,107 @@
+---
+title: "P4.4: State and useState"
+description: "Understanding reactive local state, the useState hook, state update scheduling, and re-rendering loops."
+---
+
+# P4.4: State and useState
+
+While Props are read-only and passed from parent to child, **State** is a component's local memory. State allows components to store data that changes over time (like counter values, text input fields, or drawer toggles).
+
+---
+
+## 1. Introducing the `useState` Hook
+
+To declare state inside a functional component, we use the `useState` Hook. Hooks are built-in React functions that let you connect with React's state engine.
+
+```jsx
+import React, { useState } from 'react';
+```
+
+### Syntax of `useState`
+When you call `useState`, it returns an array containing exactly two items:
+1. **The State Variable**: The current state value.
+2. **The Setter Function**: A function used to update the state variable and trigger React to re-render the page.
+
+```jsx
+const [count, setCount] = useState(0);
+//       ▲        ▲                 ▲
+//   State Var  Setter Fn       Initial Value
+```
+
+---
+
+## 2. Step-by-Step Example: An Interactive Counter
+
+Let's build a counter component that increments its value when a button is clicked.
+
+```jsx
+import React, { useState } from 'react';
+
+export default function Counter() {
+  // 1. Declare state variable initialized to 0
+  const [count, setCount] = useState(0);
+
+  // 2. Event handler function
+  const handleIncrement = () => {
+    setCount(count + 1);
+  };
+
+  return (
+    <div className="p-6 bg-slate-900 border border-slate-800 rounded-3xl text-center space-y-4">
+      <h2 className="text-xs font-black uppercase text-slate-450 tracking-wider">Interactive Counter</h2>
+      
+      {/* 3. Display current state value */}
+      <div className="text-3xl font-black text-blue-400">{count}</div>
+      
+      {/* 4. Bind trigger function to onClick */}
+      <button 
+        onClick={handleIncrement}
+        className="px-4 py-2 bg-blue-600 hover:bg-blue-500 rounded-xl font-bold text-xs text-white transition-all cursor-pointer"
+      >
+        Increment Counter
+      </button>
+    </div>
+  );
+}
+```
+
+---
+
+## 3. Key Concepts to Remember
+
+> [!IMPORTANT]
+> **State Updates are Asynchronous!**
+> Setting state does not immediately update the variable on the next line of code. Instead, React schedules the update and rebuilds the component with the new value.
+
+```jsx
+const handleIncrement = () => {
+  setCount(count + 1);
+  console.log(count); // ❌ Prints OLD count value because update is scheduled!
+};
+```
+
+### Rule 2: State Trigger Re-rendering
+Whenever a state variable changes via its setter function, React automatically invokes the component function again with the new state values, updating the browser DOM.
+
+---
+
+<DeveloperProfile
+  name="Kent C. Dodds"
+  role="JavaScript Engineer & Educator"
+  salary="₹65 Lakhs/yr equivalent"
+  company="Epic Web / Remix Team"
+  experience="10 Years"
+  avatar="👨‍💻"
+  photoUrl="https://github.com/kentcdodds.png"
+  profileUrl="https://github.com/kentcdodds"
+  stack="React, TypeScript, Testing Library, Component Patterns"
+  quote="Always treat state as read-only. Never modify state variables directly (like count++). Always call the setter function so React knows it needs to re-render!"
+/>
+
+---
+
+## 🎓 Practice Assignment
+
+1. Build a toggle component that changes its text between "ON" and "OFF" when clicked.
+2. Style the background of the toggle so it changes from red (OFF) to green (ON) based on the state variable.
+3. Test your component locally and verify the click transitions.

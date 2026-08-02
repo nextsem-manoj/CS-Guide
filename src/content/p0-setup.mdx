@@ -1,0 +1,191 @@
+---
+title: "P0: Introduction to Coding & Setup Hub"
+description: "The complete gateway to your local coding environment. Access terminal commands, editor settings, and version control cheat sheets."
+---
+
+# P0: Introduction to Coding & Setup Hub
+
+Before writing your first lines of code, you must equip your computer with the industry-standard tools that every professional web developer uses daily. This page acts as your central hub for **Phase 0**, listing all setup subtopics, cheatsheets, and quick navigation links.
+
+---
+
+## 🛠️ 0. Digital Literacy & System Mechanics (Week 0)
+Before you download any tools or write code, you must master the fundamental mechanics of using a computer for software development. This helps build muscle memory and breaks down technical anxieties.
+
+
+Practice navigating files and directories in the interactive Windows 11 simulator below:
+
+<TabbedOS />
+
+### ⚡ 1. Critical Shortcut Drills
+Develop fast muscle memory for these daily shortcut commands. You will use them thousands of times:
+
+<div className="overflow-x-auto my-4">
+  <table className="w-full text-left border-collapse border border-gray-200 dark:border-slate-800 rounded-xl overflow-hidden">
+    <thead>
+      <tr className="bg-slate-100 dark:bg-slate-900 text-slate-800 dark:text-white border-b border-gray-200 dark:border-slate-800 text-xs uppercase tracking-wider font-bold">
+        <th className="p-3 border-r border-gray-200 dark:border-slate-800">Shortcut</th>
+        <th className="p-3 border-r border-gray-200 dark:border-slate-800">Action</th>
+        <th className="p-3">Why it is Crucial for Developers</th>
+      </tr>
+    </thead>
+    <tbody className="text-xs text-slate-650 dark:text-slate-350 font-medium">
+      <tr className="border-b border-gray-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-white/5 transition-colors">
+        <td className="p-3 border-r border-gray-200 dark:border-slate-800 font-mono text-[#04aa6d] font-bold">Ctrl + C</td>
+        <td className="p-3 border-r border-gray-200 dark:border-slate-800">Copy Selected Items</td>
+        <td className="p-3">Copies code, commands, or text to clipboard.</td>
+      </tr>
+      <tr className="border-b border-gray-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-white/5 transition-colors">
+        <td className="p-3 border-r border-gray-200 dark:border-slate-800 font-mono text-[#04aa6d] font-bold">Ctrl + V</td>
+        <td className="p-3 border-r border-gray-200 dark:border-slate-800">Paste Copied Items</td>
+        <td className="p-3">Pastes code or commands instantly.</td>
+      </tr>
+      <tr className="border-b border-gray-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-white/5 transition-colors">
+        <td className="p-3 border-r border-gray-200 dark:border-slate-800 font-mono text-[#04aa6d] font-bold">Ctrl + Z</td>
+        <td className="p-3 border-r border-gray-200 dark:border-slate-800">Undo Last Action</td>
+        <td className="p-3">The "Time Machine" key—recovers deleted code instantly!</td>
+      </tr>
+      <tr className="border-b border-gray-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-white/5 transition-colors">
+        <td className="p-3 border-r border-gray-200 dark:border-slate-800 font-mono text-[#04aa6d] font-bold">Ctrl + Y</td>
+        <td className="p-3 border-r border-gray-200 dark:border-slate-800">Redo Last Action</td>
+        <td className="p-3">Re-applies the change you just undid.</td>
+      </tr>
+      <tr className="border-b border-gray-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-white/5 transition-colors">
+        <td className="p-3 border-r border-gray-200 dark:border-slate-800 font-mono text-[#04aa6d] font-bold">Ctrl + S</td>
+        <td className="p-3 border-r border-gray-200 dark:border-slate-800">Save Current File</td>
+        <td className="p-3"><strong>Crucial:</strong> Unsaved work will vanish if VS Code or your computer closes!</td>
+      </tr>
+      <tr className="hover:bg-slate-50 dark:hover:bg-white/5 transition-colors">
+        <td className="p-3 border-r border-gray-200 dark:border-slate-800 font-mono text-[#04aa6d] font-bold">Alt + Tab</td>
+        <td className="p-3 border-r border-gray-200 dark:border-slate-800">Switch Windows</td>
+        <td className="p-3">Quickly toggle between your browser preview and code editor.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+---
+
+### 📂 2. Standardized File Architecture
+Developers must be organized. On your computer's **Desktop**, create a folder named `Nextsem` and set up the following folders to store your weekly labs. Do **NOT** keep files scattered:
+
+```
+Desktop/
+└── Nextsem/
+    ├── Week-1/
+    ├── Week-2/
+    └── assets/
+```
+
+---
+
+### ⚠️ 3. The Zero-Space Rule
+Web browsers read folder and file names as web URLs. **Spaces inside file names will break your web application URLs!** 
+
+*   ❌ **WRONG:** `my first web page.html` (causes broken `%20` signs in URL browser address)
+*   ✅ **CORRECT:** `my-first-web-page.html` (always use hyphens `-` instead of spaces)
+
+---
+
+### 🏛️ 4. The Blueprint Analogy
+To understand how modern websites function, visualize them using this simple anatomical analogy:
+
+*   💀 **HTML (Skeleton):** The structure, bones, headings, paragraphs, lists, and layout structure of the page.
+*   👕 **CSS (Skin & Clothes):** The colors, fonts, margins, backgrounds, layout position, and responsive visual design.
+*   🧠 **JavaScript (Brain & Muscle):** The intelligence, interactivity, calculations, API fetching, and logical operations.
+
+---
+
+## 1. Phase 0 Subtopics & Roadmap
+Click any of the modules below to navigate to the detailed lesson:
+
+### 💻 [P0.1: Command Line & Terminal Basics](/book/p0-2-terminal)
+Learn to navigate folders and create directories like a pro without using a mouse.
+* **Key Content:** Print directory (`pwd`), list folders (`ls`), change directory (`cd`), and make folder (`mkdir`).
+* **Practice:** Navigation exercises and folder structure scripting.
+* **Go to Lesson:** [Learn Terminal Navigation &rarr;](/book/p0-2-terminal)
+
+### 📥 [P0.2: HTML Intro & Software Downloads](/book/p0-1-setup)
+Download and configure the core developer toolchain.
+* **Key Content:** Google Chrome, VS Code setup, Git installation, Node.js & npm runtimes.
+* **Practice:** Installing core tools and verification.
+* **Go to Lesson:** [Learn Software Downloads & Setup &rarr;](/book/p0-1-setup)
+
+### ⚡ [P0.3: VS Code Configuration & Editing](/book/p0-3-vscode)
+Configure your code editor for maximum efficiency.
+* **Key Content:** Format-on-save setup, installing Prettier, Live Server, and Auto Rename Tag extensions.
+* **Practice:** Editor configuration and live preview launches.
+* **Go to Lesson:** [Learn VS Code Setup &rarr;](/book/p0-3-vscode)
+
+### 🌿 [P0.4: Git & Version Control Basics](/book/p0-4-git)
+Keep track of code changes and collaborate with teams.
+* **Key Content:** Local repositories (`git init`), staging files (`git add`), saving commits (`git commit`), and remote uploads.
+* **Practice:** Initializing a repository and committing your first webpage.
+* **Go to Lesson:** [Learn Git Version Control &rarr;](/book/p0-4-git)
+
+### 🔍 [P0.5: Chrome DevTools Debugging](/book/p0-5-devtools)
+Inspect elements and troubleshoot code directly inside the browser.
+* **Key Content:** Chrome inspector, styles pane, JavaScript console warnings, and responsive layout testing.
+* **Practice:** Debugging layout elements and inspecting network logs.
+* **Go to Lesson:** [Learn Chrome DevTools &rarr;](/book/p0-5-devtools)
+
+---
+
+## 2. Command Line Cheat Sheet
+A quick-reference guide for navigating directories and managing files:
+
+| Command | Purpose | Example |
+| :--- | :--- | :--- |
+| **`pwd`** | Print current folder path | `pwd` |
+| **`ls`** | List all files in the current folder | `ls` |
+| **`cd <folder>`** | Move inside a specific folder | `cd Documents` |
+| **`cd ..`** | Move back one folder | `cd ..` |
+| **`mkdir <name>`** | Create a new folder | `mkdir nextsem-projects` |
+| **`touch <name>`** | Create a new empty text or code file | `touch index.html` |
+| **`rm <name>`** | Delete a file | `rm index.html` |
+
+---
+
+## 3. Git Workflow Cycle
+The standard Git commands you will use on every project:
+
+```bash
+# 1. Start a new repository inside your project folder
+git init
+
+# 2. Check which files were added or modified
+git status
+
+# 3. Stage all changed files for a snapshot
+git add .
+
+# 4. Commit and save the snapshot with a descriptive message
+git commit -m "feat: complete introduction html structure"
+
+# 5. Upload your local commits to GitHub (cloud)
+git push origin main
+```
+
+---
+
+<DeveloperProfile
+  name="Brad Traversy"
+  role="Full Stack Developer & Educator"
+  salary="₹45 Lakhs/yr equivalent"
+  company="Traversy Media"
+  experience="12 Years"
+  avatar="⚙️"
+  photoUrl="https://github.com/bradtraversy.png"
+  profileUrl="https://github.com/bradtraversy"
+  stack="VS Code, Git, Node.js, React, HTML5, CSS3"
+  quote="Setting up your local environment is the most important step. Don't rush it. Take it one download and one command at a time!"
+/>
+
+---
+
+## 🎓 Phase 0 Practical Checklist
+Before moving to Phase 1 (HTML Basics), make sure you have checked off the following:
+* [ ] Google Chrome, VS Code, Git, and Node.js are installed.
+* [ ] Running `node -v` and `git --version` in terminal prints active versions.
+* [ ] Prettier and Live Server extensions are active in VS Code.
+* [ ] You can create a folder, initialize it with `git init`, and create an HTML page inside it.

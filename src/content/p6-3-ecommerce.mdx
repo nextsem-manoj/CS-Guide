@@ -1,0 +1,110 @@
+---
+title: "P6.3: Full Stack E-Commerce App"
+description: "Building a MERN Stack e-commerce portal complete with product catalogs, shopping cart context state, and Stripe checkouts."
+---
+
+# P6.3: Full Stack E-Commerce App
+
+E-Commerce applications represent the classic full-stack web application, bringing together UI rendering, backend routing, database CRUD storage, and payment gateways.
+
+In this capstone project, you will build a complete MERN (MongoDB, Express, React, Node.js) stack shopping portal.
+
+---
+
+## 1. MERN Stack Architecture
+
+Our application is split into two distinct services:
+1. **Frontend Client (React/Next.js)**: Runs inside the user's browser, displaying products, updating the shopping cart state, and capturing payment forms.
+2. **Backend API Server (Node.js/Express)**: Runs in the cloud, listening for API requests, connecting to MongoDB to fetch products, and initiating payment intents.
+
+```
+┌──────────────────┐               API Fetch (Get Products)          ┌──────────────────┐
+│  React Frontend  │ ══════════════════════════════════════════════► │  Express Server  │
+│  (Client Client) │ ◄────────────────────────────────────────────── │  (Render API)    │
+└────────┬─────────┘               JSON Response (Product List)      └────────┬─────────┘
+         │                                                                    │
+         ▼ (Stripe token)                                                     ▼ (CRUD)
+┌──────────────────┐                                                 ┌──────────────────┐
+│  Stripe Sandbox  │                                                 │  MongoDB Cloud   │
+└──────────────────┘                                                 └──────────────────┘
+```
+
+---
+
+## 2. Defining Product Schemas in MongoDB
+
+Create a schema file `Product.js` inside your server folder:
+
+```javascript
+const mongoose = require('mongoose');
+
+const ProductSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  price: { type: Number, required: true },
+  description: { type: String, required: true },
+  imageUrl: { type: String, default: '/placeholder.jpg' },
+  stock: { type: Number, default: 10 }
+});
+
+module.exports = mongoose.model('Product', ProductSchema);
+```
+
+---
+
+## 3. Managing E-Commerce Cart Context
+
+To manage the shopping cart items across different pages (e.g. Products list page, Cart Drawer, Checkout Page), implement a React Context Provider:
+
+```jsx
+import React, { createContext, useState, useContext } from 'react';
+
+const CartContext = createContext();
+
+export function CartProvider({ children }) {
+  const [cart, setCart] = useState([]);
+
+  const addToCart = (product) => {
+    setCart((prev) => {
+      const exists = prev.find(item => item._id === product._id);
+      if (exists) {
+        return prev.map(item => 
+          item._id === product._id ? { ...item, quantity: item.quantity + 1 } : item
+        );
+      }
+      return [...prev, { ...product, quantity: 1 }];
+    });
+  };
+
+  return (
+    <CartContext.Provider value={{ cart, addToCart }}>
+      {children}
+    </CartContext.Provider>
+  );
+}
+
+export const useCart = () => useContext(CartContext);
+```
+
+---
+
+<DeveloperProfile
+  name="Ryan Dahl"
+  role="Creator of Node.js & Deno"
+  salary="₹95 Lakhs/yr equivalent"
+  company="Deno Land / Former Joyent"
+  experience="17 Years"
+  avatar="🦕"
+  photoUrl="https://github.com/ry.png"
+  profileUrl="https://github.com/ry"
+  stack="C++, JavaScript, Event Loops, V8 Engine, Rust"
+  quote="When handling e-commerce orders, always calculate total prices on the backend server! Never trust pricing sums passed from the client frontend, as they can be easily modified by browser devtools!"
+/>
+
+---
+
+## 🎓 Practice Assignment
+
+1. Write an Express server connected to MongoDB displaying a product list API endpoint (`/api/products`).
+2. Build a React interface that retrieves products from the API using `useEffect` and lists them inside responsive grid cards.
+3. Configure a `CartProvider` context to let users add items to their shopping cart.
+4. Verify that total calculations are performed securely before checking out.

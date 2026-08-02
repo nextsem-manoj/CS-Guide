@@ -1,0 +1,228 @@
+---
+title: "P0.5: Chrome DevTools & Debugging"
+description: "Mastering Chrome DevTools, debugging console, and inspecting layouts from newbie to expert."
+---
+
+# P0.5: Chrome DevTools & Debugging
+
+Google Chrome is more than just a browser—for web developers, it is the primary debugging environment. **Chrome DevTools** is a suite of web authoring and debugging tools built directly into the browser. 
+
+This guide will take you from a DevTools newbie to an expert, covering layout inspection, advanced console hacks, JavaScript debugging with conditional breakpoints, and keyboard shortcuts.
+
+---
+
+## 👁️ Developer Profile
+<DeveloperProfile
+  name="Dan Abramov"
+  role="React Core Developer"
+  salary="₹70 Lakhs/yr equivalent"
+  company="Meta / React Core Team"
+  experience="11 Years"
+  avatar="👁️"
+  photoUrl="https://github.com/gaearon.png"
+  profileUrl="https://github.com/gaearon"
+  stack="React, Redux, JavaScript, DevTools Elements, Console, Network"
+  quote="I spent years using console.log for everything. Once I learned to inspect variables and use Chrome DevTools elements/network panel, my debugging became ten times faster."
+/>
+
+---
+
+## 🛠️ Interactive DevTools Sandbox
+Below is a live, simulated Chrome DevTools environment. Use it to practice inspecting HTML styles, running console tables/timers, setting breakpoints, network throttling, and modifying application local storage:
+
+<TabbedDevTools />
+
+---
+
+## 1. Navigating the Panels
+
+To open Chrome DevTools, right-click any element on a webpage and select **Inspect**, or press **F12** (Windows/Linux) / **Cmd+Option+I** (Mac).
+
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 my-4">
+  <div className="p-4 bg-slate-900 border border-slate-800 rounded-xl">
+    <div className="text-base mb-1">🖥️ <strong>Elements</strong></div>
+    <div className="text-[11px] text-slate-400">Inspect and live-edit HTML tags, CSS rules, margins, and responsiveness.</div>
+  </div>
+  <div className="p-4 bg-slate-900 border border-slate-800 rounded-xl">
+    <div className="text-base mb-1">💻 <strong>Console</strong></div>
+    <div className="text-[11px] text-slate-400">Read logged outputs, view errors, and run arbitrary JavaScript expressions.</div>
+  </div>
+  <div className="p-4 bg-slate-900 border border-slate-800 rounded-xl">
+    <div className="text-base mb-1">⚙️ <strong>Sources</strong></div>
+    <div className="text-[11px] text-slate-400">Set breakpoints, step through JavaScript code execution line-by-line.</div>
+  </div>
+  <div className="p-4 bg-slate-900 border border-slate-800 rounded-xl">
+    <div className="text-base mb-1">📡 <strong>Network</strong></div>
+    <div className="text-[11px] text-slate-400">Track HTTP requests, inspect responses, payloads, and throttle speeds.</div>
+  </div>
+  <div className="p-4 bg-slate-900 border border-slate-800 rounded-xl">
+    <div className="text-base mb-1">💾 <strong>Application</strong></div>
+    <div className="text-[11px] text-slate-400">Audit LocalStorage, SessionStorage, cookies, and local database storage.</div>
+  </div>
+</div>
+
+---
+
+## 2. Elements Panel Secrets
+
+The Elements panel is where you inspect layouts, typography, alignments, and colors.
+
+<div className="space-y-3 my-4">
+  <div className="p-4 bg-slate-900 border border-slate-800 rounded-xl">
+    <h3 className="font-bold text-sm text-[#04aa6d] mb-1">🎨 Live Editing HTML & CSS</h3>
+    <p className="text-xs text-slate-350">Double-click any HTML tag or attribute in the Elements tree to edit it live in the browser. You can click on any CSS rule in the Styles pane to change font-sizes, margins, or colors. These changes are temporary, making it perfect for rapid prototyping!</p>
+  </div>
+  <div className="p-4 bg-slate-900 border border-slate-800 rounded-xl">
+    <h3 className="font-bold text-sm text-[#04aa6d] mb-1">🖱️ Forcing Pseudo-states (:hover, :active)</h3>
+    <p className="text-xs text-slate-350">Inspecting dropdown menus or hover tooltips is difficult because moving your mouse hides the item. In the Styles pane, click the <strong>:hov</strong> button and check the <strong>:hover</strong> or <strong>:active</strong> checkbox. DevTools freezes the element in that state permanently!</p>
+  </div>
+</div>
+
+---
+
+## 3. Console Power-User Hacks
+
+While `console.log()` is useful, Chrome DevTools supports more powerful output formats:
+
+<div className="space-y-4 my-4">
+  <div>
+    <span className="inline-block text-xs font-bold bg-slate-800 border border-slate-700 text-slate-300 px-2 py-0.5 rounded mb-2">📊 console.table()</span>
+    <p className="text-xs text-slate-350 mb-2">Renders an array of objects into a beautiful, sortable table instead of nested dropdowns:</p>
+  </div>
+</div>
+
+```javascript
+const students = [
+  { name: "Aman", role: "Frontend", level: 1 },
+  { name: "Rahul", role: "Backend", level: 2 }
+];
+console.table(students);
+```
+
+<div className="space-y-4 my-4">
+  <div>
+    <span className="inline-block text-xs font-bold bg-slate-800 border border-slate-700 text-slate-300 px-2 py-0.5 rounded mb-2">📁 console.group()</span>
+    <p className="text-xs text-slate-350 mb-2">Organizes related logs together under collapsible segments:</p>
+  </div>
+</div>
+
+```javascript
+console.group("User Details");
+console.log("Name: Manoj");
+console.log("Status: Certified");
+console.groupEnd();
+```
+
+<div className="space-y-4 my-4">
+  <div>
+    <span className="inline-block text-xs font-bold bg-slate-800 border border-slate-700 text-slate-300 px-2 py-0.5 rounded mb-2">⏱️ console.time() & console.timeEnd()</span>
+    <p className="text-xs text-slate-350 mb-2">Accurately measures execution speed for benchmarking database fetches or loop functions:</p>
+  </div>
+</div>
+
+```javascript
+console.time("DB Fetch");
+// Run complex task...
+console.timeEnd("DB Fetch"); // Outputs: DB Fetch: 1.45ms
+```
+
+<div className="p-4 bg-slate-900 border border-slate-800 rounded-xl my-4 text-xs text-slate-350">
+  ⚡ <strong>The $\_ Shortcut:</strong> In the Console command prompt, typing <code>$\_</code> returns the value of the most recently evaluated expression. Type <code>2 + 2</code> (press Enter), then type <code>$\_ * 5</code> to get <code>20</code> instantly!
+</div>
+
+---
+
+## 4. Sources Panel & Debugging
+
+Instead of sprinkling `console.log()` everywhere, use **breakpoints** in the Sources panel to pause your code mid-execution and inspect active variable scopes.
+
+<div className="p-4 bg-slate-900 border border-slate-800 rounded-xl my-4 space-y-2 text-xs text-slate-350">
+  <div className="flex gap-2">
+    <span className="font-bold text-[#04aa6d]">1.</span>
+    <span>Open the <strong>Sources</strong> tab in DevTools.</span>
+  </div>
+  <div className="flex gap-2">
+    <span className="font-bold text-[#04aa6d]">2.</span>
+    <span>Select your Javascript file from the file explorer sidebar.</span>
+  </div>
+  <div className="flex gap-2">
+    <span className="font-bold text-[#04aa6d]">3.</span>
+    <span>Click on any **line number** to place a breakpoint (represented by a blue bullet). Code execution will freeze here.</span>
+  </div>
+  <div className="flex gap-2">
+    <span className="font-bold text-[#04aa6d]">4.</span>
+    <span><strong>Conditional Breakpoints:</strong> Right-click a line number, choose <em>Add conditional breakpoint...</em>, and type a condition (e.g. <code>user.age &gt; 18</code>). Code will only freeze if that statement evaluates to true!</span>
+  </div>
+</div>
+
+---
+
+## 5. Network & Application Storage
+
+<div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
+  <div className="p-4 bg-slate-900 border border-slate-800 rounded-xl">
+    <h3 className="font-bold text-sm text-[#04aa6d] mb-1.5">✈️ Network Throttling</h3>
+    <p className="text-xs text-slate-350 leading-relaxed">Want to see how your site performs for users on slow mobile networks? Open the <strong>Network</strong> tab, click the <strong>Throttling</strong> dropdown, and select <strong>Slow 3G</strong> or <strong>Fast 3G</strong> to simulate connection lag.</p>
+  </div>
+  <div className="p-4 bg-slate-900 border border-slate-800 rounded-xl">
+    <h3 className="font-bold text-sm text-[#04aa6d] mb-1.5">🍪 LocalStorage & Cookie Audits</h3>
+    <p className="text-xs text-slate-350 leading-relaxed">Open the <strong>Application</strong> tab, expand the <strong>Local Storage</strong> or <strong>Cookies</strong> navigation trees. Here, you can live-edit key-value pairs stored in the browser, or click trash to clear session tokens.</p>
+  </div>
+</div>
+
+---
+
+## ⌨️ Chrome DevTools Keyboard Shortcuts
+
+Master these to debug like an expert:
+
+<div className="overflow-x-auto my-4">
+  <table className="w-full text-left border-collapse border border-gray-200 dark:border-slate-800 rounded-xl overflow-hidden">
+    <thead>
+      <tr className="bg-slate-100 dark:bg-slate-900 text-slate-800 dark:text-white border-b border-gray-200 dark:border-slate-800 text-xs uppercase tracking-wider font-bold">
+        <th className="p-3 border-r border-gray-200 dark:border-slate-800">Shortcut (Windows)</th>
+        <th className="p-3 border-r border-gray-200 dark:border-slate-800">Shortcut (Mac)</th>
+        <th className="p-3">Action</th>
+      </tr>
+    </thead>
+    <tbody className="text-xs text-slate-650 dark:text-slate-350 font-medium">
+      <tr className="border-b border-gray-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-white/5 transition-colors">
+        <td className="p-3 border-r border-gray-200 dark:border-slate-800 font-mono text-[#04aa6d] font-bold">Ctrl + Shift + P</td>
+        <td className="p-3 border-r border-gray-200 dark:border-slate-800 font-mono text-[#04aa6d] font-bold">Cmd + Shift + P</td>
+        <td className="p-3"><strong>Open Command Menu</strong> (Search settings, toggle dark mode, capture full screenshots)</td>
+      </tr>
+      <tr className="border-b border-gray-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-white/5 transition-colors">
+        <td className="p-3 border-r border-gray-200 dark:border-slate-800 font-mono text-[#04aa6d] font-bold">Ctrl + Shift + C</td>
+        <td className="p-3 border-r border-gray-200 dark:border-slate-800 font-mono text-[#04aa6d] font-bold">Cmd + Shift + C</td>
+        <td className="p-3">Toggle Inspector (Click on page to inspect element)</td>
+      </tr>
+      <tr className="border-b border-gray-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-white/5 transition-colors">
+        <td className="p-3 border-r border-gray-200 dark:border-slate-800 font-mono text-[#04aa6d] font-bold">Ctrl + Shift + J</td>
+        <td className="p-3 border-r border-gray-200 dark:border-slate-800 font-mono text-[#04aa6d] font-bold">Cmd + Option + J</td>
+        <td className="p-3">Jump directly to Console panel</td>
+      </tr>
+      <tr className="hover:bg-slate-50 dark:hover:bg-white/5 transition-colors">
+        <td className="p-3 border-r border-gray-200 dark:border-slate-800 font-mono text-[#04aa6d] font-bold">Esc</td>
+        <td className="p-3 border-r border-gray-200 dark:border-slate-800 font-mono text-[#04aa6d] font-bold">Esc</td>
+        <td className="p-3">Toggle drawer console overlay on any panel</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+---
+
+## 🎓 Practice Assignment
+1. Declare a `const` variable called `topics` that holds an array of **three objects**. Each object should have a `topic` key (string) and a `status` key (string).
+2. Use `console.log()` to print the full `topics` array.
+3. Use `console.table(topics)` to display the data in a formatted table in the console.
+4. Write a `for` loop that iterates over the `topics` array and logs each `topic` value using `console.log()`.
+5. Log an error message using `console.error("DevTools mastered!")` to see how error-level logs look in the Console panel.
+
+---
+
+
+## 🏆 Chrome DevTools Certification Test
+Pass the MCQ assessment below with **100%** to permanently claim your completion certificate on your account.
+
+<ChromeQuiz />

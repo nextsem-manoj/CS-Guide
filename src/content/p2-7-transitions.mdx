@@ -1,0 +1,44 @@
+---
+title: "P2.7: Transitions & Keyframes"
+description: "Creating premium micro-animations, timing function properties, and responsive keyframes."
+---
+
+# P2.7: Transitions & Keyframes
+
+Animations add premium feedback to user interactions, making interfaces feel active and responsive.
+
+---
+
+## 1. Transitions vs. Keyframes
+* **Transitions:** Interpolate properties smoothly when a state changes (e.g. `:hover`).
+* **Keyframes:** Run complex looping animations without user interaction.
+
+```css
+/* Smooth Hover Transition */
+.btn {
+  background-color: blue;
+  transition: background-color 0.3s ease;
+}
+.btn:hover {
+  background-color: green;
+}
+```
+
+<DeveloperProfile
+  name="Val Head"
+  role="Motion Design Specialist"
+  salary="₹68 Lakhs/yr equivalent"
+  company="Adobe"
+  experience="10 Years"
+  avatar="🎬"
+  photoUrl="https://github.com/gaearon.png"
+  profileUrl="https://github.com/gaearon"
+  stack="CSS Transitions, Animations, Motion Design, UI Performance"
+  quote="Micro-animations should be subtle and fast (typically 200ms to 400ms). Always animate transform and opacity properties. Sizing changes cause expensive layout reflows!"
+/>
+
+---
+
+## 🎓 Practice Assignment
+1. Build a card layout in HTML.
+2. When hovered, make the card scale up by 3% (`transform: scale(1.03)`) and fade in a glowing box shadow smoothly over 300ms.

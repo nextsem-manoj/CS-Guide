@@ -1,0 +1,133 @@
+---
+title: "P2.2: HSL Colors & Gradients"
+description: "Mastering CSS color declarations, HEX/RGB/HSL formats, opacity vs alpha transparency (RGBA/HSLA), and contrast accessibility standards."
+---
+
+# P2.2: HSL Colors & Gradients
+
+Color brings emotion, layout depth, and visual interest to your web designs. In this lesson, we will master how to declare foreground and background colors using various formats and transparency settings.
+
+---
+
+## 1. Foreground & Background Properties
+
+CSS color declarations target two primary areas of any HTML element box:
+* **Foreground Color (`color`):** Sets the color of the text inside an element.
+* **Background Color (`background-color`):** Sets the background color of the element box. If no background color is defined, it defaults to `transparent`.
+
+```css
+body {
+  color: #f8fafc;
+  background-color: #0f172a;
+}
+```
+
+---
+
+## 2. Palette Selection & Developer Context
+
+A curated, harmonious color system is the signature of premium digital product interfaces.
+
+<GraphBar
+  title="Visual Layout Contrast Scores"
+  subtitle="Relative readability scores based on accessibility contrast ratios."
+  items={[
+    { label: "Low Contrast (Light Gray on White)", value: 20, displayValue: "Unacceptable" },
+    { label: "Medium Contrast (Off-White on Dark Gray)", value: 75, displayValue: "Comfortable" },
+    { label: "High Contrast (Green on Black)", value: 100, displayValue: "Perfect" }
+  ]}
+/>
+
+---
+
+<DeveloperProfile
+  name="Sarah Drasner"
+  role="Layout Architect & Designer"
+  salary="₹85 Lakhs/yr equivalent"
+  company="Google"
+  experience="15 Years"
+  avatar="👩‍💻"
+  photoUrl="https://github.com/sdras.png"
+  profileUrl="https://github.com/sdras"
+  stack="CSS Color, SVG vector gradients, canvas visualization"
+  quote="Colors on computer screens are additive light. Understanding how RGB channels blend and mastering HSL saturation control is what allows developers to code dynamic, interactive visual palettes."
+/>
+
+---
+
+## 3. CSS Color Formats
+
+Every color on a screen is created by mixing red, green, and blue light (pixels). CSS supports several ways to specify these values:
+
+### 1. Color Names
+CSS recognizes 147 predefined color names (e.g. `DarkCyan`, `silver`, `white`, `black`, `tomato`). Their usage is limited because they do not cover custom design system values.
+
+### 2. Hex Codes
+The most common web format. Renders as a pound sign `#` followed by six hexadecimal digits (each pair representing Red, Green, and Blue from `00` to `ff`).
+```css
+h1 { color: #4ade80; } /* Neon Green */
+```
+
+### 3. RGB Values
+Specifies color intensity as numbers between `0` and `255` (representing Red, Green, Blue).
+```css
+h1 { color: rgb(74, 222, 128); }
+```
+
+### 4. HSL Values (Recommended for systems)
+An intuitive format based on human color perception:
+* **Hue:** The color itself, expressed as an angle on the color wheel (0 to 360). Red is 0/360, Green is 120, Blue is 240.
+* **Saturation:** The amount of gray in the color (0% is completely gray/monochrome, 100% is full color saturation).
+* **Lightness:** Renders the brightness/luminosity (0% is solid black, 100% is solid white, 50% is normal).
+
+```css
+h1 { color: hsl(120, 70%, 50%); }
+```
+
+---
+
+## 4. Transparency & Opacity
+
+CSS provides two distinct ways to make elements transparent: the `opacity` property and **alpha channels**.
+
+### The `opacity` Property
+Specifies transparency for the **entire element**, including its text and any nested child elements. The value ranges from `0.0` (fully transparent) to `1.0` (fully opaque).
+```css
+.card {
+  opacity: 0.5; /* Renders card background, borders, and TEXT at 50% opacity */
+}
+```
+
+### Alpha Transparency (RGBA / HSLA)
+Sets transparency for **only the specific property** it is applied to (e.g., just the background color), leaving the nested child elements (like text) fully opaque and readable. 
+
+* `rgba(red, green, blue, alpha)`
+* `hsla(hue, saturation, lightness, alpha)`
+* *Alpha:* Ranges from `0.0` (invisible) to `1.0` (opaque).
+
+```css
+.card {
+  /* Renders a semi-transparent background, but text remains solid and readable! */
+  background-color: rgba(15, 23, 42, 0.5); 
+}
+```
+
+---
+
+## 5. Accessibility & Contrast
+
+When choosing foreground and background colors, it is crucial to ensure there is enough contrast for the text to be readable. 
+
+* **Low Contrast:** Hard to read, especially in bright sunlight or for users with visual impairments.
+* **High Contrast:** Renders crisp readability.
+* **Medium Contrast:** For long spans of body text, slightly reducing contrast (e.g., off-white text on dark slate) reduces eye strain.
+
+> [!TIP]
+> **Typography Tip:** If you reverse text (light text on a dark background), increase the line height (`line-height`) and font weight (`font-weight`) slightly. This counteracts the visual blending of glowing white text against black.
+
+---
+
+## 🎓 Practice Assignment
+1. Create a page `colors.html` and a stylesheet `styles.css`.
+2. Construct three text blocks. Format the first text block with an HSL color, the second with a Hex code, and the third with an RGB color.
+3. Create a box with a dark background color that uses `rgba(...)` at `0.7` opacity, and verify that the white text inside it remains fully sharp and unaffected by the transparency.

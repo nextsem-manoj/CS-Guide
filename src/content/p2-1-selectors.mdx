@@ -1,0 +1,163 @@
+---
+title: "P2.1: CSS Selectors & Rules"
+description: "Understanding CSS declarations, applying external/internal styles, mastering element selectors, calculating cascade specificity, and understanding inheritance."
+---
+
+# P2.1: CSS Selectors & Rules
+
+CSS (Cascading Style Sheets) brings your structural HTML webpages to life. In this lesson, we will master how to declare styles and target elements using selectors and cascading rules.
+
+---
+
+## 1. How CSS Works
+
+CSS works by associating rules with HTML elements. A CSS rule contains two main parts: a **selector** (which points to the HTML elements to style) and a **declaration** (which contains styling properties and values).
+
+```css
+/* Selector */
+h1 {
+  /* Property : Value */
+  font-family: Arial;
+  color: #4ade80;
+}
+```
+* **Property:** The visual aspect you want to change (e.g. `color`, `font-size`, `border`).
+* **Value:** The setting for that property (e.g. `red`, `12px`, `solid`).
+* Declarations are enclosed in curly brackets `{ }` and must end with a semicolon `;`.
+
+---
+
+## 2. Dynamic Styling Engagement
+
+Clean, modular CSS stylesheets decouple presentation logic from document structure, improving code maintainability.
+
+<GraphBar
+  title="CSS Architecture Optimization Benefits"
+  subtitle="Relative improvement in page load speed and stylesheet file size."
+  items={[
+    { label: "Inline Styles Only", value: 10, displayValue: "Poor (bloated HTML)" },
+    { label: "Internal Stylesheet", value: 45, displayValue: "Moderate (per-page CSS)" },
+    { label: "External Stylesheet", value: 90, displayValue: "Excellent (cached & shared)" }
+  ]}
+/>
+
+---
+
+<DeveloperProfile
+  name="Rachel Andrew"
+  role="Technical Writer & CSS WG Member"
+  salary="₹80 Lakhs/yr equivalent"
+  company="Smashing Magazine / W3C"
+  experience="17 Years"
+  avatar="👩‍💻"
+  photoUrl="https://github.com/rachelandrew.png"
+  profileUrl="https://github.com/rachelandrew"
+  stack="CSS layout specifications, CSS Grid, HTML5 layout semantics"
+  quote="CSS selectors are not just matchers; they define document relationships. A deep grasp of specificity and selectors is what prevents the dreaded layout override wars."
+/>
+
+---
+
+## 3. Applying CSS to Webpages
+
+You can add CSS rules to your HTML in three different ways:
+
+### External CSS (Recommended)
+Places all CSS rules in a separate file (e.g., `styles.css`) and links to it in the HTML `<head>`. This separates content from presentation and allows multiple pages to share the same stylesheet.
+```html
+<link rel="stylesheet" type="text/css" href="css/styles.css" />
+```
+
+### Internal CSS
+Places CSS rules directly inside a `<style>` element in the HTML `<head>`. Ideal for one-off single-page layouts.
+```html
+<head>
+  <style type="text/css">
+    body { background-color: #0f172a; }
+  </style>
+</head>
+```
+
+### Inline CSS
+Applies styles directly to individual tags using the `style` attribute. 
+> [!WARNING]
+> Inline styles should generally be avoided because they blend content and presentation, making it harder to maintain styling across large websites.
+
+```html
+<p style="color:red; font-size:12px;">This is inline styled text.</p>
+```
+
+---
+
+## 4. CSS Selectors Reference
+
+Selectors tell the browser which HTML elements a rule applies to. You can target elements based on their type, nesting, or attributes.
+
+| Selector Type | Syntax | Meaning | Example |
+| :--- | :--- | :--- | :--- |
+| **Universal** | `*` | Targets all elements on the page. | `* { margin: 0; }` |
+| **Type** | `h1, p` | Matches HTML element names. | `p { line-height: 1.5; }` |
+| **Class** | `.note` | Matches elements with the specified class. | `.note { color: gray; }` |
+| **ID** | `#intro` | Matches the unique element with the specified `id`. | `#intro { font-weight: bold; }` |
+| **Child** | `li > a` | Matches direct children of a parent element. | `li > a { color: blue; }` |
+| **Descendant** | `p a` | Matches nested elements, regardless of depth. | `p a { text-decoration: none; }` |
+| **Adjacent Sibling** | `h1 + p` | Matches the first sibling immediately after an element. | `h1 + p { margin-top: 10px; }` |
+| **General Sibling** | `h1 ~ p` | Matches any sibling element that follows. | `h1 ~ p { color: slate; }` |
+
+---
+
+## 5. CSS Cascade & Specificity
+
+When multiple rules target the same element, browsers resolve conflicts using **the cascade**, which determines precedence based on three principles:
+
+### 1. Last Rule
+If two selectors are identical in specificity and target the same element, the rule that appears **last** in the stylesheet overrides previous ones.
+```css
+i { color: green; }
+i { color: red; } /* Wins! text will be red */
+```
+
+### 2. Specificity
+More specific selectors override more general selectors. Specificity is calculated using a scoring system:
+* Inline style = 1000
+* ID selector = 100
+* Class / Attribute selector = 10
+* Type selector (HTML tag) = 1
+* Universal selector = 0
+
+```css
+p { color: white; }        /* Specificity: 1 */
+.note { color: gray; }     /* Specificity: 10 (Wins!) */
+p#intro { color: green; }  /* Specificity: 101 (Wins over class!) */
+```
+
+### 3. The `!important` Flag
+You can write `!important` after any property value to override all specificity and ordering calculations. Use this flag sparingly, as it makes debugging layout rules extremely difficult.
+```css
+p { color: red !important; } /* Overrides all specific classes or IDs */
+```
+
+---
+
+## 6. CSS Inheritance
+
+Some CSS properties are **inherited** by child elements. For example, if you set `font-family` or `color` on the `<body>` element, all paragraphs and headings inside the body will inherit that font and color automatically.
+
+However, layout-based properties (like `background-color`, `border`, `margin`, and `padding`) are **not inherited** to prevent visual clutter.
+
+### The `inherit` Keyword:
+You can force any property to inherit a value from its parent by using the `inherit` value:
+```css
+.page {
+  /* Inherits padding dimensions set on parent <body> */
+  padding: inherit; 
+}
+```
+
+---
+
+## 🎓 Practice Assignment
+1. Create a page `selectors.html` and a stylesheet `styles.css`. Link them using an external link.
+2. Build an unordered list where some links (`<a>`) are nested inside `<li>` elements.
+3. Write CSS rules using Type, Class, ID, Child (`li > a`), and Adjacent Sibling (`h1 + p`) selectors.
+4. Test specificity by adding conflict rules for the same paragraph, and verify which color wins in Chrome.

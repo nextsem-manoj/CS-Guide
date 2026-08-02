@@ -1,0 +1,98 @@
+---
+title: "P6.2: Interactive Dashboard App"
+description: "Designing a responsive admin dashboard UI featuring active state filters, data metrics, and theme toggling."
+---
+
+# P6.2: Interactive Dashboard App
+
+Modern business applications rely on dashboards to track and filter active metrics. In this capstone project, you will build an interactive React Admin Dashboard that displays live student data, checklists, and search indicators.
+
+---
+
+## 1. Dashboard Specifications
+
+Your dashboard application must feature the following interactive components:
+* **Metric Counter widgets**: Glassmorphic panels displaying numerical progress indicators (e.g., Completed Modules, Remaining Labs).
+* **Collapsible Checklists**: Interactive phase selectors that expand and collapse subtopics.
+* **Theme Customization Selector**: A sliding pill selector changing between Light, Dark, and Night Light themes.
+* **Dynamic Search bar**: Filters list items on the fly as the user types, using standard javascript text parsing.
+
+---
+
+## 2. Implementing Dynamic Searches in React
+
+To implement text filters without querying an API on every keystroke, capture input states and perform filter passes over local item arrays:
+
+```jsx
+import React, { useState } from 'react';
+
+export default function SearchDashboard({ chapters }) {
+  const [query, setQuery] = useState("");
+
+  // Filter arrays dynamically on rendering
+  const filteredChapters = chapters.filter(ch => 
+    ch.title.toLowerCase().includes(query.toLowerCase())
+  );
+
+  return (
+    <div className="space-y-4">
+      <input
+        type="text"
+        placeholder="Filter chapters..."
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+        className="w-full p-3 rounded-xl bg-slate-900 border border-slate-800 text-white"
+      />
+      
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        {filteredChapters.map(ch => (
+          <div key={ch.id} className="p-4 bg-slate-900/40 border rounded-2xl">
+            {ch.title}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+```
+
+---
+
+## 3. Creating Glassmorphic Dashboard Panels
+
+To make your dashboard feel premium and state of the art, use CSS backing filters (`backdrop-filter`) to produce frosted-glass metrics widgets:
+
+```css
+.metric-card {
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  border-radius: 1.5rem;
+  padding: 1.5rem;
+}
+```
+
+---
+
+<DeveloperProfile
+  name="Kent C. Dodds"
+  role="JavaScript Engineer & Educator"
+  salary="₹65 Lakhs/yr equivalent"
+  company="Epic Web / Remix Team"
+  experience="10 Years"
+  avatar="👨‍💻"
+  photoUrl="https://github.com/kentcdodds.png"
+  profileUrl="https://github.com/kentcdodds"
+  stack="React, TypeScript, Testing Library, Component Patterns"
+  quote="In dashboard designs, prevent unnecessary calculations by placing filtering logic directly in standard rendering passes. Keep your search state controlled!"
+/>
+
+---
+
+## 🎓 Practice Assignment
+
+1. Build a new React workspace layout using Next.js or Vite.
+2. Implement a global `useTheme` provider supporting Light, Dark, and Night Light configurations.
+3. Design a metric dashboard page displaying dynamic task cards and an interactive filtering search bar.
+4. Verify that searches render quickly without causing lag or layout shifts.

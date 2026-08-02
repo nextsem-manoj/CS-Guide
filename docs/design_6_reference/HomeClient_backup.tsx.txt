@@ -1,0 +1,1190 @@
+"use client";
+
+import React, { useState, useRef, useEffect } from "react";
+import Link from "next/link";
+import { coursePhases } from "../data/courseData";
+import PhaseCard from "../components/PhaseCard";
+import BottomFeatures from "../components/BottomFeatures";
+import Footer from "../components/Footer";
+import { Wifi, WifiOff, BookOpen, Search, Languages, Sparkles, ArrowRight, HardDriveDownload, ShieldCheck, ChevronLeft, ChevronRight, Flag, Rocket, Lock, Gem, LayoutDashboard, Trophy, User, Settings as SettingsIcon } from "lucide-react";
+import { auth, signInWithGoogle } from "../lib/firebase";
+import { signOut } from "firebase/auth";
+
+const slideThemes = [
+  { label: "Home", color: "bg-blue-500", rawColor: "#3b82f6", shadow: "shadow-[0_0_12px_rgba(59,130,246,0.8)]", ring: "ring-blue-500/40" },
+  { label: "Curriculum Path", color: "bg-[#7d3c98]", rawColor: "#7d3c98", shadow: "shadow-[0_0_12px_rgba(125,60,152,0.8)]", ring: "ring-[#7d3c98]/40" },
+  { label: "Tools & Projects", color: "bg-[#0ea5e9]", rawColor: "#0ea5e9", shadow: "shadow-[0_0_12px_rgba(14,165,233,0.8)]", ring: "ring-[#0ea5e9]/40" },
+  { label: "Features & Pedagogy", color: "bg-[#10b981]", rawColor: "#10b981", shadow: "shadow-[0_0_12px_rgba(16,185,129,0.8)]", ring: "ring-[#10b981]/40" },
+  { label: "Get Started", color: "bg-white dark:bg-slate-100", rawColor: "#ffffff", shadow: "shadow-[0_0_12px_rgba(255,255,255,0.8)]", ring: "ring-white/40" }
+];
+
+import { usePWA } from "../hooks/usePWA";
+import FeatureSpotlight from "../components/FeatureSpotlight";
+import { useProgress } from "../context/ProgressContext";
+
+const PHASE_META: Record<string, {
+  gradient: string;
+  glow: string;
+  badge: string;
+  emoji: string;
+  outcome: string;
+  tag: string;
+}> = {
+  P0: {
+    gradient: 'from-violet-600 via-purple-600 to-indigo-700',
+    glow: 'rgba(139,92,246,0.35)',
+    badge: 'bg-violet-500/20 text-violet-300 border-violet-500/30',
+    emoji: '⚙️',
+    outcome: 'Professional dev environment ready',
+    tag: 'Foundation',
+  },
+  P1: {
+    gradient: 'from-sky-500 via-blue-600 to-cyan-600',
+    glow: 'rgba(14,165,233,0.35)',
+    badge: 'bg-sky-500/20 text-sky-300 border-sky-500/30',
+    emoji: '🌐',
+    outcome: 'Build any static webpage from scratch',
+    tag: 'Markup',
+  },
+  P2: {
+    gradient: 'from-emerald-500 via-teal-500 to-green-600',
+    glow: 'rgba(16,185,129,0.35)',
+    badge: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30',
+    emoji: '🎨',
+    outcome: 'Design pixel-perfect responsive UIs',
+    tag: 'Styling',
+  },
+  P3: {
+    gradient: 'from-amber-500 via-orange-500 to-yellow-500',
+    glow: 'rgba(245,158,11,0.35)',
+    badge: 'bg-amber-500/20 text-amber-300 border-amber-500/30',
+    emoji: '⚡',
+    outcome: 'Add interactivity and logic to any page',
+    tag: 'Logic',
+  },
+  P4: {
+    gradient: 'from-blue-500 via-indigo-500 to-violet-600',
+    glow: 'rgba(99,102,241,0.35)',
+    badge: 'bg-indigo-500/20 text-indigo-300 border-indigo-500/30',
+    emoji: '⚛️',
+    outcome: 'Build dynamic SPAs with React',
+    tag: 'Frontend Framework',
+  },
+  P5: {
+    gradient: 'from-rose-500 via-pink-500 to-fuchsia-600',
+    glow: 'rgba(236,72,153,0.35)',
+    badge: 'bg-rose-500/20 text-rose-300 border-rose-500/30',
+    emoji: '🗄️',
+    outcome: 'Power your apps with a live backend',
+    tag: 'Backend',
+  },
+  P6: {
+    gradient: 'from-cyan-500 via-teal-500 to-emerald-600',
+    glow: 'rgba(6,182,212,0.35)',
+    badge: 'bg-cyan-500/20 text-cyan-300 border-cyan-500/30',
+    emoji: '🚀',
+    outcome: 'Ship real apps to production',
+    tag: 'Deployment',
+  },
+  P7: {
+    gradient: 'from-slate-600 via-gray-700 to-zinc-800',
+    glow: 'rgba(100,116,139,0.35)',
+    badge: 'bg-slate-500/20 text-slate-300 border-slate-500/30',
+    emoji: '💼',
+    outcome: 'Land your first developer job',
+    tag: 'Career',
+  },
+};
+
+
+export default function HomeClient() {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [showUpdateModal, setShowUpdateModal] = useState(false);
+  const [hasInteracted, setHasInteracted] = useState(false);
+  const touchStartY = useRef(0);
+  const totalSlides = 5; // Hero + Curriculum Carousel + Features 1 + Features 2 + Footer
+  const [isMobile, setIsMobile] = useState(false);
+  const [currentUser, setCurrentUser] = useState<{ name: string; email: string; avatar: string; photo?: string } | null>(null);
+  
+  const { completedChapters } = useProgress();
+  const [selectedPhaseIdx, setSelectedPhaseIdx] = useState(0);
+  const milestonesRef = useRef<HTMLDivElement>(null);
+  const [isAtStart, setIsAtStart] = useState(true);
+  const [isAtEnd, setIsAtEnd] = useState(false);
+
+  const scrollMilestonesLeft = () => {
+    if (milestonesRef.current) {
+      milestonesRef.current.scrollBy({ left: -220, behavior: "smooth" });
+    }
+  };
+
+  const scrollMilestonesRight = () => {
+    if (milestonesRef.current) {
+      milestonesRef.current.scrollBy({ left: 220, behavior: "smooth" });
+    }
+  };
+
+  const getPhaseProgress = (phase: typeof coursePhases[0]) => {
+    if (!completedChapters) return 0;
+    const phaseChapters = phase.topics.map((t) => t.path);
+    const completed = phaseChapters.filter((path) => completedChapters[path]).length;
+    return Math.round((completed / phaseChapters.length) * 100);
+  };
+
+  // Offline pre-caching states
+  const [downloadingOffline, setDownloadingOffline] = useState(false);
+  const [downloadProgress, setDownloadProgress] = useState(0);
+  const [downloadCurrent, setDownloadCurrent] = useState(0);
+  const [downloadTotal, setDownloadTotal] = useState(0);
+  const [downloadComplete, setDownloadComplete] = useState(false);
+  const [isAlreadyDownloaded, setIsAlreadyDownloaded] = useState(false);
+
+  const { isInstallable, installApp, isInstalled } = usePWA();
+
+  const handleOfflineFeatureClick = async () => {
+    if (downloadingOffline || downloadComplete) return;
+
+    // Check if user is offline when trying to download
+    if (typeof window !== 'undefined' && !navigator.onLine) {
+      alert("You are currently offline. Please connect to the internet to sync and download full course content.");
+      return;
+    }
+
+    // If app is installable, prompt user to install it on device
+    if (isInstallable) {
+      try { await installApp(); } catch (e) {}
+    }
+
+    // Build the list of all unique Nextsem pages and chapters to cache
+    const paths = ["/", "/about", "/contact", "/playground", "/privacy", "/terms"];
+    coursePhases.forEach(phase => {
+      phase.topics.forEach(topic => {
+        if (topic.path && !paths.includes(`/book/${topic.path}`)) {
+          paths.push(`/book/${topic.path}`);
+        }
+      });
+    });
+
+    setDownloadingOffline(true);
+    setDownloadProgress(0);
+    setDownloadTotal(paths.length);
+    setDownloadComplete(false);
+
+    let count = 0;
+    for (const path of paths) {
+      try {
+        // Fetch triggers the Service Worker fetch handler to network-fetch and cache the HTML resource
+        await fetch(path);
+      } catch (err) {
+        console.error(`Offline downloader failed to cache route: ${path}`, err);
+      }
+      count++;
+      setDownloadCurrent(count);
+      setDownloadProgress(Math.round((count / paths.length) * 100));
+      // Give a tiny pause to prevent browser thread choking
+      await new Promise(resolve => setTimeout(resolve, 80));
+    }
+
+    setDownloadComplete(true);
+    setDownloadingOffline(false);
+    setIsAlreadyDownloaded(true);
+    localStorage.setItem("nextsem_all_downloaded", "true");
+    localStorage.setItem("nextsem_last_online_sync", Date.now().toString());
+
+    // Auto-dismiss success screen after 3 seconds
+    setTimeout(() => {
+      setDownloadComplete(false);
+    }, 3000);
+  };
+
+  const handleSearchFeatureClick = () => {
+    window.dispatchEvent(new Event("open_search"));
+  };
+
+  const handleTranslateFeatureClick = () => {
+    window.dispatchEvent(new Event("open_translate"));
+  };
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    
+    const checkAuth = () => {
+      const saved = localStorage.getItem('nextsem_user');
+      if (saved) {
+        try { setCurrentUser(JSON.parse(saved)); } catch (e) { console.error(e); }
+      } else {
+        setCurrentUser(null);
+      }
+    };
+    checkAuth();
+    window.addEventListener("nextsem_auth_changed", checkAuth);
+
+    // Check if all content has already been downloaded
+    if (localStorage.getItem("nextsem_all_downloaded") === "true") {
+      setTimeout(() => setIsAlreadyDownloaded(true), 0);
+    }
+
+    // Trigger update modal on load with a slight delay for smooth entry animation
+    const lastUpdateSeen = localStorage.getItem("nextsem_update_seen");
+    let timer: NodeJS.Timeout;
+    if (lastUpdateSeen !== "1.5") {
+      timer = setTimeout(() => setShowUpdateModal(true), 1500);
+    }
+
+    return () => {
+      window.removeEventListener("resize", checkMobile);
+      window.removeEventListener("nextsem_auth_changed", checkAuth);
+      if (timer) clearTimeout(timer);
+    };
+  }, []);
+
+  const handleNext = () => {
+    setHasInteracted(true);
+    setActiveIndex((prev) => Math.min(totalSlides - 1, prev + 1));
+  };
+
+  const handlePrev = () => {
+    setHasInteracted(true);
+    setActiveIndex((prev) => Math.max(0, prev - 1));
+  };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartY.current = e.touches[0].clientY;
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    const touchEndY = e.changedTouches[0].clientY;
+    const diff = touchStartY.current - touchEndY;
+    if (diff > 50) handleNext();
+    else if (diff < -50) handlePrev();
+  };
+
+  const selectMilestone = (index: number) => {
+    setSelectedPhaseIdx(index);
+    if (milestonesRef.current) {
+      const childNodes = milestonesRef.current.children;
+      // Button index maps to (index * 2) due to connector trace elements
+      const buttonIdx = index * 2;
+      if (childNodes[buttonIdx]) {
+        const child = childNodes[buttonIdx] as HTMLElement;
+        const targetScrollLeft = child.offsetLeft - (milestonesRef.current.clientWidth - child.offsetWidth) / 2;
+        milestonesRef.current.scrollTo({ left: targetScrollLeft, behavior: "smooth" });
+      }
+    }
+  };
+
+  const handleMilestonesScroll = () => {
+    if (!milestonesRef.current) return;
+    const { scrollLeft, scrollWidth, clientWidth } = milestonesRef.current;
+    setIsAtStart(scrollLeft <= 10);
+    setIsAtEnd(scrollLeft + clientWidth >= scrollWidth - 10);
+  };
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "ArrowDown") handleNext();
+      if (e.key === "ArrowUp") handlePrev();
+    };
+    
+    let wheelTimeout: NodeJS.Timeout | null = null;
+    const handleWheel = (e: WheelEvent) => {
+      if (wheelTimeout) return;
+      if (e.deltaY > 40) {
+        handleNext();
+        wheelTimeout = setTimeout(() => { wheelTimeout = null; }, 500);
+      } else if (e.deltaY < -40) {
+        handlePrev();
+        wheelTimeout = setTimeout(() => { wheelTimeout = null; }, 500);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    window.addEventListener("wheel", handleWheel, { passive: false });
+    
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("wheel", handleWheel);
+    };
+  }, []);
+
+  const handleStartLearning = () => {
+    // Disabled OS-level fullscreen request to prevent viewport/navigation resets on mobile
+  };
+
+  const getGlowClass = (index: number) => {
+    if (index === 0) return "from-blue-500/20 via-indigo-500/10 to-transparent";
+    if (index >= 1 && index <= coursePhases.length) {
+      const phase = coursePhases[index - 1];
+      const id = phase.id;
+      if (id.startsWith("P0")) return "from-blue-500/25 via-sky-500/10 to-transparent";
+      if (id.startsWith("P1")) return "from-violet-500/25 via-purple-500/10 to-transparent";
+      if (id.startsWith("P2")) return "from-pink-500/25 via-rose-500/10 to-transparent";
+      if (id.startsWith("P3")) return "from-amber-500/25 via-yellow-500/10 to-transparent";
+      if (id.startsWith("P4")) return "from-cyan-500/25 via-teal-500/10 to-transparent";
+      if (id.startsWith("P5")) return "from-emerald-500/25 via-teal-500/10 to-transparent";
+      if (id.startsWith("P6")) return "from-fuchsia-500/25 via-pink-500/10 to-transparent";
+      if (id.startsWith("P7")) return "from-purple-500/25 via-indigo-500/10 to-transparent";
+    }
+    return "from-slate-500/15 via-slate-600/10 to-transparent";
+  };
+
+  return (
+    <div 
+      className="h-[100dvh] w-full bg-slate-50 dark:bg-[#060c18] text-gray-900 dark:text-gray-100 font-sans selection:bg-blue-200 relative overflow-hidden select-none transition-colors duration-1000"
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+    >
+      {/* Dynamic Ambient Background Glows (Stationary for Parallax) */}
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        <div className={`absolute -top-[20%] -left-[20%] w-[80vw] h-[80vw] md:w-[50vw] md:h-[50vw] rounded-full blur-[100px] md:blur-[150px] bg-gradient-to-br ${getGlowClass(activeIndex)} transition-all duration-[1000ms] ease-out animate-slow-rotate`} />
+        <div className={`absolute -bottom-[20%] -right-[20%] w-[80vw] h-[80vw] md:w-[50vw] md:h-[50vw] rounded-full blur-[100px] md:blur-[150px] bg-gradient-to-tl ${getGlowClass((activeIndex + 2) % totalSlides)} transition-all duration-[1000ms] ease-out opacity-80 animate-slow-rotate`} />
+      </div>
+      
+      {/* Static Thin Line Navigation */}
+      <div 
+        className="absolute right-3.5 md:right-8 top-1/2 -translate-y-1/2 w-[3.5px] h-[30dvh] rounded-full transition-all duration-[800ms] ease-out z-50 pointer-events-none"
+        style={{ 
+          backgroundColor: (slideThemes[activeIndex] || slideThemes[0]).rawColor,
+          boxShadow: `0 0 12px ${(slideThemes[activeIndex] || slideThemes[0]).rawColor}`,
+          opacity: 0.85
+        }}
+      />
+
+      {/* Scroll Hint Indicator — fades out after first interaction */}
+      <div
+        className={`absolute bottom-6 left-1/2 -translate-x-1/2 z-50 flex flex-col items-center gap-1 pointer-events-none transition-all duration-700 ${
+          hasInteracted ? "opacity-0 translate-y-4" : "opacity-100 translate-y-0"
+        }`}
+      >
+        <span className="text-[10px] font-semibold uppercase tracking-widest text-white/50">Scroll</span>
+        <svg
+          className="w-5 h-5 text-white/70 animate-bounce"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth={2.5}
+          viewBox="0 0 24 24"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+        </svg>
+      </div>
+
+      {/* Slide Container (translates Y based on activeIndex) */}
+      <div 
+        className="w-full h-full transition-transform duration-[850ms] [transition-timing-function:cubic-bezier(0.16,1,0.3,1)] flex flex-col will-change-transform transform-gpu"
+        style={{ transform: `translate3d(0, -${activeIndex * 100}dvh, 0)` }}
+      >
+        
+        {/* Slide 0: Hero */}
+        <div className="h-[100dvh] w-full shrink-0 flex items-center justify-center pt-20 p-4 md:p-12">
+          <div className="flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-12 w-full h-[76dvh] lg:h-auto max-w-6xl bg-gradient-to-br from-blue-50/70 to-white/90 dark:from-slate-800/80 dark:to-[#060c18]/90 backdrop-blur-xl border border-blue-100/50 dark:border-slate-800/50 rounded-3xl p-6 md:p-12 shadow-2xl transition-opacity duration-1000">
+            
+            {/* Left Panel: Purpose & CTA */}
+            <div className="flex flex-col items-center lg:items-start text-center lg:text-left lg:w-3/5 h-full justify-between lg:justify-start">
+              
+
+              {/* Trust badge row */}
+              <div className="flex flex-wrap items-center gap-2 mb-4 justify-center lg:justify-start">
+                <span className="inline-flex items-center gap-1 text-[10px] font-black uppercase tracking-widest px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">
+                  <span style={{ animation: 'hand-bounce 0.9s ease-in-out infinite alternate' }}>🟢</span> Free to Start
+                </span>
+                <span className="inline-flex items-center gap-1 text-[10px] font-black uppercase tracking-widest px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-500 border border-amber-500/20">
+                  <span>🏆</span> Certification Included
+                </span>
+                <span className="inline-flex items-center gap-1 text-[10px] font-black uppercase tracking-widest px-2.5 py-1 rounded-full bg-blue-500/10 text-blue-500 border border-blue-500/20">
+                  <span>📱</span> Works Offline
+                </span>
+              </div>
+
+              <h2 className="text-xl sm:text-3xl lg:text-5xl font-black text-slate-900 dark:text-white mb-3 md:mb-5 tracking-tight leading-tight uppercase">
+                From <span className="relative inline-block">
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-500">Zero</span>
+                </span> to{" "}
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-violet-500 to-emerald-400">
+                  Job-Ready
+                </span>{" "}
+                Developer
+              </h2>
+
+              {/* Animated tagline */}
+              <div className="mb-6 md:mb-8 max-w-xl space-y-3">
+                <p className="text-slate-700 dark:text-slate-300 text-sm sm:text-base lg:text-lg font-medium leading-relaxed">
+                  <span className="text-lg mr-1" style={{ display: 'inline-block', animation: 'hand-bounce 1s ease-in-out infinite alternate' }}>💡</span>
+                  <strong className="text-slate-900 dark:text-white">No fluff. No passive watching.</strong> Just real code, real projects, and real results — structured from <em>absolute beginner</em> to a <em>hireable developer</em>.
+                </p>
+
+                {/* Outcome stat pills */}
+                <div className="flex flex-wrap gap-2 mt-3">
+                  {[
+                    { icon: "⚡", label: "Structured in 8 Phases", color: "from-blue-500/15 to-indigo-500/10 border-blue-500/20 text-blue-400" },
+                    { icon: "🎯", label: "Hands-on Every Lesson", color: "from-emerald-500/15 to-teal-500/10 border-emerald-500/20 text-emerald-400" },
+                    { icon: "🧠", label: "Built for BCA / B.Tech", color: "from-violet-500/15 to-purple-500/10 border-violet-500/20 text-violet-400" },
+                  ].map((stat) => (
+                    <span
+                      key={stat.label}
+                      className={`inline-flex items-center gap-1.5 text-[10px] sm:text-xs font-bold px-3 py-1.5 rounded-full bg-gradient-to-r border ${stat.color} dark:${stat.color} backdrop-blur-sm`}
+                    >
+                      <span>{stat.icon}</span> {stat.label}
+                    </span>
+                  ))}
+                </div>
+              </div>
+              
+
+              <div className="flex flex-col sm:flex-row gap-3 items-center justify-center lg:justify-start w-full max-w-md mb-2">
+                <Link 
+                  href="/book/p0-1-setup" 
+                  onClick={handleStartLearning}
+                  className="w-full sm:w-auto text-black font-black text-xs md:text-sm uppercase tracking-widest py-3.5 px-8 md:py-4 md:px-10 rounded-2xl transition-all transform hover:-translate-y-0.5 flex items-center justify-center gap-2 active:scale-95 shrink-0"
+                  style={{
+                    background: "#39FF14",
+                    boxShadow: "0 0 25px rgba(57,255,20,0.55)",
+                  }}
+                >
+                  <span>🚀</span> Start Learning Now
+                </Link>
+
+                {/* Continue with Google Button */}
+                <button
+                  onClick={async () => {
+                    if (currentUser) {
+                      try {
+                        await signOut(auth);
+                      } catch (err) {
+                        console.error("Sign Out Error:", err);
+                      }
+                    } else {
+                      try {
+                        await signInWithGoogle();
+                      } catch (err) {
+                        console.error("Sign In Error:", err);
+                        const authErr = err as { code?: string };
+                        window.dispatchEvent(new CustomEvent("nextsem_auth_error", { detail: authErr.code }));
+                      }
+                    }
+                  }}
+                  className="w-full sm:w-auto flex items-center justify-center gap-2.5 px-6 py-3 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-800 rounded-full font-bold text-xs md:text-sm shadow-md hover:bg-gray-50 dark:hover:bg-slate-800 hover:border-slate-300 dark:hover:border-slate-700 hover:-translate-y-0.5 transition-all active:scale-95 shrink-0"
+                >
+                  {currentUser ? (
+                    <>
+                      {currentUser.photo ? (
+                        <img src={currentUser.photo} alt="" className="w-5 h-5 rounded-full shrink-0 object-cover border border-white/20" />
+                      ) : (
+                        <div className="w-5 h-5 rounded-full bg-blue-600 text-white flex items-center justify-center font-black text-[10px] shrink-0">
+                          {currentUser.avatar}
+                        </div>
+                      )}
+                      <span>Logged in: {currentUser.name} (Sign Out)</span>
+                    </>
+                  ) : (
+                    <>
+                      <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24">
+                        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+                        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+                        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" />
+                        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" />
+                      </svg>
+                      <span>Continue with Google</span>
+                    </>
+                  )}
+                </button>
+              </div>
+
+              {/* Mobile 2x2 Features Grid */}
+              <div className="grid grid-cols-2 gap-2 mt-4 lg:hidden w-full max-w-md">
+                {/* Feature 1: Offline Access */}
+                <FeatureSpotlight featureId="offline-download-v1" label="Download all chapters offline!" side="top" color="blue">
+                  <button
+                    onClick={handleOfflineFeatureClick}
+                    className={`flex items-center gap-2 p-2 border rounded-xl text-left hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer w-full ${
+                      isAlreadyDownloaded
+                        ? "bg-emerald-500/10 dark:bg-emerald-900/20 border-emerald-500/30"
+                        : "bg-slate-100/40 dark:bg-slate-900/40 border-slate-200/50 dark:border-slate-700/50 hover:border-blue-500/30"
+                    }`}
+                  >
+                    <div className={`p-1.5 rounded-lg shrink-0 ${
+                      isAlreadyDownloaded ? "bg-emerald-500/15 text-emerald-500" : "bg-blue-500/10 text-blue-500"
+                    }`}>
+                      {isAlreadyDownloaded ? <ShieldCheck size={14} /> : <HardDriveDownload size={14} />}
+                    </div>
+                    <div className="min-w-0">
+                      <h4 className={`text-[10px] font-bold truncate ${
+                        isAlreadyDownloaded ? "text-emerald-600 dark:text-emerald-400" : "text-slate-800 dark:text-white"
+                      }`}>
+                        {isAlreadyDownloaded ? "Offline Ready ✓" : "Offline Access"}
+                      </h4>
+                      <p className="text-[8px] text-slate-400 dark:text-gray-400 truncate mt-0.5">
+                        {isAlreadyDownloaded ? "All chapters cached" : "Read chapters offline"}
+                      </p>
+                    </div>
+                  </button>
+                </FeatureSpotlight>
+
+                {/* Feature 2: Saves Progress */}
+                <Link
+                  href="/profile"
+                  className="flex items-center gap-2 p-2 bg-slate-100/40 dark:bg-slate-900/40 border border-slate-200/50 dark:border-slate-700/50 rounded-xl text-left hover:scale-[1.02] hover:border-emerald-500/30 active:scale-[0.98] transition-all cursor-pointer"
+                >
+                  <div className="p-1.5 bg-emerald-500/10 text-emerald-500 rounded-lg shrink-0">
+                    <BookOpen size={14} />
+                  </div>
+                  <div className="min-w-0">
+                    <h4 className="text-[10px] font-bold text-slate-800 dark:text-white truncate">Saves Progress</h4>
+                    <p className="text-[8px] text-slate-400 dark:text-gray-400 truncate mt-0.5">Track lessons easily</p>
+                  </div>
+                </Link>
+
+                {/* Feature 3: Instant Search */}
+                <button
+                  onClick={handleSearchFeatureClick}
+                  className="flex items-center gap-2 p-2 bg-slate-100/40 dark:bg-slate-900/40 border border-slate-200/50 dark:border-slate-700/50 rounded-xl text-left hover:scale-[1.02] hover:border-purple-500/30 active:scale-[0.98] transition-all cursor-pointer"
+                >
+                  <div className="p-1.5 bg-purple-500/10 text-purple-500 rounded-lg shrink-0">
+                    <Search size={14} />
+                  </div>
+                  <div className="min-w-0">
+                    <h4 className="text-[10px] font-bold text-slate-800 dark:text-white truncate">Instant Search</h4>
+                    <p className="text-[8px] text-slate-400 dark:text-gray-400 truncate mt-0.5">Find topics quickly</p>
+                  </div>
+                </button>
+
+                {/* Feature 4: Translations */}
+                <button
+                  onClick={handleTranslateFeatureClick}
+                  className="flex items-center gap-2 p-2 bg-slate-100/40 dark:bg-slate-900/40 border border-slate-200/50 dark:border-slate-700/50 rounded-xl text-left hover:scale-[1.02] hover:border-amber-500/30 active:scale-[0.98] transition-all cursor-pointer"
+                >
+                  <div className="p-1.5 bg-amber-500/10 text-amber-500 rounded-lg shrink-0">
+                    <Languages size={14} />
+                  </div>
+                  <div className="min-w-0">
+                    <h4 className="text-[10px] font-bold text-slate-800 dark:text-white truncate">Translations</h4>
+                    <p className="text-[8px] text-slate-400 dark:text-gray-400 truncate mt-0.5">Multi-language UI</p>
+                  </div>
+                </button>
+              </div>
+
+            </div>
+
+            {/* Right Panel: Features List (Desktop Only) */}
+            <div className="hidden lg:flex flex-col gap-4 lg:w-2/5 bg-slate-100/30 dark:bg-slate-900/30 p-6 rounded-2xl border border-slate-200/30 dark:border-slate-800/30 backdrop-blur-sm">
+              <span className="text-[10px] font-bold text-slate-400 tracking-widest uppercase">Course features</span>
+              
+              <div className="flex flex-col gap-3">
+                
+                {/* Feature 1: PWA Offline Access */}
+                <FeatureSpotlight featureId="offline-download-v1" label="Download all chapters offline!" side="right" color="blue">
+                  <button
+                    onClick={handleOfflineFeatureClick}
+                    className={`w-full text-left flex gap-3.5 items-start p-2.5 rounded-xl hover:scale-[1.02] active:scale-[0.99] border transition-all duration-300 cursor-pointer ${
+                      isAlreadyDownloaded
+                        ? "bg-emerald-500/5 border-emerald-500/25 hover:bg-emerald-500/10"
+                        : "border-transparent hover:bg-white/40 dark:hover:bg-slate-800/30 hover:border-slate-200/50 dark:hover:border-slate-800/50"
+                    }`}
+                  >
+                    <div className={`p-2.5 rounded-lg shrink-0 ${
+                      isAlreadyDownloaded ? "bg-emerald-500/10 text-emerald-500" : "bg-blue-500/10 text-blue-500"
+                    }`}>
+                      {isAlreadyDownloaded ? <ShieldCheck size={18} /> : <HardDriveDownload size={18} />}
+                    </div>
+                    <div>
+                      <h4 className={`text-xs font-bold ${
+                        isAlreadyDownloaded ? "text-emerald-600 dark:text-emerald-400" : "text-slate-900 dark:text-white"
+                      }`}>
+                        {isAlreadyDownloaded ? "Offline Ready — All Synced ✓" : "PWA Offline Access"}
+                      </h4>
+                      <p className="text-[11px] text-slate-400 dark:text-gray-400 mt-0.5 leading-relaxed">
+                        {isAlreadyDownloaded
+                          ? "All chapters are cached. Tap to re-sync with the latest content."
+                          : "Download and study the curriculum offline without using internet."}
+                      </p>
+                    </div>
+                  </button>
+                </FeatureSpotlight>
+
+                {/* Feature 2: Automatic Progress Saves */}
+                <Link
+                  href="/profile"
+                  className="w-full text-left flex gap-3.5 items-start p-2.5 rounded-xl hover:bg-white/40 dark:hover:bg-slate-800/30 hover:scale-[1.02] active:scale-[0.99] border border-transparent hover:border-slate-200/50 dark:hover:border-slate-800/50 transition-all duration-300 cursor-pointer"
+                >
+                  <div className="p-2.5 bg-emerald-500/10 text-emerald-500 rounded-lg shrink-0">
+                    <BookOpen size={18} />
+                  </div>
+                  <div>
+                    <h4 className="text-xs font-bold text-slate-900 dark:text-white">Automatic Progress Saves</h4>
+                    <p className="text-[11px] text-slate-400 dark:text-gray-400 mt-0.5 leading-relaxed">Keep track of your completed chapters automatically.</p>
+                  </div>
+                </Link>
+
+                {/* Feature 3: Instant Full-Text Search */}
+                <button
+                  onClick={handleSearchFeatureClick}
+                  className="w-full text-left flex gap-3.5 items-start p-2.5 rounded-xl hover:bg-white/40 dark:hover:bg-slate-800/30 hover:scale-[1.02] active:scale-[0.99] border border-transparent hover:border-slate-200/50 dark:hover:border-slate-800/50 transition-all duration-300 cursor-pointer"
+                >
+                  <div className="p-2.5 bg-purple-500/10 text-purple-500 rounded-lg shrink-0">
+                    <Search size={18} />
+                  </div>
+                  <div>
+                    <h4 className="text-xs font-bold text-slate-900 dark:text-white">Instant Full-Text Search</h4>
+                    <p className="text-[11px] text-slate-400 dark:text-gray-400 mt-0.5 leading-relaxed">Instantly search the entire curriculum for code or concepts.</p>
+                  </div>
+                </button>
+
+                {/* Feature 4: Built-in Translations */}
+                <button
+                  onClick={handleTranslateFeatureClick}
+                  className="w-full text-left flex gap-3.5 items-start p-2.5 rounded-xl hover:bg-white/40 dark:hover:bg-slate-800/30 hover:scale-[1.02] active:scale-[0.99] border border-transparent hover:border-slate-200/50 dark:hover:border-slate-800/50 transition-all duration-300 cursor-pointer"
+                >
+                  <div className="p-2.5 bg-amber-500/10 text-amber-500 rounded-lg shrink-0">
+                    <Languages size={18} />
+                  </div>
+                  <div>
+                    <h4 className="text-xs font-bold text-slate-900 dark:text-white">Built-in Translations</h4>
+                    <p className="text-[11px] text-slate-400 dark:text-gray-400 mt-0.5 leading-relaxed">Read and learn chapters in multiple local languages seamlessly.</p>
+                  </div>
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+                      {/* Slide 1: Curriculum Level Map (Matching Design 6 Mockup Exactly) */}
+        <div className="h-[100dvh] w-full shrink-0 flex relative overflow-hidden bg-[#080f21] text-white">
+          
+          {/* ── DESKTOP SIDEBAR (Visible on Desktop Only) ── */}
+          <div className="hidden lg:flex w-64 bg-[#0b1329] border-r border-slate-800/80 flex-col justify-between p-6 shrink-0 z-10 select-none">
+            <div>
+              {/* Logo */}
+              <div className="flex items-center gap-3 mb-8">
+                <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-500 to-emerald-400 flex items-center justify-center font-black text-xl text-white shadow-md">
+                  N
+                </div>
+                <span className="text-lg font-black tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-200">
+                  Nextsem Academy
+                </span>
+              </div>
+
+              {/* Navigation Links */}
+              <nav className="space-y-1.5">
+                {[
+                  { label: "Dashboard", icon: LayoutDashboard, active: false },
+                  { label: "Curriculum", icon: BookOpen, active: true },
+                  { label: "Leaderboard", icon: Trophy, active: false },
+                  { label: "My Profile", icon: User, active: false },
+                  { label: "Settings", icon: SettingsIcon, active: false },
+                ].map((item, idx) => (
+                  <button
+                    key={idx}
+                    className={`w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-sm font-black transition-all cursor-pointer ${
+                      item.active 
+                        ? "bg-slate-800/70 border border-slate-700/50 text-[#39FF14]" 
+                        : "text-slate-400 hover:text-white hover:bg-slate-800/30"
+                    }`}
+                  >
+                    <item.icon size={18} className={item.active ? "text-[#39FF14]" : "text-slate-400"} />
+                    <span>{item.label}</span>
+                  </button>
+                ))}
+              </nav>
+            </div>
+
+            {/* User Profile Info Card at Bottom */}
+            <div className="p-4 bg-slate-900/50 border border-slate-800/60 rounded-2xl flex flex-col gap-3">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full border-2 border-amber-400 overflow-hidden bg-slate-800 flex items-center justify-center shrink-0">
+                  {currentUser?.photo ? (
+                    <img src={currentUser.photo} alt={currentUser.name} className="w-full h-full object-cover" />
+                  ) : (
+                    <span className="text-base font-black text-white">{currentUser?.name?.slice(0, 2).toUpperCase() || "AJ"}</span>
+                  )}
+                </div>
+                <div className="min-w-0">
+                  <h4 className="text-xs font-black truncate">{currentUser?.name || "Alex Johnson"}</h4>
+                  <span className="text-[9px] font-black text-amber-400 uppercase tracking-widest">Rank: Gold</span>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-2 border-t border-slate-850 pt-2.5">
+                <div className="flex items-center gap-1 text-[10px] font-black text-slate-300 font-sans">
+                  <span className="text-amber-400">🪙</span>
+                  <span>12,450 XP</span>
+                </div>
+                <div className="flex items-center gap-1 text-[10px] font-black text-slate-300 font-sans">
+                  <span className="text-purple-400">💎</span>
+                  <span>75 Gems</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* ── MAIN CONTENT PANEL ── */}
+          <div className="flex-1 h-full flex flex-col justify-between p-4 md:p-8 relative select-none">
+            
+            {/* Grassy hills and path trace background (Desktop Only) */}
+            <div className="absolute inset-x-0 bottom-0 h-44 z-0 pointer-events-none overflow-hidden hidden lg:block select-none">
+              <svg viewBox="0 0 1440 320" className="w-full h-full absolute bottom-0 left-0 text-emerald-800/10 fill-current opacity-30">
+                <path d="M0,224L120,208C240,192,480,160,720,165.3C960,171,1200,213,1320,234.7L1440,256L1440,320L1320,320C1200,320,960,320,720,320C480,320,240,320,120,320L0,320Z" fill="#0f3427" />
+                <path d="M0,256L120,240C240,224,480,192,720,202.7C960,213,1200,267,1320,293.3L1440,320L1440,320L1320,320C1200,320,960,320,720,320C480,320,240,320,120,320L0,320Z" fill="#082218" />
+              </svg>
+            </div>
+
+            {/* Header Top Bar */}
+            <div className="w-full flex items-center justify-between z-10 shrink-0 select-none">
+              <button 
+                onClick={handlePrev}
+                className="w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 flex items-center justify-center transition-all cursor-pointer border border-slate-700/50"
+              >
+                <ChevronLeft size={16} />
+              </button>
+              
+              {/* Right Profile Bar */}
+              <div className="flex items-center gap-3 bg-slate-900/60 border border-slate-800/80 rounded-full py-1.5 px-4 select-none">
+                <div className="w-6 h-6 rounded-full overflow-hidden bg-slate-800 flex items-center justify-center shrink-0">
+                  {currentUser?.photo ? (
+                    <img src={currentUser.photo} alt={currentUser.name} className="w-full h-full object-cover" />
+                  ) : (
+                    <span className="text-[10px] font-black text-white">{currentUser?.name?.slice(0, 2).toUpperCase() || "AJ"}</span>
+                  )}
+                </div>
+                <span className="text-xs font-black text-slate-200 truncate max-w-[80px]">{currentUser?.name?.split(' ')[0] || "Alex J."}</span>
+                <div className="w-[1.5px] h-3 bg-slate-850" />
+                <span className="text-[10px] font-black text-amber-400 font-sans">🪙 12,450 XP</span>
+                <span className="text-[10px] font-black text-purple-400 font-sans">💎 75</span>
+              </div>
+            </div>
+
+            {/* Adventure Header */}
+            <div className="text-center z-10 shrink-0 select-none my-2">
+              <h2 className="text-xl md:text-3xl font-black uppercase tracking-wider text-slate-100">
+                Learning Adventure: Path to Mastery
+              </h2>
+              <div className="w-36 h-1.5 bg-[#39FF14] mx-auto mt-2 rounded-full shadow-[0_0_10px_#39FF14]" />
+              <span className="text-[11px] font-black text-slate-400 uppercase tracking-widest block mt-2 font-sans">
+                Level {(() => {
+                  let currentLevel = 1;
+                  for (let i = 0; i < coursePhases.length; i++) {
+                    if (getPhaseProgress(coursePhases[i]) < 100) {
+                      currentLevel = i + 1;
+                      break;
+                    }
+                  }
+                  return `${currentLevel} / ${coursePhases.length}`;
+                })()}
+              </span>
+            </div>
+
+            {/* ── DESKTOP PLAYING CARDS CAROUSEL (Visible on Desktop Only) ── */}
+            <div className="hidden lg:flex w-full flex-1 items-center justify-center gap-6 z-10 min-h-0 py-4 select-none">
+              {coursePhases.slice(0, 4).map((phase, idx) => {
+                const progress = getPhaseProgress(phase);
+                
+                // Status calculation
+                let status = "Locked";
+                let activeLevelIdx = 0;
+                for (let i = 0; i < coursePhases.length; i++) {
+                  if (getPhaseProgress(coursePhases[i]) < 100) {
+                    activeLevelIdx = i;
+                    break;
+                  }
+                }
+                if (progress === 100) status = "Completed";
+                else if (idx === activeLevelIdx) status = "Current";
+
+                return (
+                  <div
+                    key={phase.id}
+                    className={`w-[210px] h-[310px] rounded-2xl flex flex-col justify-between p-5 border transition-all duration-300 relative select-none ${
+                      status === "Completed"
+                        ? "bg-[#10b981] border-[#10b981]/50 shadow-[0_0_20px_rgba(16,185,129,0.3)]"
+                        : status === "Current"
+                        ? "bg-gradient-to-br from-[#1e3c72] to-[#2a5298] border-blue-500 shadow-[0_0_25px_rgba(59,130,246,0.3)] scale-[1.02]"
+                        : "bg-slate-800/80 border-slate-700/30 opacity-70"
+                    }`}
+                  >
+                    {/* Badge */}
+                    <div className="flex justify-between items-center">
+                      <span className={`text-[9px] font-black uppercase tracking-widest px-2.5 py-1 rounded-full border ${
+                        status === "Completed"
+                          ? "bg-green-600/30 text-white border-green-400/30"
+                          : status === "Current"
+                          ? "bg-blue-600/30 text-white border-blue-400/30"
+                          : "bg-slate-800/60 text-slate-400 border-slate-700/30"
+                      }`}>
+                        {status}
+                      </span>
+                      {status === "Completed" && (
+                        <span className="text-[10px] text-green-300 font-sans font-bold">✓</span>
+                      )}
+                    </div>
+
+                    {/* Circle Icon */}
+                    <div className="flex justify-center my-4">
+                      {status === "Completed" ? (
+                        <div className="w-16 h-16 rounded-full flex items-center justify-center border-2 border-green-300 bg-green-900/40 text-green-300 shadow-[0_0_15px_rgba(16,185,129,0.3)]">
+                          <Flag size={26} />
+                        </div>
+                      ) : status === "Current" ? (
+                        <div className="relative flex items-center justify-center w-16 h-16 rounded-full border-2 border-blue-400 bg-blue-900/50 text-blue-300 shadow-[0_0_20px_rgba(59,130,246,0.4)]">
+                          <div className="absolute inset-0 rounded-full bg-blue-400/20 animate-ping" />
+                          <div className="w-9 h-9 rounded-full border-2 border-blue-400 flex items-center justify-center">
+                            <Rocket size={18} />
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="w-16 h-16 rounded-full flex items-center justify-center border-2 border-slate-600 bg-slate-800 text-slate-500">
+                          <Lock size={22} />
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Metadata */}
+                    <div className="text-center min-w-0">
+                      <h4 className="text-[10px] font-black text-white/70 uppercase tracking-widest font-sans">Level {idx + 1}</h4>
+                      <h3 className="text-xs font-black truncate mt-0.5 text-white">{phase.title}</h3>
+                      
+                      {/* Progress bar */}
+                      <div className="mt-3.5">
+                        <div className="w-full bg-black/40 h-1.5 rounded-full overflow-hidden border border-white/10">
+                          <div 
+                            className={`h-full rounded-full transition-all duration-1000 ${
+                              status === "Completed" ? "bg-white" : "bg-blue-400"
+                            }`}
+                            style={{ width: `${progress}%` }}
+                          />
+                        </div>
+                        <div className="flex justify-between text-[8px] font-black text-white/70 uppercase mt-1 font-sans">
+                          <span>{progress}/100 XP</span>
+                          <span>{progress}%</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Bottom CTA Indicator */}
+                    <div className="flex justify-center mt-4">
+                      {status === "Completed" ? (
+                        <div className="w-6 h-6 rounded-full bg-white/20 border border-white flex items-center justify-center text-white font-sans text-xs">
+                          ✓
+                        </div>
+                      ) : status === "Current" ? (
+                        <Link
+                          href={`/book/${phase.path}`}
+                          onClick={handleStartLearning}
+                          className="bg-amber-400 hover:bg-amber-300 text-black text-[9px] font-black uppercase tracking-wider py-2.5 px-5 rounded-xl shadow-md hover:scale-105 active:scale-95 transition-all cursor-pointer font-sans"
+                        >
+                          Continue Learning
+                        </Link>
+                      ) : (
+                        <Lock size={14} className="text-white/40" />
+                      )}
+                    </div>
+
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* ── MOBILE VERTICAL LEVEL TRAIL (Visible on Mobile Only) ── */}
+            <div className="lg:hidden flex-1 w-full min-h-0 overflow-y-auto py-6 relative pr-1 select-none scrollbar-hide">
+              
+              {/* Vertical neon connection path line aligned with card circles */}
+              <div className="absolute left-[44px] top-6 bottom-6 w-0.5 bg-gradient-to-b from-[#10B981] via-[#3B82F6] to-[#475569]/30 opacity-80" />
+
+              {/* Levels list */}
+              <div className="space-y-5 relative">
+                {coursePhases.map((phase, idx) => {
+                  const progress = getPhaseProgress(phase);
+                  
+                  // Status calculation
+                  let status = "Locked";
+                  let activeLevelIdx = 0;
+                  for (let i = 0; i < coursePhases.length; i++) {
+                    if (getPhaseProgress(coursePhases[i]) < 100) {
+                      activeLevelIdx = i;
+                      break;
+                    }
+                  }
+                  if (progress === 100) status = "Completed";
+                  else if (idx === activeLevelIdx) status = "Current";
+
+                  return (
+                    <div 
+                      key={phase.id} 
+                      className={`w-full p-4 rounded-2xl border flex items-center gap-4 relative select-none ${
+                        status === "Completed"
+                          ? "bg-[#10b981] border-[#10b981]/50 text-white shadow-[0_0_15px_rgba(16,185,129,0.2)]"
+                          : status === "Current"
+                          ? "bg-gradient-to-r from-[#1e3c72] to-[#2a5298] border-blue-500 shadow-[0_0_20px_rgba(59,130,246,0.3)] text-white scale-[1.01]"
+                          : "bg-slate-800/80 border-slate-700/30 text-white/50 opacity-70"
+                      }`}
+                    >
+                      {/* Left circular milestone icon inside the card */}
+                      <div className="relative z-10 shrink-0">
+                        {status === "Completed" ? (
+                          <div className="w-14 h-14 rounded-full border-2 border-green-300 bg-green-900/60 flex items-center justify-center text-green-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={3.5} stroke="currentColor" className="w-7 h-7">
+                              <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                            </svg>
+                          </div>
+                        ) : status === "Current" ? (
+                          <div className="relative flex items-center justify-center w-14 h-14 rounded-full border-2 border-blue-400 bg-blue-900/60 text-blue-300">
+                            <div className="absolute inset-0 rounded-full bg-blue-400/20 animate-ping" />
+                            <div className="w-8 h-8 rounded-full border border-blue-400 flex items-center justify-center">
+                              <div className="w-3 h-3 rounded-full bg-blue-400" />
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="w-14 h-14 rounded-full border-2 border-slate-600 bg-slate-800 flex items-center justify-center text-slate-500">
+                            <Lock size={20} />
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Right Detail Info */}
+                      <div className="flex-1 min-w-0 flex flex-col justify-between h-full select-none">
+                        <div className="flex justify-between items-start gap-2 relative">
+                          <div className="min-w-0">
+                            <h4 className={`text-[8px] font-black uppercase tracking-widest ${status === "Locked" ? "text-slate-400" : "text-white/70"}`}>
+                              Level {idx + 1}:
+                            </h4>
+                            <h3 className="text-sm font-black truncate text-white mt-0.5">{phase.title}</h3>
+                            <span className={`text-[9px] font-black uppercase tracking-widest block mt-0.5 ${status === "Locked" ? "text-slate-400" : "text-white/70"}`}>
+                              {progress}% Done
+                            </span>
+                          </div>
+                          
+                          {/* Top right indicator badges */}
+                          {status === "Completed" ? (
+                            <span className="text-[10px] text-green-200">✓</span>
+                          ) : status === "Current" ? (
+                            <span className="text-[8px] font-black text-green-900 uppercase bg-[#39FF14] px-2 py-0.5 rounded-full shadow-[0_0_8px_#39FF14] font-sans">Tapped</span>
+                          ) : (
+                            <span className="text-[8px] font-black text-slate-400 uppercase bg-slate-850 px-2 py-0.5 rounded-full border border-slate-700/30 font-sans">Locked</span>
+                          )}
+                        </div>
+
+                        {/* Progress line indicator */}
+                        <div className="w-full bg-black/30 h-1.5 rounded-full overflow-hidden mt-3 border border-white/5">
+                          <div 
+                            className={`h-full rounded-full ${
+                              status === "Completed" ? "bg-white" : "bg-blue-400"
+                            }`}
+                            style={{ width: `${progress}%` }}
+                          />
+                        </div>
+
+                        {/* Start / Continue Button for Active level */}
+                        {status === "Current" && (
+                          <div className="flex justify-start mt-3">
+                            <Link
+                              href={`/book/${phase.path}`}
+                              onClick={handleStartLearning}
+                              className="bg-amber-400 text-black text-[9px] font-black uppercase tracking-wider py-2 px-6 rounded-xl shadow-md hover:scale-102 active:scale-98 transition-all cursor-pointer font-sans"
+                            >
+                              [Start]
+                            </Link>
+                          </div>
+                        )}
+                      </div>
+
+                    </div>
+                  );
+                })}
+              </div>
+
+            </div>
+
+            {/* Bottom Chevron (to next slide) */}
+            <div className="flex justify-center z-10 shrink-0 select-none">
+              <button 
+                onClick={handleNext}
+                className="w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 flex items-center justify-center transition-all cursor-pointer border border-slate-700/50"
+              >
+                <ChevronRight size={16} className="transform rotate-90" />
+              </button>
+            </div>
+
+          </div>
+
+        </div>
+
+        {/* Slide 9: Features Part 1 */}
+        <div className="h-[100dvh] w-full shrink-0 flex flex-col items-center justify-center pt-16 p-4 md:p-12 relative overflow-hidden bg-gradient-to-b from-gray-50 to-white dark:from-[#060c18] dark:to-slate-900">
+          <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-5"></div>
+          
+          <div className="relative z-10 max-w-7xl w-full flex flex-col items-center">
+            <div className="text-center mb-8">
+              <h2 className="text-sm md:text-lg font-bold text-blue-600 dark:text-blue-400 tracking-widest uppercase mb-2">Everything You Need</h2>
+              <h3 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white uppercase tracking-tight">Tools & Projects</h3>
+            </div>
+            
+            <BottomFeatures part={1} />
+          </div>
+        </div>
+
+        {/* Slide 10: Features Part 2 */}
+        <div className="h-[100dvh] w-full shrink-0 flex flex-col items-center justify-center pt-16 p-4 md:p-12 relative overflow-hidden bg-gradient-to-b from-white to-gray-50 dark:from-slate-900 dark:to-[#060c18]">
+          <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-5"></div>
+          
+          <div className="relative z-10 max-w-7xl w-full flex flex-col items-center">
+            <div className="text-center mb-8">
+              <h2 className="text-sm md:text-lg font-bold text-blue-600 dark:text-blue-400 tracking-widest uppercase mb-2">Success Formula</h2>
+              <h3 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white uppercase tracking-tight">Features & Pedagogy</h3>
+            </div>
+            
+            <BottomFeatures part={2} />
+          </div>
+        </div>
+
+        {/* Slide 11: Final CTA and Footer */}
+        <div className="h-[100dvh] w-full shrink-0 flex flex-col items-center justify-between pt-16 relative overflow-hidden bg-slate-900 text-white">
+          <div className="absolute inset-0 overflow-hidden pointer-events-none">
+            <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/20 rounded-full blur-[100px]"></div>
+            <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-green-500/20 rounded-full blur-[100px]"></div>
+          </div>
+
+          <div className="flex-1 flex flex-col items-center justify-center w-full max-w-4xl text-center px-4 relative z-10">
+            <span className="text-6xl md:text-8xl mb-8">🎓</span>
+            <h2 className="text-5xl md:text-7xl font-black mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400 leading-tight">
+              Ready to Build Your Future?
+            </h2>
+            <p className="text-xl md:text-2xl text-gray-400 mb-12 max-w-2xl font-light">
+              Join thousands of students and start your journey to becoming a job-ready Front End Developer today.
+            </p>
+            <Link 
+              href="/book/p0-1-setup" 
+              className="group relative inline-flex items-center justify-center gap-4 text-black font-black text-xl py-5 px-12 rounded-2xl transition-all transform hover:scale-105 active:scale-95"
+              style={{
+                background: "#39FF14",
+                boxShadow: "0 0 35px rgba(57,255,20,0.55)",
+              }}
+            >
+              <span>Start Learning For Free</span>
+              <span className="group-hover:translate-x-2 transition-transform">→</span>
+            </Link>
+          </div>
+
+          <div className="w-full relative z-10 pb-16 md:pb-0 bg-black/30 backdrop-blur-md">
+            <Footer />
+          </div>
+        </div>
+
+      </div>
+
+      {/* What's New Update Modal with Entrance Animations */}
+      {showUpdateModal && (
+        <div className="fixed inset-0 z-[99999] flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md animate-in fade-in duration-300">
+          <div className="w-full max-w-md bg-gradient-to-b from-slate-900 to-slate-950 border border-slate-800 rounded-3xl p-6 md:p-8 shadow-2xl relative animate-in zoom-in-95 slide-in-from-bottom-10 duration-500 text-left">
+            <div className="absolute top-0 right-0 w-24 h-24 bg-blue-500/10 rounded-full filter blur-lg pointer-events-none" />
+            
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 bg-amber-500/10 border border-amber-500/20 rounded-full flex items-center justify-center">
+                <Sparkles className="text-amber-400 w-5 h-5 animate-pulse" />
+              </div>
+              <div>
+                <span className="text-[9px] font-black uppercase text-amber-500 tracking-wider">Updates Live</span>
+                <h3 className="text-base font-black text-slate-100">What&apos;s New in v1.5</h3>
+              </div>
+            </div>
+
+            <p className="text-xs text-slate-400 mb-5 leading-relaxed">
+              We just deployed major updates to Nextsem Academy! Take a look:
+            </p>
+
+            <div className="space-y-4 mb-6">
+              {/* Feature 1 */}
+              <div className="flex gap-3 items-start p-3 bg-slate-900/50 border border-slate-850 rounded-xl hover:border-slate-750 transition-colors">
+                <span className="text-base font-sans">🏆</span>
+                <div>
+                  <h4 className="text-xs font-black text-slate-200">Chrome Developer Certification</h4>
+                  <p className="text-[10px] text-slate-400 mt-0.5">
+                    A comprehensive guide to Chrome DevTools. Score 100% on the final assessment to claim your verified credential badge.
+                  </p>
+                </div>
+              </div>
+
+              {/* Feature 2 */}
+              <div className="flex gap-3 items-start p-3 bg-slate-900/50 border border-slate-850 rounded-xl hover:border-slate-750 transition-colors">
+                <span className="text-base font-sans">📁</span>
+                <div>
+                  <h4 className="text-xs font-black text-slate-200">Structured Syllabus Phases</h4>
+                  <p className="text-[10px] text-slate-400 mt-0.5">
+                    The entire curriculum is now divided cleanly into P0 (Setup) through P7 (Placement Prep) for structured studying.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex gap-3 font-sans">
+              <Link 
+                href="/book/p0-5-devtools" 
+                onClick={() => {
+                  localStorage.setItem("nextsem_update_seen", "1.5");
+                  setShowUpdateModal(false);
+                }}
+                className="flex-1 flex items-center justify-center gap-1.5 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-xs shadow-md transition-colors cursor-pointer"
+              >
+                Go Try Feature <ArrowRight size={13} />
+              </Link>
+              <button 
+                onClick={() => {
+                  localStorage.setItem("nextsem_update_seen", "1.5");
+                  setShowUpdateModal(false);
+                }}
+                className="px-5 py-3 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold rounded-xl text-xs border border-slate-700 transition-colors cursor-pointer"
+              >
+                Dismiss
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Offline Cache Download Progress Overlay */}
+      {(downloadingOffline || downloadComplete) && (
+        <div className="fixed inset-0 z-[99999] flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-in fade-in duration-300">
+          <div className="w-full max-w-sm bg-slate-900 border border-slate-800 rounded-3xl p-6 md:p-8 shadow-2xl text-center relative select-none">
+            {downloadingOffline ? (
+              <>
+                <div className="w-14 h-14 bg-blue-500/10 border border-blue-500/25 rounded-full flex items-center justify-center mx-auto mb-4 animate-bounce">
+                  <span className="text-xl">📥</span>
+                </div>
+                <h3 className="text-base font-black text-slate-100 mb-1">Downloading Offline Content</h3>
+                <p className="text-[11px] text-slate-400 mb-5">
+                  Caching lessons and assets for complete offline use. Please do not close the app.
+                </p>
+
+                {/* Progress Bar */}
+                <div className="w-full bg-slate-950 rounded-full h-2.5 mb-2 overflow-hidden border border-slate-850">
+                  <div 
+                    className="bg-blue-500 h-2.5 rounded-full transition-all duration-300"
+                    style={{ width: `${downloadProgress}%` }}
+                  />
+                </div>
+                
+                <div className="flex justify-between items-center text-[10px] font-bold text-slate-400 uppercase tracking-widest font-sans">
+                  <span>{downloadProgress}% Complete</span>
+                  <span>{downloadCurrent} / {downloadTotal} Pages</span>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="w-14 h-14 bg-green-500/15 border border-green-500/30 rounded-full flex items-center justify-center mx-auto mb-4 animate-pulse">
+                  <span className="text-xl">🎉</span>
+                </div>
+                <h3 className="text-base font-black text-slate-100 mb-1">Download Complete!</h3>
+                <p className="text-xs text-slate-400">
+                  All chapters and pages have been successfully saved to your device. Nextsem Academy is ready to use without an internet connection!
+                </p>
+                <div className="mt-4 text-[9px] font-black text-amber-500 uppercase tracking-widest animate-pulse font-sans">
+                  Sync Required once every 24 hours
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}

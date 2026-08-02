@@ -1,0 +1,125 @@
+---
+title: "P5.3: MongoDB & Mongoose"
+description: "Understanding NoSQL document databases, connecting Express to MongoDB clusters, and defining model schemas using Mongoose."
+---
+
+# P5.3: MongoDB & Mongoose
+
+An in-memory array will lose all its data every time the server restarts. To persist our data permanently, we must connect our API server to a database. 
+
+In this lesson, we will use **MongoDB**, a popular NoSQL document-based database, alongside **Mongoose**, an ODM (Object Data Modeling) library for Node.js.
+
+---
+
+## 1. Relational (SQL) vs Document (NoSQL) Databases
+
+* **SQL Databases** (MySQL, PostgreSQL): Store data in strict rows and columns (tables).
+* **NoSQL Databases** (MongoDB): Store data in flexible, JSON-like documents.
+
+```json
+// Example of a MongoDB document
+{
+  "_id": "60c72b2f9b1d8b2a3c8e4d5f",
+  "title": "Learn Express",
+  "isCompleted": false,
+  "createdAt": "2026-07-07T12:00:00Z"
+}
+```
+
+---
+
+## 2. Setting Up Mongoose
+
+Mongoose provides a schema-based solution to model your application data. It includes built-in type casting, validation, and query building.
+
+### Step 1: Install Mongoose
+```bash
+npm install mongoose
+```
+
+### Step 2: Connect to MongoDB Atlas
+```javascript
+const mongoose = require('mongoose');
+
+// Connect to local or cloud MongoDB instance
+mongoose.connect('mongodb://localhost:27017/nextsem_db')
+  .then(() => console.log('Successfully connected to MongoDB!'))
+  .catch(err => console.error('Database connection error:', err));
+```
+
+---
+
+## 3. Defining Schemas and Models
+
+A **Schema** defines the structure of the document (its fields, types, and validations). A **Model** is a class constructed from the Schema that handles database queries.
+
+```javascript
+const mongoose = require('mongoose');
+
+// 1. Define the Schema
+const TaskSchema = new mongoose.Schema({
+  title: { type: String, required: true },
+  isCompleted: { type: Boolean, default: false },
+  createdAt: { type: Date, default: Date.now }
+});
+
+// 2. Create the Model
+const Task = mongoose.model('Task', TaskSchema);
+
+module.exports = Task;
+```
+
+---
+
+## 4. Querying Data with Mongoose
+
+Once your model is declared, you can use Mongoose methods (which return Promises) to query your database inside Express routes:
+
+### Get All Tasks:
+```javascript
+app.get('/api/tasks', async (req, res) => {
+  try {
+    const tasks = await Task.find();
+    res.json(tasks);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to retrieve tasks.' });
+  }
+});
+```
+
+### Create a New Task:
+```javascript
+app.post('/api/tasks', async (req, res) => {
+  try {
+    const newTask = new Task({ title: req.body.title });
+    await newTask.save(); // Save to database
+    res.status(201).json(newTask);
+  } catch (err) {
+    res.status(400).json({ error: 'Invalid data format.' });
+  }
+});
+```
+
+---
+
+<DeveloperProfile
+  name="Ryan Dahl"
+  role="Creator of Node.js & Deno"
+  salary="₹95 Lakhs/yr equivalent"
+  company="Deno Land / Former Joyent"
+  experience="17 Years"
+  avatar="🦕"
+  photoUrl="https://github.com/ry.png"
+  profileUrl="https://github.com/ry"
+  stack="C++, JavaScript, Event Loops, V8 Engine, Rust"
+  quote="MongoDB stores data in binary JSON (BSON). Since it naturally matches JavaScript object structures, NoSQL databases are the perfect choice for Node.js developers!"
+/>
+
+---
+
+## 🎓 Practice Assignment
+
+1. Install `mongoose` and establish a connection to a local database.
+2. Define a Mongoose schema for `Students` containing fields: `name` (String), `age` (Number), and `isEnrolled` (Boolean).
+3. Write a POST route to add a student, and a GET route to retrieve all students from MongoDB.
+4. Verify that data persists even after restarting your node script.

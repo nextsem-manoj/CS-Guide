@@ -1,0 +1,95 @@
+---
+title: "Chapter 12: Remote Access"
+description: "Schedule remote system power actions, enable WinRM service, and execute remote command-line tools using WinRS."
+---
+
+# Chapter 12: Remote Access
+
+## 🔌 Power Operations & Shutdown Controls
+
+Managing 🪟 Windows 11 system states remotely or locally is handled by the **`shutdown`** command. This utility allows you to configure precise power-off actions:
+
+* **`shutdown /s`**: Shuts down the computer.
+* **`shutdown /r`**: Restarts the computer.
+* **`shutdown /t [seconds]`**: Sets a delay timer before the action runs (e.g. `/t 120` delays the shutdown by 2 minutes).
+* **`shutdown /f`**: Forces running applications to close without warning, preventing files from blocking the shutdown process.
+* **`shutdown /a`**: Aborts and cancels any active, pending shutdown or restart timer.
+
+### Controlling a Remote Device:
+If you have administrative credentials, you can target another computer on your network using the `/m` switch:
+```cmd
+shutdown /s /m \\office-pc-02 /t 60 /f
+```
+*This forces a shutdown of the remote computer `office-pc-02` in 60 seconds.*
+
+---
+
+## 📶 Remote Shell Execution: WinRM & WinRS
+
+To run interactive terminal tools on remote computers across a local area network, 🪟 Windows uses the built-in **Windows Remote Management (WinRM)** and **Windows Remote Shell (WinRS)** utilities.
+
+```mermaid
+graph LR
+    local["Local Admin PC"] -- winrs command --> network["LAN Network"]
+    network -- executes --> remote["Remote Server"]
+    remote -- reports output --> local
+    
+    style local fill:#1e293b,stroke:#3b82f6,stroke-width:2px,color:#fff
+    style remote fill:#1e293b,stroke:#10b981,stroke-width:2px,color:#fff
+```
+
+### 1. Enabling WinRM Services (`winrm`)
+Before you can connect to a computer remotely, the target machine must have the WinRM listener active. Open an elevated Command Prompt on the *target computer* and run:
+```cmd
+winrm quickconfig
+```
+*This command automatically starts the WinRM service, configures it to launch on system boot, and opens required ports in the Windows Defender Firewall.*
+
+### 2. Running Remote Commands (`winrs`)
+Once WinRM is active on the remote computer, you can run commands on it from your *local computer* using `winrs`:
+* **Check Remote Network Adapter Info:**
+  ```cmd
+  winrs -r:office-pc-02 ipconfig
+  ```
+  *This executes the ipconfig command on `office-pc-02` and streams the text output back to your local command prompt window.*
+* **Specifying Credentials:**
+  If your current local user account does not have admin permissions on the target computer, supply credentials inline:
+  ```cmd
+  winrs -r:office-pc-02 -u:Administrator -p:SecretPass123 ver
+  ```
+
+> 🔌 **Developer Joke:** Why did the server countdown get aborted? Because it wanted to stay up all night drinking coffee! ☕💤
+
+---
+
+## 💻 Practice Terminal Drill
+
+Choose how you want to complete your practice drill:
+
+### ⚡ Option A: Quick-Run Simulator (Recommended)
+Click the pills below to execute the drill commands automatically:
+
+<CommandLineRunner
+  commands={[
+    { input: "shutdown /s /t 120", output: "A system shutdown has been scheduled. (Timeout is 120 seconds)", explanation: "Initiates a scheduled power down command countdown." },
+    { input: "shutdown /a", output: "The scheduled shutdown has been cancelled.", explanation: "Aborts (/a) any active scheduled shutdown countdown." }
+  ]}
+/>
+
+### 🛠️ Option B: Open-Ended Terminal Sandbox
+If you want to manually type these commands yourself, launch the full system simulator below:
+
+<TabbedOS />
+
+---
+
+## 🏆 Lesson Check
+Check your remote power operation knowledge below:
+
+<DragDropQuestion
+  questionId="cmd-shutdown-abort"
+  text="To execute the 'netstat -a' command on a remote computer named 'backup-server' using Windows Remote Shell, run __________."
+  correctOption="winrs -r:backup-server netstat -a"
+  options="winrs -r:backup-server netstat -a, winrm -r:backup-server netstat -a, ssh backup-server netstat -a, remote-exec backup-server netstat -a"
+  explanation="winrs is the Windows Remote Shell command, using the -r switch to define the target hostname followed by the execution payload."
+/>

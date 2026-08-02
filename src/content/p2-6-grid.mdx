@@ -1,0 +1,43 @@
+---
+title: "P2.6: CSS Grid Layouts"
+description: "Mastering 2D page layouts, template columns, areas, gaps, and responsive auto-fits."
+---
+
+# P2.6: CSS Grid Layouts
+
+CSS Grid is the most powerful 2-dimensional layout engine in web design, allowing layouts to align across rows and columns simultaneously.
+
+---
+
+## 1. Grid Column and Row Templates
+Define grids with columns and rows:
+* `grid-template-columns`: Defines vertical tracks (uses `fr` fractional unit).
+* `grid-gap` / `gap`: Defines grid spacing.
+* `grid-template-areas`: Maps layout templates directly using semantic strings.
+
+```css
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+}
+```
+
+<DeveloperProfile
+  name="Jen Simmons"
+  role="CSS Grid Evangelist & Designer"
+  salary="₹82 Lakhs/yr equivalent"
+  company="Apple / WebKit"
+  experience="18 Years"
+  avatar="🕸️"
+  photoUrl="https://github.com/jensimmons.png"
+  profileUrl="https://github.com/jensimmons"
+  stack="CSS Grid, Web Design Systems, Safari WebKit Dev"
+  quote="CSS Grid allows us to build layouts that were impossible before. We can place items overlapping, auto-size grids dynamically without media queries, and design page wireframes easily."
+/>
+
+---
+
+## 🎓 Practice Assignment
+1. Create a 3-column photo gallery grid using CSS Grid.
+2. Make it responsive using `repeat(auto-fit, minmax(200px, 1fr))`.

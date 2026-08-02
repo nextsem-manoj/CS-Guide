@@ -1,0 +1,52 @@
+import { MetadataRoute } from "next";
+import searchIndex from "../data/searchIndex.json";
+import { htmlLessons } from "../data/htmlLessonsData";
+
+export const dynamic = "force-static";
+
+export default function sitemap(): MetadataRoute.Sitemap {
+  const baseUrl = "https://nextsem.online";
+
+  // Base paths
+  const baseRoutes = ["", "/about", "/contact", "/playground", "/privacy", "/profile", "/terms", "/course", "/course/projects", "/cmd", "/html", "/bca/semester-1"].map((route) => ({
+    url: `${baseUrl}${route}`,
+    lastModified: new Date(),
+    changeFrequency: "weekly" as const,
+    priority: route === "" ? 1.0 : route === "/bca/semester-1" ? 0.95 : 0.8,
+  }));
+
+  // BCA 1st Semester Subject routes
+  const bcaSubjectRoutes = [
+    "/bca/semester-1/bcs-011-computer-basics",
+    "/bca/semester-1/bcs-011-computer-basics/unit-1-introduction-to-computer-systems",
+    "/bca/semester-1/bcsl-013-pc-software-lab",
+    "/bca/semester-1/bcs-012-mathematics",
+    "/bca/semester-1/begla-136-english",
+    "/bca/semester-1/bevae-181-environmental-studies",
+  ].map((route) => ({
+    url: `${baseUrl}${route}`,
+    lastModified: new Date(),
+    changeFrequency: "weekly" as const,
+    priority: 0.9,
+  }));
+
+  // Dynamic course chapter paths for other lessons (filter out HTML lessons)
+  const courseRoutes = searchIndex
+    .filter((chapter) => !chapter.id.startsWith("p1-"))
+    .map((chapter) => ({
+      url: `${baseUrl}/book/${chapter.id}`,
+      lastModified: new Date(),
+      changeFrequency: "monthly" as const,
+      priority: 0.8,
+    }));
+
+  // Add the other 99 HTML sub-lessons
+  const htmlLessonRoutes = htmlLessons.slice(1).map((lesson) => ({
+    url: `${baseUrl}/html/${lesson.slug}`,
+    lastModified: new Date(),
+    changeFrequency: "monthly" as const,
+    priority: 0.9,
+  }));
+
+  return [...baseRoutes, ...bcaSubjectRoutes, ...courseRoutes, ...htmlLessonRoutes];
+}

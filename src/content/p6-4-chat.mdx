@@ -1,0 +1,147 @@
+---
+title: "P6.4: Realtime Chat Client"
+description: "Developing a collaborative chat server using Express, Socket.io, and bi-directional message events."
+---
+
+# P6.4: Realtime Chat Client
+
+HTTP requests follow a one-way request-response cycle: the client asks for data, and the server responds. If the server has new data (like a new message in a chat room), it cannot push it to the client.
+
+To build real-time collaborative applications, we must use **WebSockets**, which open a persistent, two-way connection between the client and server.
+
+---
+
+## 1. WebSockets vs HTTP
+
+* **HTTP Requests**: Client pulls data. Connection closes after response. Great for static pages, blog articles, and catalog lists.
+* **WebSocket Tunnels**: Bidirectional persistence. Server pushes data instantly. Essential for messaging, live collaborative documents, and multiplayer games.
+
+```
+HTTP (Pull):
+Client ───(Request)───► Server ───(Response)───► [Connection Closed]
+
+WebSockets (Push):
+Client ◄───(Persistent Bidirectional Tunnel)───► Server
+```
+
+---
+
+## 2. Setting Up Socket.io Backend
+
+**Socket.io** is a popular library that simplifies WebSocket implementations, providing fallback protocols for older browsers and room management.
+
+### Step 1: Install Socket.io
+```bash
+npm install socket.io
+```
+
+### Step 2: Configure Express Server with Socket.io
+```javascript
+const express = require('express');
+const http = require('http');
+const { Server } = require('socket.io');
+
+const app = express();
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: { origin: "*" }
+});
+
+// Listen for connection events
+io.on('connection', (socket) => {
+  console.log(`User connected: ${socket.id}`);
+
+  // Listen for message broadcasts
+  socket.on('send_message', (data) => {
+    // Broadcast message to all other connected clients
+    socket.broadcast.emit('receive_message', data);
+  });
+
+  socket.on('disconnect', () => {
+    console.log(`User disconnected: ${socket.id}`);
+  });
+});
+
+server.listen(5000, () => console.log('Socket server running on port 5000'));
+```
+
+---
+
+## 3. Connecting the React Frontend
+
+To query your real-time socket server, install the client library in your React application:
+```bash
+npm install socket.io-client
+```
+
+Inside your component:
+```jsx
+import React, { useEffect, useState } from 'react';
+import io from 'socket.io-client';
+
+const socket = io.connect("http://localhost:5000");
+
+export default function ChatBox() {
+  const [message, setMessage] = useState("");
+  const [messages, setMessages] = useState([]);
+
+  useEffect(() => {
+    socket.on("receive_message", (data) => {
+      setMessages((prev) => [...prev, data]);
+    });
+    return () => socket.off("receive_message");
+  }, []);
+
+  const sendMessage = () => {
+    socket.emit("send_message", { text: message, user: "Manoj" });
+    setMessages((prev) => [...prev, { text: message, user: "Manoj" }]);
+    setMessage("");
+  };
+
+  return (
+    <div className="p-6 bg-slate-900 border rounded-3xl space-y-4 max-w-md mx-auto">
+      <div className="h-60 overflow-y-auto space-y-2 border-b border-slate-800 pb-4">
+        {messages.map((m, idx) => (
+          <div key={idx} className="text-xs">
+            <span className="font-black text-blue-400">{m.user}:</span> {m.text}
+          </div>
+        ))}
+      </div>
+      <div className="flex gap-2">
+        <input 
+          value={message} 
+          onChange={(e) => setMessage(e.target.value)}
+          className="flex-1 p-2 rounded-xl bg-slate-950 text-white border text-xs"
+        />
+        <button onClick={sendMessage} className="px-4 py-2 bg-blue-600 rounded-xl text-xs font-bold text-white">
+          Send
+        </button>
+      </div>
+    </div>
+  );
+}
+```
+
+---
+
+<DeveloperProfile
+  name="Ryan Dahl"
+  role="Creator of Node.js & Deno"
+  salary="₹95 Lakhs/yr equivalent"
+  company="Deno Land / Former Joyent"
+  experience="17 Years"
+  avatar="🦕"
+  photoUrl="https://github.com/ry.png"
+  profileUrl="https://github.com/ry"
+  stack="C++, JavaScript, Event Loops, V8 Engine, Rust"
+  quote="Because WebSockets hold open server connections, ensure your socket listeners are cleaned up (`socket.off`) in React useEffect return blocks! This prevents massive memory leaks!"
+/>
+
+---
+
+## 🎓 Practice Assignment
+
+1. Build a local real-time server that listens to socket connections.
+2. Add room joining functionality (`socket.join(roomName)`) so users can chat privately.
+3. Build a React interface that prompts users for a room name, connects them, and updates logs.
+4. Verify that two separate browser windows can chat in real time.

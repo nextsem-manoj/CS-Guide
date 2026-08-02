@@ -1,0 +1,1427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BCS-011 Unit 2: Functioning of a Computer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg0: #0d1117;
+      --bg1: #161b22;
+      --bg2: #1c2333;
+      --border: rgba(255, 255, 255, 0.08);
+      --text: #c9d1d9;
+      --heading: #f0f6fc;
+      --blue: #58a6ff;
+      --teal: #39d353;
+      --accent: #ab7df6;
+      --danger: #f85149;
+    }
+    
+    body.light {
+      --bg0: #f6f8fa;
+      --bg1: #ffffff;
+      --bg2: #eaeef2;
+      --border: rgba(0, 0, 0, 0.08);
+      --text: #24292f;
+      --heading: #1f2328;
+      --blue: #0969da;
+      --teal: #1a7f37;
+      --accent: #8250df;
+      --danger: #cf222e;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg0);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 0;
+    }
+
+    header {
+      background-color: var(--bg1);
+      border-bottom: 1px solid var(--border);
+      padding: 20px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    header h1 {
+      font-size: 1.5rem;
+      color: var(--heading);
+      font-weight: 700;
+    }
+
+    .theme-toggle {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      color: var(--heading);
+      padding: 8px 16px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: 500;
+      font-size: 0.85rem;
+      transition: background 0.2s;
+    }
+
+    .theme-toggle:hover {
+      background: var(--border);
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 40px;
+    }
+
+    @media (max-width: 900px) {
+      .container {
+        grid-template-columns: 1fr;
+        padding: 20px 10px;
+      }
+      aside {
+        position: static;
+        width: 100%;
+      }
+      main {
+        padding: 20px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      header {
+        padding: 15px 20px;
+        flex-direction: column;
+        gap: 12px;
+        text-align: center;
+      }
+      header h1 {
+        font-size: 1.2rem;
+      }
+      .q-input-wrap {
+        flex-direction: column;
+      }
+      .q-input-wrap button {
+        width: 100%;
+      }
+    }
+
+    aside {
+      position: sticky;
+      top: 100px;
+      height: fit-content;
+    }
+
+    .toc {
+      background-color: var(--bg1);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .toc h4 {
+      color: var(--heading);
+      margin-bottom: 15px;
+      font-size: 0.95rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .toc ul {
+      list-style-type: none;
+    }
+
+    .toc li {
+      margin-bottom: 10px;
+    }
+
+    .toc a {
+      color: var(--text);
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: color 0.2s;
+    }
+
+    .toc a:hover {
+      color: var(--blue);
+    }
+
+    main {
+      background-color: var(--bg1);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 40px;
+    }
+
+    h2 {
+      color: var(--heading);
+      font-size: 1.6rem;
+      margin-top: 30px;
+      margin-bottom: 15px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 8px;
+    }
+
+    h3 {
+      color: var(--heading);
+      font-size: 1.25rem;
+      margin-top: 25px;
+      margin-bottom: 12px;
+    }
+
+    p {
+      margin-bottom: 15px;
+      font-size: 0.95rem;
+      text-align: justify;
+    }
+
+    ul, ol {
+      margin-bottom: 15px;
+      padding-left: 20px;
+    }
+
+    li {
+      margin-bottom: 8px;
+      font-size: 0.95rem;
+    }
+
+    /* Quiz styling */
+    .quiz-container {
+      margin-top: 40px;
+      border-top: 2px dashed var(--border);
+      padding-top: 40px;
+    }
+
+    .quiz-title {
+      font-size: 1.8rem;
+      color: var(--heading);
+      margin-bottom: 25px;
+      text-align: center;
+    }
+
+    .quiz-card {
+      background: var(--bg0);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 20px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .quiz-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .q-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .q-num {
+      font-weight: 700;
+      color: var(--accent);
+      font-size: 0.9rem;
+    }
+
+    .q-hint-btn {
+      font-size: 0.8rem;
+      color: var(--blue);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .q-hint-btn:hover {
+      text-decoration: underline;
+    }
+
+    .q-text {
+      font-size: 1.05rem;
+      color: var(--heading);
+      font-weight: 500;
+      margin-bottom: 15px;
+    }
+
+    .q-hint {
+      background: var(--bg2);
+      border-left: 3px solid var(--blue);
+      padding: 10px;
+      font-size: 0.85rem;
+      border-radius: 0 6px 6px 0;
+      margin-bottom: 15px;
+      color: var(--text);
+    }
+
+    .q-input-wrap {
+      display: flex;
+      gap: 12px;
+    }
+
+    .q-input-wrap input {
+      flex: 1;
+      background: var(--bg1);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 16px;
+      color: var(--heading);
+      font-family: inherit;
+      font-size: 0.95rem;
+    }
+
+    .q-input-wrap input:focus {
+      outline: none;
+      border-color: var(--blue);
+    }
+
+    .q-input-wrap button {
+      background: var(--blue);
+      color: white;
+      border: none;
+      padding: 10px 24px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-family: inherit;
+      transition: filter 0.2s;
+    }
+
+    .q-input-wrap button:hover {
+      filter: brightness(1.1);
+    }
+
+    .q-feedback {
+      margin-top: 12px;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .q-feedback.correct {
+      color: var(--teal);
+    }
+
+    .q-feedback.incorrect {
+      color: var(--danger);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>BCS-011 Unit 2: Functioning of a Computer</h1>
+    <button class="theme-toggle" onclick="toggleTheme()">☀️ Toggle Light Mode</button>
+  </header>
+  
+  <div class="container">
+    <aside>
+      <div class="toc">
+        <h4>Table of Contents</h4>
+        <ul>
+          <li><a href="#sec-2-0">2.0 Introduction</a></li>
+          <li><a href="#sec-2-1">2.1 Objectives</a></li>
+          <li><a href="#sec-2-2">2.2 Components & Role</a></li>
+          <li><a href="#sec-2-2-1">2.2.1 Core Components</a></li>
+          <li><a href="#sec-2-2-2">2.2.2 Data Processor</a></li>
+          <li><a href="#sec-2-2-3">2.2.3 Language of Computer</a></li>
+          <li><a href="#sec-2-3">2.3 Number System</a></li>
+          <li><a href="#sec-2-3-1">2.3.1 Binary System</a></li>
+          <li><a href="#sec-2-3-2">2.3.2 Binary Codes</a></li>
+          <li><a href="#sec-2-3-3">2.3.3 ASCII & Unicode</a></li>
+          <li><a href="#sec-2-4">2.4 Concept of Instruction</a></li>
+          <li><a href="#sec-2-5">2.5 CPU Elements</a></li>
+          <li><a href="#quiz">Interactive Worksheet</a></li>
+        </ul>
+      </div>
+    </aside>
+
+    <main>
+      <p>UNIT 2 FUNCTIONING OF A COMPUTER                                                           Functioning of</p>
+<p>A Computer</p>
+<p>Structure                                          Page No.</p>
+<p>27</p>
+<h2 id="sec-2-0">2.0 Introduction                                       27</h2>
+<h2 id="sec-2-1">2.1 Objectives                                         28</h2>
+<h2 id="sec-2-2">2.2 Components of a Digital Computer &amp; their Role      28</h2>
+<p>29</p>
+<h3 id="sec-2-2-1">2.2.1 Components of a Digital Computer        29</h3>
+<h3 id="sec-2-2-2">2.2.2 Computer as a Data Processor            30</h3>
+<h3 id="sec-2-2-3">2.2.3 Language of Digital Computers          32</h3>
+<h2 id="sec-2-3">2.3 Number System                                       32</h2>
+<h3 id="sec-2-3-1">2.3.1 Binary Number System                    34</h3>
+<h3 id="sec-2-3-2">2.3.2 Binary Codes                            35</h3>
+<h3 id="sec-2-3-3">2.3.3 ASCII &amp; Unicode                        37</h3>
+<h2 id="sec-2-4">2.4 Concept of Instruction                             38</h2>
+<h2 id="sec-2-5">2.5 Elements of CPU and their role                     41</h2>
+<h2 id="sec-2-6">2.6 Summary                                            41</h2>
+<h2 id="sec-2-7">2.7 Answers to Check Your Progress                     42</h2>
+<h2 id="sec-2-8">2.8 Further Readings</h2>
+<h2 id="sec-2-0">2.0 INTRODUCTION</h2>
+<p>We have discussed in the previous unit, that the computers have undergone through a</p>
+<p>long history of evolution. The evolutionary history is often divided into mechanical and</p>
+<p>electronic era, with electronic computers started being developed in second half of the</p>
+<p>20th century. Since then electronic computers have undergone major transformations in</p>
+<p>terms of architectural design, components used and the IC fabrication technologies.</p>
+<p>Modern computers primarily use electronic components for processing element &amp;</p>
+<p>primary memory and both magnetic &amp; optical components (and solid state devices very</p>
+<p>recently) for secondary storage.</p>
+<p>This unit aims to identify the major components of a digital computer and to describe the</p>
+<p>functions performed by them. As the unit progresses, we will discuss about the</p>
+<p>architectural blueprint of digital computers identifying the major components and their</p>
+<p>roles. This is followed by an introduction to decimal &amp; binary number systems and</p>
+<p>popularly used binary code systems. We then move to understand the concept of a</p>
+<p>machine instruction through a simple example, followed by description of functioning of</p>
+<p>Control Unit and Arithmetic and Logic Unit. The unit concludes with a brief summary of</p>
+<p>learning outcomes.</p>
+<p>Basics of Computer  2.1 OBJECTIVES</p>
+<p>Hardware</p>
+<p>After going through this unit, you should be able to:</p>
+<p>identify the major components of a digital computer;</p>
+<p>understand the role of each component and their interconnection</p>
+<p>understand the language of digital computers;</p>
+<p>describe the decimal and binary number systems;</p>
+<p>describe the binary codes and their use;</p>
+<p>perform inter number system conversions;</p>
+<p>distinguish between weighted and un-weighted codes;</p>
+<p>describe the ASCII and Unicode;</p>
+<p>understand the format of machine instruction; and</p>
+<p>describe the function performed by Control Unit and Arithmetic &amp; Logic Unit.</p>
+<h2 id="sec-2-2">2.2 COMPONENTS OF A DIGITAL COMPUTER &amp;</h2>
+<p>THEIR ROLE</p>
+<p>A digital computer is an electronic device that receives data, performs arithmetic and</p>
+<p>logical operations and produces results according to a predetermined program. It receives</p>
+<p>data through an input device (usually keyboard) and displays the results to some output</p>
+<p>device (usually monitor). All data processing in a digital computer is done by a central</p>
+<p>processing unit, also known as processor. A working memory is used to store data and</p>
+<p>instructions. Figure 2.1 presents a block diagram of a digital computer identifying the</p>
+<p>key components and their interconnection.</p>
+<p>Input  CPU                                                                                    Output</p>
+<p>CU</p>
+<p>ALU</p>
+<p>Storage</p>
+<p>Figure 2.1: Block Diagram of a Digital Computer</p>
+<p>28</p>
+<h3 id="sec-2-2-1">2.2.1 Components of a Digital Computer                                                         Functioning of</h3>
+<p>A Computer</p>
+<p>The key elements of a digital computer, as elaborated in the block diagram given in</p>
+<p>Figure 2.1 include: Central Processing Unit, Input, Output and Memory. The Central</p>
+<p>Processing Unit (CPU) is like the brain of the computer. It is responsible for executing</p>
+<p>instructions. It controls and coordinates the execution of instructions. It is comprised of a</p>
+<p>Control Unit (CU), an Arithmetic &amp; Logic Unit (ALU) and registers. The CU controls the</p>
+<p>execution of instructions by decoding the instruction and generating micro-operations to</p>
+<p>be performed for executing that instruction. The ALU is responsible for performing</p>
+<p>arithmetic and logic operations. Execution of an instruction involves almost all parts (CU,</p>
+<p>ALU &amp; Registers) of the CPU. Hence, CPU is known as the most vital component of a</p>
+<p>computer system.</p>
+<p>Input devices are used to read the instructions and data to be processed and output</p>
+<p>devices display the results obtained after executing the program. Keyboard, Mouse and</p>
+<p>Scanner are examples of input devices, whereas Monitor, Printer and Plotter are examples</p>
+<p>of output devices. Memory is used as a working storage for temporarily storing the data</p>
+<p>and intermediate results generated during program execution. Computers use two kinds</p>
+<p>of memories: primary &amp; secondary. The primary memory is often referred to as RAM in</p>
+<p>everyday language. It is a read/write memory used to store both the program and data.</p>
+<p>Since RAM is volatile, computers also use a second level of memory- secondary</p>
+<p>memory- to permanently store the contents. Hard Disk is the non-removable secondary</p>
+<p>storage device which stores virtually everything on the machine. Computers also use</p>
+<p>other removable secondary memories like CD-ROMs, Magnetic tapes and recently Flash</p>
+<p>Drives to permanently take backup of the data onto Hard Disk or to transfer data from</p>
+<p>one machine to another.</p>
+<p>A more practical description of a digital computer can be given by describing the major        Computer takes the raw</p>
+<p>units and their interconnections for a simple personal computer (PC). If you open the          data as input and</p>
+<p>CPU cabinet of your PC, you will notice that it contains a printed circuit board on which      performs several</p>
+<p>a number of devices are plugged in. This printed circuit board is often called the mother      operations on these data</p>
+<p>board. All other major components of the computer are either plugged in directly to this       in order to produce the</p>
+<p>mother board or connected through a bunch of wires. CPU, RAM and Device Cards are              desired output so it acts</p>
+<p>plugged in various slots of the mother board. Devices like Hard Disk, Floppy Drive,            as a processing unit for</p>
+<p>CDROM Drive, which are attached to the CPU cabinet, are connected through wire                 those data</p>
+<p>ribbons. The mother board has printed circuitry which allows all these components to</p>
+<p>communicate with each other. CPU cabinet also houses a power supply unit which                                             29</p>
+<p>provides power to all the components of the computer system. On the back end of the</p>
+<p>CPU cabinet, you can notice a number of connection slots. These slots are used to</p>
+<p>connect various input/output devices such as keyboard, mouse, printer, scanner, to the</p>
+<p>computer.</p>
+<h3 id="sec-2-2-2">2.2.2 Computer as a Data Processor</h3>
+<p>The main function of a computer is to process the input data according to a specific</p>
+<p>program to produce the desired output. This is the reason why a computer is often viewed</p>
+<p>as a data processing device. Various components of a computer work coherently to</p>
+<p>Basics of Computer  perform different operations to process the data according to program instructions. The</p>
+<p>Hardware            word `Data&#039; refers to any raw collection of facts, figures and statistics. The input data to a</p>
+<p>computer may include both numbers and characters. Processing the data thus means</p>
+<p>manipulation of letters, numbers and symbols in a specific manner. The processing may</p>
+<p>include calculations, decision making, comparisons, classification, sorting, aligning &amp;</p>
+<p>formatting etc. The processing of data results in some meaningful values, often termed as</p>
+<p>`information&#039;. As we see, computer takes the raw data as input and performs several</p>
+<p>operations on these data in order to produce the desired output so it acts as a processing</p>
+<p>unit for those data.</p>
+<p>The programmers write programs for various data processing tasks. Writing a program to</p>
+<p>sort a given list of names, to search for a roll number in the list of qualified candidates,</p>
+<p>preparing and formatting a curriculum vitae, doing an accounting job, are all examples of</p>
+<p>data processing. As described in Unit I, digital computers have versatile capabilities and</p>
+<p>that is the reason why they are being used by a variety of people for different purposes.</p>
+<p>Now-a-days computers have something to offer to everyone. Whether it is an engineer, a</p>
+<p>business tycoon, a graphic designer, an accountant, a statistician, a student or even a</p>
+<p>farmer; everyone is now making use of computers. Thanks to the rich set of application</p>
+<p>programs, even novice users can now make effective use of computers.</p>
+<p>Data  Processing  Information</p>
+<p>Figure 2.2: Data Processing</p>
+<h3 id="sec-2-2-3">2.2.3 Language of Digital Computers</h3>
+<p>Digital computers are electronic devices which operate on two valued logic (On and</p>
+<p>OFF). The ability of a transistor to act as a switch is the key to designing digital</p>
+<p>computers. The digital circuits used in computers are bi-stable, one state each</p>
+<p>corresponding to ON and OFF values. The two valued Boolean logic (using two distinct</p>
+<p>symbols 0 and 1) serves as an appropriate representation of states of digital circuits.</p>
+<p>Every instruction and data item therefore needs to be represented only by using two</p>
+<p>symbols 0 and 1. Since machines are capable of executing 400-500 distinct instructions</p>
+<p>and a unique binary code is required to specify every instruction, the machine instructions</p>
+<p>are specified using multiple bits (binary digits). Similarly the data items also need to be</p>
+<p>specified using 0 and 1 only. Numbers, alphabets and other characters can be represented</p>
+<p>by using some binary code system. The next section describes in detail the binary number</p>
+<p>system and different binary codes.</p>
+<p>Though computers use a kind of binary language, we would never like to use them if we</p>
+<p>are forced to learn and use binary language for working on a computer. In fact, had this</p>
+<p>been the case, computers would have never become popular. To bridge the gap between</p>
+<p>the language used by computers and human beings, software got evolved. Software acts</p>
+<p>as an interface between the machine and the user. Initially the software performed only</p>
+<p>30</p>
+<p>simple tasks of making the better utilization of machine resources and to make it more                                Functioning of</p>
+<p>convenient for the user to use the machine. The convenience is the simplicity of the way                                A Computer</p>
+<p>through which users can give instructions to a computer. But as computers started</p>
+<p>becoming cheaper and popular, softwares to perform more complicated and domain                                                        31</p>
+<p>specific tasks were written. Now we refer to these two varieties of softwares as System</p>
+<p>and Application software respectively. While systems softwares are concerned with</p>
+<p>driving the machine, application softwares provide task specific functionalities. System</p>
+<p>software is must to operate a computer system. Operating system is a kind of systems</p>
+<p>software whereas wordprocessing, database, accounting packages are all examples of</p>
+<p>applications software. Figure 2.3 below presents the layered view of a computing system.</p>
+<p>Hardware</p>
+<p>Systems Software</p>
+<p>Applications Software</p>
+<p>User</p>
+<p>Figure 2.3: Layered View of a Computing System</p>
+<p>Check Your Progress 1</p>
+<p>1) Fill in the blanks:</p>
+<ul>
+<li>(a) A digital computer is made of following four basic components:</li>
+<li>(i)..................(ii)................ (iii) .................. (iv)...................</li>
+<li>(b) The CPU stands for .........................................................................................</li>
+</ul>
+<ul>
+<li>(c) Modern processors are capable of executing ................ distinct machine</li>
+</ul>
+<p>instructions.</p>
+<p>2) What is the significance of a computer being termed as a data processer?</p>
+<p>......................................................................................................</p>
+<p>......................................................................................................</p>
+<p>......................................................................................................</p>
+<p>3) What kind of language is used to specify machine instructions of a digital computer?</p>
+<p>......................................................................................................</p>
+<p>......................................................................................................</p>
+<p>4) Choose the best alternative:</p>
+<ul>
+<li>(a) CPU is like ..................... of the computer.</li>
+</ul>
+<ul>
+<li>(i) heart     (ii) eyes (iii) brain              (iv) ears.</li>
+</ul>
+<ul>
+<li>(b) The language of digital computers comprise of:</li>
+</ul>
+<ul>
+<li>(i) decimal numbers              (ii) alphabets         (iii) binary numbers</li>
+</ul>
+<ul>
+<li>(c) Which part of the CPU is responsible for arithmetic computations and</li>
+</ul>
+<p>comparisons?</p>
+<ul>
+<li>(i) Control Unit (ii) Arithmetic &amp; Logic Unit (iii) Registers</li>
+</ul>
+<p>Basics of Computer      2.3 NUMBER SYSTEM</p>
+<p>Hardware</p>
+<p>We are familiar with decimal number system which uses ten distinct symbols from 0...9,</p>
+<p>A number system     and has base 10. In the decimal number system a number n4n3n2n1 is interpreted as</p>
+<p>with base r will    n4�103+n3�102+n2�101+n1�100. Thus decimal number 5632 represents 5000+600+30+2.</p>
+<p>have r distinct     It is a weighted code system since numbers 5632, 2563, 3562, 6532 all represent different</p>
+<p>symbols, from 0 to  quantities despite the fact that all of them use the same symbols (2,3,5,6). The magnitude/</p>
+<p>r-1. Binary         value of a number is determined both by the symbols used and the places at which they</p>
+<p>number system       are present. Thus, symbol 3 at ten&#039;s place represent 30, but when written at thousands&#039;</p>
+<p>(r = 2), octal      place it represent 3000. Although we use only the decimal number system in everyday</p>
+<p>number system       applications but there are many other number systems possible. In fact, we can have</p>
+<p>(r = 8) and         number system with any base r.</p>
+<p>hexadecimal</p>
+<p>number system       A number system with base r will have r distinct symbols, from 0 to r-1. Binary number</p>
+<p>(r = 16) are some   system (r = 2), octal number system (r = 8) and hexadecimal number system (r = 16) are</p>
+<p>of the frequently   some of the frequently used number systems in computer science. Binary number system</p>
+<p>used number         has two distinct symbols 0 &amp; 1; Octal has seven distinct symbols 0,1,2,3,4,5,6,7; and</p>
+<p>systems in          Hexadecimal number system has sixteen distinct symbols namely</p>
+<p>computer science    0,1,2,3,4,5,6,7,8,9,A,B,C,D,E,F. The numbers written in a particular number system can</p>
+<p>be transformed to an equivalent value in a different number system. For example a</p>
+<p>32                      number 3F in hexadecimal is equivalent to 63 (3�161 + F � 160) in decimal number</p>
+<p>system. And similarly a number 302 in octal is equivalent to 194 (3� 82 + 0 � 81+2 � 80)</p>
+<p>in decimal number system.</p>
+<h3 id="sec-2-3-1">2.3.1 Binary Number System</h3>
+<p>As stated above, the binary number system has base 2 and therefore uses only two</p>
+<p>distinct symbols 0 and 1. Any number in binary is written only by using these two</p>
+<p>symbols. Though it uses just two symbols but it has enough expressive power to</p>
+<p>represent any number. A binary number 1001 thus represents the number 1� 23 + 0 � 22 +</p>
+<p>0� 21 + 1� 20. It is equivalent to number 9 in decimal number system. Similarly 11001</p>
+<p>and 10001 represent numbers 25 and 17 respectively in decimal number system. Please</p>
+<p>note that the base in binary number system is 2.</p>
+<p>A binary number can be converted to its decimal equivalent by forming the sum of</p>
+<p>powers of 2 of those coefficients whose value is 1.</p>
+<p>For example:</p>
+<p>(10101)2      = 24 + 22 + 20 = (21)10</p>
+<p>(100011)2     = 25 + 21 + 20 = (35)10</p>
+<p>(1010.011)2   = 23 + 21 + 2-2 + 2-3 = (10.375)10</p>
+<p>The conversion from decimal to binary or to any other base-r system is done by</p>
+<p>separating the number into an integer part and a fraction part and then converting each</p>
+<p>part separately. For example the decimal number 41.6875 can be converted to binary</p>
+<p>equivalent, by converting the integer and fraction parts separately, as follows:</p>
+<p>Operation       Quotient               Remainder                                   Functioning of</p>
+<p>41 / 2          20                     1                                             A Computer</p>
+<p>20 / 2          10                     0</p>
+<p>10 / 2          5                      0                                                           33</p>
+<p>5 / 2           2                      1</p>
+<p>2 / 2           1                      0</p>
+<p>1 / 2           0                      1</p>
+<p>The number is divided by 2 and the remainder part is extracted. The quotient obtained is</p>
+<p>again divided by 2 and this process is repeated until the quotient becomes 0. Every time</p>
+<p>the remainder obtained is recorded. The set of remainders obtained, read from the bottom</p>
+<p>to top form the binary equivalent of the integer part of the number. Thus (41)10 =</p>
+<ul>
+<li>(101001)2.</li>
+</ul>
+<p>In order to convert the fraction part, it is multiplied by 2 to obtain resultant integer and</p>
+<p>fraction parts. The integer part in the resultant is extracted and the fraction part is again</p>
+<p>multiplied by 2. This multiplication process is repeated till the fraction part becomes 0 or</p>
+<p>a desired precision is achieved. The integer part of the given number (.6875) can be</p>
+<p>converted to binary as follows:</p>
+<p>Operation       Resulting              Resulting</p>
+<p>Integer part           Fraction part</p>
+<p>0.6875 X 2      1                      .3750</p>
+<p>0.3750 X 2      0                      .7500</p>
+<p>0.7500 X 2      1                      .5000</p>
+<p>0.5000 X 2      1                      .0000</p>
+<p>The binary equivalent of fraction 0.6875 is 1011, obtained by reading the integer parts</p>
+<p>from top to down. Thus, the decimal number 41.6875 is equivalent to 101001.1011</p>
+<p>binary number system.</p>
+<p>Conversion</p>
+<p>Decimal to Binary:</p>
+<p>Q. Convert (13)10 to an equivalent binary number.</p>
+<p>Quotient Remainder</p>
+<p>13/2 6  1</p>
+<p>6/2 3   0</p>
+<p>3/2 1   1</p>
+<p>1/2 0   1</p>
+<p>We take the remainder from bottom to top. Hence (13)10 = (1101)2</p>
+<p>Basics of Computer  Binary To Decimal</p>
+<p>Hardware</p>
+<p>Q. Convert (101011)2 to an equivalent decimal number.</p>
+<p>34</p>
+<p>5 4 3 210</p>
+<p>(1 0 1 0 1 1)2</p>
+<p>= 25 + 23 + 21 + 20 = 32 + 8 + 2 + 1 = 43</p>
+<p>Hence, (101011)2 = 43</p>
+<p>Hexadecimal to Binary</p>
+<p>Q. Convert (2D5)16 to an equivalent Binary number.</p>
+<p>(2D5)16 =               2     D                     5</p>
+<p>0010      1101     0101</p>
+<p>We replaced each digit in the given number by its 4-bit binary equivalent. So</p>
+<p>(2D5)16 = 0010                1101                      0101</p>
+<p>Thus, (2D5)16 = (001011010101)2</p>
+<p>Binary to Hexa Decimal</p>
+<p>Q. Convert (10100110101111)2 to its equivalent Hexa Decimal Number.</p>
+<p>Starting from the least significant bit, each group of 4 bits is replaced by its decimal</p>
+<p>equivalents.</p>
+<p>(10100110101111)2 = 0010 1001 1010 1111</p>
+<p>2        9  A                F</p>
+<p>Thus, (10100110101111)2 = (29AF) 16</p>
+<h3 id="sec-2-3-2">2.3.2 Binary Codes</h3>
+<p>We have seen earlier that digital computers use signals that have two distinct values and</p>
+<p>there exists a direct analogy between binary signals and binary digits. Computers not only</p>
+<p>manipulate numbers but also other discrete elements of information. The distinct discrete</p>
+<p>quantities can be represented by a group of binary digits (known as bits). For example, to</p>
+<p>represent two different quantities uniquely two symbols are sufficient and hence one</p>
+<p>binary digit (either 0 or 1) will be sufficient to uniquely represent the two symbols. But</p>
+<p>one bit will not suffice if one has to represent more than two quantities. In those cases</p>
+<p>more than one bits are required, i.e. the bits have to used repeatedly. For example if we</p>
+<p>have to give unique codes for three distinct items we need at least 2 bits. With two bits</p>
+<p>we can have codes 00, 01, 10 and 11. Out of this we can use first three to assign unique</p>
+<p>codes to three distinct quantities and leave the fourth one unused. In general, an n-bit</p>
+<p>binary code can be used to represent 2n distinct quantities. Thus group of two bits can</p>
+<p>represent four distinct quantities through unique symbols 00, 01, 10 &amp; 11. Three bits can</p>
+<p>be used to represent eight distinct quantities by unique symbols 000, 001, 010, 011, 100,</p>
+<p>101, 110 &amp; 111. In other words, to assign unique codes to m distinct items we need at</p>
+<p>least n bit code such that 2n &gt;= m.</p>
+<p>Digital computers use binary codes to represent all kinds of information ranging from                      Functioning of</p>
+<p>numbers to alphabets. Whether we have to input an alphabet, a number or a punctuation                         A Computer</p>
+<p>symbol; we need to convey it to machine through a unique code for each item. Thus, the</p>
+<p>instruction to be performed by the CPU and the input data which form the operands of the        ASCII is an</p>
+<p>instruction are represented using a binary code system. A typical machine instruction in a      alphanumeric code</p>
+<p>digital computer system could therefore look like a set of 0s and 1s. Many binary codes         used for representing</p>
+<p>are used in digital systems. BCD code for representing decimal numbers, ASCII code for          numbers, alphabets,</p>
+<p>information interchange between computer and keyboard, Unicode for use over Internet            punctuation symbols</p>
+<p>and Reflected (Gray) code are some commonly studied binary code systems.                        and other control</p>
+<p>characters</p>
+<h3 id="sec-2-3-3">2.3.3 ASCII &amp; Unicode</h3>
+<p>An alphanumeric code has to represent 10 decimal digits, 26 alphabets and certain other</p>
+<p>symbols such as punctuation marks and special characters. Therefore, a minimum of six</p>
+<p>bits is required to code alphanumeric characters (26 = 64, but 25 = 32 is insufficient).</p>
+<p>With a few variations this 6 bit code is used to represent alphanumeric characters</p>
+<p>internally. However, the need to represent more than 64 characters (to incorporate</p>
+<p>lowercase and uppercase letters and special characters), have given rise to seven- and</p>
+<p>eight- bit alphanumeric codes. ASCII code is one such seven bit code that is used to</p>
+<p>identify key press on the keyboard. ASCII stands for American Standard Code for</p>
+<p>Information Interchange. It&#039;s an alphanumeric code used for representing numbers,</p>
+<p>alphabets, punctuation symbols and other control characters. It&#039;s a seven bit code, but for</p>
+<p>all practical purposes it&#039;s an eight bit code, where eighth bit is added for parity. Table 2.1</p>
+<p>below presents the ASCII code chart.</p>
+<p>Table 2.1 : ASCII Code Chart</p>
+<p>ASCII codes represent text in computers, communications equipment, and other devices</p>
+<p>that use text. Most modern character-encoding schemes are based on ASCII, though they</p>
+<p>support many more characters than did ASCII. Historically, ASCII developed from</p>
+<p>telegraphic codes. Its first commercial use was as a seven-bit teleprinter code promoted</p>
+<p>by Bell data services. Work on ASCII formally began on October 6, 1960, with the first</p>
+<p>35</p>
+<p>Basics of Computer        meeting of the American Standards Association&#039;s (ASA) X3.2 subcommittee. The first</p>
+<p>Hardware                  edition of the standard was published during 1963 a major revision during 1967, and the</p>
+<p>most recent update during 1986. ASCII includes definitions for 128 characters: 33 are</p>
+<p>Unicode is a        non-printing control characters (now mostly obsolete) that affect how text and space is</p>
+<p>computing           processed; 94 are printable characters, and the space is considered an invisible graphic.</p>
+<p>industry standard   The most commonly used character encoding on the World Wide Web was US-ASCII</p>
+<p>for the consistent  until December 2007, when it was surpassed by UTF-8.</p>
+<p>encoding,</p>
+<p>representation      Unicode is a computing industry standard for the consistent encoding, representation and</p>
+<p>and handling of     handling of text expressed in most of the world&#039;s writing systems. Developed in</p>
+<p>text expressed in   conjunction with the Universal Character Set standard and published in book form as The</p>
+<p>most of the         Unicode Standard, the latest version of Unicode consists of a repertoire of more than</p>
+<p>world&#039;s writing     107,000 characters covering 90 scripts, a set of code charts for visual reference, an</p>
+<p>systems             encoding methodology and set of standard character encodings, an enumeration of</p>
+<p>character properties such as upper and lower case, a set of reference data computer files,</p>
+<p>36                        and a number of related items, such as character properties, rules for normalization,</p>
+<p>decomposition, collation, rendering, and bidirectional display order (for the correct</p>
+<p>display of text containing both right-to-left scripts, such as Arabic and Hebrew, and left-</p>
+<p>to-right scripts. Unicode can be implemented by different character encodings. The most</p>
+<p>commonly used encodings are UTF-8 (which uses one byte for any ASCII characters,</p>
+<p>which have the same code values in both UTF-8 and ASCII encoding, and up to four</p>
+<p>bytes for other characters), the now-obsolete UCS-2 (which uses two bytes for each</p>
+<p>character but cannot encode every character in the current Unicode standard), and UTF-</p>
+<p>16 (which extends UCS-2 to handle code points beyond the scope of UCS-2).</p>
+<p>The Unicode Consortium, the nonprofit organization that coordinates Unicode&#039;s</p>
+<p>development, has the ambitious goal of eventually replacing existing character encoding</p>
+<p>schemes with Unicode and its standard Unicode Transformation Format (UTF) schemes,</p>
+<p>as many of the existing schemes are limited in size and scope and are incompatible with</p>
+<p>multilingual environments. Unicode&#039;s success at unifying character sets has led to its</p>
+<p>widespread and predominant use in the internationalization and localization of computer</p>
+<p>software. The standard has been implemented in many recent technologies, including</p>
+<p>XML, the Java programming language, the Microsoft .NET Framework, and modern</p>
+<p>operating systems.</p>
+<p>Check Your Progress 2</p>
+<p>1) Choose the best alternative:</p>
+<ul>
+<li>(a) ASCII is practically a ................... bit code:</li>
+</ul>
+<ul>
+<li>(i) six  (ii) seven              (iii) eight  (iv) nine</li>
+</ul>
+<ul>
+<li>(b) A number system having base r will have ........... distinct symbols:</li>
+</ul>
+<ul>
+<li>(i) r/2  (ii) 2r                 (iii) r      (iv) r2</li>
+</ul>
+<ul>
+<li>(c) Unicode is used primarily for:</li>
+</ul>
+<ul>
+<li>(i) processing (ii) Internet technologies (iii) logical operations</li>
+</ul>
+<ul>
+<li>(d) The binary equivalent of (25.25)10 is:</li>
+<li>(i) 11001.001 (ii) 11101.010 (iii) 10001.110</li>
+</ul>
+<p>2) State True or False:                                                                                 Functioning of</p>
+<p>A Computer</p>
+<ul>
+<li>(a) A decimal number can be converted into its binary equivalent</li>
+</ul>
+<p>integer and fraction parts separately.              True                False</p>
+<p>False</p>
+<ul>
+<li>(b) An n-bit binary code can represent n2 distinct codes. True</li>
+</ul>
+<ul>
+<li>(c) The most commonly used Unicode Transformation Format</li>
+</ul>
+<p>currently is UTF-8.                                 True                False</p>
+<p>3) Briefly state the reason why ASCII can not be less than 7 bit code?</p>
+<p>......................................................................................................</p>
+<p>......................................................................................................</p>
+<p>......................................................................................................</p>
+<p>4) What was the main motivation behind the development of Unicode?</p>
+<p>......................................................................................................</p>
+<p>......................................................................................................</p>
+<p>......................................................................................................</p>
+<h2 id="sec-2-4">2.4 CONCEPT OF INSTRUCTION</h2>
+<p>The CPU is a semiconductor integrated circuit chip consisting of a large number of                      The entire set of</p>
+<p>transistors. In personal computers, the CPU is also referred by the term Microprocessor.                instructions that can be</p>
+<p>Every CPU is capable of performing certain instructions (known as machine instruction).                 executed by the processor</p>
+<p>Modern CPUs have the logic built in to perform 400-550 machine instructions. The                        directly, through the logic</p>
+<p>machine instructions that a CPU can execute demonstrates its capability. Every processor                in hardware, form the</p>
+<p>is capable of performing certain operations. An instruction refers to an operation that can             instruction set of the</p>
+<p>be performed by the processor directly. The entire set of instructions that can be executed             processor. An instruction</p>
+<p>by the processor directly, through the logic in hardware, form the instruction set of the               tells the processor what</p>
+<p>processor. An instruction tells the processor what task is to be performed and what micro-              task is to be performed and</p>
+<p>operations need to be completed to perform the task. Every instruction execution requires               what micro-operations need</p>
+<p>execution of a set of arithmetic and logical operations (micro-operations). The size and                to be completed to perform</p>
+<p>format of the instruction varies with different processors.</p>
+<p>the task</p>
+<p>Every instruction is comprised of two parts: opcode and operands. The opcode specifies                  The opcode specifies the</p>
+<p>the operation to be performed and the operands provide the data on which the operation is               operation to be</p>
+<p>to be performed. To understand the concept of instruction more clearly let us assume a                  performed and the</p>
+<p>simple hypothetical computer which the capability to perform eight different operations.                operands provide the data</p>
+<p>Every operation is specified by a unique opcode as given in Table 2.2.                                  on which the operation is</p>
+<p>to be performed</p>
+<p>Table 2.2 : Unique OPcode</p>
+<p>37</p>
+<p>Operation       Opcode</p>
+<p>Addition        000</p>
+<p>Subtraction     001</p>
+<p>Multiplication  010</p>
+<p>Division        011</p>
+<p>Modulus         100</p>
+<p>Complement      101</p>
+<p>Bitwise AND     110</p>
+<p>Bitwise OR      111</p>
+<p>Basics of Computer      Let us further assume that our computer can process only two-digit decimal numbers, i.e.</p>
+<p>Hardware</p>
+<p>there can be a maximum of two operands each of a maximum of two digits. Thus the</p>
+<p>The control unit</p>
+<p>is responsible for  computer can add or subtract numbers containing a maximum of two digits. A simple</p>
+<p>overall control</p>
+<p>and coordination    instruction can thus be written as a combination of an opcode and its associated operands.</p>
+<p>of instruction</p>
+<p>execution           Opcode is denoted by its unique binary code. The operands are decimal digits and</p>
+<p>38                      therefore also need to be converted to binary code system to pass them as operands to the</p>
+<p>processor. Suppose BCD code is used to represent the operands. Then following are</p>
+<p>examples of some valid instructions on the processor:</p>
+<p>Instruction          Effect</p>
+<p>0001001001100100101  93 + 25</p>
+<p>10110000101          Complement 85</p>
+<p>0110010010100000101  25 / 05</p>
+<p>In the first instruction, the first three bits represent the opcode and the remaining sixteen</p>
+<p>bits represent the two operands each a two digit decimal number expressed using BCD</p>
+<p>code. The opcode for addition as described in the table is 000 and the BCD codes for</p>
+<p>9,3,2 and 5 are 1001, 0011, 0010 and 0101 respectively. Thus the instruction</p>
+<p>0001001001100100101 represents 93 + 25. Similarly, in the second instruction, first</p>
+<p>three bits represent the opcode and the remaining eight bits specify the operand to</p>
+<p>perform the operation. However, this is the case of a very simple hypothetical computer.</p>
+<p>Real world processors are much more complex and capable of performing more than 500</p>
+<p>machine instructions. Further they can take their operands in a number ways: directly,</p>
+<p>from registers, from memory etc. Moreover, modern processors can perform calculations</p>
+<p>on large numbers. Thus an instruction in a modern CPU could easily comprise more than</p>
+<p>50 bits.</p>
+<p>Execution of a machine instruction on modern processors involves a complex sequence</p>
+<p>of operations with multiple cycles. One instruction cycle typically involves Fetch,</p>
+<p>Decode, Execute and Write back cycles. During Fetch cycle the instruction is fetched</p>
+<p>from memory. During Decode cycle the instruction is processed by the control unit of the</p>
+<p>CPU, which generate the set of micro-operations and timing signals required to execute</p>
+<p>the instruction. The micro-operations are then executed during Execute cycle to complete</p>
+<p>the instruction and any results generated are then written back to memory during Write</p>
+<p>back cycle. An instruction cycle may also involve one or more operand fetch cycles. The</p>
+<p>control unit is responsible for overall control and coordination of instruction execution. It</p>
+<p>generates the set of micro-operations either through a hard wired logic or with the help of</p>
+<p>micro program sequencer. Executing a program therefore involves executing a large</p>
+<p>number of machine instructions, where every machine instruction execution requires</p>
+<p>executing several micro-operations.</p>
+<h2 id="sec-2-5">2.5 ELEMENTS OF CPU AND THEIR ROLE</h2>
+<p>The CPU is a complex IC chip having millions of transistors. As mentioned earlier, a</p>
+<p>CPU has three major identifiable parts: Control Unit (CU), Arithmetic &amp; logic Unit</p>
+<ul>
+<li>(ALU) and a set of Registers. The CPU chip is interfaced with other components of the</li>
+</ul>
+<p>computer through a system bus (printed wires on the mother board) which has three sets</p>
+<p>of wires forming Control Bus, Data Bus and Address Bus. Figure 2.4 presents the              Functioning of</p>
+<p>components of a CPU :                                                                          A Computer</p>
+<p>Figure 2.4 : Interfacing CPU and System Bus                    The Control Unit of</p>
+<p>the processor is that</p>
+<p>CPU has a set of Registers which is used to store some data temporarily. Register lies       unit which controls and</p>
+<p>above Cache and Main memory in memory hierarchy of the system. The registers in CPU          coordinates the</p>
+<p>perform two roles:                                                                           execution of</p>
+<p>instructions by the</p>
+<p>User-visible registers: used to store temporary data items and other user accessible        processor</p>
+<p>information useful for machine or assembly language programmers.</p>
+<p>The microprogram</p>
+<p>Control &amp; Status Registers: used by control unit to control and coordinate the               control has a control</p>
+<p>operation of the processor.                                                               memory (a PROM</p>
+<p>chip) which stores</p>
+<p>The Control Unit of the processor is that unit which controls and coordinates the             the sequence of</p>
+<p>execution of instructions by the processor. It is responsible for defining and controlling    micro-operations</p>
+<p>the instruction cycle. In essence, it causes things to happen in the processor. It issues</p>
+<p>control signals external to the processor to cause data exchange with memory and I/O                                   39</p>
+<p>modules. It also issues control signals internal to the processor to move data between</p>
+<p>registers, to cause the ALU to perform a specified function, and to regulate other internal</p>
+<p>operations. It generates timing signals and initiates the Fetch cycle of instruction</p>
+<p>execution. When the instruction is fetched, it generates the sequence of micro-operations</p>
+<p>which need to be executed in order to execute the instruction. CU also generates timing</p>
+<p>signals for executing set of micro-operations. There are three different ways in which CU</p>
+<p>can generate these micro-operations: through a hardwired logic, by reading a</p>
+<p>programmable Array (PLA) table or by reading a Programmable Read Only Memory</p>
+<ul>
+<li>(PROM).</li>
+</ul>
+<p>In hardwired control, the mapping between machine instruction and consequent micro-</p>
+<p>operations to be generated is permanently wired within the processor. It is relatively</p>
+<p>faster way although it cannot be modified. In PLA control the sequence of micro-</p>
+<p>operations to be generated for executing an instruction is stored as a PLA table. In Micro</p>
+<p>program control, the logic of the control unit is specified by a microprogram.</p>
+<p>Microprogram specifies the micro-operations. The microprogram control has a control</p>
+<p>memory (a PROM chip) which stores the sequence of micro-operations. As a general rule</p>
+<p>processors having smaller instruction set (such as RISC processors) have hard wired</p>
+<p>control logic whereas microprogram control is used in processors having larger</p>
+<p>instruction set. Most of the modern CISC processors use microprogram control.</p>
+<p>Basics of Computer  The Arithmetic and Logic Unit is that part of the CPU that actually performs arithmetic</p>
+<p>Hardware            and logical operations on data. The CU, CPU registers and memory help in bringing the</p>
+<p>data into the ALU and then taking the results back. Figure 2.5 presents the ALU inputs</p>
+<p>and outputs.</p>
+<p>Figure 2.5 : The Arithmetic and Logic Unit</p>
+<p>Data are presented to ALU in registers and the results are also stored in registers.</p>
+<p>Accumulator is one such register which is very frequently used during the ALU</p>
+<p>operation. ALU has many other registers such as flags and status register, which indicate</p>
+<p>information about the operation and its result. ALU has logic implemented to perform</p>
+<p>operations like addition, multiplication, division, shifting, complement etc. The</p>
+<p>operations are performed on represented numbers, both integer and floating point</p>
+<p>numbers.</p>
+<p>Modern processors nowadays have two identifiable trends which improve their</p>
+<p>performance to a much higher level. These are use of on chip Cache memory and having</p>
+<p>more than one processor core on the same IC chip. Cache memory is a fast</p>
+<p>semiconductor memory which can be used to temporarily store instructions and data that</p>
+<p>are frequently referred by the processor. By having frequently referred instructions and</p>
+<p>data available in the processor, the wait cycles introduced due to memory references are</p>
+<p>minimized and hence the processor performance improves a lot. Another modern</p>
+<p>technique of having more than one processor core on the same IC chip tries to perform</p>
+<p>the execution of instructions in parallel and hence the performance of the processor</p>
+<p>improves a lot.</p>
+<p>Check Your Progress 3</p>
+<p>1) Choose the best alternative:</p>
+<ul>
+<li>(a) A machine instruction consists of ........................</li>
+</ul>
+<ul>
+<li>(i) ALU  (ii) Operator           (iii) Opcode &amp; Operands        (iv) CU</li>
+</ul>
+<ul>
+<li>(b) Executing an instruction involves execution of several...................</li>
+</ul>
+<ul>
+<li>(i) micro-operations             (ii) programs       (iii) control signals</li>
+</ul>
+<ul>
+<li>(c) ALU is responsible for ................</li>
+</ul>
+<ul>
+<li>(i) generating control signals                       (ii) microprogram sequencing</li>
+</ul>
+<ul>
+<li>(iii) arithmetic &amp; logic</li>
+</ul>
+<ul>
+<li>(d) The hardwired control unit is .................</li>
+</ul>
+<ul>
+<li>(i) permanent, non-modifiable (ii) made of PROM                 (iii) erasable</li>
+</ul>
+<ul>
+<li>(e) CPU has following two kinds of registers...............</li>
+</ul>
+<ul>
+<li>(i) user-visible &amp; control (ii) program counter &amp; flags (iii) ALU &amp; CU</li>
+</ul>
+<p>40</p>
+<p>2) Briefly explain the sub cycles involved in execution of a machine instruction.                            Functioning of</p>
+<p>......................................................................................................     A Computer</p>
+<p>......................................................................................................</p>
+<p>.......................................................................................................                  41</p>
+<p>3) What are the different ways of designing the control unit of a processor?</p>
+<p>......................................................................................................</p>
+<p>......................................................................................................</p>
+<p>.......................................................................................................</p>
+<p>4) List the two key technological trends seen in modern processors for improving</p>
+<p>performance.</p>
+<p>......................................................................................................</p>
+<p>......................................................................................................</p>
+<p>.......................................................................................................</p>
+<h2 id="sec-2-6">2.6 SUMMARY</h2>
+<p>This unit has introduced you to the components of a digital computer and their roles. A</p>
+<p>digital computer has CPU, Memory, Input and Output as constituent elements. Digital</p>
+<p>computers use binary language. The binary number system is analogous to two valued</p>
+<p>Boolean logic. Decimal numbers and alphabets are represented as binary codes for being</p>
+<p>processed by the computer. The unit describes the ASCII and Unicode code systems in</p>
+<p>brief. ASCII is the code used for information interchange between keyboard and</p>
+<p>computer. Unicode is a universal code system widely used over the Internet. The unit also</p>
+<p>introduced you with the concept and format of a machine instruction. An instruction</p>
+<p>cycle involves fetch, decode, execute and write back cycles. The three key components of</p>
+<p>CPU are: CU, ALU and registers. CU controls and coordinates the execution of</p>
+<p>instructions. ALU actually performs the operations. CPU registers work as temporary</p>
+<p>storage for executing instructions.</p>
+<h2 id="sec-2-7">2.7 ANSWERS TO CHECK YOUR PROGRESS</h2>
+<p>Check Your Progress 1</p>
+<p>1) (a) CPU, Memory, Input, Output (b) Central processing Unit</p>
+<ul>
+<li>(c) 400-550</li>
+</ul>
+<p>2) A computer accepts raw data as input and processes it (performing computations,</p>
+<p>manipulations and formatting etc.) to produce a meaningful result. Due to its key job</p>
+<p>being processing according to user instructions, it is referred to as data processor.</p>
+<p>3) A language comprising of binary numbers is used to specify machine instructions in</p>
+<p>digital computers. Every machine instruction is represented by a unique binary code.</p>
+<p>4) (a) iii  (b) iii    (c) ii</p>
+<p>Basics of Computer  Check Your Progress 2</p>
+<p>Hardware</p>
+<p>1) (a) ii   (b) iii (c) ii      (d) i</p>
+<p>2) (a) True (b) False (c) True</p>
+<p>3) ASCII Code is required to have unique code for every key press on the keyboard.</p>
+<p>Through the keyboard we can enter 10 decimal digits, 26 letters of alphabets and</p>
+<p>certain other symbols such as punctuation marks and special characters. Therefore, a</p>
+<p>minimum of six bits is required to code alphanumeric characters (26 = 64, but 25 = 32</p>
+<p>is insufficient). However, the need to represent more than 64 characters (to</p>
+<p>incorporate lowercase and uppercase letters and special characters), made ASCII a 7-</p>
+<p>bit code.</p>
+<p>4) Unicode was developed as a standard for the consistent encoding, representation and</p>
+<p>handling of text expressed in most of the world&#039;s writing systems. Unicode consists</p>
+<p>of a repertoire of more than 107,000 characters covering 90 scripts. It is the universal</p>
+<p>encoding scheme having special significance for Internet and multilingual computing</p>
+<p>Check Your Progress 3</p>
+<p>1) (a) iii  (b) i      (c) iii  (d) ii  (e) i</p>
+<p>2) Execution of a machine instruction involves Fetch, Decode, Execute and Write Back</p>
+<p>cub cycles. An instruction cycle may also involve operand fetch cycles.</p>
+<p>3) There are three ways of designing the control unit: Hard-wired control, PLA and</p>
+<p>Micro-program control.</p>
+<p>4) The two technological trends seen in modern processors to improve performance</p>
+<p>include provision of on-chip cache memory and having multiple processing cores on</p>
+<p>the same chip.</p>
+<h2 id="sec-2-8">2.8 FURTHER READINGS</h2>
+<p>William Stalling, Computer Organization and Architecture, 6th Ed., Pearson Education.</p>
+<p>V. Rajaraman, Fundamentals of Computers, PHI.</p>
+<p>Web Link:</p>
+<p>http://computer.howstuffworks.com</p>
+<p>42</p>
+
+
+      <h2 id="quiz" class="quiz-title">Interactive Worksheet: 25 Fill-in-the-Blanks</h2>
+      <div class="quiz-container">
+
+    <div class="quiz-card" id="q-0">
+      <div class="q-header">
+        <span class="q-num">Question 1</span>
+        <span class="q-hint-btn" onclick="toggleHint(0)">💡 Show Hint</span>
+      </div>
+      <p class="q-text">A digital computer is made of four basic components: CPU, Memory, Input, and ________.</p>
+      <div class="q-hint" id="hint-0" style="display:none;">Hint: The component used to present results to the user</div>
+      <div class="q-input-wrap">
+        <input type="text" id="ans-0" placeholder="Type your answer here..." onkeyup="checkAnswerEnter(event, 0)">
+        <button onclick="checkAnswer(0, 'Output')">Check</button>
+      </div>
+      <div class="q-feedback" id="feedback-0"></div>
+    </div>
+  
+    <div class="quiz-card" id="q-1">
+      <div class="q-header">
+        <span class="q-num">Question 2</span>
+        <span class="q-hint-btn" onclick="toggleHint(1)">💡 Show Hint</span>
+      </div>
+      <p class="q-text">All data processing in a digital computer is performed by the ________.</p>
+      <div class="q-hint" id="hint-1" style="display:none;">Hint: Also known as the processor or the brain of the computer</div>
+      <div class="q-input-wrap">
+        <input type="text" id="ans-1" placeholder="Type your answer here..." onkeyup="checkAnswerEnter(event, 1)">
+        <button onclick="checkAnswer(1, 'CPU')">Check</button>
+      </div>
+      <div class="q-feedback" id="feedback-1"></div>
+    </div>
+  
+    <div class="quiz-card" id="q-2">
+      <div class="q-header">
+        <span class="q-num">Question 3</span>
+        <span class="q-hint-btn" onclick="toggleHint(2)">💡 Show Hint</span>
+      </div>
+      <p class="q-text">The printed circuit board inside the CPU cabinet where the CPU, RAM, and device cards are plugged is called the ________.</p>
+      <div class="q-hint" id="hint-2" style="display:none;">Hint: The main circuit board of a PC</div>
+      <div class="q-input-wrap">
+        <input type="text" id="ans-2" placeholder="Type your answer here..." onkeyup="checkAnswerEnter(event, 2)">
+        <button onclick="checkAnswer(2, 'Motherboard')">Check</button>
+      </div>
+      <div class="q-feedback" id="feedback-2"></div>
+    </div>
+  
+    <div class="quiz-card" id="q-3">
+      <div class="q-header">
+        <span class="q-num">Question 4</span>
+        <span class="q-hint-btn" onclick="toggleHint(3)">💡 Show Hint</span>
+      </div>
+      <p class="q-text">The raw collection of facts, figures, and statistics inputted into a computer is referred to as ________.</p>
+      <div class="q-hint" id="hint-3" style="display:none;">Hint: Processed to become information</div>
+      <div class="q-input-wrap">
+        <input type="text" id="ans-3" placeholder="Type your answer here..." onkeyup="checkAnswerEnter(event, 3)">
+        <button onclick="checkAnswer(3, 'Data')">Check</button>
+      </div>
+      <div class="q-feedback" id="feedback-3"></div>
+    </div>
+  
+    <div class="quiz-card" id="q-4">
+      <div class="q-header">
+        <span class="q-num">Question 5</span>
+        <span class="q-hint-btn" onclick="toggleHint(4)">💡 Show Hint</span>
+      </div>
+      <p class="q-text">Under the layered view of a computing system, the software layer concerned directly with driving the machine is ________ software.</p>
+      <div class="q-hint" id="hint-4" style="display:none;">Hint: E.g., the Operating System</div>
+      <div class="q-input-wrap">
+        <input type="text" id="ans-4" placeholder="Type your answer here..." onkeyup="checkAnswerEnter(event, 4)">
+        <button onclick="checkAnswer(4, 'System')">Check</button>
+      </div>
+      <div class="q-feedback" id="feedback-4"></div>
+    </div>
+  
+    <div class="quiz-card" id="q-5">
+      <div class="q-header">
+        <span class="q-num">Question 6</span>
+        <span class="q-hint-btn" onclick="toggleHint(5)">💡 Show Hint</span>
+      </div>
+      <p class="q-text">A number system with base r will have ________ distinct symbols.</p>
+      <div class="q-hint" id="hint-5" style="display:none;">Hint: The number of unique symbols used, ranging from 0 to r-1</div>
+      <div class="q-input-wrap">
+        <input type="text" id="ans-5" placeholder="Type your answer here..." onkeyup="checkAnswerEnter(event, 5)">
+        <button onclick="checkAnswer(5, 'r')">Check</button>
+      </div>
+      <div class="q-feedback" id="feedback-5"></div>
+    </div>
+  
+    <div class="quiz-card" id="q-6">
+      <div class="q-header">
+        <span class="q-num">Question 7</span>
+        <span class="q-hint-btn" onclick="toggleHint(6)">💡 Show Hint</span>
+      </div>
+      <p class="q-text">The hexadecimal number system uses sixteen symbols: 0 to 9 and letters ________.</p>
+      <div class="q-hint" id="hint-6" style="display:none;">Hint: Uppercase letters representing values 10 to 15</div>
+      <div class="q-input-wrap">
+        <input type="text" id="ans-6" placeholder="Type your answer here..." onkeyup="checkAnswerEnter(event, 6)">
+        <button onclick="checkAnswer(6, 'A to F')">Check</button>
+      </div>
+      <div class="q-feedback" id="feedback-6"></div>
+    </div>
+  
+    <div class="quiz-card" id="q-7">
+      <div class="q-header">
+        <span class="q-num">Question 8</span>
+        <span class="q-hint-btn" onclick="toggleHint(7)">💡 Show Hint</span>
+      </div>
+      <p class="q-text">In a weighted number system, the value of a number is determined by the symbols used and the ________ at which they are present.</p>
+      <div class="q-hint" id="hint-7" style="display:none;">Hint: Positions/places of digits</div>
+      <div class="q-input-wrap">
+        <input type="text" id="ans-7" placeholder="Type your answer here..." onkeyup="checkAnswerEnter(event, 7)">
+        <button onclick="checkAnswer(7, 'positions')">Check</button>
+      </div>
+      <div class="q-feedback" id="feedback-7"></div>
+    </div>
+  
+    <div class="quiz-card" id="q-8">
+      <div class="q-header">
+        <span class="q-num">Question 9</span>
+        <span class="q-hint-btn" onclick="toggleHint(8)">💡 Show Hint</span>
+      </div>
+      <p class="q-text">The conversion of a decimal integer part to its binary equivalent is done by repeated division by ________.</p>
+      <div class="q-hint" id="hint-8" style="display:none;">Hint: The base of the binary number system</div>
+      <div class="q-input-wrap">
+        <input type="text" id="ans-8" placeholder="Type your answer here..." onkeyup="checkAnswerEnter(event, 8)">
+        <button onclick="checkAnswer(8, '2')">Check</button>
+      </div>
+      <div class="q-feedback" id="feedback-8"></div>
+    </div>
+  
+    <div class="quiz-card" id="q-9">
+      <div class="q-header">
+        <span class="q-num">Question 10</span>
+        <span class="q-hint-btn" onclick="toggleHint(9)">💡 Show Hint</span>
+      </div>
+      <p class="q-text">To represent m distinct items uniquely, an n-bit binary code must satisfy the condition that 2^n is ________ m.</p>
+      <div class="q-hint" id="hint-9" style="display:none;">Hint: Mathematical inequality relation, e.g., greater than or equal to</div>
+      <div class="q-input-wrap">
+        <input type="text" id="ans-9" placeholder="Type your answer here..." onkeyup="checkAnswerEnter(event, 9)">
+        <button onclick="checkAnswer(9, 'greater than or equal to')">Check</button>
+      </div>
+      <div class="q-feedback" id="feedback-9"></div>
+    </div>
+  
+    <div class="quiz-card" id="q-10">
+      <div class="q-header">
+        <span class="q-num">Question 11</span>
+        <span class="q-hint-btn" onclick="toggleHint(10)">💡 Show Hint</span>
+      </div>
+      <p class="q-text">ASCII stands for American Standard Code for ________.</p>
+      <div class="q-hint" id="hint-10" style="display:none;">Hint: The primary purpose of exchanging alphanumeric information</div>
+      <div class="q-input-wrap">
+        <input type="text" id="ans-10" placeholder="Type your answer here..." onkeyup="checkAnswerEnter(event, 10)">
+        <button onclick="checkAnswer(10, 'Information Interchange')">Check</button>
+      </div>
+      <div class="q-feedback" id="feedback-10"></div>
+    </div>
+  
+    <div class="quiz-card" id="q-11">
+      <div class="q-header">
+        <span class="q-num">Question 12</span>
+        <span class="q-hint-btn" onclick="toggleHint(11)">💡 Show Hint</span>
+      </div>
+      <p class="q-text">Although ASCII is a 7-bit code, for all practical purposes it is treated as an ________-bit code, where the extra bit is added for parity.</p>
+      <div class="q-hint" id="hint-11" style="display:none;">Hint: Number of bits in a standard byte</div>
+      <div class="q-input-wrap">
+        <input type="text" id="ans-11" placeholder="Type your answer here..." onkeyup="checkAnswerEnter(event, 11)">
+        <button onclick="checkAnswer(11, '8')">Check</button>
+      </div>
+      <div class="q-feedback" id="feedback-11"></div>
+    </div>
+  
+    <div class="quiz-card" id="q-12">
+      <div class="q-header">
+        <span class="q-num">Question 13</span>
+        <span class="q-hint-btn" onclick="toggleHint(12)">💡 Show Hint</span>
+      </div>
+      <p class="q-text">________ was developed as a universal encoding standard to handle text expressed in most of the world&#039;s writing systems consistently.</p>
+      <div class="q-hint" id="hint-12" style="display:none;">Hint: Standard widely used over the Internet for multilingual computing</div>
+      <div class="q-input-wrap">
+        <input type="text" id="ans-12" placeholder="Type your answer here..." onkeyup="checkAnswerEnter(event, 12)">
+        <button onclick="checkAnswer(12, 'Unicode')">Check</button>
+      </div>
+      <div class="q-feedback" id="feedback-12"></div>
+    </div>
+  
+    <div class="quiz-card" id="q-13">
+      <div class="q-header">
+        <span class="q-num">Question 14</span>
+        <span class="q-hint-btn" onclick="toggleHint(13)">💡 Show Hint</span>
+      </div>
+      <p class="q-text">The most commonly used Unicode Transformation Format is ________.</p>
+      <div class="q-hint" id="hint-13" style="display:none;">Hint: Uses one byte for ASCII and up to four bytes for other characters</div>
+      <div class="q-input-wrap">
+        <input type="text" id="ans-13" placeholder="Type your answer here..." onkeyup="checkAnswerEnter(event, 13)">
+        <button onclick="checkAnswer(13, 'UTF-8')">Check</button>
+      </div>
+      <div class="q-feedback" id="feedback-13"></div>
+    </div>
+  
+    <div class="quiz-card" id="q-14">
+      <div class="q-header">
+        <span class="q-num">Question 15</span>
+        <span class="q-hint-btn" onclick="toggleHint(14)">💡 Show Hint</span>
+      </div>
+      <p class="q-text">Every machine instruction is comprised of two parts: opcode and ________.</p>
+      <div class="q-hint" id="hint-14" style="display:none;">Hint: The data or references to data on which the operation is performed</div>
+      <div class="q-input-wrap">
+        <input type="text" id="ans-14" placeholder="Type your answer here..." onkeyup="checkAnswerEnter(event, 14)">
+        <button onclick="checkAnswer(14, 'operands')">Check</button>
+      </div>
+      <div class="q-feedback" id="feedback-14"></div>
+    </div>
+  
+    <div class="quiz-card" id="q-15">
+      <div class="q-header">
+        <span class="q-num">Question 16</span>
+        <span class="q-hint-btn" onclick="toggleHint(15)">💡 Show Hint</span>
+      </div>
+      <p class="q-text">The entire set of instructions that can be executed directly by the processor forms the ________ of the processor.</p>
+      <div class="q-hint" id="hint-15" style="display:none;">Hint: Two-word term for the CPU&#039;s hardware capabilities</div>
+      <div class="q-input-wrap">
+        <input type="text" id="ans-15" placeholder="Type your answer here..." onkeyup="checkAnswerEnter(event, 15)">
+        <button onclick="checkAnswer(15, 'instruction set')">Check</button>
+      </div>
+      <div class="q-feedback" id="feedback-15"></div>
+    </div>
+  
+    <div class="quiz-card" id="q-16">
+      <div class="q-header">
+        <span class="q-num">Question 17</span>
+        <span class="q-hint-btn" onclick="toggleHint(16)">💡 Show Hint</span>
+      </div>
+      <p class="q-text">One typical instruction cycle involves four key sub-cycles: Fetch, ________, Execute, and Write back.</p>
+      <div class="q-hint" id="hint-16" style="display:none;">Hint: The phase where the control unit translates/interprets the instruction</div>
+      <div class="q-input-wrap">
+        <input type="text" id="ans-16" placeholder="Type your answer here..." onkeyup="checkAnswerEnter(event, 16)">
+        <button onclick="checkAnswer(16, 'Decode')">Check</button>
+      </div>
+      <div class="q-feedback" id="feedback-16"></div>
+    </div>
+  
+    <div class="quiz-card" id="q-17">
+      <div class="q-header">
+        <span class="q-num">Question 18</span>
+        <span class="q-hint-btn" onclick="toggleHint(17)">💡 Show Hint</span>
+      </div>
+      <p class="q-text">The processor registers that are used by the control unit to control and coordinate the operation of the processor are called ________ registers.</p>
+      <div class="q-hint" id="hint-17" style="display:none;">Hint: E.g., Program Counter (PC), Instruction Register (IR), MAR, MBR</div>
+      <div class="q-input-wrap">
+        <input type="text" id="ans-17" placeholder="Type your answer here..." onkeyup="checkAnswerEnter(event, 17)">
+        <button onclick="checkAnswer(17, 'Control &amp; Status')">Check</button>
+      </div>
+      <div class="q-feedback" id="feedback-17"></div>
+    </div>
+  
+    <div class="quiz-card" id="q-18">
+      <div class="q-header">
+        <span class="q-num">Question 19</span>
+        <span class="q-hint-btn" onclick="toggleHint(18)">💡 Show Hint</span>
+      </div>
+      <p class="q-text">In ________ control unit design, the mapping between machine instructions and micro-operations is permanently wired inside the processor.</p>
+      <div class="q-hint" id="hint-18" style="display:none;">Hint: A fast, hard-coded logic design that cannot be modified</div>
+      <div class="q-input-wrap">
+        <input type="text" id="ans-18" placeholder="Type your answer here..." onkeyup="checkAnswerEnter(event, 18)">
+        <button onclick="checkAnswer(18, 'hardwired')">Check</button>
+      </div>
+      <div class="q-feedback" id="feedback-18"></div>
+    </div>
+  
+    <div class="quiz-card" id="q-19">
+      <div class="q-header">
+        <span class="q-num">Question 20</span>
+        <span class="q-hint-btn" onclick="toggleHint(19)">💡 Show Hint</span>
+      </div>
+      <p class="q-text">The microprogrammed control unit stores its sequence of micro-operations in a control memory made of a ________ chip.</p>
+      <div class="q-hint" id="hint-19" style="display:none;">Hint: A type of programmable read-only memory</div>
+      <div class="q-input-wrap">
+        <input type="text" id="ans-19" placeholder="Type your answer here..." onkeyup="checkAnswerEnter(event, 19)">
+        <button onclick="checkAnswer(19, 'PROM')">Check</button>
+      </div>
+      <div class="q-feedback" id="feedback-19"></div>
+    </div>
+  
+    <div class="quiz-card" id="q-20">
+      <div class="q-header">
+        <span class="q-num">Question 21</span>
+        <span class="q-hint-btn" onclick="toggleHint(20)">💡 Show Hint</span>
+      </div>
+      <p class="q-text">RISC processors typically use ________ control logic, whereas CISC processors frequently use microprogrammed control.</p>
+      <div class="q-hint" id="hint-20" style="display:none;">Hint: The faster, permanently wired logic design</div>
+      <div class="q-input-wrap">
+        <input type="text" id="ans-20" placeholder="Type your answer here..." onkeyup="checkAnswerEnter(event, 20)">
+        <button onclick="checkAnswer(20, 'hardwired')">Check</button>
+      </div>
+      <div class="q-feedback" id="feedback-20"></div>
+    </div>
+  
+    <div class="quiz-card" id="q-21">
+      <div class="q-header">
+        <span class="q-num">Question 22</span>
+        <span class="q-hint-btn" onclick="toggleHint(21)">💡 Show Hint</span>
+      </div>
+      <p class="q-text">The register in the ALU that is very frequently used during operations to hold operands and intermediate results is the ________.</p>
+      <div class="q-hint" id="hint-21" style="display:none;">Hint: Starts with &#039;A&#039;</div>
+      <div class="q-input-wrap">
+        <input type="text" id="ans-21" placeholder="Type your answer here..." onkeyup="checkAnswerEnter(event, 21)">
+        <button onclick="checkAnswer(21, 'Accumulator')">Check</button>
+      </div>
+      <div class="q-feedback" id="feedback-21"></div>
+    </div>
+  
+    <div class="quiz-card" id="q-22">
+      <div class="q-header">
+        <span class="q-num">Question 23</span>
+        <span class="q-hint-btn" onclick="toggleHint(22)">💡 Show Hint</span>
+      </div>
+      <p class="q-text">The registers in the ALU that indicate information about the operations and their results (e.g., carry, overflow, zero) are called ________.</p>
+      <div class="q-hint" id="hint-22" style="display:none;">Hint: Plural term; also called status registers</div>
+      <div class="q-input-wrap">
+        <input type="text" id="ans-22" placeholder="Type your answer here..." onkeyup="checkAnswerEnter(event, 22)">
+        <button onclick="checkAnswer(22, 'flags')">Check</button>
+      </div>
+      <div class="q-feedback" id="feedback-22"></div>
+    </div>
+  
+    <div class="quiz-card" id="q-23">
+      <div class="q-header">
+        <span class="q-num">Question 24</span>
+        <span class="q-hint-btn" onclick="toggleHint(23)">💡 Show Hint</span>
+      </div>
+      <p class="q-text">A fast semiconductor memory placed on the processor chip to temporarily store frequently accessed instructions and data is called ________ memory.</p>
+      <div class="q-hint" id="hint-23" style="display:none;">Hint: Used to minimize wait cycles due to memory references</div>
+      <div class="q-input-wrap">
+        <input type="text" id="ans-23" placeholder="Type your answer here..." onkeyup="checkAnswerEnter(event, 23)">
+        <button onclick="checkAnswer(23, 'Cache')">Check</button>
+      </div>
+      <div class="q-feedback" id="feedback-23"></div>
+    </div>
+  
+    <div class="quiz-card" id="q-24">
+      <div class="q-header">
+        <span class="q-num">Question 25</span>
+        <span class="q-hint-btn" onclick="toggleHint(24)">💡 Show Hint</span>
+      </div>
+      <p class="q-text">The modern technique of having more than one processor core on the same IC chip is used to perform execution of instructions in ________.</p>
+      <div class="q-hint" id="hint-24" style="display:none;">Hint: Simultaneous or concurrent execution</div>
+      <div class="q-input-wrap">
+        <input type="text" id="ans-24" placeholder="Type your answer here..." onkeyup="checkAnswerEnter(event, 24)">
+        <button onclick="checkAnswer(24, 'parallel')">Check</button>
+      </div>
+      <div class="q-feedback" id="feedback-24"></div>
+    </div>
+  </div>
+
+    </main>
+  </div>
+
+  <script>
+    function toggleTheme() {
+      document.body.classList.toggle('light');
+      const isLight = document.body.classList.contains('light');
+      document.querySelector('.theme-toggle').textContent = isLight ? '🌙 Toggle Dark Mode' : '☀️ Toggle Light Mode';
+    }
+
+    function toggleHint(idx) {
+      const hint = document.getElementById('hint-' + idx);
+      const btn = document.querySelector('#q-' + idx + ' .q-hint-btn');
+      if (hint.style.display === 'none') {
+        hint.style.display = 'block';
+        btn.textContent = '🙈 Hide Hint';
+      } else {
+        hint.style.display = 'none';
+        btn.textContent = '💡 Show Hint';
+      }
+    }
+
+    function checkAnswer(idx, correctAns) {
+      const input = document.getElementById('ans-' + idx);
+      const feedback = document.getElementById('feedback-' + idx);
+      const userAns = input.value.trim().toLowerCase();
+      const ansParts = correctAns.toLowerCase().split('/');
+      
+      const isCorrect = ansParts.some(part => userAns === part.trim() || userAns.includes(part.trim()));
+      
+      if (isCorrect) {
+        feedback.textContent = '✅ Correct!';
+        feedback.className = 'q-feedback correct';
+      } else {
+        feedback.textContent = '❌ Incorrect. Try again!';
+        feedback.className = 'q-feedback incorrect';
+      }
+    }
+
+    function checkAnswerEnter(event, idx) {
+      if (event.key === 'Enter') {
+        const btn = document.querySelector('#q-' + idx + ' button');
+        if (btn) btn.click();
+      }
+    }
+  </script>
+</body>
+</html>

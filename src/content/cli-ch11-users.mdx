@@ -1,0 +1,105 @@
+---
+title: "Chapter 11: Managing User Accounts"
+description: "Learn how to manage system profiles, enforce password rules, restrict active login hours, and assign administrator rights using net user and net localgroup."
+---
+
+# Chapter 11: Managing User Accounts
+
+## 👥 Managing System Profiles with `net user`
+
+In 🪟 Windows 11, system administrators use the **`net user`** command to manage local accounts, enforce security policies, and configure access permissions:
+
+* **List Accounts:** Running **`net user`** without arguments lists all user profiles registered on the computer (e.g. Administrator, Guest, Student).
+* **View Account Details:**
+  ```cmd
+  net user Student
+  ```
+  *Displays detailed info for `Student`, such as password expiry, last login time, and group memberships.*
+
+---
+
+## ➕ Creating & Configuring User Accounts
+
+### 👤 Adding a New User
+To register a new local user with a defined password:
+```cmd
+net user coder nextsem123 /add
+```
+If you want to enter the password securely (hidden from shoulder-surfers), use an asterisk `*`:
+```cmd
+net user coder * /add
+```
+*(The shell will prompt you to type and confirm the password without displaying characters on-screen).*
+
+### 🛠️ Enforcing Security Constraints & Options
+You can configure strict login limits using inline switches:
+
+| Option Switch | Action | Example |
+| :--- | :--- | :--- |
+| **`/active:no`** | Temporarily disables the user account. | `net user coder /active:no` |
+| **`/expires:08/31/2026`** | Sets an account expiration date (or `/expires:never`). | `net user coder /expires:08/31/2026` |
+| **`/passwordreq:yes`** | Requires the user to have a password. | `net user coder /passwordreq:yes` |
+| **`/times:M-F,8am-5pm`** | Restricts login hours (e.g. only Monday-Friday, 8 AM to 5 PM). | `net user coder /times:M-F,8am-5pm` |
+
+### 🗑️ Deleting a User
+```cmd
+net user coder /delete
+```
+
+---
+
+## 👑 Assigning Permissions with `net localgroup`
+
+Creating a user only grants standard user permissions. To elevate a user to a local administrator (giving them UAC elevation privileges), add them to the local **Administrators** group:
+
+* **Add to Administrators Group:**
+  ```cmd
+  net localgroup Administrators coder /add
+  ```
+* **List Local Groups:** Running **`net localgroup`** without arguments lists all security groups (e.g. Administrators, Users, Guests).
+* **Remove from a Group:**
+  ```cmd
+  net localgroup Administrators coder /delete
+  ```
+
+> [!IMPORTANT]
+> **Elevation Required:**
+> All user account creation (`net user /add`) and group modification (`net localgroup /add`) commands require **elevated administrator privileges** (UAC elevation). If run in a standard prompt, they fail with `System error 5 has occurred. Access is denied.`
+
+> 👥 **Developer Joke:** Why did the local user account cross the Command Prompt? To get admin permission on the other side! 🚧
+
+---
+
+## 💻 Practice Terminal Drill
+
+Choose how you want to complete your practice drill:
+
+### ⚡ Option A: Quick-Run Simulator (Recommended)
+Click the pills below to execute the drill commands automatically:
+
+<CommandLineRunner
+  commands={[
+    { input: "net user", output: "User accounts for \\\\DESKTOP-NEXTSEM\n\n-------------------------------------------------------------------------------\nAdministrator            DefaultAccount           Guest                    \nStudent                  \nThe command completed successfully.", explanation: "Lists all current local system accounts." },
+    { input: "net user dev-student /add", output: "The command completed successfully.", explanation: "Creates a new user dev-student." },
+    { input: "net user dev-student", output: "User name                    dev-student\nFull Name                    \nComment                      \nUser's comment               \nCountry/region code          000 (System Default)\nAccount active               Yes\nAccount expires              Never\n\nThe command completed successfully.", explanation: "Displays settings profile for user dev-student." },
+    { input: "net user dev-student /delete", output: "The command completed successfully.", explanation: "Deletes the dev-student account." }
+  ]}
+/>
+
+### 🛠️ Option B: Open-Ended Terminal Sandbox
+If you want to manually type these commands yourself, launch the full system simulator below:
+
+<TabbedOS />
+
+---
+
+## 🏆 Lesson Check
+Check your user account management knowledge below:
+
+<DragDropQuestion
+  questionId="cmd-netuser-add"
+  text="To elevate a user named 'coder' to have full system administrator privileges on a Windows system, run __________."
+  correctOption="net localgroup Administrators coder /add"
+  options="net localgroup Administrators coder /add, net user coder /admin, net group admin coder /add, add-admin coder"
+  explanation="The net localgroup Administrators [username] /add command assigns administrative privileges to the local user."
+/>

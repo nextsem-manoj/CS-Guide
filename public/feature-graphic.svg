@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 500" width="1024" height="500">
+  <defs>
+    <linearGradient id="bg-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#060c18"/>
+      <stop offset="50%" stop-color="#09101f"/>
+      <stop offset="100%" stop-color="#0a1628"/>
+    </linearGradient>
+    <filter id="gold-glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1024" height="500" fill="url(#bg-grad)"/>
+  
+  <!-- Subtle Grid Lines -->
+  <path d="M0 100 H1024 M0 200 H1024 M0 300 H1024 M0 400 H1024" stroke="#04AA6D" stroke-opacity="0.08" stroke-width="1"/>
+  
+  <!-- Logo Card Left side -->
+  <g transform="translate(80, 75)">
+    <rect width="350" height="350" rx="70" fill="#09101f"/>
+    <rect x="8" y="8" width="334" height="334" rx="62" fill="none" stroke="#04AA6D" stroke-width="10" stroke-opacity="0.8"/>
+    <text x="175" y="150" dominant-baseline="middle" text-anchor="middle" font-family="system-ui, sans-serif" font-weight="900" font-size="145" fill="#F59E0B" filter="url(#gold-glow)" letter-spacing="-4">NS</text>
+    <text x="175" y="270" dominant-baseline="middle" text-anchor="middle" font-family="system-ui, sans-serif" font-weight="800" font-size="44" fill="#ffffff" letter-spacing="-1">NextSem</text>
+  </g>
+  
+  <!-- Text Content Right side -->
+  <text x="490" y="190" font-family="system-ui, sans-serif" font-weight="900" font-size="52" fill="#ffffff">NextSem Academy</text>
+  <text x="490" y="250" font-family="system-ui, sans-serif" font-weight="700" font-size="30" fill="#04AA6D">Full Stack Web Development &amp; CS</text>
+  
+  <!-- Pill Badges -->
+  <g transform="translate(490, 290)">
+    <!-- Badge 1 -->
+    <rect width="140" height="42" rx="21" fill="#04AA6D" fill-opacity="0.2" stroke="#04AA6D" stroke-width="1.5"/>
+    <text x="70" y="26" dominant-baseline="middle" text-anchor="middle" font-family="system-ui, sans-serif" font-weight="700" font-size="18" fill="#04AA6D">0ms Instant</text>
+    
+    <!-- Badge 2 -->
+    <rect x="155" width="160" height="42" rx="21" fill="#F59E0B" fill-opacity="0.2" stroke="#F59E0B" stroke-width="1.5"/>
+    <text x="235" y="26" dominant-baseline="middle" text-anchor="middle" font-family="system-ui, sans-serif" font-weight="700" font-size="18" fill="#F59E0B">305+ Lessons</text>
+    
+    <!-- Badge 3 -->
+    <rect x="330" width="150" height="42" rx="21" fill="#3B82F6" fill-opacity="0.2" stroke="#3B82F6" stroke-width="1.5"/>
+    <text x="405" y="26" dominant-baseline="middle" text-anchor="middle" font-family="system-ui, sans-serif" font-weight="700" font-size="18" fill="#60A5FA">Hindi/Hinglish</text>
+  </g>
+</svg>

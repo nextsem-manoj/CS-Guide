@@ -1,0 +1,170 @@
+---
+title: "P1.1: Web Intro & Text"
+description: "Understanding how the web works, mastering HTML structure, and formatting text elements according to standard semantic guidelines."
+---
+
+# P1.1: Web Intro & Text Formatting
+
+Welcome to your first deep dive into HTML5! Before we write code, we must understand the environment we are working in and the massive opportunities available in this field.
+
+---
+
+## 1. How the Web Works
+
+When you type a URL like `nextsem.online` into a browser (the **Client**), it sends an HTTP Request to a computer far away (the **Server**). The Server responds by sending back HTML, CSS, and JS files, which your browser translates into a visual webpage.
+
+- **HTML** (HyperText Markup Language): The Structure and Skeleton.
+- **CSS** (Cascading Style Sheets): The Styling, Colors, and Layouts.
+- **JS** (JavaScript): The Interactivity, Logic, and Dynamics.
+
+---
+
+## 2. The Frontend Developer Career Path & Salary
+
+Frontend web development is one of the most high-demand skill sets globally. The average salary of a frontend developer rises exponentially as they build experience and practical project portfolios.
+
+<GraphBar
+  title="Average Frontend Developer Salaries in India (LPA)"
+  subtitle="Based on industry placement statistics for project-capable developers."
+  items={[
+    { label: "Junior Developer (0-2 Yrs)", value: 25, displayValue: "₹4L - ₹8L" },
+    { label: "Mid-Level Engineer (2-5 Yrs)", value: 50, displayValue: "₹8L - ₹18L" },
+    { label: "Senior Engineer (5+ Yrs)", value: 85, displayValue: "₹18L - ₹35L" },
+    { label: "Lead Architect / Remote", value: 100, displayValue: "₹35L - ₹65L+" }
+  ]}
+/>
+
+---
+
+<DeveloperProfile
+  name="Kent C. Dodds"
+  role="JavaScript Engineer & Educator"
+  salary="₹60 Lakhs/yr equivalent"
+  company="Remix / Epic Web"
+  experience="9 Years"
+  avatar="👨‍💻"
+  photoUrl="https://github.com/kentcdodds.png"
+  profileUrl="https://github.com/kentcdodds"
+  stack="HTML5, CSS3, JavaScript, React, Remix, Testing Library"
+  quote="HTML is the foundation of everything on the web. It's not just about tags; it's about semantic meaning. Write accessible markup from day one!"
+/>
+
+---
+
+## 3. Anatomy of an HTML5 Document
+
+HTML files are simply text documents. To describe the structure of a webpage, we add code (called **tags**) to the words we want to appear on the page. Tags act as containers that tell the browser how to interpret the content within them.
+
+Every HTML page requires a fundamental skeleton to function properly.
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My First Web Page</title>
+</head>
+<body>
+    <h1>Welcome to Nextsem Academy!</h1>
+    <p>This is a basic HTML web page. You can add HTML elements inside the body tag.</p>
+</body>
+</html>
+```
+
+### Breakdown of Key Elements:
+* `<!DOCTYPE html>`: The DOCTYPE declaration tells the browser which version of HTML the page is using (HTML5). It should always be the very first line of any document, before the `<html>` tag.
+* `<html lang="en">`: The root element. Declaring the language (`en` for English) helps translation tools, search engines, and screen readers.
+* `<head>`: Contains invisible metadata and settings about the page, such as the character encoding (`charset="UTF-8"`), viewport scaling, and the page title.
+* `<title>`: Displays the page name in the browser tab or window.
+* `<body>`: Contains EVERYTHING the user actually sees on the screen (headings, text, images, videos).
+
+---
+
+## 4. Text Formatting & Typography
+
+HTML provides specific tags to give structural and semantic meaning to text.
+
+### Headings
+Headings range from `<h1>` to `<h6>`. The `<h1>` tag represents the most important main heading, while `<h6>` represents the least important sub-heading.
+> [!IMPORTANT]
+> **SEO Rule:** Always use exactly one `<h1>` per page to tell search engines what your page is primarily about. Use `<h2>` to `<h6>` logically for sub-sections. Never use heading tags just to make text bold or big!
+
+### Paragraphs & Spacing
+* `<p>`: Defines a block of text. Browsers automatically start a new paragraph on a new line and add vertical space between paragraphs.
+* `<br />`: A line break (forces text to start on a new line immediately without creating a new paragraph).
+* `<hr />`: A horizontal rule (a visible line separating content themes).
+
+### Bold vs. Strong & Italic vs. Emphasis
+* `<b>`: Renders text in bold (presentation style only, implies no extra importance).
+* `<strong>`: Indicates text of strong importance (semantic markup, highly recommended).
+* `<i>`: Renders text in italics (presentation style only, e.g. for foreign words or technical terms).
+* `<em>`: Indicates emphasized text that subtly changes the meaning of a sentence (semantic markup).
+
+```html
+<p>This is a <strong>very important</strong> warning.</p>
+<p>I <em>think</em> Ivy was the first.</p>
+```
+
+### Superscript & Subscript
+* `<sup>`: Formats text as superscript (e.g., date suffixes like 4<sup>th</sup> or math exponents like E=MC<sup>2</sup>).
+* `<sub>`: Formats text as subscript (e.g., chemical formulas like H<sub>2</sub>O or footnotes).
+
+---
+
+## 5. White Space Collapsing
+
+When a browser encounters two or more consecutive spaces in the code, or a line break, it collapses them into a single space. This is known as **white space collapsing**. Developers take advantage of this behavior to indent code and make it easier to read without affecting the visual layout.
+
+---
+
+## 6. Semantic Markup & Annotations
+
+Semantic tags add metadata details to the page that are useful for search engines, screen readers, and translation tools.
+
+### Quotations
+* `<blockquote>`: Used for longer, block-level quotations. It should always contain a `<p>` tag inside it. It can carry a `cite` attribute specifying the source URL.
+* `<q>`: Used for shorter, inline quotations. Browsers automatically wrap the content in quote marks.
+
+```html
+<blockquote cite="https://en.wikipedia.org/wiki/Winnie-the-Pooh">
+  <p>Did you ever stop to think, and forget to start again?</p>
+</blockquote>
+<p>As A.A. Milne said, <q>Some people talk to animals. Not many listen though.</q></p>
+```
+
+### Abbreviations & Acronyms
+* `<abbr>`: Used for abbreviations and acronyms. Use the `title` attribute to specify the full term. When hovered, the browser displays the full term as a tooltip.
+
+```html
+<p>The <abbr title="World Wide Web Consortium">W3C</abbr> sets web standards.</p>
+```
+
+### Citations & Definitions
+* `<cite>`: Used to reference a piece of work like a book, film, paper, or song (renders in italics).
+* `<dfn>`: Used for the defining instance of a new term.
+
+```html
+<p><cite>A Brief History of Time</cite> was written by Stephen Hawking.</p>
+<p>A <dfn>black hole</dfn> is a region of space from which nothing can escape.</p>
+```
+
+### Author Details & Content Updates
+* `<address>`: Used to contain contact details for the author of a page (renders in italics).
+* `<ins>`: Represents text that has been inserted into the document (usually rendered with an underline).
+* `<del>`: Represents text that has been deleted from the document (usually rendered with a line through it).
+* `<s>`: Indicates content that is no longer accurate or relevant (renders with a strikethrough).
+
+```html
+<address>
+  <p><a href="mailto:support@nextsem.online">support@nextsem.online</a></p>
+</address>
+<p>It was the <del>worst</del> <ins>best</ins> idea I ever had.</p>
+<p><s>Was ₹999</s> Now Free!</p>
+```
+
+---
+
+## 🎓 Lesson Assignment: Your First HTML Sandbox
+
+Create a file named `blog.html` and structure a tech blog post using headings, paragraphs, bold/italic, superscript, subscript, abbreviations, and citations. Make sure your `<h1>` is the blog title! Test it in your editor and load it in Chrome.

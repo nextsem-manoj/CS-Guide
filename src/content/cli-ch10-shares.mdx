@@ -1,0 +1,90 @@
+---
+title: "Chapter 10: Connecting to File Shares"
+description: "Mount shared server directory paths, manage permanent drive mapping, list network shares, and configure local folders sharing."
+---
+
+# Chapter 10: Connecting to File Shares
+
+## 📁 Mounting Network File Shares with `net use`
+
+In professional network environments, shared directories are hosted on central file servers. You can map (mount) these paths to a virtual drive letter on your PC using the **`net use`** command:
+
+```cmd
+net use Z: \\central-server\shared-docs
+```
+*This mounts the shared `shared-docs` directory from `central-server` onto the `Z:` drive letter, making it instantly accessible in 🪟 Windows File Explorer.*
+
+### Shorthand & Custom Arguments:
+* **View Active Connections:** Running **`net use`** without arguments lists all active network mappings, connection status, and drive letters.
+* **Persistent Connections:** By default, mapped drives disconnect when you log out. To make them permanent (survive reboots), add `/persistent:yes`:
+  ```cmd
+  net use Z: \\central-server\shared-docs /persistent:yes
+  ```
+* **Authenticating with Credentials:** If the share requires security authentication, supply credentials inline:
+  ```cmd
+  net use Z: \\central-server\shared-docs secretPassword /user:Student
+  ```
+* **Disconnecting a Mapped Share:**
+  ```cmd
+  net use Z: /delete
+  ```
+
+---
+
+## 🔎 Auditing Shares with `net view` & `net share`
+
+### 🌐 Listing Network Shares (`net view`)
+To see what folders are shared on a remote computer, use the **`net view`** command:
+```cmd
+net view \\central-server
+```
+*Displays a list of all shared resource names (like printers and directories) hosted on that IP or server.*
+
+### 🛠️ Creating Local Shares (`net share`)
+You can share your own folders with other users on your local area network (LAN) using the **`net share`** utility:
+* **Create a Share:**
+  ```cmd
+  net share ProjectWork=C:\Users\Student\Desktop\Nextsem
+  ```
+  *This shares the local folder `Nextsem` on the network under the alias `ProjectWork`.*
+* **Delete a Share:**
+  ```cmd
+  net share ProjectWork /delete
+  ```
+
+> 🔗 **Developer Joke:** Why did the drive letter mount the file share? Because it wanted to stay connected in a long-distance relationship! 🔗📁
+
+---
+
+## 💻 Practice Terminal Drill
+
+Choose how you want to complete your practice drill:
+
+### ⚡ Option A: Quick-Run Simulator (Recommended)
+Click the pills below to execute the drill commands automatically:
+
+<CommandLineRunner
+  commands={[
+    { input: "net use Z: \\\\cloud-vault\\shared", output: "The command completed successfully.", explanation: "Maps a remote share directory to drive letter Z:." },
+    { input: "net use", output: "New connections will be remembered.\n\nStatus       Local     Remote                    Network\n-------------------------------------------------------------------------------\nOK           Z:        \\\\cloud-vault\\shared     Microsoft Windows Network\n\nThe command completed successfully.", explanation: "Displays Z: mapping status and connected drives list." },
+    { input: "net use Z: /delete", output: "Z: was deleted successfully.", explanation: "Unmounts and disconnects the Z: drive share." }
+  ]}
+/>
+
+### 🛠️ Option B: Open-Ended Terminal Sandbox
+If you want to manually type these commands yourself, launch the full system simulator below:
+
+<TabbedOS />
+
+---
+
+## 🏆 Lesson Check
+Check your file sharing configuration knowledge below:
+
+<DragDropQuestion
+  questionId="cmd-netuse"
+  text="To share a local folder located at C:\Backup on the network under the name 'SysBackup', run __________."
+  correctOption="net share SysBackup=C:\Backup"
+  options="net share SysBackup=C:\Backup, net use SysBackup=C:\Backup, net view SysBackup=C:\Backup, share C:\Backup"
+  explanation="net share is used to create or display local folder sharing settings, matching an alias (SysBackup) to a physical directory path."
+/>

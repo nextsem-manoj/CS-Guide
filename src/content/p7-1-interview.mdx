@@ -1,0 +1,74 @@
+---
+title: "P7.1: Technical Mock Interviews"
+description: "Mastering standard interview questions on JavaScript scopes, closures, React hooks, and DOM optimization."
+---
+
+# P7.1: Technical Mock Interviews
+
+Landing a software engineering role requires more than coding skills. You must be able to explain your technical decisions clearly under interview pressure.
+
+In this lesson, we will cover the core JavaScript, React, and browser networking questions that recur in technical mock interviews.
+
+---
+
+## 1. Core JavaScript Conceptual Questions
+
+### Question 1: What is a Closure in JavaScript?
+A closure is the combination of a function bundled together with references to its surrounding state (the lexical environment). In other words, a closure gives an inner function access to the outer function's scope even after the outer function has returned.
+
+```javascript
+function makeCounter() {
+  let count = 0; // Lexical scope variable
+  return function() {
+    count++; // Accesses parent variable
+    return count;
+  };
+}
+
+const counter = makeCounter();
+console.log(counter()); // 1
+console.log(counter()); // 2
+```
+
+### Question 2: What is the Event Loop?
+JavaScript is single-threaded. The **Event Loop** is the mechanism that allows JavaScript to perform non-blocking operations by offloading tasks (like timers, network requests) to the browser web APIs, and then pushing callback functions onto the call stack when the stack is empty.
+
+---
+
+## 2. React Core Interview Focus
+
+### Question: What is the difference between state and props?
+* **Props**: Configuration parameters passed down from a parent component. They are read-only (immutable) and cannot be modified by the component that receives them.
+* **State**: Local data storage managed within the component itself. State changes trigger component re-rendering and are mutable via the setter function (`setState` / `useState`).
+
+---
+
+## 3. High-Frequency Interview Practice Sheet
+
+Make sure you can comfortably explain the following concepts:
+* **CSS Specificity**: How the browser decides which styles to apply based on selectors types (IDs > Classes > Tags).
+* **Promise vs Async/Await**: Syntactic differences in handling asynchronous JavaScript.
+* **CORS Errors**: Why browsers block cross-origin requests and how CORS headers resolve it.
+
+---
+
+<DeveloperProfile
+  name="Kent C. Dodds"
+  role="JavaScript Engineer & Educator"
+  salary="₹65 Lakhs/yr equivalent"
+  company="Epic Web / Remix Team"
+  experience="10 Years"
+  avatar="👨‍💻"
+  photoUrl="https://github.com/kentcdodds.png"
+  profileUrl="https://github.com/kentcdodds"
+  stack="React, TypeScript, Testing Library, Component Patterns"
+  quote="During technical interviews, talk out loud while coding! Explaining your thought process is often more important to interviewers than writing perfect syntax on the first attempt!"
+/>
+
+---
+
+## 🎓 Practice Assignment
+
+1. Write out code explaining the differences between `var`, `let`, and `const` scope block bindings.
+2. Record yourself explaining the React virtual DOM diffing process in under two minutes.
+3. Review your description with a peer to verify technical clarity.

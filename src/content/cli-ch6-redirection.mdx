@@ -1,0 +1,87 @@
+---
+title: "Chapter 6: Wildcards and Redirection"
+description: "Master file matching using * and ? wildcards, output redirection, and linking commands using pipes and more."
+---
+
+# Chapter 6: Wildcards and Redirection
+
+## 🌟 Wildcards: The * and ? Filters
+
+Wildcards are placeholder symbols used to select groups of files matching a specific pattern:
+
+* **`*` (Asterisk):** Matches **any number of characters** (including zero).
+  * `*.html` matches `index.html`, `main.html`, etc.
+  * `project*` matches `project1.zip`, `project-final.doc`, etc.
+  * `*.*` matches **every file** in the directory.
+* **`?` (Question Mark):** Matches **exactly one character**.
+  * `logo?.png` matches `logo1.png`, `logoA.png`, but *not* `logo12.png`.
+  * `file??.txt` matches `file01.txt`, `fileAB.txt`, but *not* `file1.txt`.
+
+---
+
+## ➡️ Redirection: Command Output Controls
+
+By default, 🪟 Windows sends command outputs to the screen. You can redirect this stream using the following operators:
+
+* **`>` (Overwrite Redirect):** Directs output to a file, overwriting the file if it already exists.
+  * `dir > folder-log.txt` (saves the active folder structure to a text file).
+* **`>>` (Append Redirect):** Appends output to the end of a file without deleting its current contents.
+  * `echo Server Online >> status.log` (adds a log line to an existing status file).
+* **`<` (Input Redirect):** Feeds a file's content *into* a command as input.
+
+---
+
+## 🔗 The Pipe Operator & The `more` Command
+
+### 🚰 The Pipe Operator (`|`)
+The pipe operator takes the output of one command and feeds it directly as the input to a second command:
+```cmd
+COMMAND_A | COMMAND_B
+```
+
+### 📄 The `more` Command
+When a folder has hundreds of files, running `dir` scrolls past so fast you cannot read it. You can pipe `dir` into the **`more`** command to display the output page-by-page:
+```cmd
+dir | more
+```
+* Press **`Spacebar`** to scroll to the next full page.
+* Press **`Enter`** to scroll down line-by-line.
+* Press **`Q`** to quit the viewer.
+
+> 📝 **Developer Joke:** Why did the console output get redirected to a file? Because it wanted to save its thoughts for later instead of just speaking them to the wall! 🗣️📄
+
+---
+
+## 💻 Practice Terminal Drill
+
+Choose how you want to complete your practice drill:
+
+### ⚡ Option A: Quick-Run Simulator (Recommended)
+Click the pills below to execute the drill commands automatically:
+
+<CommandLineRunner
+  commands={[
+    { input: "dir > files.txt", output: "", explanation: "Redirects the list of files in the current directory into a new file files.txt." },
+    { input: "type files.txt", output: " Volume in drive C has no label.\n Volume Serial Number is 17A3-B9E5\n\n Directory of C:\\Users\\Student\\Desktop\n\n07/07/2026  03:15 AM                 0 files.txt\n               1 File(s)              0 bytes", explanation: "Prints the content of files.txt to the console." },
+    { input: "echo log-entry >> files.txt", output: "", explanation: "Appends the text 'log-entry' to the end of files.txt (>>)." },
+    { input: "type files.txt", output: " Volume in drive C has no label.\n Volume Serial Number is 17A3-B9E5\n\n Directory of C:\\Users\\Student\\Desktop\n\n07/07/2026  03:15 AM                 0 files.txt\n               1 File(s)              0 bytes\nlog-entry", explanation: "Prints the updated content of files.txt, showing the appended log line." }
+  ]}
+/>
+
+### 🛠️ Option B: Open-Ended Terminal Sandbox
+If you want to manually type these commands yourself, launch the full system simulator below:
+
+<TabbedOS />
+
+---
+
+## 🏆 Lesson Check
+Check your understanding of wildcards and redirection below:
+
+<DragDropQuestion
+  questionId="cmd-redirection"
+  text="To display a long directory list page-by-page in Windows Command Prompt, type __________."
+  correctOption="dir | more"
+  options="dir | more, dir > more, dir < more, dir /more"
+  explanation="Piping the output of the dir command into more (dir | more) scrolls output page-by-page."
+/>

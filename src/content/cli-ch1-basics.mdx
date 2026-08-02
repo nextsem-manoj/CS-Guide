@@ -1,0 +1,95 @@
+---
+title: "Chapter 1: Command Line Basics"
+description: "Learn how to launch Command Prompt, use ver, help, cls, and customize terminal window properties."
+---
+
+# Chapter 1: Command Line Basics
+
+## 🏛️ Command Line Launching & Syntax
+
+* 🖥️ **Default Boot Interface:** By default, 🪟 Windows boots into a graphical user interface (GUI).
+* 🚨 **System Diagnostics:** If 🪟 Windows boots into something other than the default graphical interface (or one of the versions of Safe Mode), you can assume that something has gone wrong with your system.
+* 💡 **Terminal Access:** You type lines of text in the terminal which the command interpreter (CMD.EXE) converts into instruction sets.
+
+<CommandLineBasicsSimulation />
+
+Every command in ⊞ Windows follows this standard structure:
+```bash
+COMMAND [arguments]
+```
+* **Command:** The action you want to perform (e.g. `ver` to check version, or `cls` to clear screen).
+* **Arguments:** Extra specifications that tell the command *where* or *how* to act (e.g. `help dir`).
+
+### Basic Shell Commands:
+* **`ver`**: Prints your operating system build name.
+* **`help [command]`**: Accesses the built-in instruction manual for any command.
+* **`cls`**: Clears the console screen of all past text clutter.
+
+<CommandFlashcard
+  cards={[
+    {
+      command: "ver",
+      analogy: "Reading the sticker on your computer model 🏷️",
+      explanation: "Prints your operating system build name, showing your exact active 🪟 Windows version details.",
+      joke: "Why do programmers love checking versions? Because they like to make sure they are on the same page! 📄"
+    },
+    {
+      command: "cls",
+      analogy: "Wiping a dirty whiteboard clean 🧼",
+      explanation: "Clears the active Command Prompt terminal screen of all past command histories and text clutter.",
+      joke: "Why did the developer clear their screen? They wanted to wipe away all their past mistakes in one go! 🧹"
+    },
+    {
+      command: "help [command]",
+      analogy: "Reading the instruction manual on a box 📖",
+      explanation: "Accesses the built-in instruction manual detailing syntax switches and parameter rules for any command.",
+      joke: "Why did the command call for help? Because it forgot its own arguments! 🗣️"
+    }
+  ]}
+/>
+
+### 🖥️ Making the Command Prompt Window Larger
+
+By default, the ⊞ Windows Command Prompt window is not very large. Even if you click the standard **maximize** button, the window will typically not expand to take up more than about a third of your screen space.
+
+To resize and customize the window layout:
+1. 🖱️ **Open Properties:** Right-click on the Command Prompt window's top **title bar**, and select **Properties** from the context menu.
+2. 🎚️ **Navigate to Layout:** When the Properties dialog window opens, click on the **Layout Tab**.
+3. 📏 **Adjust Window Size:** Under the *Window Size* section, you can manually adjust the **Width** and **Height** values (in character units) to expand the default terminal dimensions. Click **OK** to apply!
+
+> [!TIP]
+> **Modern Terminal Alternative:**
+> In 🪟 Windows 11, you can also use the new **Windows Terminal** app, which supports standard full-screen maximization, tabs, and zoom scaling (`Ctrl` + `+` / `Ctrl` + `-`) out-of-the-box! 🚀
+
+> 📐 **Developer Joke:** Why did the Command Prompt window go to the gym? It wanted to make its layout buffer look much larger! 💪🖥
+
+> 🪲 **Developer Joke:** Why do programmers prefer dark mode command line? Because light attracts bugs! 💡
+
+---
+
+## 💻 Practice Terminal Drill
+
+Choose how you want to complete your practice drill:
+
+### ⚡ Option A: Quick-Run Simulator (Recommended)
+Click the pills below to execute the drill commands automatically:
+
+<CommandLineRunner
+  commands={[
+    { input: "ver", output: "Microsoft Windows [Version 10.0.22621.1702]", explanation: "Displays the active Windows build version." },
+    { input: "cls", output: "", explanation: "Clears the active console screen of all text clutter." },
+    { input: "help ver", output: "Displays version information.\n\nVER", explanation: "Shows syntax details for the ver command." }
+  ]}
+/>
+
+### 🛠️ Option B: Open-Ended Terminal Sandbox
+If you want to manually type these commands yourself, launch the full system simulator below:
+
+<TabbedOS />
+
+---
+
+## 🏆 Lesson Quiz
+Check your understanding of basic shell commands below:
+
+<CommandLineQuiz />

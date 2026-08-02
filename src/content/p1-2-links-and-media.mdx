@@ -1,0 +1,166 @@
+---
+title: "P1.2: Links & Media"
+description: "Mastering HTML hyperlinks, relative/absolute paths with directory hopping, image formats, figure captions, and audio/video integration."
+---
+
+# P1.2: Links & Media
+
+Webpages are interconnected using links and enriched with multimedia. In this lesson, we will master how to connect pages and embed rich media assets according to industry standards.
+
+---
+
+## 1. HTML Links (`<a>`)
+
+Hyperlinks are the defining feature of the web because they allow you to move from one webpage to another. The anchor element (`<a>`) is used to create links, using the `href` (Hypertext Reference) attribute to specify the destination.
+
+```html
+<a href="https://nextsem.online">Visit Nextsem Academy</a>
+```
+
+### Absolute vs. Relative Paths
+* **Absolute URL:** Specifies the full web address (including the protocol, e.g. `href="https://google.com"`). Used when linking to external sites.
+* **Relative URL:** Links to other pages on the same website. The browser looks for the file relative to the current page.
+
+### Mastering Directory Structure & Path Hopping
+When a website grows, files are organized into folders (directories). To link across folders, you must write relative paths accurately:
+1. **Same Directory:** Just use the filename.
+   ```html
+   <a href="about.html">About Us</a>
+   ```
+2. **Child Directory:** Specify the folder name followed by a slash.
+   ```html
+   <a href="movies/reviews.html">Reviews</a>
+   ```
+3. **Grandchild Directory:** Specify the nested folders.
+   ```html
+   <a href="movies/dvd/reviews.html">DVD Reviews</a>
+   ```
+4. **Parent Directory (`../`):** Use `../` to move UP one folder level. This is called **parent directory hopping**.
+   ```html
+   <!-- Moves up to parent directory to find index.html -->
+   <a href="../index.html">Back to Home</a>
+   ```
+5. **Grandparent Directory (`../../`):** Move up two folder levels.
+   ```html
+   <a href="../../index.html">Back to Root</a>
+   ```
+
+### Additional Link Controls
+* **Email Links:** Starts with `mailto:` followed by the recipient's address. Relaunches the user's default email client.
+  ```html
+  <a href="mailto:support@nextsem.online">Email Support</a>
+  ```
+* **Opening in New Tab:** Set the `target` attribute to `_blank`. It is standard security practice to also include `rel="noopener noreferrer"`.
+  ```html
+  <a href="https://nextsem.online" target="_blank" rel="noopener noreferrer">Visit Nextsem</a>
+  ```
+* **Linking to Specific Page Sections:** Use the `#` symbol followed by the target element's unique `id`.
+  ```html
+  <!-- Links to <h2 id="method"> inside the same page -->
+  <a href="#method">Skip to Method</a>
+  
+  <!-- Links to a section on another page -->
+  <a href="about.html#team">Meet our Team</a>
+  ```
+
+---
+
+## 2. Dynamic Media Engagement
+
+Multimedia elements drive user engagement and are crucial for modern visual web layouts.
+
+<GraphBar
+  title="Page Engagement Increase by Media Type"
+  subtitle="Average percentage increase in visitor session duration."
+  items={[
+    { label: "Plain Text Only", value: 10, displayValue: "Baseline" },
+    { label: "Text with Images", value: 45, displayValue: "+45%" },
+    { label: "Text with Videos", value: 85, displayValue: "+85%" }
+  ]}
+/>
+
+---
+
+<DeveloperProfile
+  name="Sarah Drasner"
+  role="Director of Engineering"
+  salary="₹85 Lakhs/yr equivalent"
+  company="Google"
+  experience="15 Years"
+  avatar="👩‍💻"
+  photoUrl="https://github.com/sdras.png"
+  profileUrl="https://github.com/sdras"
+  stack="HTML5 Media, SVGs, CSS Animations, WebGL"
+  quote="SVGs are not just images; they are code. Mastering vector graphics and media integration is what separates basic layouts from premium, responsive interactive interfaces."
+/>
+
+---
+
+## 3. Images in Web Design (`<img>` & `<svg>`)
+
+The `<img>` tag is an empty/self-closing element used to embed images. It must carry the `src` and `alt` attributes.
+
+```html
+<img src="images/quokka.jpg" alt="A family of quokkas" title="Quokka family in Australia" width="600" height="450" />
+```
+
+### Essential Attributes:
+* `src`: The path to the image file (usually a relative URL pointing to an `images` folder).
+* `alt` (Alternative Text): Renders when the image fails to load. Crucial for screen readers and SEO crawlers.
+* `title`: Provides additional description. Most browsers display this as a tooltip on hover.
+* `width` & `height`: Specifies size in pixels. Always define these so the browser reserves layout space before the image downloads, preventing page layout shifts.
+
+### Raster vs. Vector Formats
+* **Raster (Bitmap):** Images made of pixels. They lose quality when scaled.
+  * **JPEG:** Ideal for photographs with millions of colors.
+  * **GIF:** Best for simple animations, flat graphics, and transparency with straight edges (only 256 colors).
+  * **PNG:** Supports millions of colors, semi-opaque transparency, and drop shadows with rounded edges.
+* **Vector (SVG):** Infinitely scalable vector shapes defined in XML code. Renders crisp and clear at any resolution.
+
+### HTML5 Figures & Captions
+The `<figure>` and `<figcaption>` elements are used to group images, diagrams, or charts with their text captions:
+
+```html
+<figure>
+  <img src="images/otters.jpg" alt="Two sea otters floating in water" />
+  <figcaption>Sea otters hold hands when they sleep so they don't drift apart.</figcaption>
+</figure>
+```
+
+---
+
+## 4. Native Video & Audio Embedding
+
+HTML5 provides native `<video>` and `<audio>` tags to play files directly in the browser without third-party plugins.
+
+```html
+<video src="video/puppy.mp4" poster="images/puppy-thumbnail.jpg" width="400" height="300" controls loop>
+  <p>Your browser does not support native video playback.</p>
+</video>
+```
+
+### Key Attributes:
+* `controls`: Renders browser-default play, pause, volume, and fullscreen controls.
+* `poster`: An image file that serves as a thumbnail preview before the video is played.
+* `autoplay`: Starts playing the media automatically when the page loads (use sparingly!).
+* `loop`: Restarts the media file automatically once it ends.
+* `preload`: Controls how much data is loaded on page load (`none`, `metadata`, or `auto`).
+
+### Supporting Multiple File Formats (Fallback Sources)
+Because different browsers support different video/audio codecs, it is best practice to provide fallback formats using `<source>` tags:
+
+```html
+<video controls width="400">
+  <source src="video/puppy.mp4" type="video/mp4" />
+  <source src="video/puppy.webm" type="video/webm" />
+  <p>Your browser does not support HTML5 video.</p>
+</video>
+```
+
+---
+
+## 🎓 Practice Assignment
+1. Create a page `media.html`. Inside it, set up an anchor link that hops out of a subfolder using `../` to return to your homepage.
+2. Add a link that opens `nextsem.online` in a new tab with standard security attributes.
+3. Embed a screenshot image grouped inside an HTML5 `<figure>` block with a `<figcaption>`.
+4. Embed a native HTML5 audio file with player controls.

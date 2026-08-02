@@ -1,0 +1,117 @@
+---
+title: "P4.8: Context API"
+description: "Resolving prop drilling, creating contexts, setting provider values, and consumption with the useContext hook."
+---
+
+# P4.8: Context API
+
+As React applications grow, passing props down through multiple layers of components can become exhausting. This problem is known as **Prop Drilling**. 
+
+To solve this, React provides the **Context API**, which acts as a global broadcast system, allowing components to share data directly without passing props through intermediate elements.
+
+---
+
+## 1. The Prop Drilling Problem
+
+Imagine you have a `Theme` state declared in `App`. The `App` nests a `MainLayout`, which nests a `Sidebar`, which nests a `ThemeSelectorButton`.
+To get the theme values to the button, you must pass the props down through every single layout container, even if they don't use it!
+
+```
+[App State: theme]
+   └─► [MainLayout] (no-op pass-through)
+         └─► [Sidebar] (no-op pass-through)
+               └─► [ThemeSelectorButton] (uses theme)
+```
+
+With **Context**, the button can request the theme data directly from the root provider, skipping the intermediate components entirely:
+
+```
+[App Provider: theme] ═══════════════(broadcast)═══════════════► [ThemeSelectorButton]
+```
+
+---
+
+## 2. Setting Up Context: 3 Simple Steps
+
+Let's build a global Theme Context step-by-step:
+
+### Step 1: Create the Context
+Create a new file `ThemeContext.js` and call `createContext()`.
+```javascript
+import { createContext } from 'react';
+export const ThemeContext = createContext("dark"); // Default value is "dark"
+```
+
+### Step 2: Provide the Context
+Wrap your top-level components inside the Context `Provider` tag and pass the state value inside the `value` prop.
+```jsx
+import React, { useState } from 'react';
+import { ThemeContext } from './ThemeContext';
+import MainLayout from './MainLayout';
+
+export default function App() {
+  const [theme, setTheme] = useState("dark");
+
+  return (
+    <ThemeContext.Provider value={theme}>
+      <MainLayout />
+    </ThemeContext.Provider>
+  );
+}
+```
+
+### Step 3: Consume the Context
+Inside any child component, use the `useContext` Hook to read the value directly.
+```jsx
+import React, { useContext } from 'react';
+import { ThemeContext } from './ThemeContext';
+
+export default function ThemeSelectorButton() {
+  // Read value directly from global broadcast
+  const theme = useContext(ThemeContext);
+
+  return (
+    <div className="p-3 bg-slate-900 rounded-xl">
+      Current Theme is: <span className="font-bold text-blue-400">{theme}</span>
+    </div>
+  );
+}
+```
+
+---
+
+## 3. Comparing Local vs Global State Adoption
+
+For local concerns (like toggle states, form inputs), keep using `useState`. For global concerns (user authentication, active themes, shopping cart items), adopt the Context API.
+
+<GraphBar
+  title="Curriculum Global State Choices"
+  subtitle="Preference of developers for context-like global sharing systems vs local states."
+  items={[
+    { label: "Local Component States", value: 75, displayValue: "75% (Inputs, Toggles)" },
+    { label: "Global Context Providers", value: 25, displayValue: "25% (Auth, Themes)" }
+  ]}
+/>
+
+---
+
+<DeveloperProfile
+  name="Dan Abramov"
+  role="React Core Developer"
+  salary="₹70 Lakhs/yr equivalent"
+  company="Meta / React Core Team"
+  experience="11 Years"
+  avatar="⚛️"
+  photoUrl="https://github.com/gaearon.png"
+  profileUrl="https://github.com/gaearon"
+  stack="React, Redux, Virtual DOM Diffing, Hooks"
+  quote="Context is great for sharing low-frequency updates like theme or locale settings. For high-frequency state updates, consider state containers or keep state local!"
+/>
+
+---
+
+## 🎓 Practice Assignment
+
+1. Create a `UserContext` that stores a user profile object `{ name: "Guest", isLoggedIn: false }`.
+2. Wrap your application inside the provider and implement a button that sets `isLoggedIn: true`.
+3. In a nested header component, dynamically display the user's name if logged in, or a "Sign In" button if guest.

@@ -1,0 +1,36 @@
+<!-- BEGIN:nextjs-agent-rules -->
+# This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` before writing any code. Heed deprecation notices.
+<!-- END:nextjs-agent-rules -->
+
+# Project-Scoped Rules
+- **Curriculum Formatting Style:** Always avoid long, continuous blocks of plain text in curriculum/MDX files. Instead, rewrite them with relevant icons, emojis, bullet list highlights, descriptive GIFs/visual animations, and engaging developer jokes to keep learning highly visual, fun, and memorable.
+- **Windows Naming Style:** Whenever referring to "Windows" or "Windows 11" in the curriculum/textbook content, always accompany it with the Windows icon/emoji (e.g. ⊞ Windows or 🪟 Windows 11) to maintain standard, high-quality visual branding.
+<!-- BEGIN:nextjs-agent-rules -->
+# This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` before writing any code. Heed deprecation notices.
+<!-- END:nextjs-agent-rules -->
+
+# Project-Scoped Rules
+- **Curriculum Formatting Style:** Always avoid long, continuous blocks of plain text in curriculum/MDX files. Instead, rewrite them with relevant icons, emojis, bullet list highlights, descriptive GIFs/visual animations, and engaging developer jokes to keep learning highly visual, fun, and memorable.
+- **Windows Naming Style:** Whenever referring to "Windows" or "Windows 11" in the curriculum/textbook content, always accompany it with the Windows icon/emoji (e.g. ⊞ Windows or 🪟 Windows 11) to maintain standard, high-quality visual branding.
+- **Automatic Chat Transcript Archiving**: Always run `npm run save-chat` or write a custom formatting script to archive the conversation transcript under the `chat-logs/` folder before concluding any session. If the user requests a custom name, use that name (e.g. `100+ more projects for front end web developer.md`). Make sure to structure and save all chat logs dynamically for future developer references.
+- **Excluding Semmy AI on Native App:** Do not load or display the Semmy AI chatbot widget (`SemmyAiWidget`) on native Android or iOS app platforms. Use `Capacitor.isNativePlatform()` to disable rendering of the chatbot widget.
+- **Excluded Header Links:** Never place or render Playground, NCERT Hub, BCA Hub, or Job Portal links in the main navigation headers or sub-navigation subject bars.
+- **IGNOU BCA Master Curriculum Persistence & Auto-Read**: Always inspect, read, and honor instructions written in `docs/ignou_bca_1st_sem_master_curriculum.md`. Never delete user-written text or notes in curriculum files. Continuously log session decisions, chat results, and sitemap/architectural progress under Section 5 of the master document.
+- **IGNOU BCA Language & Complexity Structure**: All IGNOU BCA Semester 1 content must support **English** and **Hinglish** language variants with **Easy** (visual/conceptual foundation) and **Normal** (formal IGNOU exam preparation) complexity modes.
+- **IGNOU BCA PDF Coverage & Pill Options**: Every IGNOU BCA lesson must cover 100% of the unit PDF content line-by-line with rich graphics, interactive pill-form options for fill-in-the-blank questions, developer key takeaways, and official reference links.
+- **IGNOU BCA PDF Dark Mode & Native Reader Navigation**: Keep all PDF viewers in dark mode (`#060c18` background). Open PDFs in a new tab on web or via native Capacitor File Opener/intent on mobile. Display an animated loader modal with a prominent **"Cancel / Return to Lesson"** button before PDF launch. If cancelled, return users directly to their active lesson.
+- **Home Page IGNOU BCA Hub Linking**: Always connect and feature the IGNOU BCA 1st Semester Hub (`/bca/semester-1`) on the main home page hero banner via a dark-themed **`Start IGNOU BCA Free Lessons`** button (styled using `#0c1328` surface, gold `#c1a648` icon, and emerald `#04AA6D` border) and career roadmap cards.
+- **BCA Route Slug Resolution**: `generateStaticParams()` in `[semester]/page.tsx` and `[semester]/[subject]/page.tsx` must supply both `"1"` and `"semester-1"` params with case-insensitive subject codes, and `SubjectClient` must parse `parseInt(semester.replace(/^semester-/, ""), 10)` and `subject.toUpperCase()` to ensure zero runtime errors.
+- **`semester-1` Route Handler**: `src/app/bca/semester-1/page.tsx` directly renders `SemesterSubjectsDashboard` with `semester="1"` so the static directory never intercepts or blocks `/bca/semester-1` page loads.
+- **Mobile BCA Accordion & Subject Switcher**: On `/bca`, render all semesters as collapsible accordions (Semester 1 open by default). Tapping any subject launches Unit 1 directly. Top header renders `BcaHeaderNav` with Home button & subject switcher dropdown. Mobile bottom navigation bar uses rounded corners (`rounded-3xl`), emerald green glowing border (`border-emerald-500/50`), increased bottom padding, and dynamic BCA semester tabs (`Sem 1` to `Sem 6` dynamically detected from URL).
+- **Subject Dashboard Theme & Interactive Lesson Integration**: `SubjectClient.tsx` strictly uses the platform theme palette (`#060c18` background, `#0c1328` card surface, gold headers `#c1a648`, cyan/emerald accents), renders `BcaHeaderNav` at top, features direct **"Start Lesson"** buttons for interactive units (Unit 1), and renders **"Return to IGNOU BCA Hub"** buttons at the bottom.
+- **1st Semester Subject Order & Aliases**: `BCS-111 Computer Basics and PC Software` is ordered as Subject #1 at the top of 1st Semester in `bcaCoursesData.ts`, and `SubjectClient` maps `BCS-011` / `BCS-111` aliases seamlessly so clicking the top subject opens Computer Basics.
+- **BCA Lesson Sequential Navigation**: Every BCA lesson must render **"Previous Lesson"** and **"Next Lesson"** navigation buttons at the bottom of the content page so students can seamlessly navigate forward and backward through units.
+- **IGNOU BCA Author Attribution**: All IGNOU BCA lessons, PDF exports, and curriculum documents must explicitly attribute the content author as **Er. Manoj Kumar**.
+- **Golden Header Logo & PDF URL Link**: Render the golden NS logo badge in the header right. PDF exports must include the exact canonical lesson URL (`https://nextsem.online/bca/semester-1/...`) formatted as a clickable link returning back to the active web lesson.
+- **IGNOU BCA Dudu & Bubu Work-In-Progress Widget**: On all unreleased BCA semesters or upcoming subject/unit pages, render the animated `DuduBubuWipWidget` featuring sequential story animation (Scene 1: Bubu `image-17.png` lipsyncing first, Scene 2: Dudu `image-18.png` speaking next, Scene 3: Both side-by-side) with the exact message: *"Arre Arre! Yahan tak to aa gaye 🐾... par yahan se aage ka content Dudu aur Bubu milkar bana rahe hain! Thoda wait karo 🐻❤️🐻"* and an active return link.
+- **IGNOU BCA Brand Theme Compliance**: All BCA lesson headers, footers, badges, buttons, option pills, code boxes, and cards must strictly use the platform theme palette (`#060c18` background, `#0c1328` surface, cyan/emerald accents, gold headers).

@@ -1,0 +1,977 @@
+"use client";
+
+import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { 
+  ArrowLeft, BookOpen, Sparkles, Check, HelpCircle, AlertCircle, 
+  Award, ChevronRight, ChevronLeft, Zap, Menu, X, Star, FileText
+} from 'lucide-react';
+import { useProgress } from '@/context/ProgressContext';
+import AdSenseBanner from '@/components/AdSenseBanner';
+import BcaHeaderNav from '@/components/bca/BcaHeaderNav';
+
+interface PageLesson {
+  pageNo: number;
+  title: string;
+  originalText: string;
+  explanationEn: string;
+  mcq: {
+    question: string;
+    options: string[];
+    answer: number;
+    explanation: string;
+  };
+  blank: {
+    question: string;
+    answer: string;
+    hint: string;
+  };
+}
+
+const LESSONS: PageLesson[] = [
+  {
+    pageNo: 104,
+    title: "Introduction to Personal Computers",
+    originalText: "A personal computer (PC) is a general-purpose computer, used for day to day activities in different areas including education, business, administration and health. Due to its size and capabilities, PC is useful for the users. A PC can be operated directly and may be used for computational, word processing, and data storage purpose. Depending on the size and processing capacity, PCs are of many types such as, a desktop computer, a laptop tablet PC, a handheld PC /palmtop. Personal computers can be connected to the computer network by wired or wireless media. Generally, for using a PC, computer proficiency is not compulsory. PCs are being used from a school going children to a business professional for different purposes. A non-professional user may use a PC to listen songs, watching movies, creating some documentation, email etc.",
+    explanationEn: "💻 **What is a PC?** It's a general-purpose machine meant for daily tasks in schooling, office setups, and health management. \n\n🔌 **Key Capabilities**: Direct operation (no remote mainframes required!) for mathematical calculations, word typing, and storage. \n\n📶 **Variety & Connections**: Runs from massive desktop setups to tiny palm-sized devices. You can connect them via ethernet cables (wired) or Wi-Fi (wireless). \n\n🧠 **No Pro-Skills Needed**: A schoolchild can use it for entertainment (movies/music) and basic emails, while business pros use it to manage large systems.",
+    mcq: {
+      question: "Which of the following is NOT a core activity of a PC according to the text?",
+      options: [
+        "Word processing",
+        "Data storage",
+        "Controlling high-altitude military satellites",
+        "Computational purposes"
+      ],
+      answer: 2,
+      explanation: "A PC is a general-purpose computer used for day-to-day work like word processing, storage, and calculation."
+    },
+    blank: {
+      question: "Personal computers can be connected to a network via wired or ______ media.",
+      answer: "wireless",
+      hint: "Think of Wi-Fi or Bluetooth."
+    }
+  },
+  {
+    pageNo: 105,
+    title: "Objectives & Types of PC",
+    originalText: "A professional user may use a PC for different business process such as documentation, running business program, creating databases, internet, and emailing, teleconferencing etc. Thus, the scope of a personal computer varies a lot depending on the type of its users. The configuration of a PC matters a lot in terms of its processing quality and cost. After reading this unit, you should be able to: describe the meaning and purpose of the personal computer; distinguish different types of personal computers; briefly explain hardware components of personal computer; describe software and its types; explain operating system installation process; to setup network configuration; and understand different tools and application of personal computer. In general, basic function of all the computers is same i.e. Computers accept data as input, perform operations on these data and generates the desired output to the user. However there are different kinds of computers available today. These computers differ due to the differences in processing capability, storage capability, looks and sizes. Different types of computers are used for different types and complexity of problems solving. For example for simple internet access or for basic word processing , a simple generic PC may be sufficient but for complex scientific computation such as atomic energy plant control or weather forecasting, specialized computer is required.",
+    explanationEn: "🎯 **Unit Goals**: You'll learn to differentiate PC types, explain hardware/software components, set up network configurations, and handle operating systems.\n\n⚙️ **The Standard Equation**: Every computer follows the golden rule: **Input ➡️ Process ➡️ Output**.\n\n🔬 **Simple vs. Complex**: A simple PC is great for web surfing and writing reports. However, heavy jobs like weather forecasting or nuclear plant control need high-performance specialized supercomputers.",
+    mcq: {
+      question: "Which of the following tasks requires a specialized computer rather than a simple generic PC?",
+      options: [
+        "Writing a text document",
+        "Checking emails",
+        "Weather forecasting and scientific computation",
+        "Surfing the web"
+      ],
+      answer: 2,
+      explanation: "Complex scientific computations like weather forecasting require high-performance, specialized computers."
+    },
+    blank: {
+      question: "Computers accept data as ______, perform operations, and generate the desired output.",
+      answer: "input",
+      hint: "It represents the raw data entered by the user."
+    }
+  },
+  {
+    pageNo: 106,
+    title: "PC Configuration, Processors & Clock Speed",
+    originalText: "Generally, when you think of purchasing a Computer, you first try to exactly know what will be the hardware components such as processor, memory etc. of your computer. It depends on several factors such as your computation needs, your budget, your preferences about brands etc. Configuration of a PC usually mean the technical details of the System. Actually the term computer configuration means the technical specification of the computer. In this specification details generally we include speed of the processor, RAM, Hard-Disk Drive, Video card, etc. Processor plays major role in a computer. One should carefully decide about the type of processor and its speed before making a choice. Currently Core 2 Duo processor are very common in use, in which two processor used to be fit on a single chip. Also there are Core 2 Quad are multi chip processors which offer twice the performance of a Dual Core processors. The current Core processors include the latest Intel Core i7, Intel Core i5 and Intel Core i3 etc. Pentium chip is one of the most popular brands of processor. Now multi-core processors are available. A dual-core processors has two cores, a quad core processor contains four cores and a hexa-core processor contains six cores. Multi core processors implement multi-processing which improves performance and speed of executions. Pentium processor is a series of x86 compatible microprocessors manufactured by Intel. Generally you can find the speed of a processor during booting processes. For example, if you see Intel Pentium (TM) III 1000 MHz, it indicates that the processor is of Intel Pentium III processor and it is running at 1000 MHz or 1 GHz. One clock cycle is the time it takes to perform one instruction. Processor will be faster if the clock cycle is shorter and vice versa. The speed of a processor is directly related to the clock speed which is the speed at which a microprocessor executes instructions. Clock speeds are measured in megahertz (MHz) (also known as, millions of cycles per second) or Gigahertz (GHZ).",
+    explanationEn: "⚙️ **PC Configuration**: The technical specifications of a PC, including the processor model, RAM size, storage capacity, and graphics cards.\n\n🧠 **Processor Core Breakdown**:\n* **Dual-Core**: 2 brains on one chip.\n* **Quad-Core**: 4 brains.\n* **Hexa-Core**: 6 brains.\n* **Multi-Processing**: Parallel computing that executes operations simultaneously.\n\n⚡ **Clock Speed**: The speed at which a CPU runs instructions, measured in Megahertz (MHz - millions of cycles/sec) or Gigahertz (GHz - billions of cycles/sec). Faster clock cycle = speedier calculations!\n\n🪟 **How to check config in ⊞ Windows**:\n1. Right-click **My Computer**.\n2. Select **Properties**.\n3. View the basic computer specifications under the **General** tab.",
+    mcq: {
+      question: "How many processing cores are located inside a quad-core processor chip?",
+      options: [
+        "Two cores",
+        "Four cores",
+        "Six cores",
+        "Eight cores"
+      ],
+      answer: 1,
+      explanation: "A quad-core processor contains four independent cores on a single microchip."
+    },
+    blank: {
+      question: "Clock speeds are measured in megahertz (MHz) or ______ (GHz).",
+      answer: "gigahertz",
+      hint: "It represents billions of cycles per second."
+    }
+  },
+  {
+    pageNo: 107,
+    title: "Workstation & Desktop Computers",
+    originalText: "A workstation is a high-performance computer which is used for scientific and technical tasks such as computer graphics, scientific simulation, computer-aided-design (CAD), image processing, engineering calculations etc. It is generally used in such applications which require a moderate amount of computing power. Hence, the configuration of workstation used to be high. UNIX and Windows NT are the most common Operating System for workstations. Workstations are generally single user system however they can be connected together to form a LAN. In the context of networking, workstations are sometime referred to as any computer/terminal attached to a LAN. In networked workstation, system administrator tracks and controls the activities of the user. The term workstation is also used for high capacity mainframe computer terminal or a PC connected to a network and working in client server mode. A workstations has superior processing and storage capabilities than a normal PC , especially with respect to providing multitasking capability. Typical Configuration of a Workstation: Processor: Intel Core Processor (3.20 GHz), Memory: 4GB 1333MHz, Hard Disk: 500GB, RAM – 2GB. Here GHz is known as gigahertz. The speed of the processor is generally measured in gigahertz. 1 GHZ equals to 1 billion cycles per second. Similarly MHz is called as megahertz. 1 MHZ is equal to 1 million cycles per second. GB or Gigabyte is the measurements of the digital data in a computer. 1 GB is equal to 1024 Megabytes (MB). Desktop computer is popularly known as personal computer (PC). As the name suggest, it is generally small in size and fitted on the top of a desk which can be used at a fixed location. Most of modern desktop computer has separate screens and keyboards. Generally in majority of the PCs, Microsoft Windows, LINUX and Mac OS x are used as operating system. Desktop computers are available in many different forms from large vertical tower cases to small form factor models. Advantages of desktop computer are that it may be used for day to day computational and internet communication activities of office, school etc. A PC provides more space for heat to escape. Also power consumption of a PC is not very high. There are many brands of PCs are available in Indian market and abroad including HP, HCL, Wipro, Compaq etc. A PC also can be assembled as per specific requirements, instead of a particular brand.",
+    explanationEn: "🏭 **Workstation Power**: High-end single-user systems configured with advanced CPUs and RAM. Ideal for CAD modeling, simulations, and graphics editing. Commonly ran Unix or ⊞ Windows NT.\n\n🏢 **Desktop PCs**: Standard deskside systems featuring separate screens, keyboards, and tower cases. They run ⊞ Windows, Linux, or macOS.\n\n☀️ **Desktop Advantages**:\n* Great ventilation (roomy cases allow heat to escape easily).\n* Flexible configurations (easy to buy custom components and assemble them yourself).\n\n🔢 **Memory Conversions**:\n* `1 GHz` = 1 billion cycles per second.\n* `1 MHz` = 1 million cycles per second.\n* `1 GB` = 1024 Megabytes (MB).",
+    mcq: {
+      question: "Which operating system was historically popular for workstations according to the text?",
+      options: [
+        "UNIX and Windows NT",
+        "MS-DOS",
+        "Android",
+        "Ubuntu Mobile"
+      ],
+      answer: 0,
+      explanation: "UNIX and ⊞ Windows NT are listed as the most common operating systems for historical workstation environments."
+    },
+    blank: {
+      question: "One Gigabyte (GB) contains exactly ______ Megabytes (MB).",
+      answer: "1024",
+      hint: "It is 2 raised to the power of 10."
+    }
+  },
+  {
+    pageNo: 108,
+    title: "Desktop Configuration & Laptops",
+    originalText: "A Configuration of Desktop computer: Processor: Intel Pentium 4 around 3.0 GHZ, RAM: 1 GB DDR II RAM, Hard Disk: 320 GB SATA hard disk drive, Graphics: Intel Graphics Media Accelerator 950 (Intel GMA 950). DDR stands for double data rate type 2 RAM which is an enhanced version of DDR. SATA stands for serial advanced technology attachment which is a bus interface to connect host bus adapters to storage device like hard disk. SATA has different generations. Laptop is also a personal computer but intended of using it at a single place , it is small size, portable and can be used anywhere. Portability is one of the main advantage of a Laptop over a table PC. Another advantage of a Laptops is that it contain batteries which are used for power supply. It make a laptop usable even if power is not available. In a laptop almost all the components are attached as a single unit. Although some devices like mouse, can be attached externally through ports. The basic components of laptop are similar in function to the desktop computers. Laptops are much more power efficient than desktops. The major disadvantage of Laptop is that its upgradeability is limited as compared to desktops. There are many brands of Laptop are available in Indian market and abroad including HP, HCL, Wipro, Compaq, Dell, Lenovo, Toshiba, Sony etc.",
+    explanationEn: "💾 **Desktop Terms**:\n* **DDR RAM**: Double Data Rate memory (faster than original SDRAM).\n* **SATA**: Serial Advanced Technology Attachment (the interface cable connecting your motherboard to the Hard Disk).\n\n💻 **Laptops vs. Desktops**:\n* **Portability**: Laptops integrate the screen, keyboard, motherboard, and battery into a single unit.\n* **Power Efficiency**: Laptops use significantly less electricity than desktops.\n* **The Catch**: Their main disadvantage is **limited upgradeability** (it is very difficult to replace components like the GPU or CPU on a laptop).",
+    mcq: {
+      question: "What is the primary drawback of using a laptop computer instead of a desktop PC?",
+      options: [
+        "It lacks network ports",
+        "It consumes more electrical power",
+        "It cannot connect to an external mouse",
+        "Its upgradeability is limited"
+      ],
+      answer: 3,
+      explanation: "Laptops are tightly integrated, which makes upgrading individual parts (like the processor or motherboard) highly restrictive compared to desktops."
+    },
+    blank: {
+      question: "SATA stands for Serial Advanced ______ Attachment.",
+      answer: "Technology",
+      hint: "It represents advanced hardware configurations."
+    }
+  },
+  {
+    pageNo: 109,
+    title: "Netbooks & Tablet PCs",
+    originalText: "A Configuration of Laptop is given below: Hard Disk- 320 GB SATA HDD, Processor – Intel Pentium processor P6200 (2.13 GHz, 3 MB) RAM-3 GB, Memory: 1 GB DDR3 RAM (DDR3 RAM can transfer data twice the rate, hence it has higher bandwidth than DDR2 RAM). Netbooks are special type of Laptop which is very light and small. Due to its size and weight it is very portable and one may carry it very easily. Dissimilar to Laptop , it does not require a separate carry bag for it. Netbook are suitable for general purpose computing works and for accessing the Internet. They also use less powerful hardware than most laptops. Due to limited processing capabilities Netbooks are less expensive than laptops. Due to its size and portability Netbooks are becoming very popular for education and business works. Works related to word processing, presentation, internet access, multimedia etc can be easily carried out on a Netbook. Generally in Netbooks, Windows, Linux, and Android operating system are used along with others. There are many brands of Netbook available in Indian market and abroad including Acer, HP, Dell, HCL , Apple, Sony etc. A Configuration of Netbook is given below: Processor – Intel Atom, Memory: 1 GB DDR2 RAM, Hard Disk- 80 GB. A tablet PC is similar to a personal computer . It is a portable device which has a touch screen for inputting of the data. A tablet computer can connect to the internet and local computer network through wireless. In general terms, tablet PC refers to a slate shaped mobile computer device, equipped with global positioning system (GPS) System , and a touch screen to operate the computer. It is generally equipped with office suits such as word, excel etc, web browsers, computer games and other similar applications, that generally can be run on a PC. Tablet PC can also use handwriting recognition and virtual keyboards for input of data. In, tablet PCs Microsoft windows, Linux and Apple operating system are used.",
+    explanationEn: "🎒 **Netbooks**: Mini-laptops designed for basic tasks (typing, emails, web surfing). They feature low-power chips (like **Intel Atom**), less storage (80 GB), and are highly budget-friendly.\n\n📱 **Tablet PCs**: Slate-shaped devices dominated by a touchscreen. They feature:\n* **Virtual Keyboards** instead of physical buttons.\n* **Handwriting Recognition** via stylus pens.\n* Built-in **GPS** and wireless networking.\n* OS systems like ⊞ Windows, Linux, and iOS.",
+    mcq: {
+      question: "Which processor is typically featured in the netbook configuration listed in the unit?",
+      options: [
+        "Intel Atom",
+        "Intel Core i7",
+        "Intel Pentium 4",
+        "Intel Core 2 Quad"
+      ],
+      answer: 0,
+      explanation: "Netbooks utilize low-power processors like the Intel Atom to conserve battery and keep prices low."
+    },
+    blank: {
+      question: "Tablet PCs use a ______ keyboard on the screen instead of a physical keyboard.",
+      answer: "virtual",
+      hint: "It is simulated by software on the touchscreen."
+    }
+  },
+  {
+    pageNo: 110,
+    title: "Hardware Components of a PC",
+    originalText: "There are many brands of Tablet PC available in Indian market and abroad including Acer, Lenovo , Panasonic, and Toshiba etc. Typical Configuration of a Tablet PC: Processor: Intel Core 2 Duo ULV processor SU9300 (1.20GHz), Memory: 5GB (1x1GB on board, 1x4GB DIMM) DDR3 1066MHz, Hard Drive: 80GB 5400RPM SATA HDD. If we elaborate the detail of the processor mentioned above, SU9300 is the processor number, number of cores in this processor is 2 and number of threads is also 2. Clock speed is 1.2 GHz, ULV is a feature of some processors. ULV stands for Ultra low voltage. ULV processors require less power. In previous units of this block you have learned about CPU, I/O Devices and Memory system of computer/PC. Now let us look into some other major hardware components such as motherboard and video card of a PC. Hardware is an essential component of any computer system. A computer is made up of several different components. All these components work together in order to produce desired result. The physical components of a computer which can be seen and touched are known as hardware of a computer system. Each of these parts are designed for a specific purpose. Central Processing Unit (CPU), Memory, Input / Output devices like mouse, keyboard, Monitor, CPU, Memory etc. are different hardware components of a computer system. These hardware components are the building block of a computer.",
+    explanationEn: "⚡ **ULV Processors**: Ultra Low Voltage processors run on minimal power, making them ideal for the small batteries inside tablets.\n\n🔩 **What is Hardware?**: The physical, touchable items that build up your computer.\n\n🧱 **Core Building Blocks**:\n1. **CPU**: The processing brain.\n2. **Memory (RAM)**: The temporary scratchpad.\n3. **Input/Output Devices**: Keyboard, mouse, and monitor for user interaction.\n4. **Motherboard**: The main circuit board linking everything together.",
+    mcq: {
+      question: "What does the abbreviation ULV stand for in the context of portable processors?",
+      options: [
+        "Ultra Low Volume",
+        "Universal Logic Value",
+        "Ultra Low Voltage",
+        "Uninterrupted Line Voltage"
+      ],
+      answer: 2,
+      explanation: "ULV stands for Ultra Low Voltage. These processors require less electricity and run cooler."
+    },
+    blank: {
+      question: "The physical, tangible parts of a computer system are collectively called ______.",
+      answer: "hardware",
+      hint: "It contrasts with the term software."
+    }
+  },
+  {
+    pageNo: 111,
+    title: "Computer Case, CPU Core Units & Motherboard",
+    originalText: "A computer case covers the computer circuitry. It is also known as cabinet, box, computer chassis etc. it is a box which contains different components of a computer like CPU, Motherboard, RAM, Power supply unit etc. Computer cases are available in many different forms and sizes like desktop cases, full size tower cases, mini tower cases etc. ATX is the most popular form factor used for desktop computer these days. Computer case includes input/output ports and power buttons. Motherboard is a main component placed inside the computer case. The power supply unit is also attached with the case. A power supply unit is responsible for providing power to other components of a computer. Central Processing Unit (CPU) is considered as one of the most important component of a computer system. It is also known as the brain of a computer. The main function of a CPU is to execute a series of instructions called as program in a specific sequence. Normally there are four steps that all CPU use in order to perform their operation these are: fetch, decode, execute and output. CPU contains Arithmetic Logic Unit (ALU) and Control Unit(CU). ALU and CU are jointly known as the central processing unit (CPU). The ALU of a computer performs all the arithmetic operations such as addition, subtraction, multiplication and division and also all the logical decisions are made by the ALU. Control Unit (CU) is the unit which manages and coordinates the entire operation of a computer system. It controls the operation of the other components of a computer system. Motherboard holds some of the most important component of the computer system. It is also known as system board, main board etc. in a typical computer microprocessor, main memory and other components are connected to the motherboard.",
+    explanationEn: "📦 **Computer Case**: The protective box (cabinet/chassis). The **ATX** standard is the most popular layout for desktop system hardware.\n\n⚡ **The Power Supply Unit (PSU)**: Converts wall outlet current to low-voltage DC power for computer circuits.\n\n🧠 **The CPU 4-Step Cycle**: **Fetch ➡️ Decode ➡️ Execute ➡️ Output**.\n\n⚙️ **CPU Internal Units**:\n* **ALU (Arithmetic Logic Unit)**: The math genius. Handles calculations (+, -, *, /) and logic (YES/NO decisions).\n* **CU (Control Unit)**: The traffic cop. Directs data flows and manages other components.\n\n🗺️ **Motherboard**: The central circuit board (main board) that houses the CPU and RAM.",
+    mcq: {
+      question: "Which CPU component is responsible for performing calculations and making logical decisions?",
+      options: [
+        "Control Unit (CU)",
+        "Arithmetic Logic Unit (ALU)",
+        "Power Supply Unit (PSU)",
+        "System Board"
+      ],
+      answer: 1,
+      explanation: "The Arithmetic Logic Unit (ALU) performs all arithmetic operations (math) and handles logical decision-making."
+    },
+    blank: {
+      question: "The four steps of a CPU execution cycle are fetch, decode, execute, and ______.",
+      answer: "output",
+      hint: "It represents the step where the results are saved or displayed."
+    }
+  },
+  {
+    pageNo: 112,
+    title: "Motherboard Slots & Video Cards",
+    originalText: "Motherboard acts a s a base for other components. Motherboard also provides connectors for several other devices. A motherboard allows many different parts of our computer to receive power and communicate with one another. The shape , size and layout of a motherboard is called a form factor. The Motherboards usually provides the interface between the CPU memory and input/output peripheral circuits, main memory, and facilities for initial setup of the computer immediately after power-on. The below is a brief description about some parts of a motherboard: a) ATX Power Connector: Advanced Technology Extended (ATX) power connector is used to connect computer’s power supply to motherboard. b) AGP Slot: Accelerated Graphics Ports (AGP) is a point-to point channel which is used to attach a video card to a motherboard. c) CD-in header: At this CD drive is plugged in or connected . d) FDD Header: Floppy Disk Drive (FDD) header is used for Floppy drive. Now this slot is obsolete because floppy disks are outdated. e) HDD Headers: Hard Disk Drive header is used for connecting to hard disk . f) PCI Slots: It is used for connecting the PCI (Peripheral component interconnect) card. g) USB Headers: It is a group of pins to which an internal USB cable can be attached to provide extra USB ports. These ports are used for attaching external/auxiliary devices such as pen drive, printer etc. Video card: A video card is an expansion card , which is used to produce output images to a display in a monitor. Its main purpose is to generate graphical information. It is responsible for rendering the image on the monitor of a PC . It is also known as video adapter, display adapter or graphics card.",
+    explanationEn: "🗺️ **Motherboard Parts**:\n* **ATX Connector**: Plugs in power from the PSU.\n* **AGP Slot**: Dedicated graphics card connector (older standard, replaced by PCIe).\n* **PCI Slots**: Standard expansion slots for sound cards, network adapters, and custom boards.\n* **HDD & FDD Headers**: Connections for storage devices (Floppy drives are now obsolete!).\n* **USB Headers**: Pins connecting the motherboard to USB ports on your case.\n\n🎮 **Video Card**: An expansion card (GPU) that renders high-definition graphics and feeds image frames to the monitor.",
+    mcq: {
+      question: "Which motherboard interface is used to connect the main power supply unit (PSU)?",
+      options: [
+        "AGP Slot",
+        "PCI Slot",
+        "ATX Power Connector",
+        "USB Header"
+      ],
+      answer: 2,
+      explanation: "The Advanced Technology Extended (ATX) power connector brings power from the power supply unit into the motherboard."
+    },
+    blank: {
+      question: "AGP stands for Accelerated ______ Port.",
+      answer: "Graphics",
+      hint: "It is used for connecting graphic or video adapters."
+    }
+  },
+  {
+    pageNo: 113,
+    title: "Video Cards & Check Your Progress-1",
+    originalText: "A video card should be capable of displaying the best resolution supported by the monitor of the system. These days high performance video cards are available for gaming purposes which requires very high resolution. Video card consists of a circuit board which holds several components such as graphics processing unit (GPU), video memory, video BIOS etc. Video graphics array (VGA), Digital visual interface, high definition multimedia port etc are some of the common connection points used between video card and display. Now-a-days, high performance video cards are available, which has higher visual capability. With increasingly popularity of computer games video cards became one of the most important parts of a computer. One disadvantage of this high performance video card is that consume high power. The amount of video memory in video card is one of the main considerations while opting for a video card. Advanced graphics port (AGP) and PCI-Express are the two commonly slots available which is used to connect a video card.",
+    explanationEn: "🎮 **Video Card Anatomy**: Contains a dedicated **GPU** (Graphics Processing Unit), high-speed **video memory**, and a **video BIOS**.\n\n🔌 **Outputs**: Connects to the monitor using VGA, DVI, or HDMI cables.\n\n⚠️ **Power Demands**: Modern high-performance graphics cards consume significant electrical power, requiring robust cooling fans.\n\n🔌 **Slots**: Connects to the motherboard via **AGP** or modern **PCI-Express (PCIe)** slots.",
+    mcq: {
+      question: "What is a major disadvantage of high-performance video cards?",
+      options: [
+        "They do not support gaming",
+        "They consume high amounts of power",
+        "They bypass the motherboard",
+        "They lack connection ports"
+      ],
+      answer: 1,
+      explanation: "High-performance video cards are power-hungry components that require significant electricity and active cooling."
+    },
+    blank: {
+      question: "VGA stands for Video ______ Array.",
+      answer: "Graphics",
+      hint: "It refers to the analog display connection."
+    }
+  },
+  {
+    pageNo: 114,
+    title: "Introduction to Software & Operating Systems",
+    originalText: "In this unit so far we have explored about the hardware components of a PC. Now let us learn about the software component. Without which a PC can not work, no matter how good processor, memory etc you have in your PC. To solve a given problem, we write various programs in different programming languages. Programs are nothing but a set of instructions written in a programming language to solve a problem. These computer programs are collectively known as Software. Software is an integral component of a computer system. It is the software which directs a computer to do a specific task. Software can be broadly categorized as system software, application software and utility software. System Software: System software is set of programs which are used to run the system. System software manages all the other resources of the computer. It controls all the operations of the computer. One important system software requires to work any computer system is Operating System (OS). Operating system is one of the most important system software. An operating system commonly called OS, is system software which acts as an interface between a user and computer hardware. It also acts as a bridge between application programs and the computer hardware. Operating system is must in order to operate a computer. Without operating system computer is of no use. A OS controls and manages all the hardware components of a computer as well as it also controls input and output, memory and files. In other word a OS can be seen as a manager of the system. It optimizes and utilizes various kinds of resources like I/O devices, Memory, CPU etc. Microsoft Windows, UNIX, LINUX, OS/360, OS/2 etc are some of the examples of an Operating system.",
+    explanationEn: "💿 **What is Software?**: The programs, instructions, and rules that tell hardware what to do. \n\n📁 **Three Main Families**:\n1. **System Software**: The background engine (like Operating Systems).\n2. **Application Software**: Daily user apps (word processors, games).\n3. **Utility Software**: Maintenance tools (antivirus, disk defrag).\n\n🔀 **The OS Bridge**: The Operating System acts as the middle manager. It coordinates inputs/outputs, allocates CPU time, manages RAM usage, and provides the user interface. Examples include Microsoft ⊞ Windows, Linux, and Unix.",
+    mcq: {
+      question: "Which class of software does an Operating System belong to?",
+      options: [
+        "Application Software",
+        "Utility Software",
+        "System Software",
+        "Driver Software"
+      ],
+      answer: 2,
+      explanation: "An Operating System is the primary System Software that runs the hardware and hosts application programs."
+    },
+    blank: {
+      question: "Software acts as a bridge between application programs and computer ______.",
+      answer: "hardware",
+      hint: "It represents the physical circuitry."
+    }
+  },
+  {
+    pageNo: 115,
+    title: "Application Software & Media Players",
+    originalText: "Now let us discuss about some of the commonly used application software and utility software in a PC. Application software is the set of programs necessary to carry out operations for a specified application. These are programs written by programmers to enable computer to perform a specific task such as inventory control, accounting, railway reservation, billing or any such type of applications in real life. These software are user-oriented applications. Media Player: It is one of the other common examples of application software. It is an application which is used to play multimedia files. Most of the media players can play both audio and video files. Media library is a common part of almost all media players which contains available songs. It is generally used to watch movies and listen to music on the computer. Some media players also have the capability of ripping and burning an audio CD. With the help of ripping option you can convert an audio track to a digital audio file you can also burn a CD which will convert a digital audio file to an audio track. There are many audio file format , which are used to store digital audio data on a computer. Some audio file farmats are - .mp2,.mp3, .wma, .wav etc. Similarly, .mpg, .mov, . rm, .wmv etc. are some commonly used video file format. Windows media player, Winamp, iTunes, WinDVD, Real Player, GOM media player are some examples of media player. Windows media player is in-built with windows operating system.",
+    explanationEn: "📦 **Application Software**: Software created for specific user tasks (like billing, accounting, and ticket bookings).\n\n🎵 **Media Players**: App software used to run movies and music. They can execute two processes:\n* **Ripping**: Copying audio tracks from a CD and converting them into digital files (like `.mp3` or `.wav`).\n* **Burning**: Writing digital files onto a physical CD to play on CD players.\n\n💿 **Formats**:\n* **Audio**: `.mp3`, `.wav`, `.wma`.\n* **Video**: `.mpg`, `.mov`, `.wmv`.\n\n*Note: Windows Media Player comes pre-installed on Microsoft ⊞ Windows OS.*",
+    mcq: {
+      question: "What is the process of converting audio CD tracks into digital audio files called?",
+      options: [
+        "Burning",
+        "Ripping",
+        "Formatting",
+        "Compacting"
+      ],
+      answer: 1,
+      explanation: "Ripping is the process of extracting raw audio tracks from a CD and saving them as digital files on your computer."
+    },
+    blank: {
+      question: "Audio files commonly use extensions like .wav, .wma, or ______.",
+      answer: ".mp3",
+      hint: "It is the most famous compressed audio format."
+    }
+  },
+  {
+    pageNo: 116,
+    title: "Calculator & Utility Software",
+    originalText: "Calculator: It is application software provided by windows operating system. It is an application which is used to perform simple mathematical operations which can be performed by a normal digital calculator. Below is list of some categories of application software, which are used by a common PC user: Word Processor, Spreadsheet, Presentation software, Graphics software, Computer games/Entertainment software, Accounting software. Utility Software: Utility programs are also known as utilities. Utilities help out a user for system maintenance and performing routine tasks. It basically deals to optimize, manage, configure and analyze the computer system. Generally utilities are included with the operating systems. While application software are user and application oriented utilities software focuses on system infrastructure. These utilities are specialized programs capable of doing a particular type of tasks. Some of the common tasks of utility software are: Formatting of drives, Scanning system for viruses, Checking the free space available in a memory, Checking the free space available in hard disk, Searching files, Taking backup of files.",
+    explanationEn: "🧮 **Built-in Apps**: Microsoft ⊞ Windows provides a built-in **Calculator** for mathematical equations.\n\n🛠️ **Utility Software**: Software that focuses on the health and configuration of the computer infrastructure.\n\n🧹 **Common Utility Tasks**:\n* Formatting storage disks.\n* Scanning for malware/viruses.\n* Finding files.\n* Analyzing disk space.\n* Backing up documents.",
+    mcq: {
+      question: "Which of the following is considered Utility Software rather than Application Software?",
+      options: [
+        "Word Processor",
+        "Antivirus Scanner",
+        "Spreadsheet",
+        "Accounting Ledger"
+      ],
+      answer: 1,
+      explanation: "An antivirus scanner maintains system health and security, classifying it as utility software."
+    },
+    blank: {
+      question: "Utility software focuses on system ______ rather than direct user-oriented applications.",
+      answer: "infrastructure",
+      hint: "It represents the foundation/maintenance of the computer system."
+    }
+  },
+  {
+    pageNo: 117,
+    title: "Utility Categories & Disk Checkers (CHKDSK)",
+    originalText: "The utilities software can be categorized in following types: Disk Checkers, System restore, Disk Defragmenters, Disk Management, Backup, Anti-virus, Disk cleaners, Network utilities, Data compression etc. Now we will briefly explore some of the utility software and their functions. We have used Windows XP operating system in executing the steps involved in utilities software mentioned in this section. Disk Checkers : Disk Checkers are used to check the integrity of the hard disk and Pen Drive/ Flash Drive. CHKDSK is a command which is used for this purpose. This command can be used on a computer running Windows operating system. It fixes the logical file system errors found in the disk/drive. It is a command line tools which is used to check the volumes for any potential errors. This command can be used to repair the problems related to bad sectors, lost clusters, directory errors etc. How to use CHKDSK Command : You can run CHKDSK command from either My computer or windows explorer and from command prompt. Running CHKDSK from My Computer: Double-click my computer and then right-click the disk drive you want to check. Click properties there and then click Tools. Under Error-checking, click Check Now button. It will open a dialog-box which shows Check disk options. Depending upon your preference use one of the following options: To run CHKDSK in read-only mode, click Start. Select the Automatically fix file system errors check box, and then click Start. It will repair errors without scanning the volume for bad sectors. To repair errors, locate bad sectors, and recover readable information, select the Scan for and attempt recovery of bad sectors check box, and then click Start.",
+    explanationEn: "🔍 **Disk Checkers**: Tools used to check the integrity of storage devices (like HDD, SSD, and USB drives).\n\n🪛 **The CHKDSK Utility**:\n* A built-in command that scans volumes for file system corruption, lost clusters, and bad sectors.\n\n📁 **Running CHKDSK graphically (GUI)**:\n1. Right-click the drive in **My Computer** -> Select **Properties**.\n2. Go to the **Tools** tab.\n3. Under **Error-checking**, click **Check Now**.\n4. You can check *Automatically fix file system errors* or *Scan for and attempt recovery of bad sectors*.",
+    mcq: {
+      question: "Which tool should be used in ⊞ Windows to check and repair logical disk drive errors?",
+      options: [
+        "Disk Defragmenter",
+        "System Restore",
+        "CHKDSK",
+        "Zip utility"
+      ],
+      answer: 2,
+      explanation: "The CHKDSK (Check Disk) tool is specifically designed to scan storage volumes and repair logical filesystem errors."
+    },
+    blank: {
+      question: "To run CHKDSK in GUI mode, you navigate to the ______ tab under drive properties.",
+      answer: "Tools",
+      hint: "It contains system utilities like error checking and defragmentation."
+    }
+  },
+  {
+    pageNo: 118,
+    title: "CHKDSK Command Line & Switches",
+    originalText: "Running CHKDSK from Command Prompt: Click Start and then click Run. In Open type cmd and then press enter key, then use one of the following options: If you want to run CHKDSK in read-only mode, type CHKDSK at command prompt and press enter. If you want to repairs the error without scanning the volumes for bad sectors, type CHKDSK volume:/f at command prompt and press enter. If you want to repair errors, locate bad sectors, and recover readable information, type chkdsk volume:/r at command prompt and then press ENTER.",
+    explanationEn: "💻 **Running CHKDSK from CLI**:\n1. Press **Start** -> **Run** -> type `cmd` and hit **Enter**.\n2. **Read-Only Mode**: Simply run `chkdsk`.\n3. **Quick Fixes**: Run `chkdsk C: /f` (forces a repair of system errors).\n4. **Deep Recovery**: Run `chkdsk C: /r` (locates bad sectors on the disk and attempts to recover readable text).",
+    mcq: {
+      question: "Which command switch forces CHKDSK to repair logical file system errors without scanning for bad sectors?",
+      options: [
+        "/r",
+        "/f",
+        "/s",
+        "/p"
+      ],
+      answer: 1,
+      explanation: "The `/f` switch tells CHKDSK to fix errors on the disk."
+    },
+    blank: {
+      question: "To locate bad sectors and recover readable information, you run CHKDSK with the ______ switch.",
+      answer: "/r",
+      hint: "Stands for 'recover'."
+    }
+  },
+  {
+    pageNo: 119,
+    title: "System Restore Overview",
+    originalText: "Once CHKDSK finishes the checking, it returns exit codes whose description is as below: Exit Code 0: No Errors found. Exit Code 1: Errors found and corrected. Exit Code 2: Disk cleanup was performed or disk cleanup was not performed because /f was not specified. Exit Code 3: Could not check the disk, errors could not be corrected or errors were not corrected because /f was not specified. System Restore: System restore roll backs system files, registry keys etc in case of system malfunction or failure, for later use. System restore is a facility available with modern windows operating system like Windows XP, Windows vista, Windows ME, Windows 7. System restore backs up system files such as .dll, .exe etc and saves it for later use. System restore helps us to restore computer’s system files to an earlier state. Sometimes it happens that while installing a program or during use of any other software in the computer, there may some problem occurs and the system starts malfunctioning. One way to get rid of such type of problem is to re-install the software or drivers. But if uninstalling the software doesn’t fix the problem then we can restore the computer to an earlier date when the system was working properly. Restore points are used for this purpose which contains information related to registry settings and system information. It is important to note that the system restore is not able to take back ups of personal files such as images, e-mails, documents etc. so if these personal files got accidentally deleted or lost it cant be restored using system restore. So it’s a better practice to take back ups of your personal file regularly.",
+    explanationEn: "🕒 **System Restore**: A feature in ⊞ Windows (XP, Vista, 7) that lets you roll back system configuration files (like `.dll` and `.exe` modules) to a previous state.\n\n📌 **Restore Points**: Snapshots containing system configurations. These are created automatically before driver or program installations.\n\n⚠️ **Crucial Warning**: System Restore **does not** touch or backup personal files (such as pictures, emails, or text documents). If you accidentally delete a photo, System Restore will not recover it!",
+    mcq: {
+      question: "Which of the following files can be restored using System Restore?",
+      options: [
+        "Personal holiday photos (.jpg)",
+        "Database spreadsheets (.xls)",
+        "System configuration files (.dll and .exe)",
+        "Incoming emails"
+      ],
+      answer: 2,
+      explanation: "System Restore only monitors and rolls back core system files (like drivers, DLLs, and executables) and registry settings."
+    },
+    blank: {
+      question: "A CHKDSK exit code of ______ means 'No Errors found'.",
+      answer: "0",
+      hint: "It represents a clean status."
+    }
+  },
+  {
+    pageNo: 120,
+    title: "Running System Restore Step-by-Step",
+    originalText: "Steps to use System Restore. Follow these steps to perform restore on your PC: 1. Click on Start button, select All Programs, from there choose Accessories, click on System Tools, and then click System Restore. System Restore starts. 2. On the Welcome to System Restore page, click Restore my computer to an earlier time (if it is not already selected), and then click Next. 3. On the Select a Restore Point page, click the most recent system restore point in the On this list, click a restore point list, and then click Next. 4. On the Confirm Restore Point Selection page, click Next. System Restore restores the previous Windows XP configuration, and then restarts the computer. 5. Log on to the computer as Administrator. The System Restore Restoration Complete page is displayed. 6. Click OK.",
+    explanationEn: "🛠️ **How to Run System Restore**:\n1. Open the Start menu ➡️ **All Programs** ➡️ **Accessories** ➡️ **System Tools** ➡️ **System Restore**.\n2. Select **Restore my computer to an earlier time**.\n3. Choose a calendar date containing a recorded **Restore Point**.\n4. Click **Next** to confirm. The computer will restart automatically to apply the registry configuration.",
+    mcq: {
+      question: "What does the computer do automatically during the final confirmation step of System Restore?",
+      options: [
+        "It formats the hard drive",
+        "It downloads a new browser",
+        "It restarts the system",
+        "It deletes user emails"
+      ],
+      answer: 2,
+      explanation: "The computer must restart to roll back the system registry and replace locked system files."
+    },
+    blank: {
+      question: "To open System Restore, you navigate through the Programs menu to Accessories and then to System ______.",
+      answer: "Tools",
+      hint: "It contains system maintenance shortcuts."
+    }
+  },
+  {
+    pageNo: 121,
+    title: "Disk Defragmenter & Data Compression",
+    originalText: "Disk defragmenter is a utility provided with windows operating system. It re-arranges the files stored on the disk so that it can occupy contiguous memory locations. This process is known as defragmentation. The main benefits of defragmentation are that it minimizes the head movements of the hard disk , in turn which reduces the time taken to read files from and write files to the disk. It increases the access speed. With this process files are stored in contiguous locations. The defragmenter reduces the fragmentation in the file systems. Fragmentation of the memory slows the performance of the system. Large number of files and some larger files contribute to fragmentation. When files are stored neatly it speeds up reading and writing to the disks. One should run defrfragged in the PC at regular intervals. It keeps the computer running quickly and efficiently. Running Defragmenter: Click Start button, select All Programs, click on Accessories click System Tools, and then click Disk Defragmenter. In the Disk Defragmenter dialog box, click the drives that you want to defragment and then click the Analyze button. After the disk is analyzed, a dialog box appears, letting you know whether you should defragment the analyzed drives. To defragment the selected drive or drives, click the Defragment button. After the defragmentation is complete, Disk Defragmenter displays the results. If you want to view the detailed report about the defragmented disk, click on View Report. Data Compression: Data compression is the process in which information is encoded with lesser bits in compare to the original representation. Data compression is very useful, as it reduces the size of the file so it consumes fewer resources like disk space. For this purpose, you can use zip/unzip utility. Zipping a file creates the compressed version of the file which takes much smaller space then the original file. A zipped file has .zip file extension.",
+    explanationEn: "🧹 **Disk Defragmenter**: Reorganizes scattered blocks of files on mechanical hard disks so they sit in **contiguous** (continuous) sectors. This minimizes the movements of the physical read/write head, boosting loading speeds.\n\n🗜️ **Data Compression**: Re-encodes files to use fewer bits, shrinking their size on the disk. \n\n📦 **Zipping**: Standard utility to compress folders. Zipped files use the `.zip` extension, saving storage space.",
+    mcq: {
+      question: "How does defragmentation improve the performance of a mechanical hard drive?",
+      options: [
+        "By deleting duplicate files",
+        "By reducing physical drive temperature",
+        "By rearranging files into contiguous memory sectors to reduce physical head movement",
+        "By upgrading RAM bandwidth"
+      ],
+      answer: 2,
+      explanation: "Rearranging file fragments into continuous blocks means the physical read-head doesn't have to jump across the platters, speeding up read/write times."
+    },
+    blank: {
+      question: "Compressed folders generated by Windows compression utilities use the ______ file extension.",
+      answer: ".zip",
+      hint: "Think of a zipper."
+    }
+  },
+  {
+    pageNo: 122,
+    title: "Zipping & Disk Management Overview",
+    originalText: "Some of the advantages of zipping a file includes less storage space, smaller file reduces transmission time on the network, also some zip utilities also have the facility to encrypt the data for security purposes. For example, if a original word document is of 6.5 MB in size it may reduce to 2.5 MB when zipped. Text files are generally reduced more than the graphics file after compression. Similarly after zipping a file you need to unzip it, in order to view its contents or get it into its original form. Using Zip: Right- click on any file you want to zip. Click WinZip from the shortcut menu. Click add to zip file. It will create .zip file. Using unzip: Right- click on any .zip file you want to unzip. Click Extract from the shortcut menu. Disk Management: Disk Management is a tool used to manage system disks and their partitions locally or remotely. With disk management utility we can perform most disk related tasks such as initialization of disks, creation of volumes, formatting volumes, etc. it allows one to create fault-tolerant disk systems. Disk management is easy to use and its user interface and wizards allow us to carry out various disk related functions very efficiently. You can also manage remote computers using disk management. We can also use command line tool Disk Part as an alternative to disk management for disk related tasks. You can also display disks and volumes in graphical or list view. Before deleting or creating a new partition it is best practice to keep back ups of data from the disk as it will destroy the existing data. How to open Disk Management: Click My Computer, and then open Control Panel. Click Administrative Tools, and then double-click Computer Management. In the console tree, click Storage and then click Disk Management. You can also open Disk Management in following way: Click Start, then click Run, type compmgmt.msc, and then click OK. In the console tree, click Disk Management. The Disk Management window appears.",
+    explanationEn: "🗜️ **Compression Ratio**: Text files (lots of repetitive characters) compress significantly better than graphics or video files.\n\n⚙️ **Disk Management**: A system tool used to format, partition, and manage local or remote disk drives.\n\n🖥️ **Getting to Disk Management**:\n* **GUI**: Control Panel ➡️ Administrative Tools ➡️ Computer Management ➡️ Disk Management.\n* **Shortcut**: Run `compmgmt.msc` and select Disk Management.\n* **Command Line Alternative**: The command line utility `DiskPart`.",
+    mcq: {
+      question: "Which of the following command-line tools serves as an alternative to the graphical Disk Management interface?",
+      options: [
+        "CHKDSK",
+        "DiskPart",
+        "WinZip",
+        "defrag"
+      ],
+      answer: 1,
+      explanation: "`DiskPart` is the command line disk partitioning and management tool in ⊞ Windows."
+    },
+    blank: {
+      question: "To open Computer Management from the Run prompt, you type the shortcut ______.",
+      answer: "compmgmt.msc",
+      hint: "Abbreviation for computer management console."
+    }
+  },
+  {
+    pageNo: 123,
+    title: "Computer Management Window & Check Your Progress-2",
+    originalText: "In Disk Management window, the upper section displays lists of all the partitions in the disk, and the bottom section contains the graphical representation of the drives in the computer. Check Your Progress-2 Questions. True/False: (a) Formatting a volume of a memory disk will erase all the data on that volume. (b) Zipped file have .zp file extension. (c) Disk defragmenter helps the files to store in contiguous locations. (d) System restore can be used to take up back-ups of personal files. Fill in the Blanks: (a) You can use command line tool as an alternative to disk management for disk related tasks. (b) For data compression you can use utility. (c) utility helps us to restore computer’s system files to an earlier state. (d) is a command used for disk checking.",
+    explanationEn: "🖥️ **Layout of Computer Management**:\n* **Top Half**: A detailed list of all partitions (C:, D:, etc.), showing capacities, filesystem format (NTFS, FAT32), and health status.\n* **Bottom Half**: A visual, horizontal layout block depicting physical disks and their partitioned layouts.\n\n⚠️ **Formatting Warning**: Formatting a partition erases all data inside it, resetting the file allocation table.",
+    mcq: {
+      question: "What does formatting a hard drive volume do to the existing data stored on it?",
+      options: [
+        "It compresses it into a .zip file",
+        "It backs it up to System Restore",
+        "It erases all data on that volume",
+        "It increases its reading speed"
+      ],
+      answer: 2,
+      explanation: "Formatting a storage volume clears the file allocation tables and deletes all data on the volume."
+    },
+    blank: {
+      question: "The bottom half of the Disk Management window displays a ______ representation of the system drives.",
+      answer: "graphical",
+      hint: "It represents visual block diagrams."
+    }
+  },
+  {
+    pageNo: 124,
+    title: "The Desktop Environment & My Computer",
+    originalText: "5.5 DESKTOP. In most modern computers, you can see the desktop which is a part of Graphical User Interface (GUI). A desktop is a place which holds icons, files, folders etc. Desktop is a visible image which covers the entire screen. The desktop environment provides GUI to the Personal Computer users. On the desktop you can find several small images called as icons. These Icons may also be found on the toolbars and in the menus of computer application software such as Microsoft Word, Microsoft Excel etc. Icons are more user friendly compare to text-based commands. Desktop is the background area on our computer screen. We can customize our desktop in several ways. We can add background picture, background color etc. on a desktop. Icons on a desktop are small graphical images which represents various items found on a desktop such as my computer, recycle bin, my documents etc. We can also rename an icon by right-clicking on it. Some of the commonly used items found on a Desktop are: My Computer, My Documents, Recycle Bin, Task Bar. 5.5.1 My Computer: This icon displays the main components of your computer. You can open any of the items in this window to further examine the components of your computer by clicking on my computer icon. It displays different drives/disks attached with the computer.",
+    explanationEn: "🎨 **The Desktop GUI**: The graphical interface that covers your screen. It includes:\n* **Icons**: Graphic representations of folders, documents, and programs.\n* **Right-Click Menu**: Allows you to customize colors, desktop backgrounds, and rename files.\n\n🖥️ **My Computer**: The central gateway showing all connected storage devices, disk drives, CD-ROM slots, and physical properties.",
+    mcq: {
+      question: "What does GUI stand for in the context of computer interface systems?",
+      options: [
+        "General Utility Interface",
+        "Graphical User Interface",
+        "Grand Unified Interface",
+        "Giga User Interconnect"
+      ],
+      answer: 1,
+      explanation: "GUI stands for Graphical User Interface. It allows users to interact with files and settings visually rather than through text commands."
+    },
+    blank: {
+      question: "To rename an icon on the desktop, you begin by ______ on it.",
+      answer: "right-clicking",
+      hint: "The mouse action that opens a context menu."
+    }
+  },
+  {
+    pageNo: 125,
+    title: "My Documents, Recycle Bin & Taskbar",
+    originalText: "5.5.2 My Documents: It is the default space where all the files are stored unless we specifically instruct the computer to save at a specified location. It is a special folder where the system stores user’s files, pictures, music, download etc. 5.5.3 Recycle Bin: In Windows Operating System, Recycle Bin is a temporary folder which holds files and folders before it is permanently deleted from the storage devices. The Recycle Bin only stores, files deleted from hard drives, not from removable media, such as memory cards and pen drive/ flash drives. It also doesn't store files deleted from network drives. We can also restore the files from the recycle bin to its original location. It is also possible that you can bypass the recycle bin and the files deleted will be directly removed from the computer without moving it to the recycle bin. For this you keep holding the SHIFT key and delete the desired files. Sometimes it might happen that we need to restore the files which has been deleted accidentally. You can restore the deleted files from recycle bin. For this follow these steps: Double click the icon of recycle bin on your desktop. Choose a file which you want to restore back and right-click on it and then click restore. To restore all the files in the recycle bin click on restore all items. 5.5.4 Taskbar: The taskbar is the long horizontal bar at the bottom of your screen. It is used to launch and monitor running applications. It has four main sections: The Start button which opens the start menu. The quick launch toolbar which allows you to open programs with a single click. The middle section allows you to see the documents and programs which you have opened and to switch between them. The notification area, which includes a clock and icons which shows the status of certain programs and computer settings. 5.6 INTERNET ON A PC. Internet is the backbone of modern communication system. In today’s life, we are dependent on the internet for almost everything from information collection to carry out various activities such as reservation, online shopping and education. Internet is a collection of computers world over connected together to share various resources.",
+    explanationEn: "📁 **My Documents**: The default saving directory for user downloads, photos, and music files.\n\n🗑️ **Recycle Bin (⊞ Windows)**:\n* Temporarily stores deleted files so you can recover them later.\n* **The Catch**: Only holds files deleted from local hard drives. Files deleted from USB flash drives or network shared folders are **permanently** deleted immediately!\n* **Pro Tip**: Press `Shift` + `Delete` to bypass the Recycle Bin.\n\n📍 **The Taskbar**: The horizontal control bar at the bottom of the screen. Features:\n1. **Start Button**.\n2. **Quick Launch**: One-click app launching.\n3. **Middle Section**: Lists currently open program windows.\n4. **Notification Area**: Houses the system clock and network status icons.",
+    mcq: {
+      question: "Which of the following folders is NOT monitored by the Recycle Bin when you delete files from it?",
+      options: [
+        "Local C: Drive folder",
+        "Local D: Drive folder",
+        "A network shared drive folder",
+        "Desktop folder"
+      ],
+      answer: 2,
+      explanation: "The Recycle Bin does not cache files deleted from network locations or removable flash drives; they are deleted permanently."
+    },
+    blank: {
+      question: "To bypass the Recycle Bin and delete files permanently, you hold the ______ key while deleting.",
+      answer: "Shift",
+      hint: "It is the capitalization modifier key."
+    }
+  },
+  {
+    pageNo: 126,
+    title: "Dial-up vs. Broadband Connections",
+    originalText: "There are various ways to connect an internet. Generally dial-up connection and broadband connection are the two types of internet connections which are used commonly. 5.6.1 Dial-up Internet Connection: It is a way to connect to the internet in which public switched telephone network (PSTN) is used to make a Internet connection via telephone lines to an internet service provider (ISP). In dial-up connection telephone network is of prime importance. Since dial-up connection requires telephone lines which have limited capacity. Its transmission speed is limited and it is slow. Generally dialup operate at speeds of 14.4Kbit, 28.8Kbit, or 56Kbit. Dialup speeds vary by the quality of the phone line and the many different user configurations. A MODEM is required for dial-up internet connection. MODEM is short form of modulator-demodulator. A modem is a hardware device or a software application program that is used in a computer to transmit data/ information over a network such as a telephone or cable lines. In computer information is stored in digital form whereas information transmitted over telephone lines is transmitted in the form of analog signal. A modem is used to convert between these two forms of analog to digital and vice versa. Now-a-days, dial-up connections are gradually being replaced by Broadband connections. 5.6.2 Broadband Internet Connection: Broadband Connection is a high data rate connection as compared to dial-up connection. Broadband has very high rate of data transmission. In contrast to dialup connection, it is a permanent connection, which can be set up over a high-speed communication links. Generally, an internet connection of 256 kbps (kilo byte per second) or more is considered as broadband Internet connection. Multimedia applications such as video and computer games, can be downloaded very quickly and easily with broadband connection which was not possible, as fast in dial-up connection.",
+    explanationEn: "📞 **Dial-up Connections**:\n* Connects via old telephone lines (**PSTN**).\n* Slow speeds (56 Kbps max).\n* Requires a **Modem** (Modulator-Demodulator) to translate the computer's **digital** bits into telephone **analog** sound waves.\n\n⚡ **Broadband Connections**:\n* An always-on, high-speed connection.\n* Defined as speeds of **256 Kbps** or higher.\n* Perfect for downloading media, gaming, and online streaming.",
+    mcq: {
+      question: "What is the primary role of a Modem in a dial-up connection?",
+      options: [
+        "It amplifies the electrical signal of the motherboard",
+        "It converts computer digital signals to telephone line analog signals, and vice-versa",
+        "It stores cached web pages",
+        "It acts as a local firewall"
+      ],
+      answer: 1,
+      explanation: "A modem (Modulator-Demodulator) translates digital data from a computer into analog signals that can travel over voice-carrying telephone lines."
+    },
+    blank: {
+      question: "An internet connection speed of ______ kbps or higher is classified as broadband.",
+      answer: "256",
+      hint: "It is a three-digit number representing the baseline speed."
+    }
+  },
+  {
+    pageNo: 127,
+    title: "Webcasting & Proxy Servers",
+    originalText: "Webcasting is nothing but broadcasting on the internet. This facility is possible only due to high speed internet connection such as broadband connection. When we distribute same media files over the internet to different users using streaming media technology, it is called as webcast. Now-a-days, online web media is a great source of information and it is being successfully used in different sectors such as education, entertainment, technology etc. Online education is one of the most important field which is using this facility. You can find several webcast academic classes on the internet by experts. 5.6.3 Proxy Server: Proxy server is used in a computer network. Proxy server is a server which acts as an intermediary between the client application and the Web server. Proxy server is used to improve performance and for filtering purposes. In an organization, proxy server can be used to prevent its employee to access certain types of website. It provides security and check to the overall system. It can also improve the performance of the network. Suppose two users access the web through proxy server. If user X requests a webpage, say page 1. Sometime later if user Y requests the same page then this request will not forwarded to the web server. Proxy server simply returns the same page which it has access for user X, thus saving lot of time.",
+    explanationEn: "📡 **Webcasting**: Distributing live or recorded media (audio/video) over the internet using streaming technologies. Highly popular for remote learning platforms (e.g., EDUSAT lectures).\n\n🛡️ **Proxy Servers**: Intermediary servers that act as a gatekeeper between client machines and the internet.\n\n⚙️ **Proxy Functions**:\n1. **Filtering**: Allows network administrators to block specific websites.\n2. **Security**: Hides internal network configurations from external servers.\n3. **Caching**: Saves copies of requested web pages. If user X visits a site, the proxy caches it. When user Y requests the same site, the proxy serves the cached copy directly, saving bandwidth and speed.",
+    mcq: {
+      question: "How does a Proxy Server speed up internet access for multiple users in a company?",
+      options: [
+        "By overclocking the computers",
+        "By returning cached web pages instead of reloading them from the web server",
+        "By upgrading the telephone line bandwidth",
+        "By formatting the local hard drives"
+      ],
+      answer: 1,
+      explanation: "Caching allows the proxy server to return stored copies of popular web pages immediately without requesting them from the external web server again."
+    },
+    blank: {
+      question: "A proxy server acts as an ______ between client applications and web servers.",
+      answer: "intermediary",
+      hint: "It means a go-between or middleman."
+    }
+  },
+  {
+    pageNo: 128,
+    title: "Configuring Proxy Settings in Browsers",
+    originalText: "You may configure Internet Explorer to use a proxy over a LAN connection on your PC. To configure Internet Explorer 6.0 on your PC, follow the following steps: 1. On the Tools menu in Internet Explorer, you click Internet Options, click the Connections tab, and then click LAN Settings. 2. Under Proxy server, click to select the Use a proxy server for your LAN check box. In the Address box, type the IP address of the proxy server. 3. In the Port box, type the port number that is used by the proxy server for client connections. The port number by default is 8080. 4. You can click to select the Bypass proxy server for local addresses check box if you do not want the proxy server computer to be used when you connect to a computer on the local network (this may speed up performance). 5. Click OK to close the LAN Settings dialog box. 6. Click OK again to close the Internet Options dialog box. You will learn in more details about computer networks and Internet in Block 3 of this course.",
+    explanationEn: "⚙️ **Proxy Configuration (IE 6.0)**:\n1. Tools menu ➡️ **Internet Options** ➡️ **Connections** tab ➡️ **LAN Settings**.\n2. Enable **Use a proxy server for your LAN**.\n3. Type in the **IP Address** of the proxy.\n4. Input the **Port Number** (typically **8888** or the default **8080**).\n5. Optional: Select **Bypass proxy server for local addresses** to make local server communication faster.",
+    mcq: {
+      question: "What is the standard default port number used by proxy servers listed in this unit's configurations?",
+      options: [
+        "80",
+        "21",
+        "8080",
+        "443"
+      ],
+      answer: 2,
+      explanation: "Port 8080 is the standard default port configuration for proxy servers."
+    },
+    blank: {
+      question: "To configure proxy options in Internet Explorer, you click LAN Settings under the ______ tab.",
+      answer: "Connections",
+      hint: "Deals with network connectivity links."
+    }
+  },
+  {
+    pageNo: 129,
+    title: "Unit Summary & Check Your Progress-1 Answers",
+    originalText: "5.7 SUMMARY. A personal computer (PC) is a general-purpose computer, used for day to day activities in different areas including education, business, administration and health. Now-a-days PC has become vital part of the life of a person. In this unit we have focused on the practical aspects of a PC. We have discussed about various types of personal computer such as Desktop Computer, Laptop, Work Station, Netbook, Tablet PC etc. We have also discussed about the configuration of these computers. Configuration is basically the technical specifications/details about a computer. As we know hardware is essential part of a computer. Different hardware components such as monitors, CPU, Mouse, Key board etc. are combined together to form a PC. We have studied about some of the hardware components such as computer cases, central processing unit(CPU), motherboard, video card in this unit. Apart from hardware components software is also very important to operate a computer. Software plays major role in a computer. Without software computer is of no use. Software can be broadly classified as System software, Application software and Utilities. In this unit we have mainly focused on Application software and Utility software. Desktop is the place on a computer screen which holds icons, images, files, folders etc. we have also briefly mentioned about My Computer, My Documents, Recycle Bin and Taskbar on the desktop of a computer. Finally this unit provides knowledge and details about Internet and different types of Internet connections. 5.8 Answers to Check Your Progress-1. 1. True/False: (a) True, (b) True, (c) False, (d) True, (e) True. 2. Multiple Choice Questions: (a) Light pen, (b) All of these, (c) Operating system.",
+    explanationEn: "📋 **Course Summary**:\n* **PC Definition**: Everyday utility machine across education, administration, and health.\n* **Hardware Components**: Physical elements (case, motherboard, video card, CPU).\n* **Software Divisions**: System (OS), Application (User tasks), Utilities (Maintenance).\n* **Desktop Environment**: Icons (My Computer, My Documents, Recycle Bin) and Taskbar.\n* **Internet Options**: Dial-up (using Modems over PSTN lines) vs. Broadband (high speed, permanent connections).",
+    mcq: {
+      question: "Which of the following is NOT part of a computer motherboard according to the check your progress answers?",
+      options: [
+        "AGP Slot",
+        "PCI Slot",
+        "Light pen",
+        "ATX power connector"
+      ],
+      answer: 2,
+      explanation: "A light pen is an optical input peripheral, not a component physically mounted on the motherboard."
+    },
+    blank: {
+      question: "Software is broadly classified into three categories: System, Application, and ______ software.",
+      answer: "utility",
+      hint: "Deals with computer maintenance and performance tasks."
+    }
+  }
+];
+
+export default function MyPersonalComputerVisualGuide() {
+  const router = useRouter();
+  const { completedChapters, markCompleted, markIncomplete } = useProgress();
+  const progressKey = 'bca_unit:1st Semester/BCS-011 Computer Basics and PC Software/Block 1 Basics of Computer Hardware/UNIT 5.pdf';
+  const isChapterCompleted = !!completedChapters[progressKey];
+
+  const [activeIdx, setActiveIdx] = useState(0);
+  const [selectedMcqOpt, setSelectedMcqOpt] = useState<number | null>(null);
+  const [revealMcqExplanation, setRevealMcqExplanation] = useState(false);
+  const [blankInput, setBlankInput] = useState('');
+  const [blankChecked, setBlankChecked] = useState(false);
+  const [blankIsCorrect, setBlankIsCorrect] = useState(false);
+  const [showBlankHint, setShowBlankHint] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [points, setPoints] = useState(0);
+
+  useEffect(() => {
+    const savedUser = localStorage.getItem('nextsem_user');
+    let email = "guest";
+    if (savedUser) {
+      try {
+        const parsed = JSON.parse(savedUser);
+        email = parsed.email || "guest";
+      } catch (e) {}
+    }
+    const savedPoints = localStorage.getItem(`nextsem_bca_points_${email}`);
+    if (savedPoints) {
+      setPoints(parseInt(savedPoints) || 0);
+    }
+  }, []);
+
+  const activeLesson = LESSONS[activeIdx];
+
+  const handlePageChange = (idx: number) => {
+    setActiveIdx(idx);
+    setSelectedMcqOpt(null);
+    setRevealMcqExplanation(false);
+    setBlankInput('');
+    setBlankChecked(false);
+    setBlankIsCorrect(false);
+    setShowBlankHint(false);
+  };
+
+  const handleMcqSelect = (optIdx: number) => {
+    setSelectedMcqOpt(optIdx);
+    setRevealMcqExplanation(true);
+    
+    // Add XP if correct
+    if (optIdx === activeLesson.mcq.answer) {
+      awardXP(10);
+    }
+  };
+
+  const checkBlank = () => {
+    const isCorrect = blankInput.trim().toLowerCase() === activeLesson.blank.answer.toLowerCase();
+    setBlankIsCorrect(isCorrect);
+    setBlankChecked(true);
+
+    if (isCorrect) {
+      awardXP(15);
+    }
+  };
+
+  const awardXP = (amount: number) => {
+    const savedUser = localStorage.getItem('nextsem_user');
+    let email = "guest";
+    if (savedUser) {
+      try {
+        const parsed = JSON.parse(savedUser);
+        email = parsed.email || "guest";
+      } catch (e) {}
+    }
+    const currentPoints = parseInt(localStorage.getItem(`nextsem_bca_points_${email}`) || '0', 10);
+    const newPoints = currentPoints + amount;
+    localStorage.setItem(`nextsem_bca_points_${email}`, newPoints.toString());
+    setPoints(newPoints);
+  };
+
+  const toggleChapterComplete = () => {
+    if (isChapterCompleted) {
+      markIncomplete(progressKey);
+    } else {
+      markCompleted(progressKey);
+      awardXP(100); // 100 XP for finishing the chapter!
+    }
+  };
+
+  return (
+    <div className="w-full min-h-screen bg-[#060c18] text-white flex flex-col justify-between font-sans selection:bg-[#c1a648]/30 relative pb-20">
+      {/* Background radial glow */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-96 rounded-full bg-emerald-950/15 blur-[120px] pointer-events-none" />
+
+      {/* ── Top Header Bar with Subject Switcher Dropdown (Matching image-20.png) ── */}
+      <BcaHeaderNav
+        currentSubjectCode="BCS-111"
+        currentSubjectName="Computer Basics & PC Software"
+        points={points}
+      />
+
+      {/* Main layout container */}
+      <div className="flex-1 flex relative overflow-hidden">
+        {/* Sidebar Index (Desktop/Mobile overlay) */}
+        <aside className={`fixed inset-y-16 right-0 w-80 bg-[#0a0a10]/95 border-l border-slate-850 backdrop-blur-md z-30 transition-transform duration-300 transform ${
+          sidebarOpen ? 'translate-x-0' : 'translate-x-full'
+        } flex flex-col justify-between`}>
+          <div className="p-6 overflow-y-auto flex-1">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest flex items-center gap-1.5">
+                <BookOpen size={13} className="text-emerald-400" />
+                <span>Unit Topics ({LESSONS.length})</span>
+              </h3>
+              <button 
+                onClick={() => setSidebarOpen(false)}
+                className="text-slate-500 hover:text-white transition-colors"
+              >
+                <X size={16} />
+              </button>
+            </div>
+            <div className="space-y-2">
+              {LESSONS.map((les, idx) => (
+                <button
+                  key={les.pageNo}
+                  onClick={() => {
+                    handlePageChange(idx);
+                    setSidebarOpen(false);
+                  }}
+                  className={`w-full text-left p-3 rounded-xl border text-xs transition-all flex items-start gap-2.5 ${
+                    activeIdx === idx 
+                      ? 'bg-emerald-955/20 border-emerald-500/40 text-emerald-300 font-bold' 
+                      : 'bg-slate-900/40 border-slate-850/60 hover:bg-slate-900 text-slate-400'
+                  }`}
+                >
+                  <span className="shrink-0 text-[10px] font-bold bg-slate-850 px-1.5 py-0.5 rounded text-slate-500">
+                    Pg {les.pageNo}
+                  </span>
+                  <span className="truncate">{les.title}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+          <div className="p-6 border-t border-slate-850/65 bg-slate-950/30">
+            <button
+              onClick={toggleChapterComplete}
+              className={`w-full py-3 rounded-xl text-xs font-black uppercase tracking-wider transition-all flex items-center justify-center gap-2 ${
+                isChapterCompleted
+                  ? 'bg-emerald-955/20 border border-emerald-500/30 text-emerald-450 hover:bg-emerald-955/40'
+                  : 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg shadow-emerald-600/10'
+              }`}
+            >
+              <Check size={14} />
+              <span>{isChapterCompleted ? 'Completed ✓' : 'Mark Unit Completed'}</span>
+            </button>
+          </div>
+        </aside>
+
+        {/* Content Section */}
+        <main className="flex-1 w-full max-w-5xl mx-auto px-4 md:px-8 py-6 flex flex-col justify-between overflow-y-auto">
+          {/* Progress Banner */}
+          <div className="mb-6 flex items-center justify-between text-[10px] text-slate-500 font-black uppercase tracking-widest shrink-0">
+            <div className="flex items-center gap-1.5">
+              <span>BCA</span>
+              <span>›</span>
+              <span>Semester 1</span>
+              <span>›</span>
+              <span>BCS-011</span>
+              <span>›</span>
+              <span className="text-slate-350">Unit 5 (Page {activeLesson.pageNo})</span>
+            </div>
+            <div className="bg-slate-900/60 border border-slate-850 px-2.5 py-1 rounded-md text-emerald-400">
+              Slide {activeIdx + 1} of {LESSONS.length}
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start mb-6">
+            
+            {/* Left side: Textbook & Explanations */}
+            <div className="space-y-6">
+              
+              {/* Textbook Original Text */}
+              <div className="bg-[#0b0b11] border border-slate-855 rounded-3xl p-6 relative overflow-hidden shadow-xl">
+                <div className="absolute top-0 right-0 bg-slate-850/50 text-[9px] font-bold text-slate-400 px-3 py-1.5 rounded-bl-xl border-l border-b border-slate-800 uppercase tracking-widest flex items-center gap-1">
+                  <FileText size={10} className="text-slate-500" />
+                  <span>Textbook Original (Page {activeLesson.pageNo})</span>
+                </div>
+                <h2 className="text-base font-black text-white mb-4 mt-2 pr-28 flex items-center gap-2 border-b border-slate-850 pb-2">
+                  <span className="text-emerald-500">§</span> {activeLesson.title}
+                </h2>
+                <div className="text-xs text-slate-400 leading-relaxed max-h-56 overflow-y-auto pr-2 custom-scrollbar italic">
+                  &ldquo;{activeLesson.originalText}&rdquo;
+                </div>
+              </div>
+
+              {/* Visual Explanation */}
+              <div className="bg-gradient-to-br from-[#12121c] to-[#0a0a10] border border-white/5 rounded-3xl p-6 relative shadow-lg">
+                <div className="absolute top-0 right-0 bg-emerald-955/20 text-[9px] font-black text-emerald-400 px-3 py-1.5 rounded-bl-xl border-l border-b border-emerald-500/20 uppercase tracking-widest flex items-center gap-1 animate-pulse">
+                  <Sparkles size={10} />
+                  <span>Interactive Explanations</span>
+                </div>
+                <h3 className="text-xs font-black text-slate-300 uppercase tracking-widest mb-4 flex items-center gap-1.5">
+                  <Zap size={12} className="text-emerald-400" />
+                  <span>Bite-Sized Summary</span>
+                </h3>
+                <div className="text-xs text-slate-300 space-y-4 leading-relaxed whitespace-pre-wrap">
+                  {activeLesson.explanationEn}
+                </div>
+              </div>
+
+            </div>
+
+            {/* Right side: Practice / Quizzes */}
+            <div className="space-y-6">
+              
+              {/* Multiple Choice Question (MCQ) */}
+              <div className="bg-[#0f0f18]/60 border border-slate-850 rounded-3xl p-6 shadow-xl">
+                <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-1.5">
+                  <HelpCircle size={13} className="text-indigo-400" />
+                  <span>Self-Check MCQ</span>
+                </h3>
+                <p className="text-xs font-black text-white mb-4 leading-snug">
+                  {activeIdx + 1}. {activeLesson.mcq.question}
+                </p>
+                <div className="space-y-2">
+                  {activeLesson.mcq.options.map((opt, oIdx) => {
+                    const isSelected = selectedMcqOpt === oIdx;
+                    const isCorrect = oIdx === activeLesson.mcq.answer;
+                    
+                    let buttonClass = "border-slate-850 bg-slate-900/35 hover:bg-slate-900 hover:border-slate-800 text-slate-300";
+                    if (revealMcqExplanation) {
+                      if (isCorrect) {
+                        buttonClass = "border-[#39D353]/30 bg-[#39D353]/10 text-[#39D353] font-bold";
+                      } else if (isSelected) {
+                        buttonClass = "border-red-500/30 bg-red-500/10 text-red-400";
+                      }
+                    } else if (isSelected) {
+                      buttonClass = "border-indigo-500/40 bg-indigo-955/20 text-indigo-300 font-bold";
+                    }
+
+                    return (
+                      <button
+                        key={oIdx}
+                        disabled={revealMcqExplanation}
+                        onClick={() => handleMcqSelect(oIdx)}
+                        className={`w-full text-left p-3.5 rounded-xl border text-xs transition-all flex items-start gap-2.5 ${buttonClass}`}
+                      >
+                        <span className="w-5 h-5 rounded-md bg-black/30 border border-white/5 flex items-center justify-center text-[10px] font-bold shrink-0">
+                          {String.fromCharCode(65 + oIdx)}
+                        </span>
+                        <span>{opt}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {revealMcqExplanation && (
+                  <div className="mt-4 p-4 bg-slate-950/50 border border-slate-850 rounded-2xl text-[11px] text-slate-400 leading-relaxed">
+                    <span className="block font-black text-white mb-1 uppercase tracking-wider text-[9px] flex items-center gap-1">
+                      <AlertCircle size={10} className="text-emerald-400" />
+                      Explanation
+                    </span>
+                    {activeLesson.mcq.explanation}
+                  </div>
+                )}
+              </div>
+
+              {/* Fill in the Blanks */}
+              <div className="bg-[#0f0f18]/60 border border-slate-850 rounded-3xl p-6 shadow-xl">
+                <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-1.5">
+                  <Award size={13} className="text-emerald-400" />
+                  <span>Fill in the Blanks</span>
+                </h3>
+                <p className="text-xs font-black text-white mb-4 leading-snug">
+                  {activeLesson.blank.question}
+                </p>
+
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    disabled={blankChecked && blankIsCorrect}
+                    value={blankInput}
+                    onChange={(e) => setBlankInput(e.target.value)}
+                    placeholder="Type your answer here..."
+                    className="flex-1 bg-slate-950 border border-slate-850 rounded-xl px-4 py-2.5 text-xs text-white placeholder-slate-650 focus:outline-none focus:border-emerald-500/40"
+                  />
+                  <button
+                    onClick={checkBlank}
+                    disabled={!blankInput || (blankChecked && blankIsCorrect)}
+                    className="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 disabled:bg-slate-900 disabled:text-slate-600 disabled:border-slate-850 disabled:border rounded-xl text-xs font-bold transition-all text-white shrink-0"
+                  >
+                    Check
+                  </button>
+                </div>
+
+                {blankChecked && (
+                  <div className={`mt-3 text-[11px] font-bold ${
+                    blankIsCorrect ? 'text-[#39D353]' : 'text-red-400'
+                  }`}>
+                    {blankIsCorrect ? 'Correct! +15 XP earned ✓' : 'Oops! Try again.'}
+                  </div>
+                )}
+
+                <div className="mt-4 flex items-center gap-2">
+                  <button
+                    onClick={() => setShowBlankHint(!showBlankHint)}
+                    className="text-[9px] font-bold text-slate-500 hover:text-white uppercase tracking-wider transition-colors"
+                  >
+                    {showBlankHint ? 'Hide Hint' : 'Show Hint'}
+                  </button>
+                  {showBlankHint && (
+                    <span className="text-[10px] text-indigo-400 font-mono">
+                      (Hint: {activeLesson.blank.hint})
+                    </span>
+                  )}
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
+          {/* Navigation Controls */}
+          <div className="border-t border-slate-850/60 pt-6 mt-6 flex items-center justify-between shrink-0">
+            <button
+              disabled={activeIdx === 0}
+              onClick={() => handlePageChange(activeIdx - 1)}
+              className="px-4 py-2.5 bg-slate-900 border border-slate-850 hover:bg-slate-800 disabled:opacity-20 disabled:hover:bg-slate-900 text-xs font-bold text-slate-300 rounded-xl transition-all flex items-center gap-1.5"
+            >
+              <ChevronLeft size={16} />
+              <span>Previous Page</span>
+            </button>
+
+            <div className="text-[10px] text-slate-500 font-mono uppercase tracking-widest hidden sm:block">
+              Unit-5 Notebook · IGNOU BCA Course Companion
+            </div>
+
+            {activeIdx < LESSONS.length - 1 ? (
+              <button
+                onClick={() => handlePageChange(activeIdx + 1)}
+                className="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-xs font-bold text-white rounded-xl transition-all flex items-center gap-1.5 shadow-lg shadow-emerald-955/30"
+              >
+                <span>Next Page</span>
+                <ChevronRight size={16} />
+              </button>
+            ) : (
+              <button
+                onClick={toggleChapterComplete}
+                className={`px-4 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider transition-all flex items-center gap-1.5 shadow-lg ${
+                  isChapterCompleted
+                    ? 'bg-emerald-955/20 border border-emerald-500/30 text-emerald-450'
+                    : 'bg-gradient-to-r from-emerald-600 to-indigo-600 hover:from-emerald-500 hover:to-indigo-500 text-white shadow-emerald-955/20'
+                }`}
+              >
+                <Check size={16} />
+                <span>{isChapterCompleted ? 'Completed ✓' : 'Finish Unit'}</span>
+              </button>
+            )}
+          </div>
+
+        </main>
+      </div>
+
+      {/* Ad placement / Footer */}
+      <footer className="shrink-0">
+        <div className="py-2 bg-slate-950/20">
+          <AdSenseBanner />
+        </div>
+        <div className="w-full py-4 text-center text-[9px] text-slate-700 border-t border-white/5 select-none bg-[#030306]">
+          © 2026 Nextsem Academy · IGNOU BCA Revision Platform
+        </div>
+      </footer>
+    </div>
+  );
+}

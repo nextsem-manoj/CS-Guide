@@ -1,0 +1,78 @@
+---
+title: "P1.5: Semantic HTML5 & SEO"
+description: "Mastering semantic document structures, page accessibility, and search engine optimization (SEO)."
+---
+
+# P1.5: Semantic HTML5 & SEO
+
+Semantic HTML means using HTML tags that describe their meaning to both the developer, the browser, and search engines like Google.
+
+---
+
+## 1. Why Semantics Matter
+
+Without semantic HTML, browsers treat everything as plain text blocks inside generic `<div>` tags. Proper semantics are crucial for:
+1. **Search Engine Optimization (SEO):** Google crawls tags like `<article>`, `<header>`, and `<h1>` to index and rank webpages.
+2. **Accessibility (a11y):** Screen readers use semantic tags to help visually impaired users navigate.
+
+<GraphBar
+  title="Impact of HTML Semantics on Search Rank"
+  subtitle="Average search engine crawler indexing efficiency scores."
+  items={[
+    { label: "Div-Soup Layouts (no semantics)", value: 20, displayValue: "Poor (20/100)" },
+    { label: "Semantic Layouts (article, nav)", value: 75, displayValue: "Good (75/100)" },
+    { label: "Semantics with ARIA Metadata", value: 95, displayValue: "Excellent (95/100)" }
+  ]}
+/>
+
+---
+
+<DeveloperProfile
+  name="Kent C. Dodds"
+  role="JavaScript Engineer & Educator"
+  salary="₹60 Lakhs/yr equivalent"
+  company="Remix / Epic Web"
+  experience="9 Years"
+  avatar="👨‍💻"
+  photoUrl="https://github.com/kentcdodds.png"
+  profileUrl="https://github.com/kentcdodds"
+  stack="HTML5 Semantics, Remix Router, SEO Auditing, ARIA Accessibility"
+  quote="Always remember: a screen reader reads the HTML DOM, not your styled CSS colors. Focus on structural hierarchy. Semantic tags are the foundation of professional web interfaces."
+/>
+
+---
+
+## 2. Semantic Document Structures
+Instead of wrapping sections in `<div>`, use HTML5 semantic tags:
+* `<header>`: Site headers and navigation menus.
+* `<nav>`: Set of navigation links.
+* `<main>`: The dominant, unique content of the page (only one per page).
+* `<article>`: Self-contained composition (blog post, news article).
+* `<section>`: Thematic grouping of content.
+* `<aside>`: Sidebar layout for ads, bio, or links.
+* `<footer>`: Bottom disclaimer, copyright, and links.
+
+```html
+<!-- Example of a Semantic page skeleton -->
+<header>
+  <nav>
+    <a href="/">Home</a>
+  </nav>
+</header>
+<main>
+  <article>
+    <h1>HTML5 Semantics</h1>
+    <p>This is a semantic article.</p>
+  </article>
+</main>
+<footer>
+  <p>&copy; 2026 Nextsem Online.</p>
+</footer>
+```
+
+---
+
+## 🎓 Practice Assignment
+1. Open the file `blog.html` that you created in the first assignment.
+2. Restructure the code so that headers, sidebars, navigation bars, and footers use proper HTML5 semantic tags instead of generic `<div>` wrappers.
+3. Verify using Google Chrome Inspect element that your document DOM tree is semantically organized.

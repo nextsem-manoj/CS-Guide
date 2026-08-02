@@ -1,0 +1,346 @@
+---
+title: "All HTML5 Tags Reference"
+---
+
+# 📚 All HTML5 Tags Reference
+
+Welcome to **P1.6: All HTML5 Tags**! Here is a comprehensive reference guide of all standard HTML5 tags, complete with clear explanations and practical code examples for each tag.
+
+---
+
+### 🧱 Document Structure & Metadata
+These tags define the structure of the HTML document and provide metadata (information about the page).
+
+* **`<html>`**: The root element of every HTML page. Contains all other elements.
+  ```html
+  <!DOCTYPE html>
+  <html lang="en">
+    <!-- Whole page content goes here -->
+  </html>
+  ```
+* **`<head>`**: Holds page metadata (document settings, title, styles, scripts) that isn't shown directly on the page.
+  ```html
+  <head>
+    <meta charset="UTF-8">
+    <title>My Portfolio</title>
+  </head>
+  ```
+* **`<title>`**: Sets the title displayed in the browser tab. Extremely important for search engines (SEO).
+  ```html
+  <title>Nextsem Academy - Front End Developer Course</title>
+  ```
+* **`<body>`**: Contains all the visible contents of the web page (text, buttons, images).
+  ```html
+  <body>
+    <h1>Welcome to my website!</h1>
+    <p>This is visible page content.</p>
+  </body>
+  ```
+* **`<base>`**: Defines a default base URL or link target for all relative URLs in the document. (Can only be used once in `<head>`).
+  ```html
+  <head>
+    <base href="https://nextsem-academy.web.app/images/">
+  </head>
+  ```
+* **`<link>`**: Connects the HTML file to external resources (such as CSS stylesheets or favicon icons).
+  ```html
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+  ```
+* **`<meta>`**: Declares page settings (character set, viewport resize rules for mobile, SEO descriptions, keywords).
+  ```html
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Free Front End Course by Nextsem">
+  ```
+* **`<style>`**: Contains internal CSS styling rules directly inside the HTML file.
+  ```html
+  <style>
+    body {
+      background-color: #060c18;
+      color: #ffffff;
+    }
+  </style>
+  ```
+
+---
+
+### 🏛️ Semantic & Sectioning
+These tags give your page meaning and divide it into logical sections. (Great for SEO and Accessibility!)
+
+* **`<article>`**: Wraps an independent, self-contained piece of content (like a blog post, forum post, or news card).
+  ```html
+  <article>
+    <h2>HTML5 Semantics Decoded</h2>
+    <p>Semantic tags help spiders crawl your webpage more efficiently.</p>
+  </article>
+  ```
+* **`<aside>`**: Identifies content related to surrounding content, but separate (like a sidebar, ads, or quote boxes).
+  ```html
+  <aside>
+    <h3>Quick tip</h3>
+    <p>Always write descriptive alt attributes for images!</p>
+  </aside>
+  ```
+* **`<footer>`**: Wraps the bottom section of a page or article (typically holds copyrights, contact info, or site links).
+  ```html
+  <footer>
+    <p>&copy; 2026 Nextsem Academy. All Rights Reserved.</p>
+  </footer>
+  ```
+* **`<header>`**: Wraps the introductory section of a page or article (usually contains logo, site title, or main navbar).
+  ```html
+  <header>
+    <h1>Nextsem JBRS Course</h1>
+    <nav>...</nav>
+  </header>
+  ```
+* **`<h1> to <h6>`**: Headings representing page hierarchy. `<h1>` is the main page title (only use one per page!).
+  ```html
+  <h1>Mastering Frontend Development</h1>
+  <h2>Phase 1: HTML Basics</h2>
+  <h3>Lesson 1.6: HTML5 Tags</h3>
+  ```
+* **`<main>`**: Holds the main dominant content block of the page body. (Should only occur once per document).
+  ```html
+  <main>
+    <h2>Main Learning Dashboard</h2>
+    <p>This is where lessons are rendered.</p>
+  </main>
+  ```
+* **`<nav>`**: Encloses navigation menus or links (both local and external navigation lists).
+  ```html
+  <nav>
+    <a href="/">Home</a> | 
+    <a href="/curriculum">Curriculum</a>
+  </nav>
+  ```
+* **`<section>`**: Groups related contents together (like a features section, contact section, or chapters).
+  ```html
+  <section id="features">
+    <h2>Course Features</h2>
+    <p>Learn dynamically with hands-on examples.</p>
+  </section>
+  ```
+* **`<div>`**: A generic block-level container. Has no semantic meaning. Used solely for CSS styling or grouping.
+  ```html
+  <div className="flex flex-row justify-between">
+    <p>Item 1</p>
+    <p>Item 2</p>
+  </div>
+  ```
+
+---
+
+### 📝 Text Formatting & Content
+Tags used to wrap text and format content visually or semantically.
+
+* **`<p>`**: Defines a paragraph block of text. Browsers automatically add vertical spacing around it.
+  ```html
+  <p>Learn coding step-by-step through real-world capstones.</p>
+  ```
+* **`<span>`**: A generic inline-level container. Has no semantic meaning. Used to style specific words or phrases.
+  ```html
+  <p>Become a <span className="text-[#4ade80]">Front End Developer</span></p>
+  ```
+* **`<a>`**: Creates a hyperlink to navigate to another URL or to an anchor point on the same page.
+  ```html
+  <a href="https://nextsem.online/" target="_blank">Visit Academy</a>
+  ```
+* **`<strong>`**: Represents strong importance, rendering the text bold by default. (Crucial for screen readers!).
+  ```html
+  <p><strong>Warning:</strong> Always save your code changes.</p>
+  ```
+* **`<em>`**: Represents emphasized text, rendering it italicized by default.
+  ```html
+  <p>Learning syntax is <em>highly</em> rewarding!</p>
+  ```
+* **`<br>`**: Inserts a line break inside text. (A self-closing tag).
+  ```html
+  <p>Line one<br>Line two</p>
+  ```
+* **`<hr>`**: Renders a horizontal thematic break line to separate contents.
+  ```html
+  <p>First Topic Summary</p>
+  <hr>
+  <p>Second Topic Introduction</p>
+  ```
+* **`<blockquote>`**: Wraps text quoted from another source. Indents text by default.
+  ```html
+  <blockquote cite="https://nextsem.web.app/">
+    "The best way to predict the future is to write it."
+  </blockquote>
+  ```
+* **`<code>`**: Wraps inline code snippets to render them in monospace font.
+  ```html
+  <p>Declare variables in JavaScript using `const` or `let` statements.</p>
+  ```
+* **`<pre>`**: Renders preformatted text, preserving all spaces, indentations, and newlines. (Excellent for block code).
+  ```html
+  <pre>
+  function test() {
+    console.log("Hello, nextsem!");
+  }
+  </pre>
+  ```
+* **`<mark>`**: Highlights/marks text with a yellow background.
+  ```html
+  <p>Check out our <mark>Free PWA App</mark> for offline reading.</p>
+  ```
+* **`<sub>` & `<sup>`**: Renders subscript (lowered) or superscript (raised) text.
+  ```html
+  <p>Water formula is H<sub>2</sub>O. Math formula is X<sup>2</sup>.</p>
+  ```
+
+---
+
+### 📋 Lists & Tables
+Tags used to organize data into bullet points, numbered lists, and structured data tables.
+
+* **`<ul>` & `<li>`**: Creates an unordered (bulleted) list.
+  ```html
+  <ul>
+    <li>HTML5 Basics</li>
+    <li>CSS Layouts</li>
+  </ul>
+  ```
+* **`<ol>` & `<li>`**: Creates an ordered (numbered) list.
+  ```html
+  <ol>
+    <li>Install VS Code</li>
+    <li>Create index.html</li>
+  </ol>
+  ```
+* **`<dl>`, `<dt>`, & `<dd>`**: Creates a description list (item name + description text).
+  ```html
+  <dl>
+    <dt>PWA</dt>
+    <dd>Progressive Web App - behaves like a native app.</dd>
+  </dl>
+  ```
+* **`<table>`, `<tr>`, `<th>`, & `<td>`**: Defines structured tables. `tr` represents rows, `th` header cells, `td` data cells.
+  ```html
+  <table>
+    <thead>
+      <tr>
+        <th>Phase</th>
+        <th>Topic</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>P0</td>
+        <td>Setup Workspace</td>
+      </tr>
+    </tbody>
+  </table>
+  ```
+
+---
+
+### ✉️ Forms & Inputs
+Tags used to collect data from users via forms and inputs.
+
+* **`<form>`**: Wraps an input collection, pointing to a server script handling form submission.
+  ```html
+  <form action="/submit-data" method="POST">
+    <!-- inputs here -->
+  </form>
+  ```
+* **`<input>`**: The primary data input element. Behaviors change completely using the `type` attribute.
+  ```html
+  <input type="text" placeholder="Enter username">
+  <input type="checkbox" id="agree">
+  ```
+* **`<textarea>`**: A multi-line scrollable text field for longer messages.
+  ```html
+  <textarea placeholder="Write your coding bio..."></textarea>
+  ```
+* **`<button>`**: Creates a clickable button. Within a form, it submits the form by default.
+  ```html
+  <button type="submit">Submit Form</button>
+  ```
+* **`<select>` & `<option>`**: Creates a dropdown select list.
+  ```html
+  <select name="phase">
+    <option value="p0">Setup</option>
+    <option value="p3">JavaScript</option>
+  </select>
+  ```
+* **`<label>`**: Binds description text to form inputs (improves tapping radius and accessibility).
+  ```html
+  <label for="agree">I agree to curriculum terms</label>
+  <input type="checkbox" id="agree">
+  ```
+* **`<fieldset>` & `<legend>`**: Groups related fields in a form with a custom border and caption title.
+  ```html
+  <fieldset>
+    <legend>Account Info</legend>
+    <input type="email" placeholder="Email">
+  </fieldset>
+  ```
+
+---
+
+### 🎨 Media & Embedded Content
+Tags used for loading images, playing video and audio, or embedding third-party pages.
+
+* **`<img>`**: Renders raster or vector images. Always include `src` and `alt`.
+  ```html
+  <img src="/logo.svg" alt="Nextsem logo" width="100">
+  ```
+* **`<audio>` & `<source>`**: Plays sound files natively. Add `controls` to render play/pause buttons.
+  ```html
+  <audio controls>
+    <source src="audio.mp3" type="audio/mpeg">
+  </audio>
+  ```
+* **`<video>` & `<source>`**: Plays video files natively.
+  ```html
+  <video width="320" height="240" controls>
+    <source src="course-intro.mp4" type="video/mp4">
+  </video>
+  ```
+* **`<iframe>`**: Embeds an entire separate webpage within the current page (e.g. YouTube frames).
+  ```html
+  <iframe src="https://nextsem.online/" width="100%" height="400"></iframe>
+  ```
+* **`<svg>`**: Declares vector graphics right inside HTML code. Resolves crisply at any screen zoom.
+  ```html
+  <svg width="24" height="24" fill="currentColor">
+    <circle cx="12" cy="12" r="10" />
+  </svg>
+  ```
+* **`<canvas>`**: A bitmap canvas area where you draw custom shapes/games dynamically via JavaScript code.
+  ```html
+  <canvas id="gameCanvas" width="400" height="300"></canvas>
+  ```
+* **`<figure>` & `<figcaption>`**: Groups media (like images) with a captioned description paragraph.
+  ```html
+  <figure>
+    <img src="dashboard.png" alt="IDE UI Setup">
+    <figcaption>Fig 1.1: Recommended IDE interface setup.</figcaption>
+  </figure>
+  ```
+
+---
+
+### ⚙️ Scripting
+Tags used for writing or linking JavaScript directly in HTML.
+
+* **`<script>`**: Links an external JavaScript file or embeds JS commands directly.
+  ```html
+  <script src="script.js"></script>
+  <script>
+    console.log("Welcome to Nextsem Academy!");
+  </script>
+  ```
+* **`<noscript>`**: Displays warning text to users who have disabled JavaScript in their browser settings.
+  ```html
+  <noscript>
+    <p>Please enable JavaScript to view this interactive course.</p>
+  </noscript>
+  ```
+
+---
+
+🏆 **Great Job!** You now have a complete, example-driven dictionary of HTML5 tags. Keep this cheat sheet bookmarked as you move on to styling your layouts!

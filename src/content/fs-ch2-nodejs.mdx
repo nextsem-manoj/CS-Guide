@@ -1,0 +1,61 @@
+---
+title: "FS.2: Node.js Runtime & Modules"
+description: "Understand the V8 engine, event loop, CommonJS modules, and why Node.js is asynchronous and non-blocking."
+phase: "FS.2"
+duration: "5 mins read"
+color: "bg-[#27ae60]"
+icon: "🟢"
+---
+
+🟢 Node.js: Running JavaScript on the Server! 🚀
+
+For a long time, JavaScript could only run inside web browsers (like Chrome or Firefox) to animate buttons. In 2009, Ryan Dahl took Google Chrome's fast **V8 JavaScript Engine** and ran it standalone on computers. 
+
+This created **Node.js**—a runtime environment that lets us write backend server code in pure JavaScript!
+
+---
+
+⚙️ Non-Blocking Asynchronous I/O
+
+Standard servers (like Apache or PHP) are **blocking**—if 100 users request files at the same time, the server creates 100 separate threads, which uses a lot of memory.
+
+Node.js is **single-threaded** and **non-blocking**:
+- It uses an **Event Loop** to delegate heavy tasks (like reading disk files or database queries) to the operating system in the background.
+- Once the OS completes the task, it alerts Node.js, which triggers a callback function to send the response.
+
+> 🍕 **Waitress Analogy:**
+> Instead of standing still at a table waiting for the chef to cook a pizza, a single Node.js waitress takes your order, tells the kitchen, and immediately goes to take orders from other tables!
+
+---
+
+📦 CommonJS Module System
+
+To keep code organized, Node.js splits scripts into reusable files called **Modules**. In Node.js, we use the `require()` function to import files and `module.exports` to share variables or functions:
+
+```javascript
+// mathUtils.js
+const add = (a, b) => a + b;
+module.exports = { add };
+```
+
+To load this module in another file:
+
+```javascript
+// server.js
+const { add } = require('./mathUtils');
+console.log(add(5, 10)); // Outputs: 15
+```
+
+---
+
+🎯 Concept Check-in
+
+Let's verify your understanding of Node.js modules:
+
+<MultipleChoiceQuiz
+  quizId="node_require_mcq"
+  question="Which built-in function is used to load CommonJS modules in a standard Node.js script?"
+  options={["import", "require", "fetch", "include"]}
+  correctOption="require"
+  explanation="In the CommonJS module system used by default in Node.js, require() is the built-in function to load external files."
+/>

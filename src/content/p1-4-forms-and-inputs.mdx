@@ -1,0 +1,201 @@
+---
+title: "P1.4: Forms & Inputs"
+description: "Mastering HTML forms, standard input controls (text, password, checkboxes, radio, dropdown select, file uploads), labelling, fieldsets, and HTML5 validation."
+---
+
+# P1.4: Forms & User Data Inputs
+
+Websites collect data from visitors using forms. In this lesson, we will master how to design secure, accessible, and user-friendly form structures.
+
+---
+
+## 1. How Forms Work
+
+A form is a container for interactive controls. When a user fills in a form and presses the submit button, the browser bundles the data into **name/value pairs** (e.g. `username=Alex&genre=rock`) and sends it to a server.
+
+```html
+<form action="http://www.example.com/subscribe.php" method="post">
+  <!-- Interactive elements go here -->
+</form>
+```
+
+### Key `<form>` Attributes:
+* `action`: Specifies the destination URL on the server where the form data should be sent.
+* `method`: Determines how the data is transmitted:
+  * **GET:** Appends values directly to the URL (e.g. `?name=Alex`). Best for short, non-sensitive forms (like search boxes) where users might want to bookmark the result page.
+  * **POST:** Sends values invisibly within the HTTP headers. Required for passwords, file uploads, long text areas, or operations that write/modify database records.
+* `id` / `class`: Used to identify the form for CSS styling or JavaScript validation scripts.
+
+---
+
+## 2. Dynamic Forms Metrics
+
+Forms are the ultimate gatekeeper of user acquisition. Highly optimized form layouts directly drive signup conversions.
+
+<GraphBar
+  title="Form Conversion Lift by UX Optimization"
+  subtitle="Relative increase in user completion rate."
+  items={[
+    { label: "Long Form (10+ fields)", value: 15, displayValue: "Baseline" },
+    { label: "Grouped Fields (fieldset)", value: 45, displayValue: "+45%" },
+    { label: "Inline Labels & Placeholders", value: 75, displayValue: "+75%" },
+    { label: "Auto-Validation (required)", value: 95, displayValue: "+95%" }
+  ]}
+/>
+
+---
+
+<DeveloperProfile
+  name="Luke Wroblewski"
+  role="Product Director & UX Specialist"
+  salary="₹95 Lakhs/yr equivalent"
+  company="Google / Yahoo"
+  experience="16 Years"
+  avatar="👨‍💻"
+  photoUrl="https://github.com/lukew.png"
+  profileUrl="https://github.com/lukew"
+  stack="Mobile First UX, Product Strategy, Form Design Patterns"
+  quote="Form design is a conversation, not an interrogation. Keep it concise, align labels cleanly, group fields logically, and validate inputs instantly to respect your user's time."
+/>
+
+---
+
+## 3. Standard Form Controls
+
+HTML provides a wide range of input types to collect different data shapes.
+
+### Single-Line Text Inputs
+Used for short text like names, emails, and usernames.
+```html
+<input type="text" name="username" maxlength="30" />
+```
+* `name`: The variable name sent to the server.
+* `maxlength`: Limits the number of characters the user can type.
+
+### Password Inputs
+Similar to text inputs, but masks characters as dots or stars to protect privacy on screen.
+```html
+<input type="password" name="password" maxlength="30" />
+```
+
+### Multi-Line Textareas (`<textarea>`)
+Used for longer blocks of text (like reviews, feedback, or comments). Requires an opening and closing tag.
+```html
+<textarea name="comments" rows="4" cols="40">Enter comments...</textarea>
+```
+
+### Radio Buttons (`type="radio"`)
+Allows the user to select **only one option** from a list. 
+* All radio buttons in a group **must share the same `name` attribute** to link their behavior.
+* Each button must have a unique `value` attribute (the data sent to the server).
+* Use the `checked="checked"` attribute to pre-select an option on page load.
+
+```html
+<p>Please select your favorite genre:</p>
+<input type="radio" name="genre" value="rock" checked="checked" /> Rock
+<input type="radio" name="genre" value="pop" /> Pop
+<input type="radio" name="genre" value="jazz" /> Jazz
+```
+
+### Checkboxes (`type="checkbox"`)
+Allows the user to select **multiple options** from a list. Like radio buttons, they use the `value` and `checked` attributes.
+```html
+<p>Please select your favorite music service(s):</p>
+<input type="checkbox" name="service" value="itunes" checked="checked" /> iTunes
+<input type="checkbox" name="service" value="spotify" /> Spotify
+```
+
+### Dropdown Select Boxes (`<select>`)
+A space-saving dropdown list of options.
+* `<select>`: The container representing the dropdown.
+* `<option>`: Defines individual choices. Use `selected="selected"` to pre-select an item.
+* *Multiple Select:* Add `multiple="multiple"` to the `<select>` tag to allow selecting multiple options (by holding Ctrl/Cmd).
+
+```html
+<select name="device">
+  <option value="ipod" selected="selected">iPod</option>
+  <option value="computer">Computer</option>
+</select>
+```
+
+### File Uploads
+Allows users to upload files (images, PDFs, MP3s) from their computer.
+> [!IMPORTANT]
+> **POST Requirement:** The parent `<form>` tag **must use `method="post"`** for file uploads to transmit successfully.
+
+```html
+<input type="file" name="user-avatar" />
+```
+
+### Buttons
+* **Submit Button:** Submits the form data to the server.
+  ```html
+  <input type="submit" value="Register" />
+  ```
+* **Image Button:** Uses an image instead of a generic button layout.
+  ```html
+  <input type="image" src="images/submit-btn.png" width="100" height="30" />
+  ```
+* **Generic Button:** A highly stylable element that can contain text and image markup.
+  ```html
+  <button type="submit">
+    <img src="images/add-icon.png" alt="icon" /> Add Item
+  </button>
+  ```
+
+---
+
+## 4. Accessibility & Form Structure
+
+### Labelling Form Controls (`<label>`)
+Every input should carry a corresponding `<label>` tag. It displays text describing the input, increases the clickable target area, and is read aloud by screen readers.
+
+* **Explicit Method (Recommended):** Use the `for` attribute on the label pointing to the input's `id`.
+  ```html
+  <label for="user-age">Age:</label>
+  <input type="text" id="user-age" name="age" />
+  ```
+* **Implicit Method:** Wrap the label tag around both the text and the input.
+  ```html
+  <label>Age: <input type="text" name="age" /></label>
+  ```
+
+### Grouping Form Controls (`<fieldset>` & `<legend>`)
+Use `<fieldset>` to draw a border around related controls (e.g. shipping address, contact details). Use `<legend>` inside it to give the group a visual title.
+
+```html
+<fieldset>
+  <legend>Contact Details</legend>
+  <label for="email">Email:</label>
+  <input type="email" id="email" name="email" />
+</fieldset>
+```
+
+---
+
+## 5. Modern HTML5 Form Validation
+
+HTML5 introduced native client-side validation, moving the burden away from JavaScript scripts:
+
+* **`required` Attribute:** Prevents form submission if the input is left empty.
+  ```html
+  <input type="text" name="username" required="required" />
+  ```
+* **`placeholder` Attribute:** Displays faint hint text inside the input box which disappears once the user begins typing.
+  ```html
+  <input type="text" name="search" placeholder="Enter keywords..." />
+  ```
+* **HTML5 Semantic Input Types:** Automatically validates data formatting before submission:
+  * `type="email"`: Validates presence of `@` and a valid domain extension.
+  * `type="url"`: Validates web address formatting.
+  * `type="date"`: Renders a native browser calendar dropdown selector.
+  * `type="search"`: Specialized styling for search text boxes.
+
+---
+
+## 🎓 Practice Assignment
+1. Create a page `register.html`. Set up a POST form that sends data to a dummy server.
+2. Group the inputs into two `<fieldset>` segments: "Account Info" and "User Profile" (using `<legend>` titles).
+3. Under Account Info, create inputs for Username (required, with a placeholder) and Password.
+4. Under User Profile, create a dropdown select list for country, and a checkbox asking users to agree to terms.
+5. Link every input explicitly to a `<label>` tag using `id` and `for` mapping.

@@ -1,0 +1,114 @@
+---
+title: "Chapter 5: File Attributes and NTFS Permissions"
+description: "Learn about read-only, hidden, system attributes, NTFS permissions, and explicit permission management using ICACLS."
+---
+
+# Chapter 5: File Attributes and NTFS Permissions
+
+## 🔒 File Attributes & The Attrib Command
+
+In 🪟 Windows, every file has properties called **attributes** that dictate how the OS displays, logs, and protects them:
+* 🔒 **Read-Only (`R`):** Locks the file, preventing editing, writing, or deletion.
+* 👻 **Hidden (`H`):** Hides the file from standard file viewer lists and basic `dir` queries.
+* ⚙️ **System (`S`):** Identifies the file as an operating system file that cannot be moved or deleted.
+* 📦 **Archive (`A`):** Marks the file for backup (is checked by backup utilities to see if it changed since the last copy).
+
+You configure these using the **`attrib`** command:
+* ➕🔑 **`attrib +r [filename]`**: Locks the file as **Read-Only** (gives it the `R` tag).
+* ➕👻 **`attrib +h [filename]`**: **Hides** the file.
+* ➕⚙️ **`attrib +s [filename]`**: Marks it as a **System** file.
+
+> 🔒 **Access Blocked:** If a file is locked as Read-Only, trying to run `del filename` will trigger a system-level `Access is denied` block!
+
+---
+
+## 🔑 NTFS Permissions (Security ACLs)
+
+While attributes apply basic rules to a file, **NTFS permissions** allow fine-grained access controls matching specific users or groups:
+
+* **Full Control (`F`):** Can read, write, edit, delete, and alter security permissions.
+* **Modify (`M`):** Can read, write, and delete files, but cannot change ownership/permissions.
+* **Read & Execute (`RX`):** Can open, view, and run application files.
+* **Read (`R`):** Can view file contents only.
+* **Write (`W`):** Can write to or append file data.
+
+### Inheritance vs Explicit Permissions
+* **Inherited Permissions:** Permissions passed down from parent folders (e.g. if you have full control over `C:\Users\Student`, you inherit full control over its subfolders).
+* **Explicit Permissions:** Permissions directly assigned to a specific file or folder, overriding parent folder settings.
+
+---
+
+## 🛡️ Modifying Access Lists with `icacls`
+
+To display, modify, or backup file and folder access lists, 🪟 Windows uses the **`icacls`** command:
+
+### 🔎 Displaying Permissions:
+```cmd
+icacls config.txt
+```
+*Outputs current access control entries (ACEs), showing which users (e.g. Administrators, Users, SYSTEM) have what access shorthand (`(I)` = Inherited, `(F)` = Full Control).*
+
+### ➕ Granting User Permissions:
+To grant a user modified access:
+```cmd
+icacls config.txt /grant Student:M
+```
+
+### ❌ Denying User Permissions:
+To explicitly block a user:
+```cmd
+icacls config.txt /deny Administrator:F
+```
+
+<SpotTheError
+  question="A developer wants to make a file named 'config.txt' read-only, but the command outputs a syntax error. Find the mistake:"
+  command="attrib r config.txt"
+  segments={[
+    { text: "attrib", isError: false, explanation: "attrib is the correct command utility to configure file flags." },
+    { text: " ", isError: false, explanation: "Correct spacing separator." },
+    { text: "r", isError: true, explanation: "Error spotted! You must prefix the attribute letter with '+' (to grant/set) or '-' (to remove). Without '+', CMD treats 'r' as an invalid search key or path!" },
+    { text: " ", isError: false, explanation: "Correct spacing." },
+    { text: "config.txt", isError: false, explanation: "This is the target file name you want to modify." }
+  ]}
+  correctCommand="attrib +r config.txt"
+  generalExplanation="Use +r to set the Read-Only attribute on a file, and -r to clear it."
+/>
+
+> 🔒 **Developer Joke:** Why did the file attribute refuse to change? Because it was feeling too +r-esistible! 💔
+
+---
+
+## 💻 Practice Terminal Drill
+
+Choose how you want to complete your practice drill:
+
+### ⚡ Option A: Quick-Run Simulator (Recommended)
+Click the pills below to execute the drill commands automatically:
+
+<CommandLineRunner
+  commands={[
+    { input: "echo settings > secret.txt", output: "", explanation: "Creates a file secret.txt containing the string 'settings'." },
+    { input: "attrib +r secret.txt", output: "", explanation: "Marks secret.txt as read-only (+r)." },
+    { input: "del secret.txt", output: "Access is denied.\nCould Not Find C:\\Users\\Student\\secret.txt", explanation: "Attempts deletion, which is blocked by the read-only flag." },
+    { input: "attrib -r secret.txt", output: "", explanation: "Removes the read-only attribute (-r)." },
+    { input: "del secret.txt", output: "", explanation: "Permanently deletes the file now that it is writable." }
+  ]}
+/>
+
+### 🛠️ Option B: Open-Ended Terminal Sandbox
+If you want to manually type these commands yourself, launch the full system simulator below:
+
+<TabbedOS />
+
+---
+
+## 🏆 Lesson Check
+Check your understanding of file attributes and permissions below:
+
+<DragDropQuestion
+  questionId="cmd-attrib-r"
+  text="To grant the user 'Student' modify (M) permissions on a file named 'grades.csv', type __________."
+  correctOption="icacls grades.csv /grant Student:M"
+  options="icacls grades.csv /grant Student:M, attrib +r grades.csv, icacls grades.csv /deny Student:M, chmod 777 grades.csv"
+  explanation="The icacls command is used to alter Access Control Lists in Windows, using the /grant flag followed by Username:Permission."
+/>

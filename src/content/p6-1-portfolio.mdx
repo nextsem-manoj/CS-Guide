@@ -1,0 +1,107 @@
+---
+title: "P6.1: Personal Portfolio Web"
+description: "Building your official developer portfolio featuring responsive grids, timelines, and PWA configurations."
+---
+
+# P6.1: Personal Portfolio Web
+
+Your personal portfolio is the single most important asset to showcase your skills to hiring managers. It acts as your active business card.
+
+In this capstone, you will build a fast, responsive, and installable developer portfolio site using HTML5, modern CSS Grid, and custom variables.
+
+---
+
+## 1. Project Specifications
+
+Your portfolio must contain the following core pages/sections:
+* **Hero Section**: A bold headline, profile description, links to your active resume, and social anchors (GitHub, LinkedIn).
+* **Skills Dashboard**: A visual representation of your technical stack grouped by domain (Frontend, Backend, Tools).
+* **Project Gallery**: A CSS Grid layout showing project cards, titles, descriptions, and buttons linking to source code and live previews.
+* **Work Timeline**: A vertical timeline outlining your educational milestones and project phases.
+* **Contact Form**: An email inquiry form with input validations.
+
+---
+
+## 2. Setting Up Responsive CSS Grid
+
+To layout your project cards cleanly on both mobile and desktop screens, use CSS Grid with `auto-fit` and `minmax()` limits:
+
+```css
+/* Projects Gallery Grid */
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  width: 100%;
+}
+
+/* Individual Card Styling */
+.project-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.project-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+```
+
+---
+
+## 3. Making it a Progressive Web App (PWA)
+
+To make your portfolio installable on mobile phones (allowing recruiters to add your bio directly to their home screen), you must configure a manifest file.
+
+Create a file named `manifest.json` in your public assets directory:
+
+```json
+{
+  "short_name": "Developer Bio",
+  "name": "Manoj - Portfolio & Bio Card",
+  "icons": [
+    {
+      "src": "/favicon.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#060c18",
+  "theme_color": "#2563eb",
+  "display": "standalone",
+  "orientation": "portrait"
+}
+```
+
+Link it inside the `<head>` tag of your index page:
+```html
+<link rel="manifest" href="/manifest.json">
+```
+
+---
+
+<DeveloperProfile
+  name="Kent C. Dodds"
+  role="JavaScript Engineer & Educator"
+  salary="₹65 Lakhs/yr equivalent"
+  company="Epic Web / Remix Team"
+  experience="10 Years"
+  avatar="👨‍💻"
+  photoUrl="https://github.com/kentcdodds.png"
+  profileUrl="https://github.com/kentcdodds"
+  stack="React, TypeScript, Testing Library, Component Patterns"
+  quote="Your portfolio is your first project review. Clean code organization, responsive layouts, and quick page load times show recruiters you care about user experience!"
+/>
+
+---
+
+## 🎓 Practice Assignment
+
+1. Clone or download a clean starter layout in your local sandbox.
+2. Build the semantic page structure (`<header>`, `<main>`, `<aside>`, `<footer>`) and style it using custom variables.
+3. Configure the PWA manifest and verify in Chrome DevTools Application tab that the manifest loads correctly.
+4. Deploy the completed portfolio to Firebase Hosting and share the URL.

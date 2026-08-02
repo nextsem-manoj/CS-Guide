@@ -1,0 +1,93 @@
+---
+title: "Chapter 14: Task Management"
+description: "Audit running processes, filter by memory footprint, display system window owners using tasklist /v, and force close tasks recursively using taskkill /im /t."
+---
+
+# Chapter 14: Task Management
+
+## 📊 Process Auditing with `tasklist`
+
+If an application freezes, hangs, or consumes too much CPU or RAM, system administrators use Command Line tools instead of the graphical Task Manager in 🪟 Windows 11:
+
+* **List Processes:** Running **`tasklist`** displays a table of all active applications and background services, including their **Image Name**, Process ID (**PID**), Session Name, and **Mem Usage** (in KB).
+* **Verbose Details (`/v`):**
+  ```cmd
+  tasklist /v
+  ```
+  *Displays additional fields including the user account running each process and the exact window title name (e.g. `Nextsem - Google Chrome`).*
+* **Filtering Results (`/fi`):**
+  You can filter processes using query operators (like `gt` for greater than):
+  ```cmd
+  tasklist /fi "memusage gt 100000"
+  ```
+  *Lists only the processes that consume more than 100 MB of system RAM.*
+
+---
+
+## 🪓 Terminating Tasks with `taskkill`
+
+When a process becomes unresponsive, the **`taskkill`** utility forces it to close:
+
+### 1. Kill by Process ID (`/pid`)
+Every running process is assigned a unique numeric **PID** on boot. To terminate a specific instance:
+```cmd
+taskkill /pid 4902 /f
+```
+*(The `/f` switch forces the process to close instantly without prompting the user to save work).*
+
+### 2. Kill by Image Name (`/im`)
+If you want to close all instances of an application (like closing all open Notepad windows):
+```cmd
+taskkill /im notepad.exe /f
+```
+
+### 3. Tree Kill (`/t`)
+Some applications launch multiple sub-processes (child processes). To close a parent process and all of its child processes recursively, use the `/t` switch:
+```cmd
+taskkill /im chrome.exe /f /t
+```
+*This terminates Google Chrome and all of its active tabs and extensions at once.*
+
+<PillCommandBuilder
+  task="Force kill Chrome (chrome.exe) and all of its active sub-processes (child tasks) recursively."
+  pills={["taskkill", "/im", "chrome.exe", "/f", "/t", "tasklist", "/pid", "del"]}
+  correctSequence={["taskkill", "/im", "chrome.exe", "/f", "/t"]}
+  terminalOutput="SUCCESS: The process 'chrome.exe' with PID 8940 (child process of PID 2012) has been terminated."
+  explanation="Correct! We use taskkill to stop tasks, /im to filter by image name (chrome.exe), /f to force execution, and /t to terminate all sub-processes recursively."
+/>
+
+> 🏎️ **Developer Joke:** Why did explorer.exe get a ticket? Because it was caught speeding with too many background threads! 🚓👮
+
+---
+
+## 💻 Practice Terminal Drill
+
+Choose how you want to complete your practice drill:
+
+### ⚡ Option A: Quick-Run Simulator (Recommended)
+Click the pills below to execute the drill commands automatically:
+
+<CommandLineRunner
+  commands={[
+    { input: "tasklist", output: "Image Name                     PID Session Name        Session#    Mem Usage\n========================= ======== ================ =========== ============\nSystem Idle Process              0 Services                   0          8 K\nSystem                           4 Services                   0        108 K\nexplorer.exe                  2012 Console                    1     84,240 K\nlaggy-process.exe             4902 Console                    1     12,500 K\ncmd.exe                       1148 Console                    1      4,120 K", explanation: "Lists all currently active processes and their Process IDs (PIDs)." },
+    { input: "taskkill /pid 4902 /f /t", output: "SUCCESS: The process with PID 4902 (child process of PID 2012) has been terminated.", explanation: "Forcefully (/f) kills the process with PID 4902 along with its process tree (/t)." }
+  ]}
+/>
+
+### 🛠️ Option B: Open-Ended Terminal Sandbox
+If you want to manually type these commands yourself, launch the full system simulator below:
+
+<TabbedOS />
+
+---
+
+## 🏆 Lesson Check
+Check your process management knowledge below:
+
+<DragDropQuestion
+  questionId="cmd-taskkill"
+  text="To force close all instances of the application 'word.exe' and all child tasks started by it, run __________."
+  correctOption="taskkill /im word.exe /f /t"
+  options="taskkill /im word.exe /f /t, taskkill /pid word.exe /f, del word.exe /f /t, tasklist /im word.exe /t"
+  explanation="taskkill with the /im switch targets the process name, /f forces the close, and /t kills child processes recursively."
+/>

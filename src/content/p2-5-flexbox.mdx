@@ -1,0 +1,47 @@
+---
+title: "P2.5: CSS Flexbox Layouts"
+description: "Mastering flex containers, alignment, wrap flows, and responsive grids."
+---
+
+# P2.5: CSS Flexbox Layouts
+
+Flexbox (Flexible Box Layout) is a 1D layout model that makes it incredibly easy to align elements, distribute space, and manage layouts.
+
+---
+
+## 1. Container & Child Mechanics
+By applying `display: flex;` to a parent container, its children automatically become flexible elements:
+* **justify-content:** Aligns items along the main horizontal axis (e.g., center, space-between).
+* **align-items:** Aligns items along the cross vertical axis (e.g., center, stretch).
+* **flex-direction:** Dictates primary flow direction (row, column).
+
+<GraphBar
+  title="Common CSS Layout Engines Usage"
+  subtitle="Percentage of professional websites utilizing modern layout properties."
+  items={[
+    { label: "Flexbox (display: flex)", value: 92, displayValue: "92%" },
+    { label: "CSS Grid (display: grid)", value: 68, displayValue: "68%" },
+    { label: "Legacy (Float / Inline-Block)", value: 14, displayValue: "14%" }
+  ]}
+/>
+
+---
+
+<DeveloperProfile
+  name="Rachel Andrew"
+  role="CSS Working Group Invitee"
+  salary="₹70 Lakhs/yr equivalent"
+  company="Smashing Magazine"
+  experience="16 Years"
+  avatar="🍱"
+  photoUrl="https://github.com/rachelandrew.png"
+  profileUrl="https://github.com/rachelandrew"
+  stack="Flexbox specs, CSS Layout, Web Standards"
+  quote="Flexbox is perfect for rows, headers, sidebars, and component level alignments. It is best used for 1-dimensional layouts. Combine it with gap for clean item spacing!"
+/>
+
+---
+
+## 🎓 Practice Assignment
+1. Build a navigation bar with a logo on the left and links on the right using Flexbox.
+2. Use `justify-content: space-between` and `align-items: center`.

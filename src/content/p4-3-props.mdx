@@ -1,0 +1,113 @@
+---
+title: "P4.3: Props"
+description: "Mastering custom properties (Props), read-only constraints, object destructuring, and props defaults."
+---
+
+# P4.3: Props
+
+React components can receive dynamic input parameters called **Props** (short for properties). Props allow us to make our components reusable by customizing their content.
+
+---
+
+## 1. What are Props?
+
+Props are arguments passed into React components. Just like standard HTML elements accept attributes (like `<a href="...">`), React components can accept custom attributes:
+
+```jsx
+// 1. Parent component passes props
+function App() {
+  return (
+    <div className="flex gap-4">
+      <UserProfileCard username="Manoj" role="Full Stack Developer" />
+      <UserProfileCard username="Kent" role="React Core Expert" />
+    </div>
+  );
+}
+```
+
+---
+
+## 2. Reading Props inside a Child Component
+
+Props are passed into the component function as a single object parameter. You can read properties directly from this object or use JavaScript destructuring (recommended).
+
+### Option A: Standard Object Access
+```jsx
+function UserProfileCard(props) {
+  return (
+    <div className="p-4 bg-slate-900 border rounded-xl">
+      <h3>{props.username}</h3>
+      <p>{props.role}</p>
+    </div>
+  );
+}
+```
+
+### Option B: Destructuring (Recommended)
+Destructuring extracts the properties directly into variables, making your code cleaner and easier to read.
+```jsx
+function UserProfileCard({ username, role }) {
+  return (
+    <div className="p-4 bg-slate-900 border rounded-xl">
+      <h3>{username}</h3>
+      <p>{role}</p>
+    </div>
+  );
+}
+```
+
+---
+
+## 3. Props are Immutables (Read-Only)
+
+> [!IMPORTANT]
+> **Props are Read-Only!**
+> A component must never modify its own props. If you need to change data dynamically inside a component, you must use **State** instead of Props.
+
+```jsx
+// ❌ WRONG (Never edit props directly!)
+function UserProfileCard(props) {
+  props.username = "New Name"; 
+  return <div>{props.username}</div>;
+}
+```
+
+---
+
+## 4. Default Props and Fallback Values
+
+You can provide default values for props directly in the destructured arguments or using default values in javascript.
+
+```jsx
+function UserProfileCard({ username, role = "Student Developer" }) {
+  return (
+    <div className="p-4 border rounded-xl">
+      <h3>{username}</h3>
+      <p>{role}</p>
+    </div>
+  );
+}
+```
+
+---
+
+<DeveloperProfile
+  name="Kent C. Dodds"
+  role="JavaScript Engineer & Educator"
+  salary="₹65 Lakhs/yr equivalent"
+  company="Epic Web / Remix Team"
+  experience="10 Years"
+  avatar="👨‍💻"
+  photoUrl="https://github.com/kentcdodds.png"
+  profileUrl="https://github.com/kentcdodds"
+  stack="React, TypeScript, Testing Library, Component Patterns"
+  quote="Think of props like function arguments. Destructuring them directly in the parameter list makes it instantly clear what options your component accepts!"
+/>
+
+---
+
+## 🎓 Practice Assignment
+
+1. Create a `Button` component that accepts three props: `label`, `onClick`, and `themeColor` (e.g. "blue", "green").
+2. Set default values so that if no `themeColor` is passed, it renders in neutral slate gray.
+3. Nest two button instances in your main dashboard page and test click alerts.

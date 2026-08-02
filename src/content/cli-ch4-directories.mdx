@@ -1,0 +1,152 @@
+---
+title: "Chapter 4: Working with Directories"
+description: "Master folder navigation, dir search switches, and deleting directories using rmdir /s."
+---
+
+# Chapter 4: Working with Directories
+
+## 📂 Managing Directories & Navigation
+
+Managing directories (folders) without a mouse is one of the most fundamental skills in 🪟 Windows 11 system administration.
+
+* **`mkdir [name]`** (or `md`): Creates a new folder. Remember the **Zero-Space Rule** (use hyphens like `Week-1` instead of spaces).
+* **`cd [folder]`**: Steps inside a specific folder (relative path navigation).
+* **`cd ..`**: Moves backward one step to the parent directory.
+* **`cd \`**: Jumps all the way back to the root directory of the active drive.
+
+---
+
+## 🔍 Advanced Directory Audits with `dir`
+
+The `dir` command list files and folders, but you can refine its output using switches:
+
+| Switch | Action | Example |
+| :--- | :--- | :--- |
+| **`/P`** | Pauses output page-by-page (useful for very large folders). | `dir /p` |
+| **`/W`** | Lists directories in a wide multi-column layout. | `dir /w` |
+| **`/A`** | Filters files by specific attributes: | |
+| | * `/AD`: Lists **directories only** (hides files). | `dir /ad` |
+| | * `/AH`: Lists **hidden files only**. | `dir /ah` |
+| **`/O`** | Sorts files (e.g. `/ON` sorts by name, `/OS` sorts by size). | `dir /os` |
+| **`/S`** | Searches the current directory and all subdirectories for matching files. | `dir *.txt /s` |
+
+---
+
+## 🧹 Deleting Directories with `rmdir` (or `rd`)
+
+To remove a directory, use the `rmdir` command:
+```cmd
+rmdir Nextsem
+```
+
+> [!WARNING]
+> **Directory Not Empty:**
+> By default, `rmdir` will fail if the folder contains any files or other folders!
+
+To force-delete a folder and all of its contents (subfolders and files) recursively, you must use the `/s` (subdirectories) switch:
+```cmd
+rmdir Nextsem /s
+```
+<FolderTreeVisualizer
+  title="Directory Operations & Navigation Simulation"
+  initialTree={[
+    { name: "Users", type: "folder", path: "Users" },
+    { name: "Student", type: "folder", path: "Users/Student" }
+  ]}
+  steps={[
+    {
+      command: "mkdir Nextsem",
+      output: "Directory created successfully.",
+      explanation: "Creates a new folder named Nextsem in your active directory.",
+      highlightPath: "Users/Student/Nextsem",
+      treeState: [
+        { name: "Users", type: "folder", path: "Users" },
+        { name: "Student", type: "folder", path: "Users/Student" },
+        { name: "Nextsem", type: "folder", path: "Users/Student/Nextsem" }
+      ]
+    },
+    {
+      command: "cd Nextsem",
+      output: "C:\\Users\\Student\\Nextsem>",
+      explanation: "Steps inside the newly created Nextsem folder, shifting your working path.",
+      highlightPath: "Users/Student/Nextsem",
+      treeState: [
+        { name: "Users", type: "folder", path: "Users" },
+        { name: "Student", type: "folder", path: "Users/Student" },
+        { name: "Nextsem", type: "folder", path: "Users/Student/Nextsem" }
+      ]
+    },
+    {
+      command: "mkdir Week-1",
+      output: "Directory created successfully.",
+      explanation: "Creates a nested subdirectory named Week-1 inside the Nextsem folder.",
+      highlightPath: "Users/Student/Nextsem/Week-1",
+      treeState: [
+        { name: "Users", type: "folder", path: "Users" },
+        { name: "Student", type: "folder", path: "Users/Student" },
+        { name: "Nextsem", type: "folder", path: "Users/Student/Nextsem" },
+        { name: "Week-1", type: "folder", path: "Users/Student/Nextsem/Week-1" }
+      ]
+    },
+    {
+      command: "cd ..",
+      output: "C:\\Users\\Student>",
+      explanation: "Moves you backward one level to the parent directory (Student).",
+      highlightPath: "Users/Student",
+      treeState: [
+        { name: "Users", type: "folder", path: "Users" },
+        { name: "Student", type: "folder", path: "Users/Student" },
+        { name: "Nextsem", type: "folder", path: "Users/Student/Nextsem" },
+        { name: "Week-1", type: "folder", path: "Users/Student/Nextsem/Week-1" }
+      ]
+    },
+    {
+      command: "rmdir Nextsem /s /q",
+      output: "Tree structure removed.",
+      explanation: "Recursively (/s) and silently (/q) deletes the Nextsem folder along with all files and subfolders.",
+      highlightPath: "Users/Student",
+      treeState: [
+        { name: "Users", type: "folder", path: "Users" },
+        { name: "Student", type: "folder", path: "Users/Student" }
+      ]
+    }
+  ]}
+/>
+
+> 📁 **Developer Joke:** Why did the folder break up with the directory? It needed more space... but remember, at the CLI we use the **Zero-Space Rule**! 💔
+
+---
+
+## 💻 Practice Terminal Drill
+
+Choose how you want to complete your practice drill:
+
+### ⚡ Option A: Quick-Run Simulator (Recommended)
+Click the pills below to execute the drill commands automatically:
+
+<CommandLineRunner
+  commands={[
+    { input: "mkdir Nextsem\\Week-1", output: "Directory Nextsem\\Week-1 created successfully.", explanation: "Creates nested directories under the current path." },
+    { input: "cd Nextsem\\Week-1", output: "", explanation: "Changes the active working directory." },
+    { input: "cd", output: "C:\\Users\\Student\\Nextsem\\Week-1", explanation: "Prints the current working directory path." },
+    { input: "cd ..\\..", output: "", explanation: "Moves back two directory levels to the Desktop folder." }
+  ]}
+/>
+
+### 🛠️ Option B: Open-Ended Terminal Sandbox
+If you want to manually type these commands yourself, launch the full system simulator below:
+
+<TabbedOS />
+
+---
+
+## 🏆 Lesson Check
+Check your directory navigation knowledge below:
+
+<DragDropQuestion
+  questionId="cmd-cd-parent"
+  text="To delete a directory named 'old-project' along with all of its files and subfolders without prompts, run __________."
+  correctOption="rmdir old-project /s /q"
+  options="rmdir old-project /s /q, del old-project, rmdir old-project, rd old-project"
+  explanation="The /s switch deletes all files and subdirectories recursively, and the /q switch makes it run in quiet mode with no prompts."
+/>

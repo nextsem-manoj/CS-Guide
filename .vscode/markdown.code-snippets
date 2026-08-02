@@ -1,0 +1,42 @@
+{
+  "Bug Task": {
+    "prefix": "bug",
+    "body": "- [ ] **${1:Bug title}** — ${2:Description of the bug and fix}",
+    "description": "Add a new bug task item"
+  },
+  "Feature Task": {
+    "prefix": "feat",
+    "body": "- [ ] **${1:Feature title}** — ${2:Description and implementation plan}",
+    "description": "Add a new feature task item"
+  },
+  "Version Section": {
+    "prefix": "ver",
+    "body": "## 🚀 v${1:version} — ${2:Release Name}\n\n### Features\n- [ ] ${3:Feature 1}\n\n### Bug Fixes\n- [ ] ${4:Bug 1}",
+    "description": "Add a new version section"
+  },
+  "Checked Task": {
+    "prefix": "done",
+    "body": "- [x] **${1:Task}** — ✅ Completed",
+    "description": "Mark a task as done"
+  },
+  "Priority Section": {
+    "prefix": "p1",
+    "body": "### 🔴 Priority 1 — ${1:Section Name}\n\n- [ ] ${2:Task}",
+    "description": "Red priority section"
+  },
+  "Note Alert": {
+    "prefix": "note",
+    "body": "> **Note**: ${1:important note here}",
+    "description": "Add a note blockquote"
+  },
+  "File Reference": {
+    "prefix": "file",
+    "body": "`src/${1:path/to/file.tsx}`",
+    "description": "Reference a source file"
+  },
+  "Lesson Target": {
+    "prefix": "lesson",
+    "body": "- [ ] **${1:Subject} Lessons** — Complete ${2:100} lessons with multilingual MCQ, SEO slugs, Kid/Pro mode\n  - Files: `src/data/${3:subject}LessonsData.ts`",
+    "description": "Add a new lesson target"
+  }
+}

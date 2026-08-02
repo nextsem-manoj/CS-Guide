@@ -1,0 +1,91 @@
+---
+title: "Chapter 8: Networking"
+description: "Master TCP/IP network troubleshooting, local DNS flushing, route tracing, and network interface audits."
+---
+
+# Chapter 8: Networking
+
+## 🌐 Network Configuration & Diagnostics
+
+Troubleshooting network connectivity and configuring interfaces in 🪟 Windows 11 is handled by a set of command-line tools:
+
+### 📡 The `ipconfig` Command
+Displays active network adapter IP details.
+* **`ipconfig /all`**: Lists full configuration info including DHCP leases, DNS servers, and MAC address.
+* **`ipconfig /flushdns`**: Purges the local DNS resolver cache (crucial when a website changes IPs and you are stuck seeing the old cached site!).
+* **`ipconfig /release`** & **`ipconfig /renew`**: Releases and requests a new IP address from the DHCP server.
+
+### ⚡ The `ping` Command
+Sends ICMP Echo Requests to verify a remote server's availability and latency:
+* **`ping -t [address]`**: Pings the target host continuously (press `Ctrl` + `C` to stop and view statistics).
+* **`ping -n 10 [address]`**: Pings the address exactly 10 times.
+* **`ping -a [IP]`**: Attempts to resolve the IP address to a computer hostname.
+
+---
+
+## 🧭 Advanced Route Tracing & Domain Lookups
+
+### 🗺️ The `tracert` Command
+Traces the route packets take to reach a destination host, showing every intermediate router (hop) and transition latency:
+```cmd
+tracert nextsem.online
+```
+*Useful for finding exactly where a network connection is failing or which router is causing lag.*
+
+### 🔍 The `nslookup` Command
+Queries the Domain Name System (DNS) server to find the IP address mapping for a domain or check active nameservers:
+```cmd
+nslookup nextsem.online
+```
+
+---
+
+## 🔍 Network Audits: Ports, MACs, & Netsh
+
+### 🔌 The `netstat` Command
+Displays active network connections, routing tables, and port states:
+* **`netstat -a`**: Displays all active TCP connections and listening UDP/TCP ports.
+* **`netstat -n`**: Shows addresses and port numbers numerically (faster since it skips name lookups).
+
+### 🏷️ The `getmac` Command
+Quickly lists the Media Access Control (MAC) physical addresses of all network adapters on your device.
+
+### ⚙️ The `netsh` Command
+**Network Shell** is a command-line scripting utility that lets you display or modify the network configuration of a computer (e.g. configuring static IPs, modifying 🪟 Windows Defender Firewall rules).
+
+> 💔 **Developer Joke:** Why did the local computer break up with the remote server? It said: "I've been pinging you for hours, but you're giving me nothing but high latency!" 🌐💥
+
+---
+
+## 💻 Practice Terminal Drill
+
+Choose how you want to complete your practice drill:
+
+### ⚡ Option A: Quick-Run Simulator (Recommended)
+Click the pills below to execute the drill commands automatically:
+
+<CommandLineRunner
+  commands={[
+    { input: "ipconfig /flushdns", output: "Windows IP Configuration\n\nSuccessfully flushed the DNS Resolver Cache.", explanation: "Clears out the local system domain name resolution cache." },
+    { input: "ping 8.8.8.8", output: "Pinging 8.8.8.8 with 32 bytes of data:\nReply from 8.8.8.8: bytes=32 time=12ms TTL=117\nReply from 8.8.8.8: bytes=32 time=10ms TTL=117\n\nPing statistics for 8.8.8.8:\n    Packets: Sent = 2, Received = 2, Lost = 0 (0% loss),\nApproximate round trip times in milli-seconds:\n    Minimum = 10ms, Maximum = 12ms, Average = 11ms", explanation: "Sends ICMP echo packets to test network connectivity and latency." },
+    { input: "nslookup nextsem.online", output: "Server:  google-public-dns-a.google.com\nAddress:  8.8.8.8\n\nNon-authoritative answer:\nName:    nextsem.online\nAddress:  199.36.158.100", explanation: "Queries domain name servers to look up nextsem.online's IP address." }
+  ]}
+/>
+
+### 🛠️ Option B: Open-Ended Terminal Sandbox
+If you want to manually type these commands yourself, launch the full system simulator below:
+
+<TabbedOS />
+
+---
+
+## 🏆 Lesson Check
+Check your understanding of network diagnostic commands below:
+
+<DragDropQuestion
+  questionId="cmd-ping"
+  text="To flush the local DNS resolver cache on a Windows machine to fix domain loading issues, execute __________."
+  correctOption="ipconfig /flushdns"
+  options="ipconfig /flushdns, ipconfig /release, nslookup /flush, netstat -a"
+  explanation="ipconfig /flushdns is the Windows command utility designed to clear the local DNS lookup cache."
+/>

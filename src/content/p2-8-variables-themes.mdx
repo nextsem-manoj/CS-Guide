@@ -1,0 +1,45 @@
+---
+title: "P2.8: CSS Variables & Themes"
+description: "Structuring custom properties, root tokens, and implementing light/dark mode toggles."
+---
+
+# P2.8: CSS Variables & Themes
+
+CSS Variables (Custom Properties) allow you to store values and reuse them throughout stylesheets, enabling easy dark/light mode toggling.
+
+---
+
+## 1. Declaring CSS Variables
+Variables are declared inside the `:root` pseudo-class and accessed using `var()`.
+
+```css
+:root {
+  --primary-color: #39FF14;
+  --bg-color: #060c18;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--primary-color);
+}
+```
+
+<DeveloperProfile
+  name="Mark Dalgleish"
+  role="Creator of CSS Modules"
+  salary="₹88 Lakhs/yr equivalent"
+  company="Vercel"
+  experience="13 Years"
+  avatar="🌓"
+  photoUrl="https://github.com/markdalgleish.png"
+  profileUrl="https://github.com/markdalgleish"
+  stack="CSS Variables, Dark Mode theme tokens, CSS Modules"
+  quote="Dynamic styling and theming used to require heavy JS computations. Now, CSS variables allow you to toggle themes on the client instantly with zero layout re-renders."
+/>
+
+---
+
+## 🎓 Practice Assignment
+1. Define primary colors using CSS variables.
+2. Build a basic card component styled with those variables.
+3. Write a stylesheet override that changes those variable values when the page body has a `.dark` class.

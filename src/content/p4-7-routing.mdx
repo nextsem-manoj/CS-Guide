@@ -1,0 +1,112 @@
+---
+title: "P4.7: React Routing"
+description: "Understanding Single Page Applications (SPAs), React Router navigation, and dynamic URL parameter handling."
+---
+
+# P4.7: React Routing
+
+In traditional websites, navigating between pages requires the browser to reload the entire HTML page. Modern React applications are built as **Single Page Applications (SPAs)**. They load the page once, and then swap out components dynamically when the URL changes.
+
+To handle page transitions without reloading the page, we use a routing library like **React Router** or **Next.js Routing**.
+
+---
+
+## 1. Traditional vs Client-Side Routing
+
+* **Traditional Routing**: User clicks link -> Browser requests new page -> Server returns HTML -> Full page refresh (slow, white flash).
+* **Client-Side Routing**: User clicks link -> React intercept click -> Updates the URL -> Swaps out matching component dynamically (instant, smooth).
+
+<GraphBar
+  title="Client-Side Routing Speed Increase"
+  subtitle="Load times (ms) for sub-page transitions."
+  items={[
+    { label: "Traditional Server Refresh", value: 92, displayValue: "920ms" },
+    { label: "React Client Navigation", value: 5, displayValue: "50ms (Instant)" }
+  ]}
+/>
+
+---
+
+## 2. Using React Router Components
+
+React Router provides three core components to handle client-side routing:
+
+### 1. `BrowserRouter`
+Wraps your entire application to enable URL tracking.
+
+### 2. `Routes` & `Route`
+Defines the mapping between URL paths and React components.
+
+```jsx
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Home from './Home';
+import About from './About';
+
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+      </Routes>
+    </BrowserRouter>
+  );
+}
+```
+
+### 3. `Link` instead of `<a>`
+Always use the `<Link>` component for internal navigation. Standard `<a href="...">` anchor tags will trigger a full browser page reload, defeating the purpose of an SPA!
+
+```jsx
+import { Link } from 'react-router-dom';
+
+// ❌ WRONG (Triggers full reload)
+<a href="/about">About Us</a>
+
+//  RIGHT (Client-side routing)
+<Link to="/about">About Us</Link>
+```
+
+---
+
+## 3. Reading Dynamic Parameters
+
+You can capture values from the URL (like user IDs or chapter names) by declaring a wildcard path:
+
+```jsx
+// Route mapping
+<Route path="/user/:userId" element={<UserProfile />} />
+```
+
+Inside the component, use the `useParams` Hook to read the value:
+```jsx
+import { useParams } from 'react-router-dom';
+
+function UserProfile() {
+  const { userId } = useParams();
+  return <div>Loading profile for user #{userId}...</div>;
+}
+```
+
+---
+
+<DeveloperProfile
+  name="Kent C. Dodds"
+  role="JavaScript Engineer & Educator"
+  salary="₹65 Lakhs/yr equivalent"
+  company="Epic Web / Remix Team"
+  experience="10 Years"
+  avatar="👨‍💻"
+  photoUrl="https://github.com/kentcdodds.png"
+  profileUrl="https://github.com/kentcdodds"
+  stack="React, TypeScript, Testing Library, Component Patterns"
+  quote="Client-side routing is what makes modern web apps feel as fast as native mobile applications. Keep your URL structure clean and descriptive!"
+/>
+
+---
+
+## 🎓 Practice Assignment
+
+1. Set up a basic React app structure with two views: `Home` and `Dashboard`.
+2. Configure a router using `Routes` and navigation layout links.
+3. Verify in your browser devtools that clicking navigation links updates the URL without triggering a full page reload.

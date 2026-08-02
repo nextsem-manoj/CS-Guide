@@ -1,0 +1,107 @@
+---
+title: "P5.1: Node.js & Express Basics"
+description: "Understanding the Node.js JavaScript runtime, NPM package ecosystem, and configuring a basic Express HTTP server."
+---
+
+# P5.1: Node.js & Express Basics
+
+Until now, we have written JavaScript code that runs exclusively inside the browser DOM. **Node.js** allows us to run JavaScript on our local computer or backend servers, opening the door to full-stack development!
+
+---
+
+## 1. What is Node.js?
+
+**Node.js** is an open-source, cross-platform JavaScript runtime environment built on Google Chrome's V8 engine. It executes JavaScript code outside of a web browser.
+
+### Key Characteristics:
+* **Asynchronous and Event-Driven**: Node.js uses a single-threaded event loop to handle thousands of concurrent requests without blocking operations.
+* **No Browser APIs**: Since Node.js runs on a server, there is no `window`, `document`, or `alert()`. Instead, you gain access to server APIs like `fs` (File System) and `path`.
+
+---
+
+## 2. Package Management with NPM
+
+**NPM** (Node Package Manager) is the default package manager for Node.js. It allows you to download and manage third-party libraries (packages) for your project.
+
+To start a new Node.js project, run this command in your terminal:
+```bash
+npm init -y
+```
+This generates a `package.json` file, which tracks your project's dependencies and configuration metadata.
+
+---
+
+## 3. Creating a Server with Express
+
+**Express** is a minimal and flexible web application framework for Node.js, providing a robust set of features for building web servers and APIs.
+
+### Step 1: Install Express
+Run the install command in your project folder:
+```bash
+npm install express
+```
+
+### Step 2: Write your server script (`server.js`)
+Create a file named `server.js` and write the setup:
+
+```javascript
+const express = require('express');
+const app = express();
+const PORT = 5000;
+
+// Define a simple root route
+app.get('/', (req, res) => {
+  res.send('Hello from the Node.js Server!');
+});
+
+// Start the server listening on PORT
+app.listen(PORT, () => {
+  console.log(`Server is running at http://localhost:${PORT}`);
+});
+```
+
+### Step 3: Run your server
+Start the script in your terminal:
+```bash
+node server.js
+```
+Open `http://localhost:5000` in your web browser, and you will see your server response!
+
+---
+
+## 4. Node.js Event Loop Performance
+
+The Node.js event loop handles operations asynchronously, making it highly efficient for I/O-intensive web servers.
+
+<GraphBar
+  title="Web Server Concurrent Request Handling"
+  subtitle="Number of requests handled per second under high I/O loads."
+  items={[
+    { label: "Traditional Multi-threaded (PHP/Apache)", value: 45, displayValue: "4,500 req/sec" },
+    { label: "Node.js Single-threaded Event Loop", value: 92, displayValue: "9,200 req/sec" }
+  ]}
+/>
+
+---
+
+<DeveloperProfile
+  name="Ryan Dahl"
+  role="Creator of Node.js & Deno"
+  salary="₹95 Lakhs/yr equivalent"
+  company="Deno Land / Former Joyent"
+  experience="17 Years"
+  avatar="🦕"
+  photoUrl="https://github.com/ry.png"
+  profileUrl="https://github.com/ry"
+  stack="C++, JavaScript, Event Loops, V8 Engine, Rust"
+  quote="Node.js was designed to build scalable network applications. By utilizing non-blocking callbacks, a single server thread can handle massive network volumes with minimal memory footprints!"
+/>
+
+---
+
+## 🎓 Practice Assignment
+
+1. Initialize a new Node.js project using `npm init -y` inside a test directory.
+2. Install the `express` library.
+3. Write a server script that returns a welcome message at route `/` and your name at route `/about`.
+4. Run the server and test both routes in your web browser.

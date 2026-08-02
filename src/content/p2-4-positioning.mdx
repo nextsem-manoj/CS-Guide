@@ -1,0 +1,173 @@
+---
+title: "P2.4: Absolute & Sticky Positions"
+description: "Mastering CSS layout positioning schemes (static, relative, absolute, fixed, sticky), stack context (z-index), floats, and clears."
+---
+
+# P2.4: Absolute & Sticky Positioning
+
+Sizing element boxes is only the first step. To build professional webpages, you must master how to position those boxes on the screen. In this lesson, we will cover CSS positioning schemes and floating behaviors.
+
+---
+
+## 1. CSS Positioning Schemes
+
+The `position` property determines how the browser calculates the physical coordinates of an element box. It uses **box offset properties (`top`, `bottom`, `left`, `right`)** to move elements from their default positions.
+
+### Normal Flow (`position: static`)
+The default positioning. Elements render in their natural source order. Block elements start on a new line, and inline elements flow next to each other. Box offset properties (`top`, `left`, etc.) have no effect on static elements.
+
+### Relative Positioning (`position: relative`)
+Moves an element relative to its **natural position in normal flow**. 
+* The space the element originally occupied remains in the page flow (renders as an empty blank space).
+* Surrounding elements do not move to fill the gap.
+
+```css
+.moved-box {
+  position: relative;
+  top: 10px;  /* Moves the box 10px down from its natural top edge */
+  left: 20px; /* Moves the box 20px right from its natural left edge */
+}
+```
+
+### Absolute Positioning (`position: absolute`)
+Positions the element relative to its **nearest positioned ancestor** (any ancestor element that has a position other than static, such as `position: relative`).
+* The element is taken **completely out of normal document flow**.
+* Adjacent elements act as if the absolute element does not exist and collapse to fill its original space.
+
+```css
+/* Container must be positioned relative to act as coordinate root */
+.container {
+  position: relative;
+}
+.close-button {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+}
+```
+
+### Fixed Positioning (`position: fixed`)
+Positions the element relative to the **browser viewport**. 
+* The element is taken out of normal flow and stays in the **exact same spot on screen** even when the page is scrolled.
+* Used for sticky headers, floating chat buttons, and bottom navigations.
+
+```css
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+}
+```
+
+### Sticky Positioning (`position: sticky`)
+A modern hybrid of relative and fixed. The element behaves like `position: relative` until it reaches a specified scroll threshold, where it "sticks" and behaves like `position: fixed`.
+```css
+.table-header {
+  position: sticky;
+  top: 0; /* Sticks to the top of the viewport when scrolled to */
+}
+```
+
+---
+
+## 2. Layout Positioning Usage
+
+Positioning rules form the structural foundation of headers, sidebars, popups, and dropdown menus.
+
+<GraphBar
+  title="Layout Stability Improvement"
+  subtitle="Average reduction in layout shifts after switching to modern positioning."
+  items={[
+    { label: "Float-based Hacks", value: 30, displayValue: "High Shift Rate" },
+    { label: "Absolute Layouts", value: 65, displayValue: "Stable Coordinates" },
+    { label: "Sticky Navbars", value: 95, displayValue: "Flawless UX" }
+  ]}
+/>
+
+---
+
+<DeveloperProfile
+  name="Rachel Andrew"
+  role="Technical Editor & CSS WG Member"
+  salary="₹80 Lakhs/yr equivalent"
+  company="Smashing Magazine"
+  experience="17 Years"
+  avatar="👩‍💻"
+  photoUrl="https://github.com/rachelandrew.png"
+  profileUrl="https://github.com/rachelandrew"
+  stack="CSS layout specs, layout engines, grid design"
+  quote="Floats were designed for wrapping text around images. Using floats for full webpage layouts was a hack. Master relative and absolute positioning, and use Flexbox/Grid for grids!"
+/>
+
+---
+
+## 3. Overlapping Elements & Stack Context (`z-index`)
+
+When you use relative, absolute, fixed, or sticky positioning, elements can overlap. By default, elements that appear later in the HTML source code stack on top of earlier ones.
+
+To explicitly control this vertical stacking order, use the `z-index` property.
+* `z-index` **only works on positioned elements** (elements with `position` set to `relative`, `absolute`, `fixed`, or `sticky`).
+* Higher numbers stack in front of lower numbers. Can be negative.
+
+```css
+.sidebar {
+  position: fixed;
+  z-index: 100; /* Sits on top of main content */
+}
+.modal-overlay {
+  position: fixed;
+  z-index: 999; /* Sits on top of everything, including sidebar */
+}
+```
+
+---
+
+## 4. Floats & Clears
+
+### The Float Property (`float`)
+Takes an element out of normal flow and pushes it as far left or right of its containing block as possible. Text and other inline elements flow (wrap) around the floated box.
+* Values: `left`, `right`, `none`.
+* *Requirement:* Floated elements **must have a defined `width`** (otherwise, the box collapses to fit its content, and adjacent text may not wrap cleanly).
+
+```css
+.thumbnail {
+  float: left;
+  width: 150px;
+  margin-right: 15px;
+}
+```
+
+### The Clear Property (`clear`)
+Prevents subsequent elements from wrapping around floated boxes. It forces the element to move down below the floated box.
+* Values: `left` (clears left floats), `right` (clears right floats), `both` (clears both directions).
+
+```css
+.footer {
+  clear: both; /* Forces footer to sit below floated sidebar and content blocks */
+}
+```
+
+---
+
+## 5. Parent Collapsing & Clearfix
+
+If a parent container *only* contains floated child elements, the browser treats the parent as if its height is zero. The border and background of the parent collapse, causing child elements to spill out.
+
+### The CSS Overflow Fix:
+To force the parent container to automatically wrap around all of its floated children, add these rules to the parent:
+```css
+.container {
+  overflow: auto; /* Triggers the browser to calculate container height including floats */
+  width: 100%;    /* Ensures compatibility across browsers */
+}
+```
+
+---
+
+## 🎓 Practice Assignment
+1. Create a page `layout.html` and a stylesheet `styles.css`.
+2. Construct a parent card (`position: relative`) containing an absolute positioned badge in the top-right corner.
+3. Add a header navigation bar that stays fixed at the top of the viewport (`position: fixed`) when you scroll.
+4. Float an image to the left inside a paragraph text block. Observe how the text flows around it.
+5. Add a footer block with `clear: both` at the bottom of the page.

@@ -1,0 +1,99 @@
+---
+title: "CLI.1: CLI Introduction & Desktop Navigation"
+description: "Learn 🪟 Windows 11 desktop navigation, GUI vs. CLI differences, history of command prompts, and window configuration."
+---
+
+# 💻 CLI.1: CLI Introduction & Desktop Navigation
+
+Welcome to the command center! 🚀 Before we write any HTML or CSS, let's learn how to command our operating system directly using text commands.
+
+---
+
+## 🪟 Windows 11 Desktop Navigation
+
+In 🪟 Windows 11, navigation is typically visual. We use the centered **Start Button ⊞** (or press the ⌨️ `Windows Key` on the keyboard) to find settings, apps, and files. 
+
+However, developers prefer speed. Rather than navigating menus with a mouse, we search for and launch the **Command Prompt (cmd.exe)** to get a direct text-based gateway to the operating system.
+
+### 🔍 Launching the Command Prompt
+Watch this automated search loop to see how simple it is to find the terminal in 🪟 Windows 11:
+
+<TerminalTypingAnimation />
+
+---
+
+## 🆚 GUI vs. CLI: The Ultimate Showdown
+
+Most computer users navigate via a **Graphical User Interface (GUI)**. As developers, we unlock the **Command Line Interface (CLI)**. Here is how they stack up:
+
+<div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-6">
+  <div className="p-5 rounded-2xl bg-blue-500/5 border border-blue-500/10 hover:border-blue-500/20 transition-all">
+    <div className="text-sm font-bold text-white mb-2 flex items-center gap-2">
+      <span>🖱️</span> Graphical User Interface (GUI)
+    </div>
+    <ul className="text-xs text-slate-400 space-y-2 list-disc list-inside leading-relaxed">
+      <li>Built for **point-and-click** ease of use</li>
+      <li>Uses windows, folders, and visual icons</li>
+      <li>Highly repetitive for multi-file operations</li>
+      <li>Requires constant mouse movement</li>
+    </ul>
+  </div>
+  
+  <div className="p-5 rounded-2xl bg-emerald-500/5 border border-emerald-500/10 hover:border-emerald-500/20 transition-all">
+    <div className="text-sm font-bold text-white mb-2 flex items-center gap-2">
+      <span>⌨️</span> Command Line Interface (CLI)
+    </div>
+    <ul className="text-xs text-slate-400 space-y-2 list-disc list-inside leading-relaxed">
+      <li>Built for **keyboard-only** automation & speed</li>
+      <li>Uses typed text commands & direct system calls</li>
+      <li>Performs complex multi-file tasks in **0.1 seconds**</li>
+      <li>Integrates with custom automation scripts</li>
+    </ul>
+  </div>
+</div>
+
+> 💡 **Developer Joke:** Why do programmers prefer dark mode terminals? Because light attracts bugs! 🐜
+
+---
+
+## ⏳ Back to the Roots: The History of MS-DOS
+
+Before the colorful windows of modern 🪟 Windows 11, everything was text-based. ⊞ Windows owes its core Command Line utilities to **MS-DOS** (Microsoft Disk Operating System) from the 1980s. 
+
+Explore the historical timeline below to see how MS-DOS shaped modern computing:
+
+<WindowsHistoryTimeline />
+
+---
+
+## ⚙️ How the Command Interpreter Works
+
+When you type a command inside the terminal, the **Command Interpreter** parses your instruction, translates it to binary machine code, and requests the system kernel to perform the action.
+
+Interact with the parser below to see how standard commands are translated:
+
+<CommandInterpreterSimulation />
+
+---
+
+## 🛠️ CLI Mechanics & Boot Modes
+
+🪟 Windows 11 can boot in different modes. While normal boot yields the GUI, troubleshooting mode boots directly into the Command Line.
+
+Learn about boot environments and test core CLI mechanics like casing, history search, and copy-paste buffers below:
+
+<CommandLineBasicsSimulation />
+
+---
+
+## 🎯 Quick Concept Check-in
+
+Let's do a fast verification to solidify your folder creation muscle memory:
+
+<DragDropQuestion
+  questionId="cli_mkdir_check"
+  text="To create a new folder named Nextsem, we write: __________ Nextsem"
+  options="['mkdir', 'cd', 'dir', 'ver']"
+  correctOption="mkdir"
+  explanation="mkdir (make directory) allocates a new block on the hard drive storage table to register a new folder index."
+/>

@@ -1,0 +1,152 @@
+---
+title: "Chapter 7: Copying, Moving, Renaming, and Deleting Files"
+description: "Learn advanced file copy, move, rename, and delete options using COPY, MOVE, DEL, and XCOPY commands."
+---
+
+# Chapter 7: Copying, Moving, Renaming, and Deleting Files
+
+## 📄 File Manipulation Operations
+
+Managing system records at the command line requires familiarity with the primary file operations:
+
+* 📑 **`copy [source] [destination]`**: Duplicates a file to a new name or directory path.
+* 📦 **`move [source] [destination]`**: Moves a file from its current path to another folder, or renames a directory.
+* 🏷️ **`ren [oldname] [newname]`**: Renames a file or folder (short for *rename*).
+* 🗑️ **`del [filename]`** (or `erase`): Deletes files.
+* 📄 **`type [filename]`**: Displays the text content of a file on-screen.
+
+---
+
+## 🛠️ Advanced Operation Switches
+
+For bulk automation, these commands support powerful parameters to control behavior and prompt prompts:
+
+### Overwriting Confirmation Controls (`/Y`)
+By default, if you copy or move a file to a destination where a file with the same name already exists, 🪟 Windows asks if you want to overwrite it.
+* **`/Y`**: Suppresses the prompt, automatically overwriting any existing files.
+* **`/-Y`**: Explicitly forces the confirmation prompt.
+
+```cmd
+copy /Y index.html backup.html
+```
+
+### Force Deleting Read-Only Files (`/F` and `/S` in `del`)
+By default, the `del` command fails with `"Access is denied"` if a file is marked with the Read-Only (+r) attribute.
+* **`/F`**: Forces deletion of read-only files.
+* **`/S`**: Deletes specified files from the current folder and all subdirectories.
+* **`/Q`**: Runs in quiet mode (does not prompt you before deleting wildcards).
+
+```cmd
+del /f /s /q test-logs\*.log
+```
+
+---
+
+## 📂 Bulk Folder Duplication with `xcopy`
+
+The standard `copy` command only duplicates *individual files*, not folders. To copy folders, subfolders, and all contained files, use **`xcopy`**:
+
+* **`/S`**: Copies directories and subdirectories, *excluding* empty ones.
+* **`/E`**: Copies directories and subdirectories, *including* empty ones.
+* **`/Y`**: Suppresses prompts to overwrite files.
+
+```cmd
+xcopy Nextsem Backups\Nextsem-Backup /E /Y
+```
+
+<FolderTreeVisualizer
+  title="File Manipulation Operations Visualizer"
+  initialTree={[
+    { name: "Users", type: "folder", path: "Users" },
+    { name: "Student", type: "folder", path: "Users/Student" }
+  ]}
+  steps={[
+    {
+      command: "echo hello > index.html",
+      output: "index.html created successfully.",
+      explanation: "Creates a new text file named index.html containing the word 'hello'.",
+      highlightPath: "Users/Student/index.html",
+      treeState: [
+        { name: "Users", type: "folder", path: "Users" },
+        { name: "Student", type: "folder", path: "Users/Student" },
+        { name: "index.html", type: "file", path: "Users/Student/index.html" }
+      ]
+    },
+    {
+      command: "copy index.html backup.html",
+      output: "        1 file(s) copied.",
+      explanation: "Duplicates the contents of index.html into a new file named backup.html.",
+      highlightPath: "Users/Student/backup.html",
+      treeState: [
+        { name: "Users", type: "folder", path: "Users" },
+        { name: "Student", type: "folder", path: "Users/Student" },
+        { name: "index.html", type: "file", path: "Users/Student/index.html" },
+        { name: "backup.html", type: "file", path: "Users/Student/backup.html" }
+      ]
+    },
+    {
+      command: "ren backup.html archive.html",
+      output: "File renamed successfully.",
+      explanation: "Renames backup.html to archive.html, preserving the file contents.",
+      highlightPath: "Users/Student/archive.html",
+      treeState: [
+        { name: "Users", type: "folder", path: "Users" },
+        { name: "Student", type: "folder", path: "Users/Student" },
+        { name: "index.html", type: "file", path: "Users/Student/index.html" },
+        { name: "archive.html", type: "file", path: "Users/Student/archive.html" }
+      ]
+    },
+    {
+      command: "del index.html",
+      output: "",
+      explanation: "Permanently deletes the original index.html file from your active directory.",
+      highlightPath: "Users/Student/archive.html",
+      treeState: [
+        { name: "Users", type: "folder", path: "Users" },
+        { name: "Student", type: "folder", path: "Users/Student" },
+        { name: "archive.html", type: "file", path: "Users/Student/archive.html" }
+      ]
+    }
+  ]}
+/>
+
+> ⚙️ **Modern Alternative:** In newer versions of 🪟 Windows, you can also use **`robocopy`** (Robust File Copy), which is even faster and supports automatic resume on network drops! 🚀
+
+> 🖼️ **Developer Joke:** Why did the developer move index.html to the assets folder? Because it wanted a change of scenery, but didn't want to lose its identity! 🏕️
+
+---
+
+## 💻 Practice Terminal Drill
+
+Choose how you want to complete your practice drill:
+
+### ⚡ Option A: Quick-Run Simulator (Recommended)
+Click the pills below to execute the drill commands automatically:
+
+<CommandLineRunner
+  commands={[
+    { input: "echo hello > index.html", output: "", explanation: "Creates a new file index.html with content 'hello'." },
+    { input: "copy index.html backup.html", output: "        1 file(s) copied.", explanation: "Duplicates index.html into a new file backup.html." },
+    { input: "ren backup.html archive.html", output: "", explanation: "Renames backup.html to archive.html." },
+    { input: "attrib +r archive.html", output: "", explanation: "Sets the read-only attribute (+r) on archive.html." },
+    { input: "del /f archive.html", output: "", explanation: "Force-deletes (/f) the read-only archive.html file." }
+  ]}
+/>
+
+### 🛠️ Option B: Open-Ended Terminal Sandbox
+If you want to manually type these commands yourself, launch the full system simulator below:
+
+<TabbedOS />
+
+---
+
+## 🏆 Lesson Check
+Check your understanding of file operations below:
+
+<DragDropQuestion
+  questionId="cmd-del-block"
+  text="To copy a directory named 'src' to 'dest' including all subfolders (even empty ones) without prompts, run __________."
+  correctOption="xcopy src dest /E /Y"
+  options="xcopy src dest /E /Y, copy src dest, move src dest /y, del src dest /s"
+  explanation="The xcopy command with /E copies all folders recursively including empty ones, and /Y suppresses overwrite confirmations."
+/>

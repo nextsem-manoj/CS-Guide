@@ -1,0 +1,112 @@
+---
+title: "P5.2: REST APIs"
+description: "Mastering REST architectural constraints, HTTP routing methods (GET, POST, PUT, DELETE), and parsing JSON bodies."
+---
+
+# P5.2: REST APIs
+
+A **REST API** (Representational State Transfer Application Programming Interface) is an architectural style that allows different computer programs to communicate with each other over the web.
+
+In this lesson, we will build a complete, standard REST API using Express that handles CRUD (Create, Read, Update, Delete) operations.
+
+---
+
+## 1. Core HTTP Methods
+
+REST APIs use standard HTTP request methods to perform database operations:
+
+| HTTP Method | API Operation | CRUD Meaning | Example Path |
+| :--- | :--- | :--- | :--- |
+| **GET** | Read Data | Retrieve resources | `/api/books` |
+| **POST** | Create Data | Add a new resource | `/api/books` |
+| **PUT** | Update Data | Modify an existing resource | `/api/books/:id` |
+| **DELETE** | Delete Data | Remove a resource | `/api/books/:id` |
+
+---
+
+## 2. Setting Up Express for JSON Requests
+
+By default, Express does not parse JSON request bodies. We must add the built-in middleware `express.json()` to read data passed inside a POST or PUT request.
+
+```javascript
+const express = require('express');
+const app = express();
+
+// Middleware to parse incoming JSON bodies
+app.use(express.json());
+```
+
+---
+
+## 3. Implementing CRUD Routes
+
+Let's build an API server that manages an in-memory list of coding tasks:
+
+```javascript
+const express = require('express');
+const app = express();
+app.use(express.json());
+
+let tasks = [
+  { id: 1, title: 'Learn JSX' },
+  { id: 2, title: 'Learn Node.js' }
+];
+
+// 1. GET: Read all tasks
+app.get('/api/tasks', (req, res) => {
+  res.json(tasks);
+});
+
+// 2. POST: Create a new task
+app.post('/api/tasks', (req, res) => {
+  const newTask = {
+    id: tasks.length + 1,
+    title: req.body.title
+  };
+  tasks.push(newTask);
+  res.status(201).json(newTask); // Status 201: Created
+});
+
+// 3. DELETE: Delete a task
+app.delete('/api/tasks/:id', (req, res) => {
+  const taskId = parseInt(req.params.id);
+  tasks = tasks.filter(t => t.id !== taskId);
+  res.json({ message: `Task #${taskId} deleted successfully.` });
+});
+
+app.listen(5000);
+```
+
+---
+
+## 4. Key HTTP Status Codes
+
+Always return the correct HTTP status code so the client (frontend) knows the result of their API request:
+* **`200 OK`**: The request succeeded.
+* **`201 Created`**: A new resource was created successfully (used in POST requests).
+* **`400 Bad Request`**: Client-side validation error (e.g. missing fields).
+* **`404 Not Found`**: The requested path or ID does not exist.
+* **`500 Internal Server Error`**: An unexpected server crash or database failure.
+
+---
+
+<DeveloperProfile
+  name="Kent C. Dodds"
+  role="JavaScript Engineer & Educator"
+  salary="₹65 Lakhs/yr equivalent"
+  company="Epic Web / Remix Team"
+  experience="10 Years"
+  avatar="👨‍💻"
+  photoUrl="https://github.com/kentcdodds.png"
+  profileUrl="https://github.com/kentcdodds"
+  stack="React, TypeScript, Testing Library, Component Patterns"
+  quote="Always validate req.body on the backend before sending it to a database! Return a clean 400 status if client data is missing or formatted incorrectly."
+/>
+
+---
+
+## 🎓 Practice Assignment
+
+1. Build on top of your Express server script to add a list of items (e.g., users, products).
+2. Create a POST route at `/api/items` to append items, checking that a `name` parameter exists in the request body.
+3. Use a tool like Postman, curl, or standard javascript fetches to test adding and retrieving your items list.

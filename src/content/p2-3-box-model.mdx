@@ -1,0 +1,183 @@
+---
+title: "P2.3: Resilient CSS Box Model"
+description: "Mastering the CSS box model components (content, padding, border, margin), box-sizing, border-radius, box-shadows, and layout display properties."
+---
+
+# P2.3: Resilient CSS Box Model
+
+Every element on a webpage is treated as a rectangular box. In this lesson, we will master the box model rules that control spacing, borders, shadows, and visibility.
+
+---
+
+## 1. Box Model Components
+
+Every HTML box is made up of four layers, nesting from the inside out:
+
+```
+┌───────────────────────────────────────────┐
+│                 MARGIN                    │
+│   ┌───────────────────────────────────┐   │
+│   │             BORDER                │   │
+│   │   ┌───────────────────────────┐   │   │
+│   │   │         PADDING           │   │   │
+│   │   │   ┌───────────────────┐   │   │   │
+│   │   │   │    CONTENT AREA   │   │   │   │
+│   │   │   └───────────────────┘   │   │   │
+│   │   └───────────────────────────┘   │   │
+│   └───────────────────────────────────┘   │
+└───────────────────────────────────────────┘
+```
+
+1. **Content Area:** The actual text, images, or child elements (sized via `width` and `height`).
+2. **Padding:** The space between the content and the border. Padding inherits the background color of the element.
+3. **Border:** A line surrounding the padding and content.
+4. **Margin:** The empty space outside the border that separates this box from adjacent boxes. Margins are always transparent.
+
+```css
+.card {
+  width: 300px;
+  padding: 20px;
+  border: 1px solid #334155;
+  margin: 15px;
+}
+```
+
+---
+
+## 2. Layout & Box Model Metrics
+
+Mastering padding and margin scaling is crucial for achieving professional spacing alignments in user interfaces.
+
+<GraphBar
+  title="Visual Layout Space Distribution"
+  subtitle="Average proportion of element sizing in standard UI layouts."
+  items={[
+    { label: "Content Area", value: 60, displayValue: "60%" },
+    { label: "Internal Padding", value: 25, displayValue: "25%" },
+    { label: "External Margins", value: 15, displayValue: "15%" }
+  ]}
+/>
+
+---
+
+<DeveloperProfile
+  name="Jen Simmons"
+  role="Layout Advocate & Designer"
+  salary="₹90 Lakhs/yr equivalent"
+  company="Mozilla / W3C CSS WG"
+  experience="18 Years"
+  avatar="👩‍💻"
+  photoUrl="https://github.com/jensimmons.png"
+  profileUrl="https://github.com/jensimmons"
+  stack="HTML5 structure, CSS Grid, Flexbox, Web Design History"
+  quote="The box model is the foundation of visual styling. If you don't master the relationship between padding, borders, and margins, your layouts will break on different screen sizes."
+/>
+
+---
+
+## 3. Box Dimensions & Overflow
+
+### Sizing Limits
+You can define exact dimensions or set flexible limits to prevent layouts from breaking:
+* `min-width` / `max-width`: Limits how narrow or wide a box can scale.
+* `min-height` / `max-height`: Limits how short or tall a box can scale.
+
+### Overflow Control (`overflow`)
+If a box has fixed dimensions and its content is too large to fit, the `overflow` property controls the behavior:
+* `hidden`: Crops the overflowing content (renders it invisible).
+* `scroll`: Adds horizontal and vertical scrollbars, even if the content fits.
+* `auto`: Adds scrollbars only if the content overflows the box.
+
+```css
+.scroll-box {
+  height: 200px;
+  overflow: auto;
+}
+```
+
+---
+
+## 4. Spacing, Borders, and Shorthands
+
+### Padding & Margin Shorthand
+You can declare padding and margins for each side individually (`padding-top`, `padding-right`, `padding-bottom`, `padding-left`) or use a shorthand sequence following a **clockwise order (Top, Right, Bottom, Left)**:
+
+```css
+/* Clockwise: Top=10px, Right=20px, Bottom=10px, Left=20px */
+padding: 10px 20px 10px 20px;
+
+/* Symmetrical: Top/Bottom=10px, Left/Right=20px */
+padding: 10px 20px;
+
+/* Uniform: All 4 sides get 15px */
+padding: 15px;
+```
+
+### Collapsing Margins
+When the bottom margin of one element touches the top margin of another, they collapse into a single margin. The browser does not add them together; instead, it renders only the larger of the two margins.
+
+### Centering Block Elements
+To center a block box inside its parent container, specify a fixed `width` and set the left and right margins to `auto`:
+```css
+.centered-container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto; /* Top/Bottom=0, Left/Right automatically balanced */
+}
+```
+
+### Border Shorthand
+Sets width, style, and color in a single declaration:
+```css
+/* border: width style color; */
+border: 3px dotted #4ade80;
+```
+* **Styles:** `solid`, `dotted`, `dashed`, `double`, `groove`, `ridge`, `inset`, `outset`, `none`.
+
+---
+
+## 5. CSS3 Rounded Corners & Shadows
+
+### Border Radius (`border-radius`)
+Creates rounded corners on any box. Value can be in pixels or percentages (50% on a square box creates a perfect circle).
+```css
+.rounded-card {
+  border-radius: 12px;
+}
+.profile-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+}
+```
+
+### Box Shadows (`box-shadow`)
+Adds a drop shadow around the element box:
+```css
+/* box-shadow: horizontal-offset vertical-offset blur-radius spread-radius color; */
+box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.3);
+```
+* Add `inset` at the start to render the shadow inside the box borders.
+
+---
+
+## 6. Display & Visibility Properties
+
+The `display` property determines how an element behaves in the document flow:
+* `block`: Starts on a new line and stretches to fill the full width of its parent (e.g. `<div>`, `<p>`, `<h1>`).
+* `inline`: Flows inline with text. Ignores width and height properties (e.g. `<span>`, `<strong>`, `<a>`).
+* `inline-block`: Flows inline like a span, but respects width, height, margins, and padding.
+* `none`: Completely hides the element and removes it from the page layout flow.
+
+### Display `none` vs. Visibility `hidden`
+* `display: none`: Hides the box completely. Adjacent elements shift to fill the empty space.
+* `visibility: hidden`: Hides the content of the box, but leaves the physical box in the layout (renders as a blank gap).
+
+---
+
+## 🎓 Practice Assignment
+1. Create a page `box.html` and a stylesheet `styles.css`.
+2. Construct a card container (`<div>`) with a fixed width, centered on the page using `margin: 0 auto;`.
+3. Add a border (dashed), padding, and margins to the card.
+4. Apply rounded corners (`border-radius`) and a drop shadow (`box-shadow`) to the card.
+5. Create a text box inside the card with a fixed height and `overflow: auto;`. Fill it with dummy text to test scrolling.
