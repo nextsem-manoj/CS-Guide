@@ -1,6 +1,6 @@
 # understand current workspace
 
-*Saved on: 2/8/2026, 11:05:06 pm*
+*Saved on: 2/8/2026, 11:08:40 pm*
 *Conversation ID: 39b50c14-558e-4d94-a8c2-8d1bed3fb3e7*
 
 ---
@@ -1536,6 +1536,57 @@ keep language only english as a professional look
 
 ### 3. 📦 **Deployment & GitHub**:
 - Pushed commits `071470e` & `6752bbd` to GitHub and launched Firebase Hosting deployment in the background.
+
+---
+
+### 🤖 Antigravity AI
+
+✅ **Both Platform Deployments Complete!**
+
+### What Was Accomplished:
+1. 🖥️ **Removed Auto-Fullscreen Layout Effect**: Removed auto-launching `enterFullscreen()` from `src/app/html/layout.tsx` so opening `/html` loads naturally with header navigation and sidebars visible without triggering Chrome errors.
+2. 🇬🇧 **Professional English Language Default**: Set default language to **English** (`selectedLang = "english"`) across `HtmlLessonClient` and `CliLessonClient` on both `nextsem.online` and `ignou.nextsem.online`.
+3. 🚀 **Production Hosting**: Both `nextsem.online` and `ignou.nextsem.online` compiled and deployed live to Firebase Hosting with zero errors.
+4. 📝 **Chat Log**: Saved conversation transcript to [chat-logs/understand current workspace.md](file:///c:/Users/manoj2403/ignou.nextsem.online/chat-logs/understand%20current%20workspace.md) and pushed to GitHub (`91793e5`).
+
+---
+
+### 👤 User
+
+remember https://nextsem.online/html/anatomy-of-http-request-headers-verbs/ this layout and make same for https://nextsem.online/cli/
+
+---
+
+### 👤 User
+
+remove full screen request from web on all parts
+
+---
+
+### 🤖 Antigravity AI
+
+✨ **`/cli/` Layout Matched to `/html/` & Auto-Fullscreen Completely Removed**:
+
+### 1. 🖥️ **`/cli/` Page Layout Matched to `/html/`**:
+- Updated `src/app/cli/page.tsx` so `https://nextsem.online/cli/` directly renders **Lesson 1** (`cliLessons[0]`) using `CliLessonClient` inside `CliLayout` — matching `https://nextsem.online/html/`!
+- Cleaned up `src/app/cli/layout.tsx` to align navigation header (`NsSubjectNavBar`), sidebar drawer toggles, and max-width reading containers.
+
+### 2. 🚫 **Completely Removed Auto-Fullscreen Requests**:
+- Stripped all `enterFullscreen()` auto-launch triggers and fullscreen exit hint overlays from **ALL** layout files:
+  - `src/app/html/layout.tsx`
+  - `src/app/cli/layout.tsx`
+  - `src/app/book/layout.tsx`
+  - `src/app/git/layout.tsx`
+- Chrome/Brave will **never** trigger fullscreen or show "This page couldn't load" errors when opening any page or lesson!
+
+### 3. 📦 **Deployment & GitHub**:
+- Pushed commits `b7b753c` & `d06147e` to GitHub and launched Firebase Hosting deployment in the background.
+
+---
+
+### 👤 User
+
+do not deploy for nextsem.online
 
 ---
 
