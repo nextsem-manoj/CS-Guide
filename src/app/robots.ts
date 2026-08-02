@@ -7,8 +7,8 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: '*',
       allow: '/',
-      disallow: ['/profile', '/playground'],
+      disallow: ['/profile'],
     },
-    sitemap: 'https://nextsem.online/sitemap.xml',
+    sitemap: 'https://ignou.nextsem.online/sitemap.xml',
   };
 }
