@@ -684,37 +684,8 @@ export default function HomeClient() {
                   </Link>
                 </div>
               </div>
-                      Understand computer hardware basics, operating systems, data structures, and university degree fundamentals.
-                    </p>
-                  </div>
-                  <div className="flex flex-wrap gap-1.5 pt-1">
-                    <span className="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 text-xs font-mono font-bold text-slate-300">BCA Degree Hub</span>
-                    <span className="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 text-xs font-mono font-bold text-slate-300">PC Hardware</span>
-                  </div>
-                </div>
-                <div className="pt-6 mt-4 border-t border-slate-800/80 flex items-center justify-between gap-3">
-                  <Link
-                    href="/bca/semester-1"
-                    className="px-4 py-2 bg-gradient-to-r from-amber-600 to-cyan-600 hover:from-amber-500 hover:to-cyan-500 text-white font-extrabold text-xs rounded-xl shadow-md transition-all flex items-center gap-1.5 cursor-pointer"
-                  >
-                    <span>Explore IGNOU BCA 1st Sem Hub »</span>
-                  </Link>
-                  <Link
-                    href="/course"
-                    className="text-xs font-bold text-slate-400 hover:text-white transition-colors"
-                  >
-                    View Full Curriculum ➔
-                  </Link>
-                </div>
-              </div>
-
             </div>
           </div>
-
-
-
-
-
         </div>
       </section>
 
