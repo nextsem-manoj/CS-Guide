@@ -686,282 +686,119 @@ export default function HomeClient() {
               </div>
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* ── CORE CURRICULUM PHASES (Image 11 Card Pattern) ── */}
-
-      
-
-
-      {/* 2. HTML Band */}
-      <section id="html-section" className="bg-[#D9EEE1] text-slate-900 py-16 px-4 md:px-8 transition-colors">
+           {/* ── IGNOU BCA PRACTICAL LAB SIMULATORS BAND ── */}
+      <section className="bg-[#0b1328] text-white py-16 px-4 md:px-8 border-t border-slate-800">
         <div className="max-w-[1200px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
           <div className="text-left space-y-4">
-            <span className="text-[10px] font-black uppercase bg-[#04AA6D]/20 border border-[#04AA6D]/30 px-3 py-1 rounded-full text-[#036c45]">
-              Phase 1: Web Markup
+            <span className="text-[10px] font-black uppercase bg-[#04AA6D]/20 border border-[#04AA6D]/30 px-3 py-1 rounded-full text-[#04AA6D]">
+              Practical Lab & Terminal Simulators
             </span>
-            <h2 className="text-3xl md:text-4xl font-black uppercase text-slate-950 tracking-tight">
-              HTML5 Web markup
+            <h2 className="text-3xl md:text-4xl font-black uppercase text-white tracking-tight">
+              BCS-111 & BCSL-013 Interactive Simulators
             </h2>
-            <p className="text-slate-800 text-sm md:text-base max-w-lg leading-relaxed font-semibold">
-              The structural skeleton of the web. Master semantic page flows, navigation elements, forms, layouts, and Google search engine index tags.
+            <p className="text-slate-300 text-sm md:text-base max-w-lg leading-relaxed font-medium">
+              Practice Windows Command Prompt (CMD), Linux CLI commands, and HTML5 Web Lab directly in your browser with instant execution feedback.
             </p>
             <div className="flex flex-wrap gap-3 pt-4">
               <Link 
-                href="/html"
-                className="px-5 py-2.5 bg-[#04AA6D] hover:bg-[#039861] text-white rounded-lg text-xs font-black uppercase tracking-wider transition-all cursor-pointer shadow-md shadow-[#04AA6D]/20 flex items-center gap-1.5"
+                href="/cmd"
+                target="_blank"
+                className="px-5 py-2.5 bg-[#04AA6D] hover:bg-[#039861] text-white rounded-xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer shadow-md shadow-[#04AA6D]/20 flex items-center gap-1.5"
+              >
+                <Terminal size={14} className="stroke-[2.5]" />
+                <span>Open CMD Simulator</span>
+              </Link>
+              <Link 
+                href="/bca/semester-1/bcs-011-computer-basics/unit-1/lessons"
+                className="px-5 py-2.5 bg-slate-800 hover:bg-slate-700 text-amber-300 rounded-xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer shadow-md flex items-center gap-1.5 border border-amber-500/30"
               >
                 <BookOpen size={14} className="stroke-[2.5]" />
-                <span>Learn HTML</span>
-              </Link>
-              <Link 
-                href="/playground"
-                className="px-5 py-2.5 bg-gray-900 hover:bg-gray-800 text-white rounded-lg text-xs font-black uppercase tracking-wider transition-all cursor-pointer shadow-md shadow-gray-900/10 flex items-center gap-1.5"
-              >
-                <Code size={14} className="stroke-[2.5]" />
-                <span>Try HTML Sandbox</span>
+                <span>50 Micro-Lessons Hub</span>
               </Link>
             </div>
           </div>
 
-          {/* Mock Code Box */}
-          <div className="bg-[#282A35] text-white rounded-xl overflow-hidden shadow-2xl max-w-md lg:max-w-full mx-auto w-full text-xs text-left font-mono">
-            <div className="bg-[#1f2029] px-4 py-2 border-b border-slate-800 flex justify-between select-none">
-              <span className="text-slate-400 font-bold text-[10px] uppercase">index.html</span>
-              <button onClick={() => router.push('/playground')} className="text-emerald-400 hover:text-emerald-300 font-bold flex items-center gap-0.5">
-                <span>Run Code</span>
-                <ChevronRight size={12} />
-              </button>
+          {/* Interactive CMD Simulator Preview Card */}
+          <div className="bg-[#090e1a] border border-slate-800 text-white rounded-2xl overflow-hidden shadow-2xl max-w-md lg:max-w-full mx-auto w-full text-xs text-left font-mono">
+            <div className="bg-[#0e162a] px-4 py-2.5 border-b border-slate-800 flex justify-between items-center select-none">
+              <span className="text-emerald-400 font-bold text-[10px] uppercase flex items-center gap-1.5">
+                <Terminal size={12} />
+                <span>Windows Command Prompt • BCS-111 Lab</span>
+              </span>
+              <Link href="/cmd" target="_blank" className="text-amber-300 hover:text-amber-200 font-bold text-[10px] flex items-center gap-0.5">
+                <span>Launch Full Screen »</span>
+              </Link>
             </div>
-            <pre className="p-4 space-y-0.5 overflow-x-auto text-[11px] leading-relaxed">
-              <div><span className="text-cyan-400">&lt;!DOCTYPE html&gt;</span></div>
-              <div><span className="text-teal-400">&lt;html&gt;</span></div>
-              <div><span className="text-teal-400">  &lt;head&gt;</span></div>
-              <div><span className="text-teal-400">    &lt;title&gt;</span><span className="text-yellow-200">Nextsem Academy</span><span className="text-teal-400">&lt;/title&gt;</span></div>
-              <div><span className="text-teal-400">  &lt;body&gt;</span></div>
-              <div><span className="text-teal-400">    &lt;h1&gt;</span><span className="text-white font-bold">Welcome to Nextsem</span><span className="text-teal-400">&lt;/h1&gt;</span></div>
-              <div><span className="text-teal-400">    &lt;p&gt;</span><span className="text-slate-300">Learn to build beautiful websites.</span><span className="text-teal-400">&lt;/p&gt;</span></div>
-              <div><span className="text-teal-400">  &lt;/body&gt;</span></div>
-              <div><span className="text-teal-400">&lt;/html&gt;</span></div>
+            <pre className="p-4 space-y-1.5 overflow-x-auto text-[11px] leading-relaxed text-slate-300">
+              <div><span className="text-[#04AA6D]">C:\NEXTSEM&gt;</span> dir</div>
+              <div className="text-slate-400"> Directory of C:\NEXTSEM</div>
+              <div className="text-slate-400">08/02/2026  10:00 AM    &lt;DIR&gt;          BCS-111_Computer_Basics</div>
+              <div className="text-slate-400">08/02/2026  10:05 AM    &lt;DIR&gt;          BCSL-013_Software_Lab</div>
+              <div><span className="text-[#04AA6D]">C:\NEXTSEM&gt;</span> systeminfo</div>
+              <div className="text-cyan-300">Host Name: DESKTOP-IGNOU-BCA</div>
+              <div className="text-cyan-300">OS Name: Microsoft Windows 11 Pro</div>
             </pre>
           </div>
         </div>
       </section>
 
-      {/* 3. CSS Band */}
-      <section id="css-section" className="bg-[#FFF4A3] text-slate-950 py-16 px-4 md:px-8 transition-colors">
-        <div className="max-w-[1200px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
-          
-          {/* Mock Code Box */}
-          <div className="bg-[#282A35] text-white rounded-xl overflow-hidden shadow-2xl max-w-md lg:max-w-full mx-auto w-full text-xs text-left font-mono order-2 lg:order-1">
-            <div className="bg-[#1f2029] px-4 py-2 border-b border-slate-800 flex justify-between select-none">
-              <span className="text-slate-400 font-bold text-[10px] uppercase">styles.css</span>
-              <button onClick={() => router.push('/playground')} className="text-emerald-400 hover:text-emerald-300 font-bold flex items-center gap-0.5">
-                <span>Try it</span>
-                <ChevronRight size={12} />
-              </button>
-            </div>
-            <pre className="p-4 space-y-1 overflow-x-auto text-[11px] leading-relaxed">
-              <div><span className="text-yellow-400">body</span> &#123;</div>
-              <div>  <span className="text-cyan-400">background-color</span>: <span className="text-emerald-400">#060c18</span>;</div>
-              <div>  <span className="text-cyan-400">font-family</span>: <span className="text-teal-300">&apos;Outfit&apos;, sans-serif</span>;</div>
-              <div>&#125;</div>
-              <div className="pt-2"><span className="text-yellow-400">.landing-card</span> &#123;</div>
-              <div>  <span className="text-cyan-400">border</span>: <span className="text-slate-400">1px solid var(--theme-border)</span>;</div>
-              <div>  <span className="text-cyan-400">border-radius</span>: <span className="text-emerald-400">1rem</span>;</div>
-              <div>  <span className="text-cyan-400">backdrop-filter</span>: <span className="text-teal-300">blur(12px)</span>;</div>
-              <div>&#125;</div>
-            </pre>
-          </div>
-
-          <div className="text-left space-y-4 order-1 lg:order-2">
-            <span className="text-[10px] font-black uppercase bg-slate-900/10 border border-slate-900/20 px-3 py-1 rounded-full text-slate-950 font-bold">
-              Phase 2: Stylesheets &amp; Layouts
-            </span>
-            <h2 className="text-3xl md:text-4xl font-black uppercase text-slate-950 tracking-tight">
-              CSS3 Responsive Layouts
-            </h2>
-            <p className="text-slate-900 text-sm md:text-base max-w-lg leading-relaxed font-semibold">
-              Inject styling, positioning, and variables. Create premium responsive grid-panels, flexbox headers, dark switches, and smooth keyframe micro-animations.
-            </p>
-            <div className="flex flex-wrap gap-3 pt-4">
-              <button 
-                onClick={() => handleLaunchChapter('p2-1-selectors')}
-                className="px-5 py-2.5 bg-gray-900 hover:bg-gray-800 text-white rounded-lg text-xs font-black uppercase tracking-wider transition-all cursor-pointer shadow-lg"
-              >
-                Learn CSS
-              </button>
-              <Link 
-                href="/playground"
-                className="px-5 py-2.5 border-2 border-slate-900 text-slate-950 font-black hover:bg-slate-900 hover:text-white rounded-lg text-xs font-black uppercase tracking-wider transition-all cursor-pointer shadow-sm"
-              >
-                CSS Reference
-              </Link>
-            </div>
-          </div>
-
-        </div>
-      </section>
-
-      {/* 4. JavaScript Band (Phase 3) */}
-      <section id="js-section" className="bg-theme-bg border-b border-theme-border text-theme-text py-16 px-4 md:px-8">
-        <div className="max-w-[1200px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
-          <div className="text-left space-y-4">
-            <span className="text-[10px] font-black uppercase bg-emerald-400/10 border border-emerald-400/20 px-3 py-1 rounded-full text-theme-accent">
-              Phase 3: Scripting &amp; Logic
-            </span>
-            <h2 className="text-3xl md:text-4xl font-black uppercase text-theme-text tracking-tight">
-              JavaScript Logic
-            </h2>
-            <p className="text-theme-text/80 text-sm md:text-base max-w-lg leading-relaxed">
-              Program logic, arrays, and event handlers. Manipulate DOM hierarchies dynamically and store database state vectors into local storage buffers.
-            </p>
-            <div className="flex flex-wrap gap-3 pt-4">
-              <button 
-                onClick={() => handleLaunchChapter('p3-1-basics')}
-                className="px-5 py-2.5 bg-[#04AA6D] hover:bg-[#039861] text-white rounded-lg text-xs font-black uppercase tracking-wider transition-all cursor-pointer shadow-md shadow-[#04AA6D]/20"
-              >
-                Learn JavaScript
-              </button>
-              <Link 
-                href="/playground"
-                className="px-5 py-2.5 bg-theme-surface hover:bg-theme-card text-theme-text border border-theme-border rounded-lg text-xs font-black uppercase tracking-wider transition-all cursor-pointer inline-flex items-center justify-center"
-              >
-                JS Playground
-              </Link>
-            </div>
-          </div>
-
-          {/* Mock Code Box */}
-          <div className="bg-[#1f2029] border border-slate-800 text-white rounded-xl overflow-hidden shadow-2xl max-w-md lg:max-w-full mx-auto w-full text-xs text-left font-mono">
-            <div className="bg-[#15161d] px-4 py-2 border-b border-slate-900 flex justify-between select-none">
-              <span className="text-slate-500 font-bold text-[10px] uppercase">main.js</span>
-              <button onClick={() => router.push('/playground')} className="text-emerald-400 hover:text-emerald-300 font-bold flex items-center gap-0.5">
-                <span>Run logic</span>
-                <ChevronRight size={12} />
-              </button>
-            </div>
-            <pre className="p-4 space-y-1 overflow-x-auto text-[11px] leading-relaxed">
-              <div><span className="text-red-400">function</span> <span className="text-blue-400">calculateTotal</span>(subtotal, taxRate) &#123;</div>
-              <div>  <span className="text-red-400">let</span> tax = subtotal * taxRate;</div>
-              <div>  <span className="text-red-400">return</span> subtotal + tax;</div>
-              <div>&#125;</div>
-              <div className="pt-2"><span className="text-slate-400">{"// Output order check"}</span></div>
-              <div><span className="text-teal-400">console</span>.<span className="text-blue-400">log</span>(<span className="text-blue-400">calculateTotal</span>(<span className="text-yellow-400">100</span>, <span className="text-yellow-400">0.08</span>)); <span className="text-slate-500">{"// 108"}</span></div>
-            </pre>
-          </div>
-        </div>
-      </section>
-
-      {/* 5. React & Backend Bands (Compact side-by-side grids) */}
-      <section className="bg-slate-100 dark:bg-[#0c1222] py-16 px-4 md:px-8 border-y border-slate-200 dark:border-slate-800 transition-colors">
-        <div className="max-w-[1200px] mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
-          
-          {/* React Block */}
-          <div id="react-section" className="bg-[#E7F3FF] dark:bg-[#12233c] text-slate-900 dark:text-white p-8 rounded-2xl border border-blue-200 dark:border-slate-800 text-left flex flex-col justify-between transition-colors">
-            <div className="space-y-3">
-              <span className="text-[10px] font-black uppercase text-blue-600 dark:text-blue-400">React Core (⚛)</span>
-              <h3 className="text-2xl font-black uppercase">React UI libraries</h3>
-              <p className="text-slate-600 dark:text-slate-400 text-xs md:text-sm leading-relaxed">
-                Build composable, reactive client interfaces. Leverage useState triggers, useEffect fetch handlers, and Context provider stores.
-              </p>
-              
-              <div className="bg-[#282A35] text-white p-4 rounded-xl font-mono text-[10px] space-y-1 overflow-x-auto shadow-inner select-none mt-4">
-                <div><span className="text-red-400">function</span> <span className="text-blue-400">Hero</span>(&#123; title &#125;) &#123;</div>
-                <div>  <span className="text-red-400">return</span> <span className="text-teal-400">&lt;h1&gt;</span>&#123;title&#125;<span className="text-teal-400">&lt;/h1&gt;</span>;</div>
-                <div>&#125;</div>
-              </div>
-            </div>
-            <button 
-              onClick={() => handleLaunchChapter('p4-1-jsx')} 
-              className="mt-6 px-4 py-2.5 bg-gray-900 hover:bg-gray-800 text-white dark:bg-white dark:hover:bg-gray-100 dark:text-gray-900 rounded-lg text-xs font-black uppercase tracking-wider transition-all self-start cursor-pointer"
-            >
-              Start React
-            </button>
-          </div>
-
-          {/* Backend Block */}
-          <div id="backend-section" className="bg-[#F3EBF6] dark:bg-[#20152b] text-slate-900 dark:text-white p-8 rounded-2xl border border-purple-200 dark:border-slate-800 text-left flex flex-col justify-between transition-colors">
-            <div className="space-y-3">
-              <span className="text-[10px] font-black uppercase text-purple-600 dark:text-purple-400">Server Side (🔌)</span>
-              <h3 className="text-2xl font-black uppercase">Node.js & Databases</h3>
-              <p className="text-slate-600 dark:text-slate-400 text-xs md:text-sm leading-relaxed">
-                Deploy fast RESTful servers. Route Express endpoints, construct databases tables in MongoDB, and deploy full stack SaaS containers.
-              </p>
-
-              <div className="bg-[#282A35] text-white p-4 rounded-xl font-mono text-[10px] space-y-1 overflow-x-auto shadow-inner select-none mt-4">
-                <div><span className="text-red-400">const</span> express = <span className="text-blue-400">require</span>(<span className="text-yellow-200">&apos;express&apos;</span>);</div>
-                <div>app.<span className="text-blue-400">get</span>(<span className="text-yellow-200">&apos;/api&apos;</span>, (req, res) =&gt; res.<span className="text-blue-400">send</span>(<span className="text-yellow-200">&apos;Online&apos;</span>));</div>
-              </div>
-            </div>
-            <button 
-              onClick={() => handleLaunchChapter('p5-1-node')} 
-              className="mt-6 px-4 py-2.5 bg-gray-900 hover:bg-gray-800 text-white dark:bg-white dark:hover:bg-gray-100 dark:text-gray-900 rounded-lg text-xs font-black uppercase tracking-wider transition-all self-start cursor-pointer"
-            >
-              Start Backend
-            </button>
-          </div>
-
-        </div>
-      </section>
-
-      {/* ── FOOTER (Nextsem Academy style columned) ── */}
-      <footer className="bg-[#1f2029] text-white border-t border-slate-850/80 transition-colors mt-auto">
+      {/* ── FOOTER ── */}
+      <footer className="bg-[#0c1328] text-white border-t border-slate-800/80 transition-colors mt-auto">
         
-        {/* Quick courses band */}
-        <div className="bg-[#1b1c24] border-b border-slate-800/60 py-4">
+        {/* IGNOU Subject Sub-Navigation Band */}
+        <div className="bg-[#080d1c] border-b border-slate-800/60 py-4">
           <div className="max-w-[1200px] mx-auto px-4 flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs font-black uppercase text-slate-400">
-            <button onClick={() => handleScrollToId('cli-section')} className="hover:text-white cursor-pointer">CLI</button>
+            <Link href="/bca/semester-1/bcs-011-computer-basics" className="hover:text-white cursor-pointer">BCS-111</Link>
             <span>•</span>
-            <button onClick={() => handleScrollToId('html-section')} className="hover:text-white cursor-pointer">HTML</button>
+            <Link href="/bca/semester-1/bcs-012-basic-mathematics" className="hover:text-white cursor-pointer">BCS-012</Link>
             <span>•</span>
-            <button onClick={() => handleScrollToId('css-section')} className="hover:text-white cursor-pointer">CSS</button>
+            <Link href="/bca/semester-1/bcsl-013-software-lab" className="hover:text-white cursor-pointer">BCSL-013</Link>
             <span>•</span>
-            <button onClick={() => handleScrollToId('js-section')} className="hover:text-white cursor-pointer">JAVASCRIPT</button>
+            <Link href="/bca/semester-1/begla-136-english" className="hover:text-white cursor-pointer">BEGLA-136</Link>
             <span>•</span>
-            <button onClick={() => handleScrollToId('react-section')} className="hover:text-white cursor-pointer">REACT</button>
+            <Link href="/bca/semester-1/bevae-181-environmental-studies" className="hover:text-white cursor-pointer">BEVAE-181</Link>
             <span>•</span>
-            <button onClick={() => handleScrollToId('backend-section')} className="hover:text-white cursor-pointer">NODE.JS</button>
+            <Link href="/bca/2" className="hover:text-white cursor-pointer">MCS-011</Link>
             <span>•</span>
-            <Link href="/playground" className="hover:text-white">SANDBOX</Link>
+            <Link href="/bca/3" className="hover:text-white cursor-pointer">MCS-021</Link>
+            <span>•</span>
+            <Link href="/curriculum" className="hover:text-amber-400 text-[#c1a648]">BCA CURRICULUM</Link>
           </div>
         </div>
 
         <div className="max-w-[1200px] mx-auto px-4 py-12 grid grid-cols-2 md:grid-cols-4 gap-8 text-left text-xs text-slate-400">
           
           <div className="space-y-3">
-            <h5 className="font-black uppercase text-white text-xs tracking-wider">Top Tutorials</h5>
+            <h5 className="font-black uppercase text-white text-xs tracking-wider">IGNOU BCA Courses</h5>
             <ul className="space-y-2 font-medium">
-              <li><button onClick={() => handleScrollToId('html-section')} className="hover:text-white">HTML Tutorial</button></li>
-              <li><button onClick={() => handleScrollToId('css-section')} className="hover:text-white">CSS Tutorial</button></li>
-              <li><button onClick={() => handleScrollToId('js-section')} className="hover:text-white">JavaScript Tutorial</button></li>
-              <li><button onClick={() => handleScrollToId('react-section')} className="hover:text-white">React Tutorial</button></li>
-              <li><button onClick={() => handleScrollToId('backend-section')} className="hover:text-white">Node.js Backend</button></li>
-              <li><button onClick={() => handleScrollToId('cli-section')} className="hover:text-white">Windows Commands (CLI)</button></li>
-              <li><Link href="/curriculum" className="hover:text-white text-emerald-400 font-bold">🚀 Full Dev Curriculum</Link></li>
+              <li><Link href="/bca/semester-1/bcs-011-computer-basics" className="hover:text-white">BCS-111 Computer Basics</Link></li>
+              <li><Link href="/bca/semester-1/bcs-012-basic-mathematics" className="hover:text-white">BCS-012 Basic Mathematics</Link></li>
+              <li><Link href="/bca/semester-1/bcsl-013-software-lab" className="hover:text-white">BCSL-013 Software Lab</Link></li>
+              <li><Link href="/bca/semester-1/begla-136-english" className="hover:text-white">BEGLA-136 Workplace English</Link></li>
+              <li><Link href="/bca/semester-1/bevae-181-environmental-studies" className="hover:text-white">BEVAE-181 Environment</Link></li>
+              <li><Link href="/bca/semester-1" className="hover:text-white font-bold text-cyan-400">🎓 IGNOU BCA 1st Sem Hub</Link></li>
+              <li><Link href="/curriculum" className="hover:text-white text-emerald-400 font-bold">🚀 Full BCA Phase Curriculum</Link></li>
             </ul>
           </div>
 
           <div className="space-y-3">
             <h5 className="font-black uppercase text-white text-xs tracking-wider">Simulators & Tools</h5>
             <ul className="space-y-2 font-medium">
-              <li><Link href="/cmd" target="_blank" className="hover:text-white">🪟 Windows CMD Simulator</Link></li>
-              <li><Link href="/git" target="_blank" className="hover:text-white">🌿 Git Simulator</Link></li>
-              <li><Link href="/playground" className="hover:text-white">💻 Code Sandbox Playground</Link></li>
-              <li><Link href="/bca" className="hover:text-white">🎓 BCA Semester Hub</Link></li>
-              <li><button onClick={() => handleLaunchChapter('p0-3-vscode')} className="hover:text-white">VS Code Editor Setup</button></li>
-              <li><button onClick={() => handleLaunchChapter('p0-5-devtools')} className="hover:text-white">Chrome DevTools Console</button></li>
+              <li><Link href="/cmd" target="_blank" className="hover:text-white">🪟 Windows CMD Simulator (BCS-111)</Link></li>
+              <li><Link href="/git" target="_blank" className="hover:text-white">🌿 Git & Terminal Simulator</Link></li>
+              <li><Link href="/bca/semester-1" className="hover:text-white">📚 Line-by-Line Textbook Reader</Link></li>
+              <li><Link href="/bca" className="hover:text-white">🎓 All Semesters Dashboard</Link></li>
+              <li><Link href="/bca/semmy-ai" className="hover:text-white">🤖 Semmy AI Tutor</Link></li>
             </ul>
           </div>
 
           <div className="space-y-3">
-            <h5 className="font-black uppercase text-white text-xs tracking-wider">Career Prep</h5>
+            <h5 className="font-black uppercase text-white text-xs tracking-wider">Exam & Degree Prep</h5>
             <ul className="space-y-2 font-medium">
-              <li><button onClick={() => handleLaunchChapter('p7-2-resume')} className="hover:text-white">ATS-friendly Resume</button></li>
-              <li><button onClick={() => handleLaunchChapter('p7-1-interview')} className="hover:text-white">Technical Interview Q&A</button></li>
-              <li><button onClick={() => handleLaunchChapter('p7-3-github')} className="hover:text-white">GitHub Portfolio SEO</button></li>
-              <li><button onClick={() => handleLaunchChapter('p6-1-portfolio')} className="hover:text-white">PWA App manifest</button></li>
+              <li><Link href="/bca/semester-1" className="hover:text-white">IGNOU Solved Assignments</Link></li>
+              <li><Link href="/curriculum" className="hover:text-white">Exam Important Questions Q&A</Link></li>
+              <li><Link href="/curriculum" className="hover:text-white">BCA Viva & Practical Exam Prep</Link></li>
+              <li><Link href="/curriculum" className="hover:text-white">BCSP-064 Major Project Guide</Link></li>
             </ul>
           </div>
 
@@ -971,29 +808,27 @@ export default function HomeClient() {
               <li><Link href="/privacy" className="hover:text-white">Privacy Policy</Link></li>
               <li><Link href="/terms" className="hover:text-white">Terms of Service</Link></li>
               <li><Link href="/contact" className="hover:text-white">Contact Support</Link></li>
-              <li><Link href="/about" className="hover:text-white">About Nextsem</Link></li>
+              <li><Link href="/about" className="hover:text-white">About IGNOU BCA Hub</Link></li>
             </ul>
           </div>
 
         </div>
 
-        {/* Disclaimer / Nextsem Academy style */}
-        <div className="bg-[#1b1c24] text-[10px] text-slate-500 font-medium py-6 px-4 border-t border-slate-800/40">
+        {/* IGNOU BCA Disclaimer & Copyright */}
+        <div className="bg-[#080d1c] text-[10px] text-slate-400 font-medium py-6 px-4 border-t border-slate-800/60">
           <div className="max-w-[1000px] mx-auto text-center space-y-3 leading-relaxed">
             <p>
-              Nextsem Academy is optimized for learning, testing, and training. Examples and simulations might be simplified to improve reading and basic understanding. Tutorials, references, and examples are constantly reviewed to avoid errors, but we cannot warrant full correctness of all content.
+              IGNOU BCA Study Hub by Nextsem is optimized for degree learning, exam preparation, and practical lab training. Tutorials, unit notes, and code simulations are line-by-line textbook aligned by Er. Manoj Kumar.
             </p>
             <p>
-              While using Nextsem Academy, you agree to have read and accepted our <Link href="/terms" className="underline hover:text-slate-400">terms of use</Link>, <Link href="/privacy" className="underline hover:text-slate-400">cookie and privacy policy</Link>.
+              While using IGNOU BCA Study Hub, you agree to have read and accepted our <Link href="/terms" className="underline hover:text-slate-300">terms of use</Link>, <Link href="/privacy" className="underline hover:text-slate-300">cookie and privacy policy</Link>.
             </p>
-            <p className="pt-2 text-slate-400 font-bold uppercase tracking-wider font-sans">
-              Copyright {new Date().getFullYear()} by Nextsem Academy. All rights reserved. Powered by React, Next.js & Tailwind CSS.
+            <p className="pt-2 text-[#c1a648] font-bold uppercase tracking-wider font-sans">
+              COPYRIGHT {new Date().getFullYear()} BY IGNOU BCA HUB • NEXTSEM.ONLINE. ALL RIGHTS RESERVED. AUTHOR: ER. MANOJ KUMAR.
             </p>
           </div>
         </div>
-
       </footer>
-
     </div>
   );
 }
