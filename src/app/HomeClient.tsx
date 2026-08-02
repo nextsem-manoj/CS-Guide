@@ -313,17 +313,17 @@ export default function HomeClient() {
                       <span>🌿</span>
                       <span>Git Simulator</span>
                     </Link>
-                    <Link href="/playground" onClick={() => setExercisesDropdownOpen(false)} className="flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800/60 hover:text-[#04AA6D] text-xs font-bold transition-all">
+                    <Link href="/bca/semester-1/bcs-011-computer-basics" onClick={() => setExercisesDropdownOpen(false)} className="flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800/60 hover:text-[#04AA6D] text-xs font-bold transition-all">
                       <span>💻</span>
-                      <span>Code Sandbox</span>
+                      <span>BCS-111 Computer Basics</span>
                     </Link>
-                    <Link href="/bca" onClick={() => setExercisesDropdownOpen(false)} className="flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800/60 hover:text-[#04AA6D] text-xs font-bold transition-all">
-                      <span>🎓</span>
-                      <span>BCA Semester Hub</span>
+                    <Link href="/bca/semester-1/bcsl-013-software-lab" onClick={() => setExercisesDropdownOpen(false)} className="flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800/60 hover:text-[#04AA6D] text-xs font-bold transition-all">
+                      <span>🧪</span>
+                      <span>BCSL-013 Software Lab</span>
                     </Link>
-                    <Link href="/jobs" onClick={() => setExercisesDropdownOpen(false)} className="flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800/60 hover:text-blue-400 text-xs font-bold transition-all">
-                      <span>💼</span>
-                      <span>BCA/MCA/B.Tech Jobs</span>
+                    <Link href="/bca/semester-1/bevae-181-environmental-studies" onClick={() => setExercisesDropdownOpen(false)} className="flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800/60 hover:text-[#04AA6D] text-xs font-bold transition-all">
+                      <span>🌱</span>
+                      <span>BEVAE-181 Environment</span>
                     </Link>
                     <button onClick={() => { handleScrollToId('exercises-section'); setExercisesDropdownOpen(false); }} className="flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800/60 hover:text-[#04AA6D] text-xs font-bold transition-all text-left">
                       <span>🏆</span>
@@ -333,18 +333,17 @@ export default function HomeClient() {
                 )}
               </div>
 
-              <Link href="/curriculum" className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white transition-all cursor-pointer">
-                <Rocket size={14} className="text-[#04AA6D]" />
-                <span>Curriculum</span>
+              <Link href="/bca/semester-1" className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white transition-all cursor-pointer">
+                <BookOpen size={14} className="text-[#04AA6D]" />
+                <span>IGNOU BCA 1st Sem</span>
               </Link>
-              <Link href="/jobs" className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white transition-all cursor-pointer">
-                <Briefcase size={14} className="text-blue-400" />
-                <span>Jobs Portal</span>
-              </Link>
-              <Link href="/playground" className="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white transition-all">Playground</Link>
               <Link href="/bca" className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white transition-all cursor-pointer">
                 <Layers size={14} className="text-indigo-500" />
-                <span>BCA Hub</span>
+                <span>Semesters</span>
+              </Link>
+              <Link href="/curriculum" className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white transition-all cursor-pointer">
+                <Rocket size={14} className="text-amber-400" />
+                <span>Curriculum</span>
               </Link>
             </nav>
           </div>

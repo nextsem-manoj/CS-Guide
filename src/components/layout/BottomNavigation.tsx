@@ -113,7 +113,7 @@ const BottomNavigation = () => {
     window.dispatchEvent(new Event("open_google_auth"));
   };
 
-  const isBcaSubdomain = pathname?.startsWith('/bca');
+  const isBcaSubdomain = true; // Always true on ignou.nextsem.online
 
   // Dynamic BCA Semester Detection (Sem 1, Sem 2, Sem 3, etc.)
   const semMatch = pathname?.match(/\/bca\/(?:semester-)?(\d+)/i);
