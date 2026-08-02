@@ -644,14 +644,14 @@ export default function TextbookViewer() {
                 </button>
                 <button
                   onClick={() => {
-                    setUseGoogleDocs(!useGoogleDocs);
+                    setViewMode(viewMode === 'mozilla' ? 'direct' : 'mozilla');
                     setIframeLoaded(false);
                     setIframeTimedOut(false);
                   }}
                   className="px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-700 text-slate-300 hover:text-white font-bold text-[11px] cursor-pointer"
                 >
                   <RefreshCw size={12} />
-                  <span>{useGoogleDocs ? "Try Direct View" : "Try Google Docs View"}</span>
+                  <span>{viewMode === 'mozilla' ? "Try Direct View" : "Try Mozilla Engine View"}</span>
                 </button>
               </div>
             </div>
