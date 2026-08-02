@@ -1,6 +1,6 @@
 # understand current workspace
 
-*Saved on: 2/8/2026, 11:24:06 pm*
+*Saved on: 2/8/2026, 11:25:10 pm*
 *Conversation ID: 39b50c14-558e-4d94-a8c2-8d1bed3fb3e7*
 
 ---
@@ -1727,6 +1727,39 @@ i still see
 ### 👤 User
 
 a major task i dont like ai made visualisations instead let me upload actual screenshot for the current command on my pc and then paste it on the relevant leson page
+
+---
+
+### 🤖 Antigravity AI
+
+✨ **Tasks Completed**:
+
+---
+
+### 1. 🗑️ **Completely Purged `Download Lesson PDF (WATCH AD)`**:
+- Removed the residual `Download Lesson PDF (✨ Watch Ad)` button container in `CliLessonClient.tsx` that was still rendering on CLI lesson pages.
+- Verified that **zero instances** of `Download Lesson PDF` or `Watch Ad` pills remain in any lesson component across the entire application.
+
+---
+
+### 2. 📷 **Actual PC Command Screenshot Upload & Paste Widget**:
+- Replaced synthetic AI visualizations on command lesson pages with a brand new, dedicated **`CommandScreenshotWidget`**:
+  - **Direct Clipboard Paste**: Take a screenshot of the actual command running on your PC terminal (Snipping Tool / PrtScn) and simply **Paste (Ctrl+V)** onto the lesson page!
+  - **Drag & Drop / File Select**: Or click **"Select Screenshot Image"** to upload any screenshot image file directly from your computer.
+  - **Windows CMD Title Frame**: Automatically wraps your uploaded screenshot in a clean, high-resolution Windows Command Prompt frame (`⊞ Command Prompt — Verified PC Screenshot`).
+  - **Full-Screen Lightbox Zoom**: Click any uploaded screenshot to view it in full resolution with a zoom modal.
+
+---
+
+### 🛡️ **Git & Deployment Status**:
+- **Code Pushed to GitHub**: Commits `89ecea6` (`nextsem.online`) and `345a3ba` (`ignou.nextsem.online`).
+- **Production Guard**: **Zero production deployments executed**, honoring your deployment hold policy.
+
+---
+
+### 👤 User
+
+but keep in mind this should be visible to only me not to public for public just show the content of lesson if there is no screenshot available
 
 ---
 
