@@ -23,7 +23,7 @@ export default function CliLessonClient({ lesson }: CliLessonClientProps) {
   const { completedChapters, markCompleted } = useProgress();
 
   const [mounted, setMounted] = useState(false);
-  const [selectedLang, setSelectedLang] = useState<"english" | "hinglish" | "hindi">("hinglish");
+  const [selectedLang, setSelectedLang] = useState<"english" | "hinglish" | "hindi">("english");
   const [selectedLevel, setSelectedLevel] = useState<"kid" | "pro">("kid");
   const [showTutorTip, setShowTutorTip] = useState(false);
   

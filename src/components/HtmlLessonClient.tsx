@@ -28,7 +28,7 @@ export default function HtmlLessonClient({ lesson }: HtmlLessonClientProps) {
   const { completedChapters, markCompleted } = useProgress();
 
   const [mounted, setMounted] = useState(false);
-  const [selectedLang, setSelectedLang] = useState<"english" | "hinglish" | "hindi">("hinglish");
+  const [selectedLang, setSelectedLang] = useState<"english" | "hinglish" | "hindi">("english");
   const [selectedLevel, setSelectedLevel] = useState<"kid" | "pro">("kid");
   const [showTutorTip, setShowTutorTip] = useState(false);
   
@@ -49,6 +49,7 @@ export default function HtmlLessonClient({ lesson }: HtmlLessonClientProps) {
     if (typeof window !== "undefined") {
       const savedLang = localStorage.getItem("nextsem_html_lang") as "english" | "hinglish" | "hindi" | null;
       if (savedLang) setSelectedLang(savedLang);
+      else setSelectedLang("english");
 
       const savedLevel = localStorage.getItem("nextsem_html_level") as "kid" | "pro" | null;
       if (savedLevel) setSelectedLevel(savedLevel);
