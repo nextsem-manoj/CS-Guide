@@ -20,6 +20,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/bca/6",
     "/bca/semmy-ai",
     "/cmd",
+    "/profile",
     "/about",
     "/contact",
     "/privacy",
