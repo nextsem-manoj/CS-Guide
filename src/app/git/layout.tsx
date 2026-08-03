@@ -21,8 +21,6 @@ function GitLayoutContent({ children }: { children: React.ReactNode }) {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [currentUser, setCurrentUser] = useState<UserProfile | null>(null);
   const lessonContainerRef = useRef<HTMLDivElement>(null);
-  const [isFullscreen, setIsFullscreen] = useState(false);
-  const [showFsHint, setShowFsHint] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -65,30 +63,6 @@ function GitLayoutContent({ children }: { children: React.ReactNode }) {
     checkMobile();
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
-  }, []);
-
-  const enterFullscreen = useCallback(async () => {
-    const el = lessonContainerRef.current || document.documentElement;
-    try {
-      if (el.requestFullscreen) await el.requestFullscreen();
-      else if ((el as any).webkitRequestFullscreen) await (el as any).webkitRequestFullscreen();
-      setIsFullscreen(true);
-      setShowFsHint(true);
-      setTimeout(() => setShowFsHint(false), 2500);
-    } catch (_) {}
-  }, []);
-
-  const exitFullscreen = useCallback(async () => {
-    try {
-      if (document.fullscreenElement) await document.exitFullscreen();
-    } catch (_) {}
-    setIsFullscreen(false);
-  }, []);
-
-  useEffect(() => {
-    const onFsChange = () => setIsFullscreen(!!document.fullscreenElement);
-    document.addEventListener('fullscreenchange', onFsChange);
-    return () => document.removeEventListener('fullscreenchange', onFsChange);
   }, []);
 
   return (

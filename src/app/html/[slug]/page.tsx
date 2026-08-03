@@ -5,9 +5,10 @@ import { htmlLessons } from "@/data/htmlLessonsData";
 import HtmlLessonClient from "@/components/HtmlLessonClient";
 
 export async function generateStaticParams() {
-  return htmlLessons.map((lesson) => ({
+  const params = htmlLessons.map((lesson) => ({
     slug: lesson.slug,
   }));
+  return [...params, { slug: "" }, { slug: "index" }];
 }
 
 export async function generateMetadata({
@@ -16,8 +17,9 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const lesson = htmlLessons.find((l) => l.slug === slug);
-  
+  const decoded = slug ? decodeURIComponent(slug).toLowerCase() : "";
+  const lesson = htmlLessons.find((l) => l.slug.toLowerCase() === decoded) || (!decoded ? htmlLessons[0] : null);
+
   if (!lesson) {
     return {
       title: "Lesson Not Found | NextSem",
@@ -32,12 +34,12 @@ export async function generateMetadata({
     title,
     description,
     alternates: {
-      canonical: `/html/${slug}`,
+      canonical: `/html/${lesson.slug}`,
     },
     openGraph: {
       title,
       description,
-      url: `https://nextsem.online/html/${slug}`,
+      url: `https://nextsem.online/html/${lesson.slug}`,
       type: "article",
     },
   };
@@ -49,7 +51,10 @@ export default async function HtmlSlugPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const lesson = htmlLessons.find((l) => l.slug === slug);
+  const decoded = slug ? decodeURIComponent(slug).toLowerCase() : "";
+  const lesson = htmlLessons.find(
+    (l) => l.slug.toLowerCase() === decoded || l.id.toString() === decoded
+  ) || (!decoded || decoded === "index" ? htmlLessons[0] : null);
 
   if (!lesson) {
     notFound();

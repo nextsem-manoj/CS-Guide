@@ -3,17 +3,12 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { 
-  ChevronLeft, ChevronRight, BookOpen, Code, 
-  HelpCircle, CheckCircle2, AlertCircle, Sparkles, Lock, ArrowLeft, X, Bookmark, Download
-} from "lucide-react";
+import { ChevronLeft, ChevronRight, Bookmark } from "lucide-react";
 import { htmlLessons, Lesson } from "../data/htmlLessonsData";
 import AdSenseBanner from "./AdSenseBanner";
 import { useProgress } from "../context/ProgressContext";
 import { triggerCelebration } from "../lib/celebration";
 import TopicAnimationWidget from "./TopicAnimationWidget";
-import HtmlTagTooltip from "./HtmlTagTooltip";
-import TaskBasedCodingLab from "./TaskBasedCodingLab";
 import { AdMob } from "@capacitor-community/admob";
 import { Capacitor } from "@capacitor/core";
 import { showRewardedAd } from "@/lib/admobHelper";
@@ -256,20 +251,28 @@ export default function HtmlLessonClient({ lesson }: HtmlLessonClientProps) {
     }
   };
 
-  // ── Inline backtick `code` tokeniser — wraps tokens in HtmlTagTooltip
+  // ── Inline backtick `code` tokeniser — renders clean code elements without pop-up tooltips
   const renderInlineCode = (text: string): React.ReactNode[] => {
     const parts = text.split(/(`[^`]+`)/);
     return parts.map((part, i) => {
       if (part.startsWith('`') && part.endsWith('`')) {
         const token = part.slice(1, -1);
-        return <HtmlTagTooltip key={i} code={token} lang={selectedLang} />;
+        return (
+          <code key={i} className="px-1.5 py-0.5 rounded bg-slate-800/90 text-[#04AA6D] font-mono text-xs md:text-sm font-bold border border-slate-700/60 mx-0.5">
+            {token}
+          </code>
+        );
       }
       // Also auto-detect bare HTML tags like <div>, <p> etc in plain text
       const tagRegex = /(<\/?[a-zA-Z][a-zA-Z0-9]*\s*\/?>)/g;
       const subParts = part.split(tagRegex);
       return subParts.map((sub, j) => {
         if (tagRegex.test(sub) || (sub.startsWith('<') && sub.endsWith('>'))) {
-          return <HtmlTagTooltip key={`${i}-${j}`} code={sub.trim()} lang={selectedLang} />;
+          return (
+            <code key={`${i}-${j}`} className="px-1.5 py-0.5 rounded bg-slate-800/90 text-[#04AA6D] font-mono text-xs md:text-sm font-bold border border-slate-700/60 mx-0.5">
+              {sub.trim()}
+            </code>
+          );
         }
         return <React.Fragment key={`${i}-${j}`}>{sub}</React.Fragment>;
       });
@@ -395,43 +398,34 @@ export default function HtmlLessonClient({ lesson }: HtmlLessonClientProps) {
     <div className="space-y-6">
       {/* Top Banner Ad */}
       <AdSenseBanner />
-      {/* Nextsem Academy Clean Header (Previous + Title + Save/PDF + Next) */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pb-4 border-b border-slate-800/60 pt-2">
+      {/* Nextsem Academy Clean Header (Previous + Exact Lesson Title + Bookmark + Next) */}
+      <div className="flex items-center justify-between gap-3 pb-4 border-b border-slate-800/60 pt-2">
         {/* Left: Previous Lesson */}
         <div className="flex items-center gap-2 shrink-0">
           {prevLesson ? (
             <Link
               href={prevLesson.id === 1 ? "/html" : `/html/${prevLesson.slug}`}
               className="px-3.5 py-2 bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-300 hover:text-white rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-sm"
+              title={prevLesson.title}
             >
               <ChevronLeft size={16} className="stroke-[2.5]" />
-              <span>Previous</span>
+              <span className="hidden sm:inline">Previous</span>
             </Link>
           ) : (
             <div className="px-3.5 py-2 bg-slate-950/60 border border-slate-850 text-slate-600 rounded-xl text-xs font-bold flex items-center gap-1.5 cursor-not-allowed">
               <ChevronLeft size={16} />
-              <span>Previous</span>
+              <span className="hidden sm:inline">Previous</span>
             </div>
           )}
         </div>
 
-        {/* Center: Clean Topic Title */}
-        <h1 className="text-xl sm:text-3xl font-extrabold text-white tracking-tight text-center truncate">
-          {
-            lesson.id === 1 ? "HTML Introduction" :
-            `HTML ${
-              lesson.title
-                .replace(/^(Lesson\s+\d+:|Learn HTML5?|Introduction to|What is|How)\s*/i, '')
-                .replace(/\s*-\s*Free Web Development.*$/i, '')
-                .replace(/\s*-\s*Comprehensive Guide.*$/i, '')
-                .trim()
-            }`
-          }
+        {/* Center: Exact Clean Topic Title */}
+        <h1 className="text-lg sm:text-2xl md:text-3xl font-extrabold text-white tracking-tight text-center truncate px-2">
+          {lesson.title}
         </h1>
 
-        {/* Right: Save Options + Next Lesson */}
+        {/* Right: Bookmark + Next Lesson */}
         <div className="flex items-center gap-2 shrink-0">
-
           <button
             onClick={toggleBookmark}
             className={`px-3 py-2 rounded-xl border transition-all cursor-pointer shrink-0 flex items-center gap-1.5 ${
@@ -439,18 +433,19 @@ export default function HtmlLessonClient({ lesson }: HtmlLessonClientProps) {
                 ? "bg-emerald-950/40 border-emerald-500/40 text-[#04AA6D]"
                 : "bg-slate-900/60 border-slate-800 text-slate-400 hover:text-white"
             }`}
-            title={isBookmarked ? "Remove Bookmark" : "Save Bookmark"}
+            title={isBookmarked ? "Remove Bookmark" : "Bookmark Lesson"}
           >
             <Bookmark size={18} className={`stroke-[2.5] ${isBookmarked ? "fill-[#04AA6D] text-[#04AA6D]" : ""}`} />
-            <span className="text-xs font-bold">{isBookmarked ? "Saved" : "Save"}</span>
+            <span className="text-xs font-bold">{isBookmarked ? "Bookmarked" : "Bookmark"}</span>
           </button>
 
           {nextLesson ? (
             <Link
               href={`/html/${nextLesson.slug}`}
               className="px-4 py-2 bg-[#04AA6D] hover:bg-[#039861] text-white rounded-xl text-xs font-extrabold transition-all flex items-center gap-1.5 shadow-md shadow-[#04AA6D]/20 cursor-pointer"
+              title={nextLesson.title}
             >
-              <span>Next</span>
+              <span className="hidden sm:inline">Next</span>
               <ChevronRight size={16} className="stroke-[2.5]" />
             </Link>
           ) : null}
@@ -465,37 +460,6 @@ export default function HtmlLessonClient({ lesson }: HtmlLessonClientProps) {
 
         {/* Visual Demonstration Topic Animation GIF Card */}
         <TopicAnimationWidget lessonId={lesson.id} lessonTitle={lesson.title} type="html" lang={selectedLang} />
-
-        {/* Task-Based Coding Lab Section */}
-        <TaskBasedCodingLab
-          labId={`html-lab-${lesson.id}`}
-          labTitle={`Task-Based Coding Lab: Practice ${lesson.title}`}
-          language="html"
-          initialCode={`<!-- Practice Task Code -->\n<div class="card">\n  <h1>HTML Coding Lab</h1>\n  <p>Practice writing clean semantic HTML code step-by-step.</p>\n</div>`}
-          tasks={[
-            {
-              id: "task-1",
-              title: "Create a container <div> element",
-              instruction: "Wrap your content inside a <div> tag with a class attribute.",
-              hint: "Use <div class=\"card\">...</div>",
-              validatorKeywords: ["<div", "</div>"]
-            },
-            {
-              id: "task-2",
-              title: "Add a main heading <h1>",
-              instruction: "Include a main header <h1> element inside your container.",
-              hint: "Use <h1>My Title</h1> syntax.",
-              validatorKeywords: ["<h1>", "</h1>"]
-            },
-            {
-              id: "task-3",
-              title: "Add a descriptive paragraph <p>",
-              instruction: "Add a paragraph <p> explaining your project details.",
-              hint: "Use <p>Description goes here...</p>",
-              validatorKeywords: ["<p>", "</p>"]
-            }
-          ]}
-        />
       </div>
 
       {/* Nextsem Academy HTML Quiz Reminder Card (Replaces inline question block - Image 86) */}

@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -p 3001",
     "build": "node scripts/generate-search-index.js && next build && node scripts/verify-sitemap.js",
-    "start": "next start",
+    "start": "next start -p 3001",
     "lint": "eslint",
     "save-chat": "node scripts/save_chat.js",
     "deploy:staging": "npm run build && npx firebase-tools deploy --only hosting:staging --project bca-nextsem",

@@ -31,8 +31,6 @@ function CliLayoutContent({ children }: { children: React.ReactNode }) {
   const lessonContainerRef = useRef<HTMLDivElement>(null);
   const [scrollPercent, setScrollPercent] = useState(0);
   const [currentUser, setCurrentUser] = useState<UserProfile | null>(null);
-  const [isFullscreen, setIsFullscreen] = useState(false);
-  const [showFsHint, setShowFsHint] = useState(false);
 
   const pathname = usePathname() || "";
   const currentChapterId = getChapterIdFromPath(pathname);
@@ -165,52 +163,12 @@ function CliLayoutContent({ children }: { children: React.ReactNode }) {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  const enterFullscreen = useCallback(async () => {
-    const el = lessonContainerRef.current || document.documentElement;
-    try {
-      if (el.requestFullscreen) await el.requestFullscreen();
-      else if ((el as any).webkitRequestFullscreen) await (el as any).webkitRequestFullscreen();
-      setIsFullscreen(true);
-      setShowFsHint(true);
-      setTimeout(() => setShowFsHint(false), 2500);
-    } catch (_) {}
-  }, []);
-
-  const exitFullscreen = useCallback(async () => {
-    try {
-      if (document.fullscreenElement) await document.exitFullscreen();
-    } catch (_) {}
-    setIsFullscreen(false);
-  }, []);
-
-  useEffect(() => {
-    const onFsChange = () => setIsFullscreen(!!document.fullscreenElement);
-    document.addEventListener('fullscreenchange', onFsChange);
-    return () => document.removeEventListener('fullscreenchange', onFsChange);
-  }, []);
-
-  useEffect(() => {
-    const isLesson = pathname?.includes('/cli/');
-    if (isLesson && mounted) {
-      const t = setTimeout(() => enterFullscreen(), 600);
-      return () => clearTimeout(t);
-    }
-  }, [pathname, mounted, enterFullscreen]);
-
   return (
     <div ref={lessonContainerRef} className="min-h-screen flex flex-col bg-[#060c18] text-foreground font-sans selection:bg-[#c1a648]/30 transition-colors duration-300">
-      {isFullscreen && showFsHint && (
-        <div className="fixed top-4 left-1/2 -translate-x-1/2 z-[9999] bg-black/80 text-white text-xs px-4 py-2 rounded-full backdrop-blur-md pointer-events-none shadow-lg">
-          📖 Tap anywhere to exit fullscreen
-        </div>
-      )}
-      {!isFullscreen && (
-        <NsSubjectNavBar currentUser={currentUser} onSignIn={handleSignIn} />
-      )}
+      <NsSubjectNavBar currentUser={currentUser} onSignIn={handleSignIn} />
       <div
         className="flex-1 flex flex-col md:flex-row w-full min-w-0 bg-[#060c18]"
         style={mounted && !isMobile ? { paddingLeft: `calc(5vw + ${effectiveSidebarWidth}px)`, paddingRight: '5vw' } : undefined}
-        onClick={isFullscreen ? exitFullscreen : undefined}
       >
         <BookSidebar
           isOpen={sidebarOpen}
@@ -228,37 +186,6 @@ function CliLayoutContent({ children }: { children: React.ReactNode }) {
             className="flex-1 px-2 py-3 md:px-6 md:py-6 relative z-10 transition-all duration-300"
           >
             <div className="max-w-5xl mx-auto w-full">
-              {/* Inline Title & Navigation Bar */}
-              {/* Clean Title Row with Lesson Name & Bookmark Icon (Image 108 + 109) */}
-              <div className="flex items-center justify-between gap-4 mb-6 pb-4 border-b border-slate-800/40 text-left">
-                <h1 className="text-xl md:text-3xl font-black text-white tracking-tight truncate">
-                  {currentChapter?.title || "Reading Lesson"}
-                </h1>
-
-                <button
-                  onClick={() => {
-                    try {
-                      const key = "nextsem_cli_bookmarks";
-                      const saved = JSON.parse(localStorage.getItem(key) || "[]");
-                      let updated;
-                      if (saved.includes(currentChapterId)) {
-                        updated = saved.filter((id: string) => id !== currentChapterId);
-                      } else {
-                        updated = [...saved, currentChapterId];
-                      }
-                      localStorage.setItem(key, JSON.stringify(updated));
-                      window.dispatchEvent(new Event("bookmark_changed"));
-                    } catch (e) {
-                      console.error(e);
-                    }
-                  }}
-                  className="p-2.5 rounded-xl border border-slate-800 bg-slate-900/60 text-slate-400 hover:text-white transition-all cursor-pointer shrink-0"
-                  title="Bookmark Lesson"
-                >
-                  <Bookmark size={20} className="stroke-[2.5]" />
-                </button>
-              </div>
-
               {children}
             </div>
           </div>

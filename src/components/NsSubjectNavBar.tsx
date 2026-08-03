@@ -16,6 +16,7 @@ interface NsSubjectNavBarProps {
   currentUser?: UserProfile | null;
   onSignIn?: () => void;
   onToggleSidebar?: () => void;
+  showSubjectBar?: boolean;
 }
 
 const SUBJECT_TABS = [
@@ -30,7 +31,7 @@ const SUBJECT_TABS = [
   { id: "curriculum", label: "CURRICULUM", href: "/curriculum", match: (p: string) => p.startsWith("/curriculum") }
 ];
 
-export default function NsSubjectNavBar({ currentUser, onSignIn, onToggleSidebar }: NsSubjectNavBarProps) {
+export default function NsSubjectNavBar({ currentUser, onSignIn, onToggleSidebar, showSubjectBar }: NsSubjectNavBarProps) {
   const [isFullscreen, setIsFullscreen] = useState(false);
 
   useEffect(() => {
@@ -42,6 +43,8 @@ export default function NsSubjectNavBar({ currentUser, onSignIn, onToggleSidebar
   }, []);
 
   const pathname = usePathname() || "";
+  const isHomePage = pathname === "/";
+  const shouldShowSubjectBar = showSubjectBar ?? isHomePage;
   const [searchQuery, setSearchQuery] = useState("");
 
   if (isFullscreen) return null;
@@ -128,27 +131,29 @@ export default function NsSubjectNavBar({ currentUser, onSignIn, onToggleSidebar
 
       </div>
 
-      {/* ── SUBJECT TABS NAVIGATION BAR (Horizontal Scrollable) ── */}
-      <div className="bg-[#09101f] border-t border-slate-850 px-2">
-        <div className="max-w-7xl mx-auto flex items-center gap-1 overflow-x-auto custom-scrollbar py-1 scroll-smooth">
-          {SUBJECT_TABS.map((tab) => {
-            const isActive = tab.match(pathname);
-            return (
-              <Link
-                key={tab.id}
-                href={tab.href}
-                className={`px-3 py-1.5 text-xs font-black uppercase tracking-wider rounded-md whitespace-nowrap transition-all ${
-                  isActive
-                    ? "bg-[#04AA6D] text-white shadow-sm font-bold"
-                    : "text-slate-300 hover:text-white hover:bg-slate-900"
-                }`}
-              >
-                {tab.label}
-              </Link>
-            );
-          })}
+      {/* ── SUBJECT TABS NAVIGATION BAR (Horizontal Scrollable - ONLY ON FRONT PAGE) ── */}
+      {shouldShowSubjectBar && (
+        <div className="bg-[#09101f] border-t border-slate-850 px-2">
+          <div className="max-w-7xl mx-auto flex items-center gap-1 overflow-x-auto custom-scrollbar py-1 scroll-smooth">
+            {SUBJECT_TABS.map((tab) => {
+              const isActive = tab.match(pathname);
+              return (
+                <Link
+                  key={tab.id}
+                  href={tab.href}
+                  className={`px-3 py-1.5 text-xs font-black uppercase tracking-wider rounded-md whitespace-nowrap transition-all ${
+                    isActive
+                      ? "bg-[#04AA6D] text-white shadow-sm font-bold"
+                      : "text-slate-300 hover:text-white hover:bg-slate-900"
+                  }`}
+                >
+                  {tab.label}
+                </Link>
+              );
+            })}
+          </div>
         </div>
-      </div>
+      )}
     </header>
   );
 }

@@ -46,8 +46,6 @@ function BookLayoutContent({
   const [scrollPercent, setScrollPercent] = useState(0);
 
   const [currentUser, setCurrentUser] = useState<UserProfile | null>(null);
-  const [isFullscreen, setIsFullscreen] = useState(false);
-  const [showFsHint, setShowFsHint] = useState(false);
   useEffect(() => {
     const checkAuth = () => {
       const saved = localStorage.getItem('nextsem_user');
@@ -184,30 +182,6 @@ function BookLayoutContent({
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  const enterFullscreen = useCallback(async () => {
-    const el = lessonContainerRef.current || document.documentElement;
-    try {
-      if (el.requestFullscreen) await el.requestFullscreen();
-      else if ((el as any).webkitRequestFullscreen) await (el as any).webkitRequestFullscreen();
-      setIsFullscreen(true);
-      setShowFsHint(true);
-      setTimeout(() => setShowFsHint(false), 2500);
-    } catch (_) {}
-  }, []);
-
-  const exitFullscreen = useCallback(async () => {
-    try {
-      if (document.fullscreenElement) await document.exitFullscreen();
-    } catch (_) {}
-    setIsFullscreen(false);
-  }, []);
-
-  useEffect(() => {
-    const onFsChange = () => setIsFullscreen(!!document.fullscreenElement);
-    document.addEventListener('fullscreenchange', onFsChange);
-    return () => document.removeEventListener('fullscreenchange', onFsChange);
-  }, []);
-
   return (
     <div ref={lessonContainerRef} className="min-h-screen flex flex-col bg-[#060c18] text-foreground font-sans selection:bg-[#c1a648]/30 transition-colors duration-300">
       <NsSubjectNavBar currentUser={currentUser} onSignIn={handleSignIn} onToggleSidebar={() => setSidebarOpen(prev => !prev)} />
@@ -238,36 +212,6 @@ function BookLayoutContent({
                 }
               >
                 <div className={hasSim ? "w-full h-full flex flex-col min-h-0" : "max-w-5xl mx-auto w-full"}>
-                  {/* Clean Title Row with Lesson Name & Bookmark Icon (Image 108 + 109) */}
-                  <div className="flex items-center justify-between gap-4 mb-6 pb-4 border-b border-slate-800/40 text-left">
-                    <h1 className="text-xl md:text-3xl font-black text-white tracking-tight truncate">
-                      {currentChapter?.title || "Reading Lesson"}
-                    </h1>
-
-                    <button
-                      onClick={() => {
-                        try {
-                          const key = "nextsem_book_bookmarks";
-                          const saved = JSON.parse(localStorage.getItem(key) || "[]");
-                          let updated;
-                          if (saved.includes(currentChapterId)) {
-                            updated = saved.filter((id: string) => id !== currentChapterId);
-                          } else {
-                            updated = [...saved, currentChapterId];
-                          }
-                          localStorage.setItem(key, JSON.stringify(updated));
-                          window.dispatchEvent(new Event("bookmark_changed"));
-                        } catch (e) {
-                          console.error(e);
-                        }
-                      }}
-                      className="p-2.5 rounded-xl border border-slate-800 bg-slate-900/60 text-slate-400 hover:text-white transition-all cursor-pointer shrink-0"
-                      title="Bookmark Lesson"
-                    >
-                      <Bookmark size={20} className="stroke-[2.5]" />
-                    </button>
-                  </div>
-
                   {children}
                 </div>
               </div>

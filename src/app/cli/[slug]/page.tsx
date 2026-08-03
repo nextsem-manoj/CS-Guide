@@ -5,9 +5,10 @@ import { cliLessons } from "@/data/cliLessonsData";
 import CliLessonClient from "@/components/CliLessonClient";
 
 export async function generateStaticParams() {
-  return cliLessons.map((lesson) => ({
+  const params = cliLessons.map((lesson) => ({
     slug: lesson.slug,
   }));
+  return [...params, { slug: "" }, { slug: "index" }];
 }
 
 export async function generateMetadata({
@@ -16,8 +17,9 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const lesson = cliLessons.find((l) => l.slug === slug);
-  
+  const decoded = slug ? decodeURIComponent(slug).toLowerCase() : "";
+  const lesson = cliLessons.find((l) => l.slug.toLowerCase() === decoded) || (!decoded ? cliLessons[0] : null);
+
   if (!lesson) {
     return {
       title: "Lesson Not Found | NextSem",
@@ -32,12 +34,12 @@ export async function generateMetadata({
     title,
     description,
     alternates: {
-      canonical: `/cli/${slug}`,
+      canonical: `/cli/${lesson.slug}`,
     },
     openGraph: {
       title,
       description,
-      url: `https://nextsem.online/cli/${slug}`,
+      url: `https://nextsem.online/cli/${lesson.slug}`,
       type: "article",
     },
   };
@@ -49,7 +51,10 @@ export default async function CliSlugPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const lesson = cliLessons.find((l) => l.slug === slug);
+  const decoded = slug ? decodeURIComponent(slug).toLowerCase() : "";
+  const lesson = cliLessons.find(
+    (l) => l.slug.toLowerCase() === decoded || l.id.toString() === decoded
+  ) || (!decoded || decoded === "index" ? cliLessons[0] : null);
 
   if (!lesson) {
     notFound();
