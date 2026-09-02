@@ -66,6 +66,14 @@ export default function UserSitemap() {
         icon: <Book size={16} /> 
       },
       { 
+        title: "Unit 2: Operating System (Visual Notes & Lab)", 
+        url: "/bca/notes/bcs-011-unit-2-operating-system", 
+        category: "bca", 
+        description: "12-page comprehensive interactive notes, initial-alphabet fill-in-the-blanks, and Windows 11 CMD diagnostic simulator.", 
+        icon: <Sparkles size={16} />, 
+        tag: "Interactive Notes" 
+      },
+      { 
         title: "Unit 5: My Personal Computer (Visual Notes)", 
         url: "/bca/notes/bcs-011-unit-5", 
         category: "bca", 

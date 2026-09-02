@@ -200,7 +200,7 @@ export default function HomeClient() {
                   IGNOU
                 </span>
                 <span className="text-[10px] font-mono text-[#04AA6D] font-bold tracking-tight mt-0.5">
-                  ignou.nextsem.online
+                  Study Notes Hub
                 </span>
               </div>
             </Link>

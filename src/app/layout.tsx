@@ -36,7 +36,7 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://ignou.nextsem.online"),
+  metadataBase: new URL("https://ignou-study-notes-by-nextsem.web.app"),
   title: "IGNOU BCA 1st Semester Hub | Er. Manoj Kumar | Nextsem Online",
   description: "Official IGNOU BCA 1st Semester learning dashboard featuring line-by-line textbook units, bilingual English & Hinglish lessons, MCQs, and practical lab simulators by Er. Manoj Kumar.",
   manifest: "/manifest.json",
@@ -60,7 +60,7 @@ export const metadata: Metadata = {
     "ignou bca syllabus semester wise",
     "ignou online learning free"
   ],
-  authors: [{ name: "Er. Manoj Kumar", url: "https://nextsem.online" }],
+  authors: [{ name: "Er. Manoj Kumar", url: "https://ignou-study-notes-by-nextsem.web.app" }],
   creator: "Er. Manoj Kumar",
   publisher: "Nextsem Academy",
   formatDetection: {
@@ -71,7 +71,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "IGNOU BCA 1st Semester Hub | Er. Manoj Kumar",
     description: "Line-by-line IGNOU BCA Semester 1 curriculum with interactive units, bilingual support, and exam preparation by Er. Manoj Kumar.",
-    url: "https://ignou.nextsem.online",
+    url: "https://ignou-study-notes-by-nextsem.web.app",
     siteName: "Nextsem Academy",
     images: [
       {

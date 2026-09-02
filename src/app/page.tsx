@@ -21,11 +21,11 @@ export const metadata: Metadata = {
     "ignou bca previous year questions",
     "ignou study hub online"
   ],
-  alternates: { canonical: "https://ignou.nextsem.online" },
+  alternates: { canonical: "https://ignou-study-notes-by-nextsem.web.app" },
   openGraph: {
     title: "IGNOU BCA Free Study Materials & Lessons | Er. Manoj Kumar",
     description: "Free line-by-line IGNOU BCA Semester 1 curriculum with interactive units, bilingual notes, MCQs, and lab simulators.",
-    url: "https://ignou.nextsem.online",
+    url: "https://ignou-study-notes-by-nextsem.web.app",
     siteName: "IGNOU BCA Hub by Nextsem",
     type: "website",
   },
@@ -42,8 +42,8 @@ export default function Home() {
     "@graph": [
       {
         "@type": "WebSite",
-        "@id": "https://ignou.nextsem.online/#website",
-        "url": "https://ignou.nextsem.online",
+        "@id": "https://ignou-study-notes-by-nextsem.web.app/#website",
+        "url": "https://ignou-study-notes-by-nextsem.web.app",
         "name": "IGNOU BCA Study Hub",
         "description": "Free IGNOU BCA Study Materials, Line-by-Line Textbook Notes & Practical Simulators",
         "publisher": {
@@ -51,15 +51,15 @@ export default function Home() {
           "name": "IGNOU BCA Hub • Nextsem Online",
           "logo": {
             "@type": "ImageObject",
-            "url": "https://ignou.nextsem.online/icon.svg"
+            "url": "https://ignou-study-notes-by-nextsem.web.app/icon.svg"
           }
         }
       },
       {
         "@type": "EducationalOrganization",
-        "@id": "https://ignou.nextsem.online/#organization",
+        "@id": "https://ignou-study-notes-by-nextsem.web.app/#organization",
         "name": "IGNOU BCA Study Hub by Nextsem",
-        "url": "https://ignou.nextsem.online",
+        "url": "https://ignou-study-notes-by-nextsem.web.app",
         "founder": {
           "@type": "Person",
           "name": "Er. Manoj Kumar"
@@ -72,7 +72,7 @@ export default function Home() {
         "provider": {
           "@type": "EducationalOrganization",
           "name": "IGNOU BCA Hub",
-          "url": "https://ignou.nextsem.online"
+          "url": "https://ignou-study-notes-by-nextsem.web.app"
         }
       },
       {
@@ -82,7 +82,7 @@ export default function Home() {
         "provider": {
           "@type": "EducationalOrganization",
           "name": "IGNOU BCA Hub",
-          "url": "https://ignou.nextsem.online"
+          "url": "https://ignou-study-notes-by-nextsem.web.app"
         }
       },
       {
@@ -93,7 +93,7 @@ export default function Home() {
             "name": "Where can I get free IGNOU BCA study materials and notes?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "You can access 100% free IGNOU BCA study materials, line-by-line textbook unit notes, interactive MCQs, and lab simulators directly on https://ignou.nextsem.online created by Er. Manoj Kumar."
+              "text": "You can access 100% free IGNOU BCA study materials, line-by-line textbook unit notes, interactive MCQs, and lab simulators directly on https://ignou-study-notes-by-nextsem.web.app created by Er. Manoj Kumar."
             }
           },
           {

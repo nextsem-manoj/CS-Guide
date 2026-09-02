@@ -224,12 +224,16 @@ export default function SubjectSyllabusDashboard({ semester, subject }: { semest
                       const isCompleted = !!completedChapters[progressKey];
                       const pdfPath = `/BCA_NEW_Books/${block.path}/${unit.fileName}`;
                       
-                      // ✅ Any block's Unit 1 or Unit 5 in BCS-111 / BCS-011 gets interactive lesson link
+                      // ✅ Any block's Unit 1, Unit 2 (Operating System), or Unit 5 in BCS-111 / BCS-011 gets interactive lesson link
                       const isComputerBasicsUnit1 =
                         (subjectCode === "BCS-111" || subjectCode === "BCS-011") &&
                         (unit.fileName.toLowerCase().includes("unit-1") ||
                           unit.fileName.toLowerCase().includes("unit 1") ||
                           (uIdx === 0 && bIdx === 0));
+                      const isOperatingSystemUnit2 =
+                        (subjectCode === "BCS-111" || subjectCode === "BCS-011") &&
+                        (unit.displayName.toLowerCase().includes("operating system") ||
+                          (block.name.toLowerCase().includes("block 2") && unit.fileName.toLowerCase().includes("unit-2")));
                       const isComputerBasicsUnit5 =
                         (subjectCode === "BCS-111" || subjectCode === "BCS-011") &&
                         (unit.fileName.toLowerCase().includes("unit 5") ||
@@ -238,8 +242,10 @@ export default function SubjectSyllabusDashboard({ semester, subject }: { semest
 
                       const interactiveLessonUrl = isComputerBasicsUnit1
                         ? "/bca/semester-1/bcs-011-computer-basics/unit-1/lessons"
+                        : isOperatingSystemUnit2
+                        ? "/bca/notes/bcs-011-unit-2-operating-system"
                         : isComputerBasicsUnit5
-                        ? "/bca/semester-1/bcs-011-computer-basics/unit-5-introduction-to-personal-computers"
+                        ? "/bca/notes/bcs-011-unit-5"
                         : null;
 
                       const handleUnitClick = () => {

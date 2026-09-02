@@ -1070,3 +1070,8 @@ Total: 26 features shipped across 2 app versions (v25 → v26) 🎯
 - **Task-Based Coding Lab Integration (2026-07-31)**:
   - Built interactive `TaskBasedCodingLab.tsx` component with step-by-step task checklist, live code editor, automated keyword/regex verification engine, hints system, and celebration confetti.
   - Embedded `TaskBasedCodingLab` into `HtmlLessonClient.tsx` and `BcaLessonClient.tsx` for hands-on practice.
+- **Unit 2: Operating System (Pages 46–57) Interactive Suite & Architecture Visualizer (2026-09-02)**:
+  - Created 12-page interactive line-by-line textbook note & Fill-in-the-Blanks study suite (`src/app/bca/notes/bcs-011-unit-2-operating-system/page.tsx`).
+  - Built rich visual lesson page with real-world analogies, 🪟 Windows 11 CMD diagnostic terminal simulator, and interactive quiz (`src/app/bca/semester-1/bcs-011-computer-basics/unit-2-operating-system/page.tsx`).
+  - Designed vector SVG architectural diagrams: 4-Layer OS Architecture (`public/os_illustration.svg`) and Process State Transition Lifecycle (`public/os_process_illustration.svg`).
+  - Integrated Block 2 Unit 2 interactive links into `SubjectClient.tsx`, `ViewerClient.tsx`, `sitemap.ts`, and `sitemap/page.tsx`.

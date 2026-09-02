@@ -5,7 +5,7 @@ import { htmlLessons } from "../data/htmlLessonsData";
 export const dynamic = "force-static";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://ignou.nextsem.online";
+  const baseUrl = "https://ignou-study-notes-by-nextsem.web.app";
 
   // Base paths
   const baseRoutes = [
@@ -36,7 +36,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const bcaSubjectRoutes = [
     "/bca/semester-1/bcs-011-computer-basics",
     "/bca/semester-1/bcs-011-computer-basics/unit-1-introduction-to-computer-systems",
+    "/bca/semester-1/bcs-011-computer-basics/unit-2-operating-system",
+    "/bca/notes/bcs-011-unit-2-operating-system",
     "/bca/semester-1/bcs-011-computer-basics/unit-5-introduction-to-personal-computers",
+    "/bca/notes/bcs-011-unit-5",
     "/bca/semester-1/bcsl-013-software-lab",
     "/bca/semester-1/bcs-012-basic-mathematics",
     "/bca/semester-1/begla-136-english",

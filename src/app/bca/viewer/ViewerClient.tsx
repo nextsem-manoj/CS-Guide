@@ -140,6 +140,11 @@ export default function TextbookViewer() {
   useEffect(() => {
     if (fileUrl.toLowerCase().includes('unit 5.pdf') || fileUrl.toLowerCase().includes('unit-5')) {
       router.replace('/bca/notes/bcs-011-unit-5');
+    } else if (
+      (fileUrl.toLowerCase().includes('block 2') || fileUrl.toLowerCase().includes('block%202')) &&
+      (fileUrl.toLowerCase().includes('unit-2.pdf') || fileUrl.toLowerCase().includes('unit 2.pdf') || fileUrl.toLowerCase().includes('unit-2'))
+    ) {
+      router.replace('/bca/notes/bcs-011-unit-2-operating-system');
     }
   }, [fileUrl, router]);
 

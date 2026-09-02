@@ -21,11 +21,11 @@ try {
 
   // Define critical URLs to verify
   const requiredUrls = [
-    'https://ignou.nextsem.online/',
-    'https://ignou.nextsem.online/about',
-    'https://ignou.nextsem.online/bca',
-    'https://ignou.nextsem.online/bca/semester-1',
-    'https://ignou.nextsem.online/profile'
+    'https://ignou-study-notes-by-nextsem.web.app/',
+    'https://ignou-study-notes-by-nextsem.web.app/about',
+    'https://ignou-study-notes-by-nextsem.web.app/bca',
+    'https://ignou-study-notes-by-nextsem.web.app/bca/semester-1',
+    'https://ignou-study-notes-by-nextsem.web.app/profile'
   ];
 
   let missingCount = 0;

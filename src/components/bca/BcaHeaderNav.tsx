@@ -59,7 +59,7 @@ export default function BcaHeaderNav({
                 IGNOU
               </span>
               <span className="text-[8px] font-mono text-[#04AA6D] font-bold tracking-tight">
-                ignou.nextsem.online
+                Study Notes Hub
               </span>
             </div>
           </Link>
