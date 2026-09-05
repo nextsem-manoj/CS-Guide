@@ -1,6 +1,8 @@
+"use client";
+
 import React from 'react';
 import Link from 'next/link';
-import { ThemeToggle } from './ThemeToggle';
+import { Search } from 'lucide-react';
 import ProgressIndicator from './ProgressIndicator';
 import { FontSizeControlPill } from './FontSizeControl';
 
@@ -24,8 +26,20 @@ const Header = () => {
         </h1>
       </div>
 
-      {/* Right Section: Progress, Font Size & Theme Toggle in a horizontal row */}
-      <div className="flex flex-row items-center gap-3 sm:gap-4">
+      {/* Right Section: Search, Progress, Font Size */}
+      <div className="flex flex-row items-center gap-2.5 sm:gap-4">
+        <button
+          onClick={() => window.dispatchEvent(new CustomEvent('open-global-search'))}
+          className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-slate-900 border border-slate-700/80 hover:border-emerald-500/60 text-slate-300 hover:text-white transition-all text-xs font-bold cursor-pointer"
+          title="Search Topics (Ctrl+K)"
+        >
+          <Search size={14} className="text-emerald-400" />
+          <span className="hidden sm:inline">Search</span>
+          <kbd className="hidden md:inline-block text-[9px] bg-slate-800 border border-slate-700 px-1 py-0.5 rounded text-slate-400 font-mono">
+            Ctrl+K
+          </kbd>
+        </button>
+
         <div className="hidden md:block">
           <ProgressIndicator />
         </div>

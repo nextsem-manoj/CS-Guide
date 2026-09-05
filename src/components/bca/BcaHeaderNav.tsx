@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
-import { Home, ChevronDown, BookOpen, X, Sparkles, GraduationCap, CheckCircle2 } from 'lucide-react';
+import { Home, ChevronDown, BookOpen, X, Sparkles, GraduationCap, CheckCircle2, Search } from 'lucide-react';
 import { bcaSemesters } from '@/data/bcaCoursesData';
 
 interface BcaHeaderNavProps {
@@ -23,15 +23,27 @@ export default function BcaHeaderNav({
 
   return (
     <>
-      <header className="h-16 border-b border-slate-800/80 bg-[#060c18]/90 backdrop-blur-xl sticky top-0 z-40 flex items-center justify-between px-4 sm:px-6 select-none shadow-md">
-        {/* Left: Always Visible Home Link */}
-        <Link
-          href="/"
-          className="flex items-center gap-2 text-slate-300 hover:text-white font-black text-xs sm:text-sm bg-slate-900/80 hover:bg-slate-800 border border-slate-800 px-3.5 py-2 rounded-xl transition-all active:scale-95 shrink-0"
-        >
-          <Home size={16} className="text-amber-400" />
-          <span className="hidden sm:inline">Home</span>
-        </Link>
+      <header className="h-16 border-b border-slate-800/80 bg-[#060c18]/90 backdrop-blur-xl sticky top-0 z-40 flex items-center justify-between px-4 sm:px-6 select-none shadow-md gap-2">
+        {/* Left: Always Visible Home Link & Search Trigger */}
+        <div className="flex items-center gap-2">
+          <Link
+            href="/"
+            className="flex items-center gap-2 text-slate-300 hover:text-white font-black text-xs sm:text-sm bg-slate-900/80 hover:bg-slate-800 border border-slate-800 px-3.5 py-2 rounded-xl transition-all active:scale-95 shrink-0"
+          >
+            <Home size={16} className="text-amber-400" />
+            <span className="hidden sm:inline">Home</span>
+          </Link>
+
+          <button
+            onClick={() => window.dispatchEvent(new CustomEvent("open-global-search"))}
+            className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-900/80 hover:bg-slate-800 border border-slate-800 text-slate-300 hover:text-white font-bold text-xs shadow-md transition-all active:scale-95 cursor-pointer"
+            title="Universal Search (Ctrl+K)"
+          >
+            <Search size={14} className="text-cyan-400" />
+            <span className="hidden md:inline">Search</span>
+            <kbd className="hidden lg:inline text-[9px] bg-slate-950 px-1 py-0.5 rounded border border-slate-700 text-slate-400">Ctrl K</kbd>
+          </button>
+        </div>
 
         {/* Center: Subject Switcher Dropdown (Matching image-20.png style) */}
         <div className="relative">
@@ -106,8 +118,19 @@ export default function BcaHeaderNav({
                   <div className="space-y-1">
                     {sem.subjects.map((sub) => {
                       const isCurrent = sub.code.toUpperCase() === currentSubjectCode.toUpperCase() || currentSubjectCode.includes(sub.code);
-                      const targetUrl = (sub.code === "BCS-111" || sub.code === "BCS-011")
-                        ? "/bca/semester-1/bcs-011-computer-basics/unit-1-introduction-to-computer-systems"
+                      const isComputerBasics = sub.code === "BCS-111" || sub.code === "BCS-011";
+                      const targetUrl = sem.id === 1
+                        ? (isComputerBasics 
+                            ? "/bca/semester-1/bcs-011-computer-basics" 
+                            : sub.code === "BCS-012"
+                            ? "/bca/semester-1/bcs-012-basic-mathematics"
+                            : sub.code === "BCSL-013"
+                            ? "/bca/semester-1/bcsl-013-software-lab"
+                            : sub.code === "BEGLA-136"
+                            ? "/bca/semester-1/begla-136-english"
+                            : sub.code === "BEVAE-181"
+                            ? "/bca/semester-1/bevae-181-environmental-studies"
+                            : `/bca/semester-1/${sub.code.toLowerCase()}`)
                         : `/bca/${sem.id}/${sub.code.toLowerCase()}`;
 
                       return (
@@ -117,7 +140,7 @@ export default function BcaHeaderNav({
                             setDropdownOpen(false);
                             router.push(targetUrl);
                           }}
-                          className={`w-full text-left p-2.5 rounded-xl border transition-all flex items-center justify-between gap-2 text-xs font-bold ${
+                          className={`w-full text-left p-2.5 rounded-xl border transition-all flex items-center justify-between gap-2 text-xs font-bold cursor-pointer ${
                             isCurrent
                               ? "bg-cyan-500/20 border-cyan-400 text-cyan-200"
                               : "bg-slate-900/60 hover:bg-slate-800 border-slate-800 text-slate-300"

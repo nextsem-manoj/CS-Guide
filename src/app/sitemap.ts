@@ -10,6 +10,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // Base paths
   const baseRoutes = [
     "",
+    "/html",
+    "/html/tags",
     "/bca",
     "/bca/semester-1",
     "/bca/1",

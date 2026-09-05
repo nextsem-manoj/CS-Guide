@@ -75,6 +75,8 @@ interface SearchItem {
   duration: string;
   color: string;
   icon: string;
+  url?: string;
+  category?: string;
 }
 
 interface AiResponse {
@@ -116,6 +118,8 @@ interface SearchResultItem {
   icon: string;
   score: number;
   excerpt: string;
+  url?: string;
+  category?: string;
 }
 
 const AI_RESPONSES: Record<string, { title: string; summary: string; code: string; chapter: string }> = {
@@ -341,12 +345,14 @@ const SearchWidget = () => {
     }
 
     const handleGlobalKeyDown = (e: KeyboardEvent) => {
-      if (e.key === '/' && document.activeElement?.tagName !== 'INPUT' && document.activeElement?.tagName !== 'TEXTAREA') {
+      if (
+        ((e.key === 'k' || e.key === 'K') && (e.ctrlKey || e.metaKey)) ||
+        (e.key === '/' && document.activeElement?.tagName !== 'INPUT' && document.activeElement?.tagName !== 'TEXTAREA')
+      ) {
         e.preventDefault();
         setIsOpen(true);
         setTimeout(() => {
-          const inputEl = document.querySelector('input[type="text"]') as HTMLInputElement;
-          inputEl?.focus();
+          inputRef.current?.focus();
         }, 150);
       }
     };
@@ -373,6 +379,7 @@ const SearchWidget = () => {
       setTimeout(() => inputRef.current?.focus(), 150);
     };
     window.addEventListener("open_search", handleOpenSearch as EventListener);
+    window.addEventListener("open-global-search", handleOpenSearch as EventListener);
 
     const handleAuthError = (e: Event) => {
       const customEvent = e as CustomEvent<string>;
@@ -995,7 +1002,7 @@ const SearchWidget = () => {
                         {results.map((item) => (
                           <Link
                             key={item.id}
-                            href={getChapterUrl(item.id)}
+                            href={item.url || getChapterUrl(item.id)}
                             onClick={() => handleSelectResult(item.title)}
                             className="flex flex-col sm:flex-row gap-4 p-3 bg-slate-900/30 hover:bg-slate-900/80 border border-slate-850 rounded-2xl transition-all duration-300 group hover:border-blue-500/40 shadow-sm"
                           >
@@ -1007,7 +1014,7 @@ const SearchWidget = () => {
                                 {item.icon}
                               </div>
                               <span className="absolute bottom-2 right-2 bg-black/80 text-[10px] font-black uppercase px-2 py-0.5 rounded border border-white/10 tracking-widest text-slate-250 z-10">
-                                {item.phase}
+                                {item.category || item.phase}
                               </span>
                             </div>
 
@@ -1018,9 +1025,15 @@ const SearchWidget = () => {
                               </h4>
                               
                               <div className="flex items-center gap-2 text-xs text-slate-400 font-bold mb-2">
-                                <span>Nextsem Academy</span>
+                                <span className="text-emerald-400 font-extrabold">{item.category || "Nextsem Hub"}</span>
                                 <span>•</span>
-                                <span>{item.duration}</span>
+                                <span>{item.duration || '5 min read'}</span>
+                                {item.phase && item.phase !== item.category && (
+                                  <>
+                                    <span>•</span>
+                                    <span className="text-slate-500">{item.phase}</span>
+                                  </>
+                                )}
                               </div>
                               
                               <p className="text-xs md:text-sm text-slate-400 font-medium leading-relaxed bg-slate-900/40 border border-slate-850/20 px-3 py-2 rounded-lg font-mono overflow-x-hidden text-ellipsis whitespace-nowrap sm:whitespace-normal">

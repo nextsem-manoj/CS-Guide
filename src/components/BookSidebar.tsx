@@ -271,11 +271,18 @@ const BookSidebar = ({ isOpen, setIsOpen, sidebarWidth, onWidthChange, isCollaps
                 </div>
 
                 {!isCollapsed && isHtml && (
-                  <Link href="/html/quiz" onClick={() => setIsOpen(false)}
-                    className="mt-2 flex items-center justify-between px-3 py-1.5 bg-[#04AA6D]/15 border border-[#04AA6D]/40 text-[#04AA6D] hover:bg-[#04AA6D]/25 rounded-lg text-xs font-black uppercase tracking-wider transition-all cursor-pointer">
-                    <span>📝 Take HTML Quiz</span>
-                    <span className="text-[9px] bg-[#04AA6D] text-white px-1.5 py-0.5 rounded font-bold">100 Qs</span>
-                  </Link>
+                  <div className="flex flex-col gap-1.5 mt-2">
+                    <Link href="/html/tags" onClick={() => setIsOpen(false)}
+                      className="flex items-center justify-between px-3 py-1.5 bg-blue-950/40 border border-blue-800/40 text-blue-300 hover:bg-blue-900/40 rounded-lg text-xs font-black uppercase tracking-wider transition-all cursor-pointer">
+                      <span>🏷️ All HTML Tags</span>
+                      <span className="text-[9px] bg-blue-600 text-white px-1.5 py-0.5 rounded font-bold">115+</span>
+                    </Link>
+                    <Link href="/html/quiz" onClick={() => setIsOpen(false)}
+                      className="flex items-center justify-between px-3 py-1.5 bg-[#04AA6D]/15 border border-[#04AA6D]/40 text-[#04AA6D] hover:bg-[#04AA6D]/25 rounded-lg text-xs font-black uppercase tracking-wider transition-all cursor-pointer">
+                      <span>📝 Take HTML Quiz</span>
+                      <span className="text-[9px] bg-[#04AA6D] text-white px-1.5 py-0.5 rounded font-bold">100 Qs</span>
+                    </Link>
+                  </div>
                 )}
                 {!isCollapsed && isCli && (
                   <Link href="/cli/quiz" onClick={() => setIsOpen(false)}

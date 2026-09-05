@@ -19,7 +19,8 @@ import {
   Sparkles,
   ChevronRight,
   Code,
-  GraduationCap
+  GraduationCap,
+  Search
 } from "lucide-react";
 import { usePWA } from '@/hooks/usePWA';
 import { LANGUAGES, changeLanguage } from '@/components/TranslateWidget';
@@ -48,8 +49,6 @@ const BottomNavigation = () => {
       return () => document.removeEventListener("fullscreenchange", handleFs);
     }
   }, []);
-
-  if (isFullscreen) return null;
 
   useEffect(() => {
     const native = Capacitor.isNativePlatform();
@@ -80,6 +79,7 @@ const BottomNavigation = () => {
     setMenuOpen(false);
   }, [pathname]);
 
+  if (isFullscreen) return null;
   if (!mounted) return null;
   if (pathname === '/simulator') return null;
 
@@ -246,6 +246,29 @@ const BottomNavigation = () => {
 
             <div className="space-y-4 max-h-[60vh] overflow-y-auto pr-1 custom-scrollbar">
               
+              {/* Universal Search Quick Button */}
+              <button
+                onClick={() => {
+                  setMenuOpen(false);
+                  window.dispatchEvent(new CustomEvent("open-global-search"));
+                }}
+                className="w-full flex items-center justify-between p-3 bg-gradient-to-r from-slate-900 to-slate-800/90 hover:from-slate-800 hover:to-slate-750 border border-cyan-500/30 hover:border-cyan-400/60 rounded-2xl text-slate-300 hover:text-white transition-all cursor-pointer group shadow-md text-left"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-xl bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center text-cyan-400 group-hover:scale-105 transition-transform">
+                    <Search size={16} />
+                  </div>
+                  <div>
+                    <div className="text-xs font-bold text-white flex items-center gap-1.5">
+                      <span>Search All Courses</span>
+                      <span className="text-[9px] font-bold px-1.5 py-0.2 bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 rounded-md">500+ Lessons</span>
+                    </div>
+                    <div className="text-[10px] text-slate-400">HTML, CLI, BCA Sem 1, MS Word & Tags</div>
+                  </div>
+                </div>
+                <kbd className="hidden sm:inline-block text-[10px] font-mono bg-slate-950 px-2 py-1 rounded-lg border border-slate-700 text-slate-400">Ctrl K</kbd>
+              </button>
+
               {/* User Auth Banner */}
               <div className="p-3.5 bg-slate-800/40 border border-slate-700/50 rounded-2xl">
                 {currentUser ? (

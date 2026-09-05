@@ -237,9 +237,21 @@ export default function BcaDashboard() {
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         {sem.subjects.map((sub) => {
                           const isComputerBasics = sub.code === "BCS-111" || sub.code === "BCS-011";
-                          // First Active Lesson URL for BCS-111, or subject overview for others
-                          const targetUrl = isComputerBasics
-                            ? "/bca/semester-1/bcs-011-computer-basics/unit-1-introduction-to-computer-systems"
+                          const totalUnits = sub.blocks.reduce((acc, b) => acc + b.units.length, 0);
+                          
+                          // Dedicated subject page URL for all subjects across all semesters
+                          const targetUrl = sem.id === 1
+                            ? (isComputerBasics 
+                                ? "/bca/semester-1/bcs-011-computer-basics" 
+                                : sub.code === "BCS-012"
+                                ? "/bca/semester-1/bcs-012-basic-mathematics"
+                                : sub.code === "BCSL-013"
+                                ? "/bca/semester-1/bcsl-013-software-lab"
+                                : sub.code === "BEGLA-136"
+                                ? "/bca/semester-1/begla-136-english"
+                                : sub.code === "BEVAE-181"
+                                ? "/bca/semester-1/bevae-181-environmental-studies"
+                                : `/bca/semester-1/${sub.code.toLowerCase()}`)
                             : `/bca/${sem.id}/${sub.code.toLowerCase()}`;
 
                           return (
@@ -249,20 +261,23 @@ export default function BcaDashboard() {
                               className="p-4 rounded-2xl bg-[#0c1328] hover:bg-[#101b38] border border-cyan-500/30 hover:border-cyan-400 cursor-pointer transition-all duration-200 shadow-md group flex items-center justify-between"
                             >
                               <div className="flex items-center gap-3 min-w-0">
-                                <div className="w-9 h-9 rounded-xl bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 flex items-center justify-center text-sm font-black shrink-0">
+                                <div className="w-10 h-10 rounded-xl bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 flex items-center justify-center text-base font-black shrink-0 group-hover:scale-105 transition-transform">
                                   {sub.isLab ? '🧪' : '📘'}
                                 </div>
 
                                 <div className="min-w-0 text-left">
-                                  <div className="flex items-center gap-1.5">
+                                  <div className="flex items-center gap-1.5 flex-wrap">
                                     <span className="text-[10px] font-black uppercase text-amber-400">
                                       {sub.code}
                                     </span>
                                     {isComputerBasics && (
                                       <span className="text-[9px] font-black uppercase px-1.5 py-0.2 bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 rounded">
-                                        Active Lesson 1
+                                        Interactive Lessons
                                       </span>
                                     )}
+                                    <span className="text-[9px] font-bold text-slate-400">
+                                      {sub.blocks.length} Blocks · {totalUnits} Units
+                                    </span>
                                   </div>
                                   <h4 className="text-xs sm:text-sm font-extrabold text-white truncate leading-snug mt-0.5 group-hover:text-cyan-300 transition-colors">
                                     {sub.name}
@@ -270,7 +285,12 @@ export default function BcaDashboard() {
                                 </div>
                               </div>
 
-                              <Play size={14} className="text-cyan-400 group-hover:translate-x-1 transition-transform shrink-0" />
+                              <div className="flex items-center gap-1 shrink-0 pl-2">
+                                <span className="text-[10px] font-bold text-cyan-400 opacity-0 group-hover:opacity-100 transition-opacity hidden sm:inline">
+                                  Syllabus
+                                </span>
+                                <Play size={14} className="text-cyan-400 group-hover:translate-x-1 transition-transform" />
+                              </div>
                             </div>
                           );
                         })}

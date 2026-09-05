@@ -1,0 +1,1850 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML & CSS Live Code & Visual Output Test | NextSem Academy</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-main: #060c18;
+            --card-surface: #0c1328;
+            --card-surface-elevated: #131c38;
+            --card-surface-dark: #030712;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --border-light: rgba(255, 255, 255, 0.15);
+            --primary-green: #04AA6D;
+            --primary-green-glow: rgba(4, 170, 109, 0.35);
+            --gold: #c1a648;
+            --gold-glow: rgba(193, 166, 72, 0.25);
+            --cyan-accent: #00d2ff;
+            --cyan-glow: rgba(0, 210, 255, 0.25);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 16px 60px;
+            background-image: 
+                radial-gradient(circle at 15% 15%, rgba(4, 170, 109, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 85% 85%, rgba(0, 210, 255, 0.08) 0%, transparent 40%);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1120px;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        /* Top Header */
+        .header {
+            background: var(--card-surface);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 20px 24px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-green), var(--cyan-accent), var(--gold));
+        }
+
+        .brand-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--gold);
+            background: rgba(193, 166, 72, 0.12);
+            padding: 4px 10px;
+            border-radius: 20px;
+            border: 1px solid rgba(193, 166, 72, 0.3);
+            margin-bottom: 4px;
+        }
+
+        .title {
+            font-size: 24px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ffffff 40%, #cbd5e1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .lang-tabs {
+            display: flex;
+            background: var(--bg-main);
+            padding: 4px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            gap: 4px;
+        }
+
+        .lang-tab {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 12px;
+            font-weight: 700;
+            padding: 6px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .lang-tab.active {
+            background: var(--primary-green);
+            color: #ffffff;
+            box-shadow: 0 2px 8px var(--primary-green-glow);
+        }
+
+        /* Stats Strip */
+        .stats-strip {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 12px;
+        }
+
+        .stat-card {
+            background: var(--card-surface);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 10px 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .stat-icon {
+            font-size: 20px;
+            background: var(--card-surface-elevated);
+            width: 38px;
+            height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            flex-shrink: 0;
+        }
+
+        .stat-label {
+            font-size: 10.5px;
+            color: var(--text-muted);
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .stat-value {
+            font-size: 16px;
+            font-weight: 800;
+            color: var(--text-main);
+        }
+
+        /* Progress Tracker */
+        .progress-wrapper {
+            background: var(--card-surface);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 10px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .progress-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11.5px;
+            font-weight: 700;
+            color: var(--text-muted);
+        }
+
+        .progress-bar-bg {
+            width: 100%;
+            height: 7px;
+            background: var(--bg-main);
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--primary-green), var(--cyan-accent));
+            transition: width 0.3s ease;
+        }
+
+        /* Split-View Workbench */
+        .workbench-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        @media (max-width: 820px) {
+            .workbench-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Left Side: Code Editor Box */
+        .code-panel {
+            background: var(--card-surface);
+            border: 1px solid var(--border-color);
+            border-radius: 18px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+
+        .panel-topbar {
+            background: var(--card-surface-elevated);
+            padding: 10px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .panel-title-wrap {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: #38bdf8;
+        }
+
+        .code-tab-buttons {
+            display: flex;
+            gap: 4px;
+            background: var(--card-surface-dark);
+            padding: 3px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .code-tab-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 11px;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .code-tab-btn.active {
+            background: var(--primary-green);
+            color: #ffffff;
+        }
+
+        .code-editor-area {
+            position: relative;
+            background: var(--card-surface-dark);
+            height: 260px;
+            display: flex;
+        }
+
+        textarea.code-textarea {
+            width: 100%;
+            height: 100%;
+            background: transparent;
+            border: none;
+            outline: none;
+            padding: 14px 16px;
+            color: #38bdf8;
+            font-family: 'Fira Code', monospace;
+            font-size: 13px;
+            line-height: 1.5;
+            resize: none;
+            white-space: pre;
+            tab-size: 2;
+        }
+
+        .code-action-strip {
+            padding: 8px 14px;
+            background: var(--card-surface);
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .btn-reset-code {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            font-size: 11px;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .btn-reset-code:hover {
+            color: #ffffff;
+            border-color: var(--text-muted);
+        }
+
+        /* Right Side: Live Browser Output Frame */
+        .preview-panel {
+            background: var(--card-surface);
+            border: 1px solid var(--border-color);
+            border-radius: 18px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+
+        .browser-mock-header {
+            background: #1e293b;
+            padding: 8px 14px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .browser-dots {
+            display: flex;
+            gap: 6px;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+        .dot-red { background: #ef4444; }
+        .dot-yellow { background: #f59e0b; }
+        .dot-green { background: #22c55e; }
+
+        .browser-url-bar {
+            flex: 1;
+            background: #0f172a;
+            border-radius: 6px;
+            padding: 3px 10px;
+            font-size: 11px;
+            font-family: 'Fira Code', monospace;
+            color: #94a3b8;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            border: 1px solid rgba(255,255,255,0.06);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .iframe-container {
+            height: 260px;
+            background: #ffffff;
+            position: relative;
+        }
+
+        iframe.preview-iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+            background: #ffffff;
+        }
+
+        .preview-footer {
+            padding: 8px 14px;
+            background: var(--card-surface);
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            color: #4ade80;
+            font-weight: 700;
+        }
+
+        .status-dot-live {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #4ade80;
+            box-shadow: 0 0 8px #4ade80;
+            animation: pulse 2s infinite;
+        }
+
+        /* Question Card & Assessment */
+        .question-card {
+            background: var(--card-surface);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.4);
+        }
+
+        .question-top-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .question-tag-pill {
+            font-size: 11px;
+            font-weight: 800;
+            color: var(--cyan-accent);
+            background: rgba(0, 210, 255, 0.1);
+            padding: 4px 10px;
+            border-radius: 8px;
+            border: 1px solid rgba(0, 210, 255, 0.25);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .question-text {
+            font-size: 17.5px;
+            font-weight: 700;
+            line-height: 1.5;
+            color: #ffffff;
+        }
+
+        /* Options */
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option-item {
+            background: var(--card-surface-elevated);
+            border: 1.5px solid var(--border-color);
+            border-radius: 12px;
+            padding: 13px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 13.5px;
+            font-weight: 600;
+            user-select: none;
+        }
+
+        .option-item:hover:not(.locked) {
+            border-color: rgba(4, 170, 109, 0.5);
+            background: rgba(4, 170, 109, 0.08);
+            transform: translateX(4px);
+        }
+
+        .option-letter {
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            background: var(--card-surface-dark);
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 800;
+            color: var(--text-muted);
+            flex-shrink: 0;
+            transition: all 0.2s ease;
+        }
+
+        /* Option States */
+        .option-item.correct {
+            background: rgba(4, 170, 109, 0.15) !important;
+            border-color: var(--primary-green) !important;
+            color: #4ade80 !important;
+        }
+        .option-item.correct .option-letter {
+            background: var(--primary-green);
+            color: #ffffff;
+            border-color: var(--primary-green);
+        }
+
+        .option-item.wrong {
+            background: rgba(239, 68, 68, 0.15) !important;
+            border-color: var(--danger) !important;
+            color: #f87171 !important;
+        }
+        .option-item.wrong .option-letter {
+            background: var(--danger);
+            color: #ffffff;
+            border-color: var(--danger);
+        }
+
+        /* Explanation Box */
+        .explanation-card {
+            display: none;
+            background: rgba(193, 166, 72, 0.08);
+            border: 1px solid rgba(193, 166, 72, 0.3);
+            border-radius: 12px;
+            padding: 14px 18px;
+            gap: 8px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .explanation-card.active {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .explanation-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--gold);
+            font-size: 12.5px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+        }
+
+        .explanation-body {
+            font-size: 13.5px;
+            line-height: 1.6;
+            color: #cbd5e1;
+        }
+
+        /* Footer Controls */
+        .controls-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-top: 6px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 11px 22px;
+            border-radius: 10px;
+            font-size: 13.5px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+            text-decoration: none;
+        }
+
+        .btn-prev {
+            background: var(--card-surface);
+            color: var(--text-muted);
+            border-color: var(--border-color);
+        }
+
+        .btn-prev:hover:not(:disabled) {
+            background: var(--card-surface-elevated);
+            color: #ffffff;
+        }
+
+        .btn-shuffle {
+            background: var(--card-surface-elevated);
+            color: var(--cyan-accent);
+            border-color: rgba(0, 210, 255, 0.3);
+        }
+
+        .btn-shuffle:hover:not(:disabled) {
+            background: rgba(0, 210, 255, 0.15);
+            border-color: var(--cyan-accent);
+        }
+
+        .btn-next {
+            background: var(--primary-green);
+            color: #ffffff;
+            box-shadow: 0 4px 14px var(--primary-green-glow);
+        }
+
+        .btn-next:hover {
+            background: #03935e;
+            transform: translateY(-1px);
+        }
+
+        .btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        /* Result Screen */
+        .result-screen {
+            display: none;
+            background: var(--card-surface);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 36px;
+            text-align: center;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .result-screen.active {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .trophy-badge {
+            font-size: 64px;
+            animation: bounce 1.5s infinite;
+        }
+
+        .result-score {
+            font-size: 48px;
+            font-weight: 800;
+            color: var(--primary-green);
+        }
+
+        .result-feedback {
+            font-size: 15.5px;
+            color: var(--text-muted);
+            max-width: 520px;
+            line-height: 1.6;
+        }
+
+        .certificate-pill {
+            background: rgba(193, 166, 72, 0.1);
+            border: 1px solid var(--gold);
+            padding: 10px 22px;
+            border-radius: 12px;
+            color: var(--gold);
+            font-weight: 700;
+            font-size: 13.5px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        
+        <!-- Header -->
+        <header class="header">
+            <div>
+                <div class="brand-badge">
+                    <span>🔥</span> Advanced Level • HTML & CSS Deep Architecture
+                </div>
+                <h1 class="title">HTML + CSS Hard-Level Master Test</h1>
+                <p class="subtitle">15 Deep Browser Architecture Questions • Stacking Contexts, Cascade Quirks & Dynamic Shuffling</p>
+            </div>
+
+            <!-- Language Switcher -->
+            <div class="lang-tabs">
+                <button class="lang-tab active" onclick="setLang('english')">🇬🇧 English</button>
+                <button class="lang-tab" onclick="setLang('hinglish')">🗣️ Hinglish</button>
+                <button class="lang-tab" onclick="setLang('hindi')">🕉️ Hindi</button>
+            </div>
+        </header>
+
+        <!-- Stats Strip -->
+        <div class="stats-strip">
+            <div class="stat-card">
+                <div class="stat-icon">⏱️</div>
+                <div>
+                    <div class="stat-label">Time Remaining</div>
+                    <div class="stat-value" id="timer-display">15:00</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">🎯</div>
+                <div>
+                    <div class="stat-label">Score</div>
+                    <div class="stat-value" id="score-display">0 / 15</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">🔥</div>
+                <div>
+                    <div class="stat-label">Streak</div>
+                    <div class="stat-value" id="streak-display">0 🔥</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">🔀</div>
+                <div>
+                    <div class="stat-label">Options Order</div>
+                    <div class="stat-value" style="font-size: 13px; color: var(--cyan-accent); font-weight: 700;">Randomized</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Progress Tracker -->
+        <div class="progress-wrapper">
+            <div class="progress-meta">
+                <span id="question-progress-label">Question 1 of 15</span>
+                <span id="percentage-label">7% Completed</span>
+            </div>
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" id="progress-bar"></div>
+            </div>
+        </div>
+
+        <!-- SPLIT WORKBENCH: Code on Left | Live Output on Right -->
+        <div class="workbench-grid" id="workbench-area">
+            
+            <!-- Left Side: Code Editor -->
+            <div class="code-panel">
+                <div class="panel-topbar">
+                    <div class="panel-title-wrap">
+                        <span>💻</span> Code Inspector (Left Side)
+                    </div>
+                    <div class="code-tab-buttons">
+                        <button class="code-tab-btn active" id="tab-html" onclick="switchCodeTab('html')">📄 HTML</button>
+                        <button class="code-tab-btn" id="tab-css" onclick="switchCodeTab('css')">🎨 CSS</button>
+                        <button class="code-tab-btn" id="tab-combined" onclick="switchCodeTab('combined')">⚡ Combined</button>
+                    </div>
+                </div>
+                <div class="code-editor-area">
+                    <textarea class="code-textarea" id="code-editor" oninput="handleCodeEdit()" spellcheck="false"></textarea>
+                </div>
+                <div class="code-action-strip">
+                    <span id="code-status-msg">✏️ You can edit code live to test variations!</span>
+                    <button class="btn-reset-code" onclick="resetCurrentCode()">
+                        🔄 Reset Code
+                    </button>
+                </div>
+            </div>
+
+            <!-- Right Side: Live Output Frame -->
+            <div class="preview-panel">
+                <div class="browser-mock-header">
+                    <div class="browser-dots">
+                        <span class="dot dot-red"></span>
+                        <span class="dot dot-yellow"></span>
+                        <span class="dot dot-green"></span>
+                    </div>
+                    <div class="browser-url-bar">
+                        <span>🔒</span> https://nextsem.preview/test-canvas.html
+                    </div>
+                </div>
+                <div class="iframe-container">
+                    <iframe class="preview-iframe" id="preview-frame" sandbox="allow-scripts allow-same-origin"></iframe>
+                </div>
+                <div class="preview-footer">
+                    <div class="status-pill">
+                        <span class="status-dot-live"></span> Live Real-Time Browser Output (Right Side)
+                    </div>
+                    <span style="font-size: 10.5px; color: var(--gold); font-weight: 700;">NextSem Engine</span>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Question & Quiz Area -->
+        <main id="quiz-view" class="question-card">
+            <div class="question-top-meta">
+                <div class="question-tag-pill" id="question-category">
+                    <span>🏷️</span> Block vs Inline Elements
+                </div>
+                <span id="question-difficulty" style="font-size: 11px; font-weight: 700; color: var(--gold);">
+                    ⭐ Concept Level: Core Foundation
+                </span>
+            </div>
+
+            <h2 class="question-text" id="question-text">
+                <!-- Question injected via JS -->
+            </h2>
+
+            <!-- Option List -->
+            <div class="options-list" id="options-container">
+                <!-- Options injected via JavaScript with Fisher-Yates shuffle -->
+            </div>
+
+            <!-- Explanation Box -->
+            <div class="explanation-card" id="explanation-box">
+                <div class="explanation-header">
+                    <span>💡</span> Deep Technical Explanation & Rule
+                </div>
+                <div class="explanation-body" id="explanation-text">
+                    <!-- Technical explanation -->
+                </div>
+            </div>
+
+            <!-- Controls -->
+            <div class="controls-footer">
+                <button class="btn btn-prev" id="btn-prev" onclick="prevQuestion()" disabled>
+                    ← Previous
+                </button>
+                <div style="display: flex; gap: 8px;">
+                    <button class="btn btn-shuffle" id="btn-shuffle" onclick="reshuffleCurrentOptions()" title="Reshuffle options for this question">
+                        🔀 Shuffle Options
+                    </button>
+                    <button class="btn btn-next" id="btn-next" onclick="nextQuestion()">
+                        Next Question →
+                    </button>
+                </div>
+            </div>
+        </main>
+
+        <!-- Result Screen -->
+        <div id="result-view" class="result-screen">
+            <div class="trophy-badge" id="trophy-icon">🏆</div>
+            <h2 class="title" id="result-title">HTML + CSS Test Completed!</h2>
+            <div class="result-score" id="final-score">11 / 12</div>
+            <p class="result-feedback" id="result-message">
+                Outstanding work! You demonstrated complete visual comprehension of HTML element flow, CSS box model calculations, and live browser layout rendering.
+            </p>
+            <div class="certificate-pill">
+                <span>📜</span> Certified by Er. Manoj Kumar • NextSem Academy
+            </div>
+            <div style="display: flex; gap: 12px; margin-top: 10px;">
+                <button class="btn btn-next" onclick="restartQuiz()">
+                    🔄 Retake Test (Re-shuffled)
+                </button>
+                <a href="index1.html" class="btn btn-prev">
+                    📖 Back to Lesson
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // 15 Hard & Advanced HTML & CSS Code-Based Test Questions
+        const testQuestionsData = [
+            {
+                id: 1,
+                category: "Stacking Context & Z-Index Isolation",
+                difficulty: "Hard / 3D Layering",
+                htmlCode: `<div class="card card-a">
+  <div class="badge badge-a">Child A (z-index: 9999)</div>
+</div>
+
+<div class="card card-b">
+  <div class="badge badge-b">Child B (z-index: 2)</div>
+</div>`,
+                cssCode: `.card-a {
+  position: relative;
+  z-index: 1;
+  opacity: 0.95; /* Creates Stacking Context! */
+  background: #131c38;
+  height: 90px;
+}
+
+.badge-a {
+  position: absolute;
+  top: 30px;
+  left: 30px;
+  z-index: 9999;
+  background: #ef4444;
+  color: white;
+  padding: 8px 14px;
+}
+
+.card-b {
+  position: relative;
+  z-index: 2;
+  background: #0c1328;
+  height: 90px;
+  margin-top: -30px;
+}
+
+.badge-b {
+  position: absolute;
+  top: 10px;
+  left: 45px;
+  z-index: 2;
+  background: #00d2ff;
+  color: black;
+  padding: 8px 14px;
+}`,
+                question: {
+                    english: "Look at the live output on the right: Why does Child B (z-index: 2) render ON TOP OF Child A (z-index: 9999) where they overlap?",
+                    hinglish: "Right side ke live output me: Child B (z-index: 2) Child A (z-index: 9999) ke upar kyu render ho raha hai jabki Child A ka z-index 9999 hai?",
+                    hindi: "दाईं ओर के आउटपुट को देखें: ओवरलैप होने पर Child B (z-index: 2), Child A (z-index: 9999) के ऊपर क्यों दिखाई दे रहा है?"
+                },
+                options: [
+                    "Because .card-a creates a local isolated Stacking Context (via opacity < 1 & z-index: 1); since .card-b has z-index: 2, all its descendants paint in front of .card-a",
+                    "Because z-index values greater than 1000 overflow and reset to 0 in CSS engines",
+                    "Because Child B appears later in the HTML source code tree",
+                    "Because Cyan color has a higher composite alpha depth than Red"
+                ],
+                correctAnswer: 0,
+                explanation: {
+                    english: "W3C Stacking Context Rule: Properties like 'opacity < 1', 'transform', or 'filter' on a positioned element create a new local Stacking Context. The z-index of 9999 is trapped inside .card-a. Because .card-b (z-index: 2) is higher than .card-a (z-index: 1), everything inside .card-b paints above .card-a.",
+                    hinglish: "Jab parent (.card-a) par opacity: 0.95 aur z-index: 1 lagta hai, to ek isolated Stacking Context ban jata hai. 9999 ka z-index andar hi bandh jata hai. Kyunki .card-b ka z-index (2) .card-a (1) se bada hai, isliye Child B upar paint hota hai.",
+                    hindi: "जब पैरेंट (.card-a) पर opacity < 1 होती है, तो एक नया स्टैकिंग कॉन्टेक्स्ट बनता है। .card-b (z-index: 2) .card-a (z-index: 1) से बड़ा होने के कारण Child B ऊपर दिखाई देता है।"
+                }
+            },
+            {
+                id: 2,
+                category: "Margin Collapsing through Empty / Phantom Blocks",
+                difficulty: "Hard / Box Model",
+                htmlCode: `<div class="block-top">Block 1 (margin-bottom: 30px)</div>
+<div class="empty-block"></div>
+<div class="block-bottom">Block 2 (margin-top: 25px)</div>`,
+                cssCode: `.block-top {
+  height: 40px;
+  background: #04AA6D;
+  color: white;
+  padding: 8px;
+  margin-bottom: 30px;
+}
+
+.empty-block {
+  margin-top: 20px;
+  margin-bottom: 50px;
+  /* No height, no padding, no border */
+}
+
+.block-bottom {
+  height: 40px;
+  background: #00d2ff;
+  color: black;
+  padding: 8px;
+  margin-top: 25px;
+}`,
+                question: {
+                    english: "What is the EXACT computed vertical gap between Block 1 and Block 2 in the live browser output?",
+                    hinglish: "Block 1 aur Block 2 ke beech actual vertical space (gap) kitne pixels calculate hoga?",
+                    hindi: "Block 1 और Block 2 के बीच वास्तविक लंबवत दूरी (Gap) कितनी होगी?"
+                },
+                options: [
+                    "50px (All 4 adjacent vertical margins collapse into the single maximum value: max(30, 20, 50, 25))",
+                    "125px (The sum of all four declared margins: 30 + 20 + 50 + 25)",
+                    "80px (30px from top box + 50px from bottom box)",
+                    "25px (The last declared margin takes priority)"
+                ],
+                correctAnswer: 0,
+                explanation: {
+                    english: "CSS Margin Collapse Rules: When an empty block has no border, padding, or height, its own top and bottom margins collapse together AND collapse with the preceding sibling's bottom margin and the following sibling's top margin. The final gap is max(30px, 20px, 50px, 25px) = 50px.",
+                    hinglish: "Empty block jisme koi padding/border/height na ho, uske dono margins aapas me collapse hote hain aur sath hi upar-neeche ke block margins ke sath milkar single maximum value max(30, 20, 50, 25) = 50px banate hain.",
+                    hindi: "खाली ब्लॉक के मार्जिन ऊपर और नीचे के ब्लॉक्स के साथ विलीन (collapse) होकर सबसे बड़े मान max(30, 20, 50, 25) = 50px के बराबर हो जाते हैं।"
+                }
+            },
+            {
+                id: 3,
+                category: "Modern Specificity: :is() vs :where() vs IDs",
+                difficulty: "Hard / Specificity",
+                htmlCode: `<div id="app">
+  <p class="title active">NextSem Developer</p>
+</div>`,
+                cssCode: `:where(#app) p.title.active {
+  color: red;
+}
+
+div#app p.title {
+  color: #04AA6D;
+}
+
+:is(#app, .container) p.title.active {
+  color: #c1a648;
+}`,
+                question: {
+                    english: "Based on W3C Specificity calculation rules, what is the final text color of the paragraph and why?",
+                    hinglish: "W3C Specificity rules ke hisab se paragraph ka text color kya hoga aur kyu?",
+                    hindi: "W3C विशिष्टता नियमों के अनुसार पैराग्राफ का अंतिम रंग क्या होगा और क्यों?"
+                },
+                options: [
+                    "Gold (#c1a648) because :is(#app) takes the highest specificity of its arguments (ID = 1,0,0) making total (1,2,1), beating div#app p.title (1,1,2)",
+                    "Green (#04AA6D) because div#app has tag + ID which always beats pseudo-classes",
+                    "Red because :where(#app) has an ID selector matching #app",
+                    "Black because contradictory rules neutralize each other"
+                ],
+                correctAnswer: 0,
+                explanation: {
+                    english: "Specificity calculation breakdown:\n1. :where(#app) p.title.active = (0,2,1) — :where() ALWAYS has 0 specificity!\n2. div#app p.title = (1,1,2)\n3. :is(#app, .container) p.title.active = (1,0,0) + (0,2,0) + (0,0,1) = (1,2,1). Since (1,2,1) > (1,1,2), Gold (#c1a648) wins!",
+                    hinglish: ":where() ki specificity hamesha 0 hoti hai. :is(#app) apne andar ke sabse bade argument (#app = 1,0,0) ka weight leta hai, jisse total (1,2,1) ban jata hai aur vo div#app p.title (1,1,2) se jeet kar Gold color deta hai.",
+                    hindi: ":where() की विशिष्टता शून्य होती है। :is() अपने सबसे भारी तर्क (#app = 1,0,0) का भार लेता है जिससे इसका कुल भार (1,2,1) हो जाता है और यह जीत जाता है।"
+                }
+            },
+            {
+                id: 4,
+                category: "The Transform Containing Block Trap for position: fixed",
+                difficulty: "Hard / Viewport Escape",
+                htmlCode: `<div class="container-box">
+  <div class="fixed-modal">Fixed Modal Element</div>
+</div>`,
+                cssCode: `.container-box {
+  width: 240px;
+  height: 120px;
+  background: #131c38;
+  border: 2px dashed #00d2ff;
+  transform: translate(0, 0); /* The Trap! */
+  margin: 20px auto;
+}
+
+.fixed-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: #ef4444;
+  color: white;
+  padding: 8px;
+  font-weight: bold;
+}`,
+                question: {
+                    english: "Why is .fixed-modal trapped inside the 240px .container-box instead of spanning across the entire browser window viewport?",
+                    hinglish: ".fixed-modal poori browser window par failne ke bajaye 240px ke .container-box ke andar kyu kaid ho gaya hai?",
+                    hindi: ".fixed-modal पूरे ब्राउज़र व्यूपोर्ट में फैलने के बजाय 240px के बॉक्स में क्यों सीमित हो गया है?"
+                },
+                options: [
+                    "Applying 'transform' (even translate(0,0)) on an ancestor establishes a new Containing Block for all position: fixed descendants, detaching them from the viewport",
+                    "Because .container-box has margin: auto applied",
+                    "position: fixed is deprecated in modern HTML5 stylesheets",
+                    "Fixed positioning only works on native <body> elements"
+                ],
+                correctAnswer: 0,
+                explanation: {
+                    english: "CSS Transforms & Viewport Spec: Any element with a property other than 'none' for 'transform', 'filter', 'perspective', or 'contain: paint' acts as the containing block for all its fixed-position descendants, preventing them from attaching to the browser viewport.",
+                    hinglish: "Jab kisi parent element par 'transform', 'filter' ya 'perspective' lagta hai, to vo position: fixed ke liye naya containing block ban jata hai aur modal viewport se detach ho kar us parent ke andar hi fit ho jata hai.",
+                    hindi: "पैरेंट पर 'transform' या 'filter' लगाने से वह position: fixed तत्वों के लिए व्यूपोर्ट की तरह कार्य करने लगता है और तत्व उसी में सीमित हो जाता है।"
+                }
+            },
+            {
+                id: 5,
+                category: "Flexbox min-width: auto Content Blowout Trap",
+                difficulty: "Hard / Flexbox Internals",
+                htmlCode: `<div class="flex-parent">
+  <div class="flex-main">
+    <p class="unbreakable">VeryLongContinuousCodeIdentifierWithoutSpacesThatOverflows</p>
+  </div>
+  <div class="flex-sidebar">Sidebar</div>
+</div>`,
+                cssCode: `.flex-parent {
+  display: flex;
+  width: 260px;
+  background: #030712;
+  border: 1px solid #38bdf8;
+}
+
+.flex-main {
+  flex: 1;
+  background: #131c38;
+}
+
+.flex-sidebar {
+  width: 80px;
+  background: #04AA6D;
+  color: white;
+  padding: 6px;
+}`,
+                question: {
+                    english: "Why does .flex-main overflow the container and crush/push the 80px .flex-sidebar out of proportion?",
+                    hinglish: ".flex-main container se bahar kyu nikal raha hai aur 80px wali sidebar ko kyu dabakar distort kar raha hai?",
+                    hindi: ".flex-main कंटेनर से बाहर क्यों निकल रहा है और साइडबार को क्यों दबा रहा है?"
+                },
+                options: [
+                    "Flex items default to 'min-width: auto' (computed as min-content), preventing them from shrinking below their intrinsic unbreakable content width unless 'min-width: 0' is set",
+                    "Because flex: 1 automatically forces flex-shrink: 0",
+                    "Because the sidebar width must be specified in percentages rather than pixels",
+                    "Flexbox cannot render paragraphs inside flex children"
+                ],
+                correctAnswer: 0,
+                explanation: {
+                    english: "Flex Item Minimum Sizing Spec: By default, flex items have 'min-width: auto'. This computes to the 'min-content' size. If text inside cannot wrap, the flex item refuses to shrink. Adding 'min-width: 0' overrides this and allows the flex item to respect container boundaries.",
+                    hinglish: "Flex items me default 'min-width: auto' hota hai jo unhe apne content ki minimum width se chhota hone se rokta hai. Is issue ko fix karne ke liye 'min-width: 0' lagana padta hai.",
+                    hindi: "फ्लेक्स आइटम्स में डिफ़ॉल्ट रूप से 'min-width: auto' होता है। इसे कंटेनर में फिट करने के लिए 'min-width: 0' लगाना आवश्यक है।"
+                }
+            },
+            {
+                id: 6,
+                category: "Inline Formatting Context 4px Whitespace Drop",
+                difficulty: "Hard / Inline Flow",
+                htmlCode: `<div class="grid-wrap">
+  <div class="col">50% Width</div>
+  <div class="col">50% Width</div>
+</div>`,
+                cssCode: `.grid-wrap {
+  width: 300px;
+  font-size: 16px;
+  background: #0c1328;
+  border: 1px solid #00d2ff;
+}
+
+.col {
+  display: inline-block;
+  width: 50%;
+  height: 40px;
+  background: #c1a648;
+  color: #0c1328;
+  font-weight: bold;
+  text-align: center;
+  line-height: 40px;
+}`,
+                question: {
+                    english: "Why does the second 50% width box drop to the NEXT line instead of sitting side-by-side in the 300px container?",
+                    hinglish: "Do 50% width ke boxes ek line me aane ke bajaye doosra box neeche wali line me kyu gir jata hai?",
+                    hindi: "दो 50% चौड़ाई वाले बॉक्स एक ही पंक्ति में आने के बजाय दूसरा बॉक्स नीचे क्यों चला जाता है?"
+                },
+                options: [
+                    "HTML parses the newline/whitespace between consecutive <div> tags as a typographic space character (~4px), making total width (50% + ~4px + 50%) exceed 100%",
+                    "Because 300px is not divisible by 2 in CSS layout engines",
+                    "inline-block elements automatically force a line break on desktop screens",
+                    "Because background-color increases the physical pixel footprint"
+                ],
+                correctAnswer: 0,
+                explanation: {
+                    english: "Inline Formatting Context rule: Whitespace characters (spaces, tabs, newlines) between inline or inline-block elements are rendered as a font space (typically 4px). Thus: 50% + 4px + 50% > 100%, causing line wrap. Solutions: set parent font-size: 0 or remove HTML whitespace.",
+                    hinglish: "HTML me do inline-block tags ke beech ki space/newline ko browser 4px ka character space manta hai. Is wajah se 50% + 4px + 50% = 100% se zyada ho jata hai aur box neeche gir jata hai.",
+                    hindi: "दो इनलाइन-ब्लॉक टैग्स के बीच के खाली स्थान (Whitespace) को ब्राउज़र लगभग 4px का स्पेस मानता है जिससे कुल चौड़ाई 100% से अधिक हो जाती है।"
+                }
+            },
+            {
+                id: 7,
+                category: "Percentage Padding Calculation Basis",
+                difficulty: "Hard / Box Math",
+                htmlCode: `<div class="aspect-parent">
+  <div class="aspect-child">Aspect Ratio Box</div>
+</div>`,
+                cssCode: `.aspect-parent {
+  width: 400px;
+  height: 100px;
+  background: #030712;
+  border: 1px solid #38bdf8;
+}
+
+.aspect-child {
+  width: 100px;
+  padding-top: 50%; /* What is this in pixels? */
+  background: #04AA6D;
+  color: white;
+}`,
+                question: {
+                    english: "What is the exact computed pixel height of 'padding-top: 50%' on .aspect-child?",
+                    hinglish: ".aspect-child par lagaye gaye 'padding-top: 50%' ki actual pixel value kitni calculate hogi?",
+                    hindi: ".aspect-child पर लगाए गए 'padding-top: 50%' का वास्तविक पिक्सेल मान क्या होगा?"
+                },
+                options: [
+                    "200px (In CSS, percentage padding on ALL four sides is ALWAYS calculated relative to the containing block's WIDTH: 50% of 400px)",
+                    "50px (50% of the parent height 100px)",
+                    "50px (50% of child width 100px)",
+                    "100px (Locks to the parent height ceiling)"
+                ],
+                correctAnswer: 0,
+                explanation: {
+                    english: "W3C CSS Box Model Specification: Percentage values for 'padding-top', 'padding-bottom', 'padding-left', and 'padding-right' (as well as margins) are ALL resolved against the WIDTH of the containing block! 50% of 400px = 200px.",
+                    hinglish: "CSS Box Model me chaaro sides ki percentage padding (top, bottom, left, right) hamesha parent ki WIDTH (400px) ke hisab se nikali jati hai, height ke hisab se nahi! Isliye 50% of 400px = 200px.",
+                    hindi: "CSS में चारों दिशाओं की प्रतिशत पैडिंग हमेशा पैरेंट की चौड़ाई (WIDTH) के आधार पर निकाली जाती है (50% of 400px = 200px)।"
+                }
+            },
+            {
+                id: 8,
+                category: "Inheritance vs Direct Element Rule with !important",
+                difficulty: "Hard / Cascading",
+                htmlCode: `<div id="parent-box" style="color: red !important;">
+  <p class="direct-child">Who wins this cascade battle?</p>
+</div>`,
+                cssCode: `p.direct-child {
+  color: #00d2ff;
+}`,
+                question: {
+                    english: "What color is the text of the paragraph in the live output?",
+                    hinglish: "Live output me paragraph text ka final color kya hoga?",
+                    hindi: "लाइव आउटपुट में पैराग्राफ टेक्स्ट का रंग क्या होगा?"
+                },
+                options: [
+                    "Cyan (#00d2ff) because an inherited property (even with !important on the ancestor) NEVER beats a direct explicit declaration on the element itself",
+                    "Red because inline style with !important has infinite specificity",
+                    "Black because #parent-box ID overrides class selectors",
+                    "Purple by blending red and cyan together"
+                ],
+                correctAnswer: 0,
+                explanation: {
+                    english: "CSS Cascade Rule: Inherited values have NO specificity. An inherited value (even from an inline style with !important on a parent) is considered the weakest possible rule and will ALWAYS be overridden by any direct declaration targeting the child element directly.",
+                    hinglish: "Inherited (virasat me mili) property ki koi specificity nahi hoti. Parent par chahe !important hi kyu na laga ho, child par direct laga hua color (#00d2ff) hamesha jeetega.",
+                    hindi: "इनहेरिटेड (inherited) प्रॉपर्टी की कोई विशिष्टता नहीं होती। चाइल्ड पर सीधे तौर पर लगाया गया नियम हमेशा पैरेंट के !important से जीत जाता है।"
+                }
+            },
+            {
+                id: 9,
+                category: "pointer-events: none and Subtree Re-enabling",
+                difficulty: "Hard / Event Bubbling",
+                htmlCode: `<div class="backdrop" onclick="document.getElementById('log').innerText = 'Backdrop Clicked!'">
+  <button class="interactive-btn" onclick="event.stopPropagation(); document.getElementById('log').innerText = 'Button Clicked Successfully!'">
+    Click Me!
+  </button>
+</div>
+<p id="log" style="color: #c1a648; font-weight: bold; margin-top: 8px;">Status: Waiting for click...</p>`,
+                cssCode: `.backdrop {
+  pointer-events: none; /* Disables click on backdrop */
+  background: rgba(255, 255, 255, 0.1);
+  padding: 24px;
+  border: 1px solid #38bdf8;
+}
+
+.interactive-btn {
+  pointer-events: auto; /* Re-enables clicks! */
+  background: #04AA6D;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}`,
+                question: {
+                    english: "Click the green button in the live output: What happens when an element with 'pointer-events: auto' is inside a parent with 'pointer-events: none'?",
+                    hinglish: "Right side ke green button par click karein: Jab 'pointer-events: auto' wala child 'pointer-events: none' wale parent me hota hai to kya hota hai?",
+                    hindi: "ग्रीन बटन पर क्लिक करें: जब 'pointer-events: auto' वाला चाइल्ड 'pointer-events: none' वाले पैरेंट में हो तो क्या होता है?"
+                },
+                options: [
+                    "The button captures mouse clicks normally and triggers its click handler, while clicks on the surrounding backdrop pass straight through",
+                    "The button is completely unclickable because parent pointer-events cannot be overridden",
+                    "Clicking the button crashes the browser event loop",
+                    "The click event is converted into a hover event"
+                ],
+                correctAnswer: 0,
+                explanation: {
+                    english: "SVG/CSS Pointer-Events Spec: Setting 'pointer-events: none' on an ancestor stops it from being the target of pointer events. However, descendants CAN explicitly opt back in by specifying 'pointer-events: auto', receiving full click and touch interaction.",
+                    hinglish: "'pointer-events: none' parent ko click hone se rokta hai, lekin agar child par 'pointer-events: auto' laga diya jaye to child normal click capture kar sakta hai.",
+                    hindi: "पैरेंट पर 'pointer-events: none' होने पर भी चाइल्ड पर 'pointer-events: auto' लगाकर उसे क्लिक करने योग्य बनाया जा सकता है।"
+                }
+            },
+            {
+                id: 10,
+                category: "CSS Grid auto-fill vs auto-fit Track Collapse",
+                difficulty: "Hard / Grid Geometry",
+                htmlCode: `<div class="grid-box">
+  <div class="item">Card 1</div>
+  <div class="item">Card 2</div>
+</div>`,
+                cssCode: `.grid-box {
+  display: grid;
+  width: 320px;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 10px;
+  background: #030712;
+  padding: 10px;
+}
+
+.item {
+  background: #00d2ff;
+  color: black;
+  font-weight: bold;
+  padding: 12px;
+  text-align: center;
+}`,
+                question: {
+                    english: "How wide will Card 1 and Card 2 be rendered inside the 320px grid container using 'auto-fit'?",
+                    hinglish: "'auto-fit' use karne par 320px container me Card 1 aur Card 2 ki rendered width kitni hogi?",
+                    hindi: "'auto-fit' का उपयोग करने पर 320px कंटेनर में Card 1 और Card 2 की चौड़ाई कितनी होगी?"
+                },
+                options: [
+                    "~145px each (auto-fit collapses all empty ghost tracks to 0px, expanding the 2 active cards via 1fr to fill the entire 300px space)",
+                    "100px each leaving 100px of empty blank space on the right",
+                    "320px each stacked vertically on two separate rows",
+                    "50px each"
+                ],
+                correctAnswer: 0,
+                explanation: {
+                    english: "CSS Grid Spec: 'auto-fit' creates tracks and then collapses any empty tracks down to 0px, allowing the remaining populated columns (1fr) to stretch across the full available space (~145px each). In contrast, 'auto-fill' would have preserved the 3rd empty 100px track.",
+                    hinglish: "'auto-fit' khali tracks ko collapse (0px) kar deta hai, jisse active cards 1fr ki madad se poori 300px jagah me stretch ho kar ~145px ke ban jate hain.",
+                    hindi: "'auto-fit' खाली ट्रैक्स को हटा देता है, जिससे दोनों सक्रिय कार्ड्स पूरी चौड़ाई में खिंचकर (~145px) बड़े हो जाते हैं।"
+                }
+            },
+            {
+                id: 11,
+                category: "display: contents and Box Model Deletion",
+                difficulty: "Hard / Layout Flattening",
+                htmlCode: `<div class="flex-container">
+  <div class="ghost-parent">
+    <div class="child-item">Item 1</div>
+    <div class="child-item">Item 2</div>
+  </div>
+</div>`,
+                cssCode: `.flex-container {
+  display: flex;
+  justify-content: space-between;
+  width: 280px;
+  background: #030712;
+  padding: 10px;
+}
+
+.ghost-parent {
+  display: contents; /* Box Deletion! */
+  background: red;
+  border: 10px solid yellow;
+  padding: 30px;
+}
+
+.child-item {
+  background: #04AA6D;
+  color: white;
+  padding: 8px 16px;
+  font-weight: bold;
+}`,
+                question: {
+                    english: "What happens to .ghost-parent's red background, yellow border, and 30px padding in the live output?",
+                    hinglish: ".ghost-parent ke red background, yellow border aur 30px padding ke sath live output me kya hota hai?",
+                    hindi: ".ghost-parent के लाल बैकग्राउंड और पीले बॉर्डर के साथ लाइव आउटपुट में क्या होता है?"
+                },
+                options: [
+                    "They are completely deleted from rendering: .ghost-parent generates NO box, and its children participate directly as first-level flex items of .flex-container",
+                    "The red background covers the entire screen behind the flex container",
+                    "The border and background are rendered around both children combined",
+                    "It causes a CSS parser error and falls back to display: block"
+                ],
+                correctAnswer: 0,
+                explanation: {
+                    english: "CSS Display Level 3 Spec: 'display: contents' causes the element's own box to not be generated at all. Its background, border, padding, and margin are entirely omitted from rendering. Its children are promoted directly into the outer layout formatting context.",
+                    hinglish: "'display: contents' element ke apne box ko poori tarah mita deta hai: na background dikhega, na border, na padding. Uske bachhe (children) direct parent flex container ke direct items ban jate hain.",
+                    hindi: "'display: contents' तत्व के अपने बॉक्स, बॉर्डर और बैकग्राउंड को हटा देता है और उसके संतानों को सीधे बाहरी लेआउट में ले आता है।"
+                }
+            },
+            {
+                id: 12,
+                category: "Pseudo-elements on Void / Replaced Elements",
+                difficulty: "Hard / DOM Structure",
+                htmlCode: `<img src="pokemon.png" class="pic" alt="Pokemon">
+<button class="btn-tag">PRO Badge</button>`,
+                cssCode: `.pic::after {
+  content: "⭐ Verified";
+  color: gold;
+  display: block;
+}
+
+.btn-tag::after {
+  content: " ⭐";
+  color: gold;
+}`,
+                question: {
+                    english: "Why does the '::after' pseudo-element render on .btn-tag but FAILS to render on the <img> element?",
+                    hinglish: "'::after' pseudo-element .btn-tag par to render hota hai lekin <img> tag par kyu render nahi hota?",
+                    hindi: "'::after' छद्म-तत्व (pseudo-element) बटन पर दिखता है लेकिन <img> पर क्यों नहीं दिखता?"
+                },
+                options: [
+                    "<img> is a Void/Replaced element whose content is replaced by an external resource; it has no internal content model and cannot host child pseudo-elements",
+                    "Because <img> only supports ::before, not ::after",
+                    "Because Pokemon images disable CSS pseudo-elements via CORS headers",
+                    "Because ::after requires font-size declared directly on images"
+                ],
+                correctAnswer: 0,
+                explanation: {
+                    english: "W3C Generated Content Spec: '::before' and '::after' insert generated content as the first and last child INSIDE the element's formatting box. Replaced void elements (like <img>, <input>, <br>, <hr>) have no internal content box, so pseudo-elements cannot be generated inside them.",
+                    hinglish: "::before aur ::after element ke ANDAR pehle aur aakhri child banate hain. <img> ek void/replaced element hai jiska koi internal content model nahi hota, isliye uspe pseudo-elements kaam nahi karte.",
+                    hindi: "<img> एक वॉयड/रिप्लेस्ड तत्व है जिसके अंदर कोई आंतरिक कंटेंट मॉडल नहीं होता, इसलिए इसमें ::before और ::after काम नहीं कर सकते।"
+                }
+            },
+            {
+                id: 13,
+                category: "HTML5 Form Implicit Submission on Enter Key",
+                difficulty: "Hard / Form Specifications",
+                htmlCode: `<form action="/search" method="GET" id="search-form">
+  <input type="text" name="q" placeholder="Press Enter here...">
+  <button type="button" onclick="customClientValidation()">Save Draft</button>
+</form>`,
+                cssCode: `form {
+  background: #0c1328;
+  padding: 16px;
+  border: 1px solid #00d2ff;
+  border-radius: 8px;
+}
+input {
+  padding: 6px 10px;
+  background: #030712;
+  color: #38bdf8;
+  border: 1px solid #38bdf8;
+  border-radius: 4px;
+}`,
+                question: {
+                    english: "According to the HTML5 form submission algorithm, what happens when a user types in the input and presses the 'Enter' key?",
+                    hinglish: "HTML5 form algorithm ke mutabik, jab user input me likhkar 'Enter' dabata hai to kya hota hai?",
+                    hindi: "HTML5 फॉर्म एल्गोरिदम के अनुसार, जब उपयोगकर्ता इनपुट में 'Enter' दबाता है तब क्या होता है?"
+                },
+                options: [
+                    "The browser immediately triggers implicit form submission to /search (bypassing the type='button' click handler)",
+                    "Nothing happens because there is no button with type='submit'",
+                    "The form triggers the customClientValidation() function",
+                    "The browser prompts an alert box asking for confirmation"
+                ],
+                correctAnswer: 0,
+                explanation: {
+                    english: "HTML5 Spec on Implicit Submission: If a form contains exactly one single-line text input and has no submit button, pressing Enter triggers implicit form submission directly to the action URL. The type='button' button is ignored during Enter-key dispatch.",
+                    hinglish: "HTML5 spec ke hisab se agar form me 1 text field hai aur koi submit button nahi hai, to Enter dabane par form automatically submit ho jata hai aur type='button' bypass ho jata hai.",
+                    hindi: "HTML5 नियमों के अनुसार यदि फॉर्म में एक ही टेक्स्ट इनपुट है, तो Enter दबाने पर फॉर्म स्वतः सबमिट हो जाता है।"
+                }
+            },
+            {
+                id: 14,
+                category: "GPU Layer Bleed: border-radius vs clip-path",
+                difficulty: "Hard / Compositor Layers",
+                htmlCode: `<div class="masked-circle">
+  <div class="gpu-accelerated-layer">
+    GPU Composited 3D Layer
+  </div>
+</div>`,
+                cssCode: `.masked-circle {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  overflow: hidden;
+  clip-path: circle(50% at 50% 50%); /* Hardware Clip */
+  background: #131c38;
+  border: 2px solid #00d2ff;
+}
+
+.gpu-accelerated-layer {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #ef4444, #04AA6D);
+  transform: translateZ(0); /* Promotes to GPU compositor layer */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 11px;
+  font-weight: bold;
+  text-align: center;
+}`,
+                question: {
+                    english: "Why is 'clip-path: circle()' used in tandem with 'border-radius: 50%' + 'overflow: hidden' for GPU-promoted layers?",
+                    hinglish: "GPU-accelerated layers par 'border-radius' ke sath 'clip-path: circle()' kyu use kiya jata hai?",
+                    hindi: "GPU त्वरित लेयर्स पर 'border-radius' के साथ 'clip-path: circle()' क्यों उपयोग किया जाता है?"
+                },
+                options: [
+                    "GPU-composited layers (promoted via translateZ/video) can visually bleed past border-radius overflow boundaries during browser rendering passes; clip-path forces strict vector mask clipping on the GPU raster pipeline",
+                    "clip-path increases network download speeds of CSS stylesheets",
+                    "border-radius is deprecated on circular containers in CSS4",
+                    "Without clip-path, colors invert to grayscale"
+                ],
+                correctAnswer: 0,
+                explanation: {
+                    english: "Browser Compositing Bug/Behavior: When child elements are promoted to separate GPU layers (via translateZ, video, or 3D transforms), WebKit/Blink engines can exhibit visual corner-bleeding past 'overflow: hidden' + 'border-radius'. 'clip-path' guarantees hardware-accelerated vector clipping.",
+                    hinglish: "GPU layer (translateZ ya video) render hote time kabhi-kabhi border-radius ke corners se bahar nikal jati hai (bleed hoti hai). 'clip-path' GPU rasterizer ko strict circle me mask karne par majboor karta hai.",
+                    hindi: "GPU त्वरित लेयर्स कभी-कभी border-radius से बाहर लीक हो जाती हैं। 'clip-path' हार्डवेयर स्तर पर सटीक मास्किंग सुनिश्चित करता है।"
+                }
+            },
+            {
+                id: 15,
+                category: "CSS Cascade Layers: @layer and !important Inversion",
+                difficulty: "Hard / Cascade Layers",
+                htmlCode: `<button class="priority-btn">Cascade Layer Test</button>`,
+                cssCode: `@layer theme {
+  .priority-btn {
+    color: #ef4444 !important; /* !important in earlier layer */
+  }
+}
+
+@layer utilities {
+  .priority-btn {
+    color: #04AA6D !important; /* !important in later layer */
+  }
+}
+
+.priority-btn {
+  color: #00d2ff; /* Unlayered normal rule */
+  background: #0c1328;
+  padding: 10px 20px;
+  border: 1px solid #38bdf8;
+  border-radius: 6px;
+  font-weight: bold;
+}`,
+                question: {
+                    english: "According to the CSS Cascade Layers (@layer) specification, what is the computed text color of the button?",
+                    hinglish: "CSS Cascade Layers (@layer) ke niyam ke anusaar button ka final text color kya hoga?",
+                    hindi: "CSS Cascade Layers (@layer) के नियमों के अनुसार बटन का अंतिम रंग क्या होगा?"
+                },
+                options: [
+                    "Red (#ef4444) because !important INVERTS layer precedence: in important declarations, earlier defined layers (@layer theme) beat later layers (@layer utilities) and unlayered styles",
+                    "Green (#04AA6D) because @layer utilities was declared later in the CSS source code",
+                    "Cyan (#00d2ff) because unlayered styles always beat all @layer rules regardless of !important",
+                    "White by default fallback"
+                ],
+                correctAnswer: 0,
+                explanation: {
+                    english: "W3C Cascade Layers Rule: For normal declarations, unlayered styles > later layers > earlier layers. BUT for '!important' declarations, the precedence is completely INVERTED: earlier layers with !important > later layers with !important > unlayered !important! Therefore, @layer theme with !important wins (Red).",
+                    hinglish: "Cascade Layers me normal rules me baad wali layer jeetti hai, LEKIN !important aane par niyam ULTA (invert) ho jata hai! Pehle declare hui layer (@layer theme) sabse zyada powerful ho jati hai aur Red color jeet jata hai.",
+                    hindi: "Cascade Layers में !important लगने पर लेयर्स की प्राथमिकता पूरी तरह उलट जाती है: पहले घोषित लेयर (@layer theme) सबसे शक्तिशाली हो जाती है और लाल रंग जीतता है।"
+                }
+            }
+        ];
+
+        // State variables
+        let currentLang = 'english';
+        let currentIdx = 0;
+        let activeTab = 'html'; // 'html' | 'css' | 'combined'
+        let userAnswers = {};
+        let score = 0;
+        let streak = 0;
+        let timeLeft = 900; // 15 mins
+        let timerInterval = null;
+        let sessionQuestions = [];
+
+        // Fisher-Yates Array Shuffle
+        function shuffleArray(arr) {
+            const copy = [...arr];
+            for (let i = copy.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [copy[i], copy[j]] = [copy[j], copy[i]];
+            }
+            return copy;
+        }
+
+        // Build session with randomized option orders for every question
+        function buildShuffledSession() {
+            sessionQuestions = testQuestionsData.map(q => {
+                const originalCorrectText = q.options[q.correctAnswer];
+                const paired = q.options.map((opt) => ({
+                    text: opt,
+                    isCorrect: (opt === originalCorrectText)
+                }));
+                const shuffled = shuffleArray(paired);
+                return {
+                    ...q,
+                    options: shuffled.map(item => item.text),
+                    correctAnswer: shuffled.findIndex(item => item.isCorrect),
+                    currentHtml: q.htmlCode,
+                    currentCss: q.cssCode
+                };
+            });
+        }
+
+        function initTest() {
+            buildShuffledSession();
+            startTimer();
+            renderQuestion();
+        }
+
+        function setLang(lang) {
+            currentLang = lang;
+            document.querySelectorAll('.lang-tab').forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+            renderQuestion();
+        }
+
+        function startTimer() {
+            if (timerInterval) clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    finishTest();
+                    return;
+                }
+                timeLeft--;
+                const mins = Math.floor(timeLeft / 60);
+                const secs = timeLeft % 60;
+                document.getElementById('timer-display').innerText = 
+                    `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+            }, 1000);
+        }
+
+        function switchCodeTab(tab) {
+            activeTab = tab;
+            document.querySelectorAll('.code-tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`tab-${tab}`).classList.add('active');
+            updateEditorText();
+        }
+
+        function updateEditorText() {
+            const q = sessionQuestions[currentIdx];
+            const editor = document.getElementById('code-editor');
+            if (activeTab === 'html') {
+                editor.value = q.currentHtml;
+            } else if (activeTab === 'css') {
+                editor.value = q.currentCss;
+            } else {
+                editor.value = `<!-- HTML -->\n${q.currentHtml}\n\n/* CSS */\n<style>\n${q.currentCss}\n</style>`;
+            }
+        }
+
+        function handleCodeEdit() {
+            const q = sessionQuestions[currentIdx];
+            const editorVal = document.getElementById('code-editor').value;
+            if (activeTab === 'html') {
+                q.currentHtml = editorVal;
+            } else if (activeTab === 'css') {
+                q.currentCss = editorVal;
+            }
+            updateLivePreview();
+        }
+
+        function resetCurrentCode() {
+            const original = testQuestionsData[currentIdx];
+            const q = sessionQuestions[currentIdx];
+            q.currentHtml = original.htmlCode;
+            q.currentCss = original.cssCode;
+            updateEditorText();
+            updateLivePreview();
+        }
+
+        function updateLivePreview() {
+            const q = sessionQuestions[currentIdx];
+            const iframe = document.getElementById('preview-frame');
+            const doc = iframe.contentDocument || iframe.contentWindow.document;
+            
+            const fullDoc = `<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 16px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #ffffff;
+      color: #0f172a;
+    }
+    ${q.currentCss}
+  </style>
+</head>
+<body>
+  ${q.currentHtml}
+</body>
+</html>`;
+
+            doc.open();
+            doc.write(fullDoc);
+            doc.close();
+        }
+
+        function reshuffleCurrentOptions() {
+            if (userAnswers.hasOwnProperty(currentIdx)) {
+                alert("This question has already been answered! Option shuffling applies to unanswered questions or when retaking the test.");
+                return;
+            }
+            const q = sessionQuestions[currentIdx];
+            const currentCorrectText = q.options[q.correctAnswer];
+            const paired = q.options.map(opt => ({
+                text: opt,
+                isCorrect: (opt === currentCorrectText)
+            }));
+            const shuffled = shuffleArray(paired);
+            q.options = shuffled.map(item => item.text);
+            q.correctAnswer = shuffled.findIndex(item => item.isCorrect);
+
+            renderQuestion();
+        }
+
+        function renderQuestion() {
+            const q = sessionQuestions[currentIdx];
+            
+            // Category & Header
+            document.getElementById('question-category').innerHTML = `<span>🏷️</span> ${q.category}`;
+            document.getElementById('question-difficulty').innerText = `⭐ Concept: ${q.difficulty}`;
+            document.getElementById('question-text').innerText = q.question[currentLang] || q.question.english;
+            
+            // Update code editor and live output iframe
+            updateEditorText();
+            updateLivePreview();
+
+            // Progress labels
+            document.getElementById('question-progress-label').innerText = `Question ${currentIdx + 1} of ${sessionQuestions.length}`;
+            const pct = Math.round(((currentIdx + 1) / sessionQuestions.length) * 100);
+            document.getElementById('percentage-label').innerText = `${pct}% Completed`;
+            document.getElementById('progress-bar').style.width = `${pct}%`;
+
+            // Render Options
+            const container = document.getElementById('options-container');
+            container.innerHTML = '';
+
+            const isAnswered = userAnswers.hasOwnProperty(currentIdx);
+            const chosenAnswer = userAnswers[currentIdx];
+
+            const letters = ['A', 'B', 'C', 'D'];
+            q.options.forEach((optText, index) => {
+                const optDiv = document.createElement('div');
+                optDiv.className = 'option-item';
+                if (isAnswered) optDiv.classList.add('locked');
+
+                if (isAnswered) {
+                    if (index === q.correctAnswer) {
+                        optDiv.classList.add('correct');
+                    } else if (index === chosenAnswer) {
+                        optDiv.classList.add('wrong');
+                    }
+                }
+
+                optDiv.onclick = () => selectOption(index);
+
+                optDiv.innerHTML = `
+                    <div class="option-letter">${letters[index]}</div>
+                    <div style="flex: 1;">${optText.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</div>
+                `;
+                container.appendChild(optDiv);
+            });
+
+            // Explanation handling
+            const explanationBox = document.getElementById('explanation-box');
+            if (isAnswered) {
+                explanationBox.classList.add('active');
+                document.getElementById('explanation-text').innerHTML = q.explanation[currentLang] || q.explanation.english;
+            } else {
+                explanationBox.classList.remove('active');
+            }
+
+            // Button states
+            document.getElementById('btn-prev').disabled = (currentIdx === 0);
+            const btnShuffle = document.getElementById('btn-shuffle');
+            if (btnShuffle) {
+                btnShuffle.disabled = isAnswered;
+            }
+            const btnNext = document.getElementById('btn-next');
+            if (currentIdx === sessionQuestions.length - 1) {
+                btnNext.innerText = isAnswered ? 'Finish & See Results 🎉' : 'Submit & Finish';
+            } else {
+                btnNext.innerText = 'Next Question →';
+            }
+        }
+
+        function selectOption(index) {
+            if (userAnswers.hasOwnProperty(currentIdx)) return; // prevent changing
+
+            userAnswers[currentIdx] = index;
+            const q = sessionQuestions[currentIdx];
+
+            if (index === q.correctAnswer) {
+                score++;
+                streak++;
+            } else {
+                streak = 0;
+            }
+
+            document.getElementById('score-display').innerText = `${score} / ${sessionQuestions.length}`;
+            document.getElementById('streak-display').innerText = `${streak} 🔥`;
+
+            renderQuestion();
+        }
+
+        function nextQuestion() {
+            if (currentIdx < sessionQuestions.length - 1) {
+                currentIdx++;
+                renderQuestion();
+            } else {
+                finishTest();
+            }
+        }
+
+        function prevQuestion() {
+            if (currentIdx > 0) {
+                currentIdx--;
+                renderQuestion();
+            }
+        }
+
+        function finishTest() {
+            clearInterval(timerInterval);
+            document.getElementById('workbench-area').style.display = 'none';
+            document.getElementById('quiz-view').style.display = 'none';
+            document.getElementById('result-view').classList.add('active');
+            document.getElementById('final-score').innerText = `${score} / ${sessionQuestions.length}`;
+
+            const pct = (score / sessionQuestions.length) * 100;
+            let msg = "";
+            let trophy = "🏆";
+
+            if (pct >= 85) {
+                trophy = "🥇";
+                msg = "Outstanding! You scored above 85% and have achieved Master Level HTML & CSS proficiency. You understand element flow, specificity, flexbox, and live rendering perfectly!";
+            } else if (pct >= 60) {
+                trophy = "🥈";
+                msg = "Good Job! You passed with a solid score. Review the few tricky box model questions to achieve perfection!";
+            } else {
+                trophy = "💪";
+                msg = "Keep practicing! Review the live code explanations and take the test again to boost your score.";
+            }
+
+            document.getElementById('trophy-icon').innerText = trophy;
+            document.getElementById('result-message').innerText = msg;
+        }
+
+        function restartQuiz() {
+            buildShuffledSession(); // Re-shuffle options randomly for all questions on retake
+            currentIdx = 0;
+            userAnswers = {};
+            score = 0;
+            streak = 0;
+            timeLeft = 900;
+            document.getElementById('score-display').innerText = `0 / ${sessionQuestions.length}`;
+            document.getElementById('streak-display').innerText = `0 🔥`;
+            document.getElementById('result-view').classList.remove('active');
+            document.getElementById('workbench-area').style.display = 'grid';
+            document.getElementById('quiz-view').style.display = 'flex';
+            startTimer();
+            renderQuestion();
+        }
+
+        // Initialize on load
+        window.addEventListener('DOMContentLoaded', initTest);
+    </script>
+</body>
+</html>

@@ -181,6 +181,27 @@ export default function HtmlDashboardClient() {
 
         {/* Right column: Lesson details widget */}
         <div className="space-y-5">
+          {/* HTML Tags Reference Spotlight Card */}
+          <div className="rounded-2xl border border-[#04AA6D]/40 bg-gradient-to-br from-[#0c1a2e] to-[#060c18] p-5 shadow-xl relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-28 h-28 bg-[#04AA6D]/10 rounded-full blur-2xl pointer-events-none" />
+            <div className="flex items-center gap-2 text-[#04AA6D] text-xs font-bold uppercase tracking-wider mb-2">
+              <Zap size={14} className="fill-[#04AA6D]" />
+              <span>Developer Reference</span>
+            </div>
+            <h3 className="text-base font-extrabold text-white mb-1.5">
+              All HTML Tags (115+ Tags)
+            </h3>
+            <p className="text-xs text-slate-300 mb-4 leading-relaxed">
+              Explore complete HTML5 tags directory with live browser preview sandbox, multilingual explanations, and working examples.
+            </p>
+            <Link
+              href="/html/tags"
+              className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-[#04AA6D] hover:bg-[#038857] text-white text-xs font-bold shadow-md transition-all cursor-pointer"
+            >
+              <span>Explore All HTML Tags &rarr;</span>
+            </Link>
+          </div>
+
           <h2 className="text-lg font-black tracking-tight uppercase text-slate-300">Quick Lesson Finder</h2>
 
           <div className="rounded-2xl border border-white/5 bg-[#0b0f19]/80 p-5 space-y-4">

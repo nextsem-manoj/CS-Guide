@@ -1,9 +1,26 @@
 const fs = require('fs');
 const path = require('path');
 const matter = require('gray-matter');
+const ts = require('typescript');
+const vm = require('vm');
 
 const CONTENT_DIR = path.join(__dirname, '../src/content');
 const OUTPUT_FILE = path.join(__dirname, '../src/data/searchIndex.json');
+
+function loadTsModule(relPath) {
+  const fullPath = path.join(__dirname, '..', relPath);
+  if (!fs.existsSync(fullPath)) return {};
+  try {
+    const tsCode = fs.readFileSync(fullPath, 'utf8');
+    const jsCode = ts.transpile(tsCode);
+    const sandbox = { exports: {}, require };
+    vm.runInNewContext(jsCode, sandbox);
+    return sandbox.exports;
+  } catch (err) {
+    console.warn(`Failed to transpile ${relPath}:`, err.message);
+    return {};
+  }
+}
 
 const PHASE_METADATA = {
   // Phase CLI (Windows 11 CLI)
@@ -82,46 +99,170 @@ const PHASE_METADATA = {
 };
 
 function generateIndex() {
-  console.log('Generating full-text search index...');
-  
-  if (!fs.existsSync(CONTENT_DIR)) {
-    console.warn('Content directory does not exist. Skipping index generation.');
-    return;
-  }
-
-  const files = fs.readdirSync(CONTENT_DIR).filter(file => file.endsWith('.mdx'));
+  console.log('Generating comprehensive platform-wide search index...');
   const searchIndex = [];
 
-  for (const file of files) {
-    const filePath = path.join(CONTENT_DIR, file);
-    const fileContent = fs.readFileSync(filePath, 'utf8');
-    
-    // Parse Frontmatter
-    const { data, content } = matter(fileContent);
-    const id = file.replace('.mdx', '');
-    const meta = PHASE_METADATA[id] || { phase: 'windows 11 command Line interface CLI', duration: '5 mins read', color: 'bg-slate-600', icon: '📖' };
+  // 1. Index MDX Book Chapters
+  if (fs.existsSync(CONTENT_DIR)) {
+    const files = fs.readdirSync(CONTENT_DIR).filter(file => file.endsWith('.mdx'));
+    for (const file of files) {
+      const filePath = path.join(CONTENT_DIR, file);
+      const fileContent = fs.readFileSync(filePath, 'utf8');
+      const { data, content } = matter(fileContent);
+      const id = file.replace('.mdx', '');
+      const meta = PHASE_METADATA[id] || { phase: 'CLI.0', duration: '5 mins read', color: 'bg-slate-600', icon: '📖' };
+      const cleanContent = content.replace(/#+\s+/g, '').replace(/```[a-z]*/g, '').trim();
 
-    // Clean up content slightly (remove backticks, markdown headers symbols for raw search cleanliness, but keep tag names)
-    const cleanContent = content
-      .replace(/#+\s+/g, '') // remove markdown titles
-      .replace(/```[a-z]*/g, '') // remove code fence tags
-      .trim();
-
-    searchIndex.push({
-      id,
-      title: data.title || id.replace('-', ' '),
-      content: cleanContent,
-      phase: meta.phase,
-      duration: meta.duration,
-      color: meta.color,
-      icon: meta.icon
-    });
+      searchIndex.push({
+        id,
+        title: data.title || id.replace(/-/g, ' '),
+        content: cleanContent,
+        phase: meta.phase,
+        duration: meta.duration,
+        color: meta.color,
+        icon: meta.icon,
+        url: `/book/${id}`,
+        category: 'Full-Stack Developer Course'
+      });
+    }
   }
 
-  // Sort searchIndex items by phase code (e.g. P0.0, P0.1, P1.1, etc.)
-  searchIndex.sort((a, b) => {
-    return a.phase.localeCompare(b.phase, undefined, { numeric: true, sensitivity: 'base' });
-  });
+  // 2. Index HTML5 Course Lessons
+  const htmlData = loadTsModule('src/data/htmlLessonsData.ts');
+  if (htmlData.htmlLessons && Array.isArray(htmlData.htmlLessons)) {
+    for (const lesson of htmlData.htmlLessons) {
+      const proText = lesson.english?.pro || lesson.english?.kid || '';
+      const exQuestion = lesson.exercise?.english?.question || '';
+      const summary = `${lesson.unit}. ${proText} ${exQuestion}`.trim();
+      searchIndex.push({
+        id: `html-${lesson.slug}`,
+        title: lesson.title,
+        content: summary,
+        phase: 'HTML5',
+        duration: '5 mins read',
+        color: 'bg-[#04AA6D]',
+        icon: '🌐',
+        url: `/html/${lesson.slug}`,
+        category: 'HTML5 Mastery'
+      });
+    }
+  }
+
+  // 3. Index Windows CLI Lessons
+  const cliData = loadTsModule('src/data/cliLessonsData.ts');
+  if (cliData.cliLessons && Array.isArray(cliData.cliLessons)) {
+    for (const lesson of cliData.cliLessons) {
+      const proText = lesson.english?.pro || lesson.english?.kid || '';
+      const summary = `${lesson.unit}. ${proText}`.trim();
+      searchIndex.push({
+        id: `cli-${lesson.slug}`,
+        title: lesson.title,
+        content: summary,
+        phase: 'Windows CLI',
+        duration: '5 mins read',
+        color: 'bg-[#1f1f1f]',
+        icon: lesson.icon || '💻',
+        url: `/cli/${lesson.slug}`,
+        category: 'Windows Command Prompt'
+      });
+    }
+  }
+
+  // 4. Index MS Word Lessons
+  const mswordData = loadTsModule('src/data/mswordLessonsData.ts');
+  if (mswordData.mswordLessons && Array.isArray(mswordData.mswordLessons)) {
+    for (const lesson of mswordData.mswordLessons) {
+      const proText = lesson.english?.pro || lesson.english?.kid || '';
+      const summary = `${lesson.unit}. ${proText}`.trim();
+      searchIndex.push({
+        id: `msword-${lesson.slug}`,
+        title: lesson.title,
+        content: summary,
+        phase: 'MS Word 365',
+        duration: '5 mins read',
+        color: 'bg-[#2b579a]',
+        icon: '📄',
+        url: `/msword/${lesson.slug}`,
+        category: 'MS Word Career Skills'
+      });
+    }
+  }
+
+  // 5. Index IGNOU BCA Semester Courses & Units
+  const bcaData = loadTsModule('src/data/bcaCoursesData.ts');
+  if (bcaData.bcaSemesters && Array.isArray(bcaData.bcaSemesters)) {
+    for (const sem of bcaData.bcaSemesters) {
+      for (const subject of sem.subjects || []) {
+        const isComputerBasics = subject.code === "BCS-111" || subject.code === "BCS-011";
+        const subjectUrl = sem.id === 1
+          ? (isComputerBasics 
+              ? "/bca/semester-1/bcs-011-computer-basics" 
+              : subject.code === "BCS-012"
+              ? "/bca/semester-1/bcs-012-basic-mathematics"
+              : subject.code === "BCSL-013"
+              ? "/bca/semester-1/bcsl-013-software-lab"
+              : subject.code === "BEGLA-136"
+              ? "/bca/semester-1/begla-136-english"
+              : subject.code === "BEVAE-181"
+              ? "/bca/semester-1/bevae-181-environmental-studies"
+              : `/bca/semester-1/${subject.code.toLowerCase()}`)
+          : `/bca/${sem.id}/${subject.code.toLowerCase()}`;
+
+        // Add Subject Dedicated Overview Entry
+        searchIndex.push({
+          id: `bca-subject-${subject.code.toLowerCase()}`,
+          title: `${subject.code}: ${subject.name}`,
+          content: `IGNOU BCA Semester ${sem.id} • ${subject.code} ${subject.name}. Complete syllabus blocks, unit-by-unit study notes, and PDF textbooks.`,
+          phase: `BCA Sem ${sem.id}`,
+          duration: `${subject.blocks?.length || 0} Blocks`,
+          color: 'bg-[#0c1328]',
+          icon: '📘',
+          url: subjectUrl,
+          category: 'IGNOU BCA Subjects'
+        });
+
+        for (const block of subject.blocks || []) {
+          for (const unit of block.units || []) {
+            const cleanUnitName = unit.fileName.replace(/\.pdf$/i, '');
+            const unitSlug = isComputerBasics && (cleanUnitName.toLowerCase() === 'unit-1' || cleanUnitName.toLowerCase() === 'unit 1')
+              ? '/bca/semester-1/bcs-011-computer-basics/unit-1/lessons'
+              : subjectUrl;
+
+            searchIndex.push({
+              id: `bca-sem${sem.id}-${subject.code.toLowerCase()}-${cleanUnitName.toLowerCase()}`,
+              title: `${subject.code}: ${unit.displayName}`,
+              content: `${subject.name} • ${block.name} • ${unit.displayName}. IGNOU BCA Semester ${sem.id} study notes, syllabus units, and solved textbook lessons.`,
+              phase: `BCA Sem ${sem.id}`,
+              duration: '10 mins read',
+              color: 'bg-[#0c1328]',
+              icon: '🎓',
+              url: unitSlug,
+              category: 'IGNOU BCA'
+            });
+          }
+        }
+      }
+    }
+  }
+
+  // 6. Index HTML Tag Directory Reference
+  const tagsData = loadTsModule('src/data/allHtmlTagsData.ts');
+  if (tagsData.ALL_HTML_TAGS && Array.isArray(tagsData.ALL_HTML_TAGS)) {
+    for (const tag of tagsData.ALL_HTML_TAGS) {
+      const tagName = tag.tag.replace(/[<>]/g, '');
+      searchIndex.push({
+        id: `tag-${tagName}`,
+        title: `<${tagName}> HTML Tag Reference`,
+        content: `${tag.category} • ${tag.description}. Example: ${tag.example || ''}`,
+        phase: 'HTML Tag',
+        duration: 'Quick Ref',
+        color: 'bg-[#c1a648]',
+        icon: '🏷️',
+        url: '/html-tags',
+        category: 'HTML5 Tag Directory'
+      });
+    }
+  }
 
   // Create output parent folder if it doesn't exist
   const outputDir = path.dirname(OUTPUT_FILE);
@@ -130,7 +271,7 @@ function generateIndex() {
   }
 
   fs.writeFileSync(OUTPUT_FILE, JSON.stringify(searchIndex, null, 2), 'utf8');
-  console.log(`Successfully generated full-text search index with ${searchIndex.length} items at ${OUTPUT_FILE}`);
+  console.log(`✅ Successfully generated unified search index with ${searchIndex.length} items at ${OUTPUT_FILE}`);
 }
 
 generateIndex();

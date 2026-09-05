@@ -1,0 +1,1303 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML5 Mastery Certification Test | NextSem Academy</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-main: #060c18;
+            --card-surface: #0c1328;
+            --card-surface-elevated: #131c38;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --primary-green: #04AA6D;
+            --primary-green-glow: rgba(4, 170, 109, 0.3);
+            --gold: #c1a648;
+            --gold-glow: rgba(193, 166, 72, 0.25);
+            --cyan-accent: #00d2ff;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 24px 16px 60px;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(4, 170, 109, 0.07) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(0, 210, 255, 0.07) 0%, transparent 40%);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 860px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Top Header */
+        .header {
+            background: var(--card-surface);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 24px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-green), var(--gold), var(--cyan-accent));
+        }
+
+        .brand-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--gold);
+            background: rgba(193, 166, 72, 0.12);
+            padding: 4px 10px;
+            border-radius: 20px;
+            border: 1px solid rgba(193, 166, 72, 0.3);
+            margin-bottom: 6px;
+        }
+
+        .title {
+            font-size: 26px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ffffff 40%, #94a3b8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .lang-tabs {
+            display: flex;
+            background: var(--bg-main);
+            padding: 4px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            gap: 4px;
+        }
+
+        .lang-tab {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 12px;
+            font-weight: 700;
+            padding: 6px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .lang-tab.active {
+            background: var(--primary-green);
+            color: #ffffff;
+            box-shadow: 0 2px 8px var(--primary-green-glow);
+        }
+
+        /* Stats Strip */
+        .stats-strip {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+        }
+
+        .stat-card {
+            background: var(--card-surface);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .stat-icon {
+            font-size: 22px;
+            background: var(--card-surface-elevated);
+            width: 42px;
+            height: 42px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+        }
+
+        .stat-label {
+            font-size: 11px;
+            color: var(--text-muted);
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .stat-value {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--text-main);
+        }
+
+        /* Progress Bar */
+        .progress-wrapper {
+            background: var(--card-surface);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 12px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .progress-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-muted);
+        }
+
+        .progress-bar-bg {
+            width: 100%;
+            height: 8px;
+            background: var(--bg-main);
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--primary-green), var(--cyan-accent));
+            transition: width 0.3s ease;
+        }
+
+        /* Question Box */
+        .question-card {
+            background: var(--card-surface);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 28px;
+            box-shadow: 0 12px 36px rgba(0,0,0,0.4);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            position: relative;
+        }
+
+        .question-tag-pill {
+            align-self: flex-start;
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--cyan-accent);
+            background: rgba(0, 210, 255, 0.1);
+            padding: 4px 10px;
+            border-radius: 8px;
+            border: 1px solid rgba(0, 210, 255, 0.25);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .question-text {
+            font-size: 18px;
+            font-weight: 700;
+            line-height: 1.5;
+            color: #ffffff;
+        }
+
+        .code-snippet {
+            font-family: 'Fira Code', monospace;
+            background: #030712;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-left: 4px solid var(--primary-green);
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            color: #38bdf8;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+
+        /* Options List */
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option-item {
+            background: var(--card-surface-elevated);
+            border: 1.5px solid var(--border-color);
+            border-radius: 12px;
+            padding: 14px 18px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 14px;
+            font-weight: 600;
+            user-select: none;
+        }
+
+        .option-item:hover:not(.locked) {
+            border-color: rgba(4, 170, 109, 0.5);
+            background: rgba(4, 170, 109, 0.08);
+            transform: translateX(4px);
+        }
+
+        .option-letter {
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            background: var(--bg-main);
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 800;
+            color: var(--text-muted);
+            flex-shrink: 0;
+            transition: all 0.2s ease;
+        }
+
+        /* Option States */
+        .option-item.correct {
+            background: rgba(4, 170, 109, 0.15) !important;
+            border-color: var(--primary-green) !important;
+            color: #4ade80 !important;
+        }
+        .option-item.correct .option-letter {
+            background: var(--primary-green);
+            color: #ffffff;
+            border-color: var(--primary-green);
+        }
+
+        .option-item.wrong {
+            background: rgba(239, 68, 68, 0.15) !important;
+            border-color: var(--danger) !important;
+            color: #f87171 !important;
+        }
+        .option-item.wrong .option-letter {
+            background: var(--danger);
+            color: #ffffff;
+            border-color: var(--danger);
+        }
+
+        /* Explanation Box */
+        .explanation-card {
+            display: none;
+            background: rgba(193, 166, 72, 0.08);
+            border: 1px solid rgba(193, 166, 72, 0.3);
+            border-radius: 14px;
+            padding: 16px 20px;
+            gap: 10px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .explanation-card.active {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .explanation-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--gold);
+            font-size: 13px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+        }
+
+        .explanation-body {
+            font-size: 13.5px;
+            line-height: 1.6;
+            color: #cbd5e1;
+        }
+
+        /* Nav Footer Buttons */
+        .controls-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+            text-decoration: none;
+        }
+
+        .btn-prev {
+            background: var(--card-surface);
+            color: var(--text-muted);
+            border-color: var(--border-color);
+        }
+
+        .btn-prev:hover:not(:disabled) {
+            background: var(--card-surface-elevated);
+            color: #ffffff;
+        }
+
+        .btn-next {
+            background: var(--primary-green);
+            color: #ffffff;
+            box-shadow: 0 4px 14px var(--primary-green-glow);
+        }
+
+        .btn-next:hover {
+            background: #03935e;
+            transform: translateY(-1px);
+        }
+
+        .btn-shuffle {
+            background: var(--card-surface-elevated);
+            color: var(--cyan-accent);
+            border-color: rgba(0, 210, 255, 0.3);
+        }
+
+        .btn-shuffle:hover:not(:disabled) {
+            background: rgba(0, 210, 255, 0.15);
+            border-color: var(--cyan-accent);
+        }
+
+        .btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        /* Coding Challenge Sandbox */
+        .sandbox-card {
+            background: var(--card-surface);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .sandbox-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .sandbox-title {
+            font-size: 16px;
+            font-weight: 800;
+            color: var(--cyan-accent);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .sandbox-split {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        @media (max-width: 640px) {
+            .sandbox-split {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .editor-wrapper, .preview-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .editor-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        textarea.code-editor {
+            width: 100%;
+            height: 180px;
+            background: #030712;
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 10px;
+            padding: 12px;
+            color: #38bdf8;
+            font-family: 'Fira Code', monospace;
+            font-size: 13px;
+            resize: vertical;
+            outline: none;
+        }
+
+        textarea.code-editor:focus {
+            border-color: var(--primary-green);
+        }
+
+        .live-preview-box {
+            width: 100%;
+            height: 180px;
+            background: #ffffff;
+            color: #0f172a;
+            border-radius: 10px;
+            padding: 12px;
+            overflow: auto;
+            border: 1px solid rgba(255,255,255,0.15);
+        }
+
+        /* Result Modal */
+        .result-screen {
+            display: none;
+            background: var(--card-surface);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 36px;
+            text-align: center;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .result-screen.active {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .trophy-badge {
+            font-size: 64px;
+            animation: bounce 1.5s infinite;
+        }
+
+        .result-score {
+            font-size: 48px;
+            font-weight: 800;
+            color: var(--primary-green);
+        }
+
+        .result-feedback {
+            font-size: 16px;
+            color: var(--text-muted);
+            max-width: 500px;
+        }
+
+        .certificate-pill {
+            background: rgba(193, 166, 72, 0.1);
+            border: 1px solid var(--gold);
+            padding: 12px 24px;
+            border-radius: 12px;
+            color: var(--gold);
+            font-weight: 700;
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        
+        <!-- Header -->
+        <header class="header">
+            <div>
+                <div class="brand-badge">
+                    <span>⚡</span> NextSem Academy • IGNOU BCA
+                </div>
+                <h1 class="title">HTML5 Interactive Master Test</h1>
+                <p class="subtitle">Complete Quiz with 15 Core Exam Questions + Live Sandbox Challenge</p>
+            </div>
+
+            <!-- Language Switcher -->
+            <div class="lang-tabs">
+                <button class="lang-tab active" onclick="setLang('english')">🇬🇧 English</button>
+                <button class="lang-tab" onclick="setLang('hinglish')">🗣️ Hinglish</button>
+                <button class="lang-tab" onclick="setLang('hindi')">🕉️ Hindi</button>
+            </div>
+        </header>
+
+        <!-- Stats Strip -->
+        <div class="stats-strip">
+            <div class="stat-card">
+                <div class="stat-icon">⏱️</div>
+                <div>
+                    <div class="stat-label">Time Remaining</div>
+                    <div class="stat-value" id="timer-display">15:00</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">🎯</div>
+                <div>
+                    <div class="stat-label">Current Score</div>
+                    <div class="stat-value" id="score-display">0 / 15</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">🔥</div>
+                <div>
+                    <div class="stat-label">Streak</div>
+                    <div class="stat-value" id="streak-display">0 🔥</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">🔀</div>
+                <div>
+                    <div class="stat-label">Options Order</div>
+                    <div class="stat-value" style="font-size: 13px; color: var(--cyan-accent); font-weight: 700;">Randomized</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Progress Tracker -->
+        <div class="progress-wrapper">
+            <div class="progress-meta">
+                <span id="question-progress-label">Question 1 of 15</span>
+                <span id="percentage-label">7% Completed</span>
+            </div>
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" id="progress-bar"></div>
+            </div>
+        </div>
+
+        <!-- Test Question View -->
+        <main id="quiz-view" class="question-card">
+            <div class="question-tag-pill" id="question-category">
+                <span>🏷️</span> HTML Basics & Structure
+            </div>
+
+            <h2 class="question-text" id="question-text">
+                Which tag is used to create the highest level heading in HTML?
+            </h2>
+
+            <div id="code-snippet-box" class="code-snippet" style="display: none;"></div>
+
+            <!-- Option List -->
+            <div class="options-list" id="options-container">
+                <!-- Options injected via JavaScript -->
+            </div>
+
+            <!-- Explanation Box -->
+            <div class="explanation-card" id="explanation-box">
+                <div class="explanation-header">
+                    <span>💡</span> Deep Explanation & Key Takeaway
+                </div>
+                <div class="explanation-body" id="explanation-text">
+                    The &lt;h1&gt; tag defines the most important heading on an HTML webpage.
+                </div>
+            </div>
+
+            <!-- Controls -->
+            <div class="controls-footer">
+                <button class="btn btn-prev" id="btn-prev" onclick="prevQuestion()" disabled>
+                    ← Previous
+                </button>
+                <div style="display: flex; gap: 8px;">
+                    <button class="btn btn-shuffle" id="btn-shuffle" onclick="reshuffleCurrentOptions()" title="Reshuffle options for this question">
+                        🔀 Shuffle Options
+                    </button>
+                    <button class="btn btn-next" id="btn-next" onclick="nextQuestion()">
+                        Next Question →
+                    </button>
+                </div>
+            </div>
+        </main>
+
+        <!-- Result Screen -->
+        <div id="result-view" class="result-screen">
+            <div class="trophy-badge" id="trophy-icon">🏆</div>
+            <h2 class="title" id="result-title">Test Completed!</h2>
+            <div class="result-score" id="final-score">14 / 15</div>
+            <p class="result-feedback" id="result-message">
+                Phenomenal job! You have demonstrated exceptional mastery over HTML5 elements, semantic structure, forms, and attributes.
+            </p>
+            <div class="certificate-pill">
+                <span>📜</span> Certified by Er. Manoj Kumar • NextSem Academy
+            </div>
+            <div style="display: flex; gap: 12px; margin-top: 10px;">
+                <button class="btn btn-next" onclick="restartQuiz()">
+                    🔄 Retake Test
+                </button>
+                <a href="index.html" class="btn btn-prev">
+                    📖 Back to Lesson
+                </a>
+            </div>
+        </div>
+
+        <!-- Live Code Challenge Sandbox -->
+        <section class="sandbox-card">
+            <div class="sandbox-header">
+                <div class="sandbox-title">
+                    <span>💻</span> Practical Coding Challenge #1
+                </div>
+                <span style="font-size: 11px; color: var(--gold); font-weight: 700;">Live Interactive Sandbox</span>
+            </div>
+            <p style="font-size: 13px; color: var(--text-muted);">
+                <strong>Task:</strong> Create a clickable link with text <code style="color:#38bdf8;">"Visit NextSem"</code> opening in a new tab (<code style="color:#38bdf8;">target="_blank"</code>) and an image with an <code style="color:#38bdf8;">alt</code> attribute!
+            </p>
+
+            <div class="sandbox-split">
+                <div class="editor-wrapper">
+                    <span class="editor-label">HTML Code Editor (Edit here):</span>
+                    <textarea class="code-editor" id="live-code-input" oninput="updateLivePreview()" spellcheck="false">&lt;!-- Write your HTML test code here --&gt;
+&lt;h2&gt;Hello World!&lt;/h2&gt;
+&lt;p&gt;Learning HTML is super fun 🚀&lt;/p&gt;
+&lt;a href="https://nextsem.online" target="_blank" style="color: #04AA6D; font-weight: bold;"&gt;Visit NextSem &amp;rarr;&lt;/a&gt;</textarea>
+                </div>
+                <div class="preview-wrapper">
+                    <span class="editor-label">Live Browser Output:</span>
+                    <div class="live-preview-box" id="live-preview-box"></div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        // Multilingual Questions Bank
+        const testQuestions = [
+            {
+                id: 1,
+                category: "HTML Fundamentals",
+                code: null,
+                question: {
+                    english: "What does HTML stand for?",
+                    hinglish: "HTML ka full form kya hota hai?",
+                    hindi: "HTML का पूर्ण रूप क्या है?"
+                },
+                options: [
+                    "Hyper Text Markup Language",
+                    "High Tech Modern Language",
+                    "Hyper Transfer Markup Language",
+                    "Home Tool Markup Language"
+                ],
+                correctAnswer: 0,
+                explanation: {
+                    english: "HTML stands for HyperText Markup Language. 'HyperText' refers to links connecting webpages, and 'Markup' refers to tags annotating text.",
+                    hinglish: "HTML ka matlab HyperText Markup Language hai. Hypertext ka matlab links jo pages ko connect karte hain aur Markup ka matlab tags.",
+                    hindi: "HTML का अर्थ HyperText Markup Language है। यह वेब पेजों को बनाने की मानक मार्कअप भाषा है।"
+                }
+            },
+            {
+                id: 2,
+                category: "Document Declaration",
+                code: "<!DOCTYPE html>",
+                question: {
+                    english: "What is the primary purpose of the <!DOCTYPE html> declaration?",
+                    hinglish: "<!DOCTYPE html> declaration ka main purpose kya hota hai?",
+                    hindi: "<!DOCTYPE html> का मुख्य उद्देश्य क्या है?"
+                },
+                options: [
+                    "It tells the browser that this document is written in HTML5",
+                    "It creates the root <html> container element",
+                    "It imports JavaScript and CSS libraries automatically",
+                    "It secures the webpage with HTTPS encryption"
+                ],
+                correctAnswer: 0,
+                explanation: {
+                    english: "<!DOCTYPE html> is not an HTML tag; it is an instruction to the web browser about what version of HTML the page is written in (HTML5 standards mode).",
+                    hinglish: "<!DOCTYPE html> browser ko batata hai ki document HTML5 standard follow kar raha hai aur standards mode me render hona chahiye.",
+                    hindi: "<!DOCTYPE html> ब्राउज़र को सूचित करता है कि यह दस्तावेज़ HTML5 मानक में लिखा गया है।"
+                }
+            },
+            {
+                id: 3,
+                category: "Headings & Hierarchy",
+                code: null,
+                question: {
+                    english: "How many levels of headings does standard HTML provide?",
+                    hinglish: "HTML me kitne heading levels (h1 se h...) hote hain?",
+                    hindi: "HTML में कितने स्तर के हेडिंग्स होते हैं?"
+                },
+                options: [
+                    "6 levels (<h1> to <h6>)",
+                    "4 levels (<h1> to <h4>)",
+                    "8 levels (<h1> to <h8>)",
+                    "Infinite levels"
+                ],
+                correctAnswer: 0,
+                explanation: {
+                    english: "HTML provides exactly 6 heading tags from <h1> (most important) down to <h6> (least important).",
+                    hinglish: "HTML me 6 headings hoti hain: <h1> sabse bada/important aur <h6> sabse chhota.",
+                    hindi: "HTML में कुल 6 हेडिंग स्तर होते हैं: <h1> से <h6> तक।"
+                }
+            },
+            {
+                id: 4,
+                category: "Links & Navigation",
+                code: `<a href="https://nextsem.online" target="___">Visit</a>`,
+                question: {
+                    english: "Which target attribute value opens a hyperlink in a new browser tab or window?",
+                    hinglish: "Naye browser tab me link open karne ke liye target attribute ki value kya honi chahiye?",
+                    hindi: "हाइपरलिंक को नए टैब में खोलने के लिए target का मान क्या होना चाहिए?"
+                },
+                options: [
+                    '_blank',
+                    '_new',
+                    '_tab',
+                    '_parent'
+                ],
+                correctAnswer: 0,
+                explanation: {
+                    english: `target="_blank" tells the browser to open the linked destination in a brand new browsing context (tab/window).`,
+                    hinglish: `target="_blank" likhne se link click karne par page naye tab me open hota hai.`,
+                    hindi: `target="_blank" का उपयोग लिंक को नए ब्राउज़र टैब में खोलने के लिए किया जाता है।`
+                }
+            },
+            {
+                id: 5,
+                category: "Images & Accessibility",
+                code: `<img src="logo.png" alt="Company Logo">`,
+                question: {
+                    english: "Why is the 'alt' attribute mandatory for good HTML and accessibility practice?",
+                    hinglish: "<img> tag me 'alt' attribute lagana kyu zaroori hota hai?",
+                    hindi: "<img> टैग में 'alt' एट्रिब्यूट क्यों आवश्यक है?"
+                },
+                options: [
+                    "Provides descriptive alternative text for screen readers and when images fail to load",
+                    "It changes the visual resolution and DPI of the image",
+                    "It animates the image automatically when hovered",
+                    "It applies watermark security to the image file"
+                ],
+                correctAnswer: 0,
+                explanation: {
+                    english: "The alt attribute provides alternative text for screen readers (accessibility for visually impaired users) and displays fallback text if the image fails to load.",
+                    hinglish: "Alt attribute image load na hone par text show karta hai aur screen readers (blind users) ke liye photo describe karta hai.",
+                    hindi: "Alt एट्रिब्यूट स्क्रीन रीडर्स और इमेज लोड न होने की स्थिति में विवरण प्रदान करता है।"
+                }
+            },
+            {
+                id: 6,
+                category: "Lists in HTML",
+                code: `<ul>\n  <li>Apples</li>\n  <li>Mangoes</li>\n</ul>`,
+                question: {
+                    english: "Which tag is used to create an Ordered (numbered) list in HTML?",
+                    hinglish: "HTML me Numbered (1, 2, 3...) list banane ke liye kaunsa tag use hota hai?",
+                    hindi: "संख्यात्मक (Numbered) सूची बनाने के लिए किस टैग का उपयोग होता है?"
+                },
+                options: [
+                    "<ol>",
+                    "<ul>",
+                    "<dl>",
+                    "<nl>"
+                ],
+                correctAnswer: 0,
+                explanation: {
+                    english: "<ol> stands for Ordered List (numbers 1,2,3 or Roman numerals), while <ul> stands for Unordered List (bullet points).",
+                    hinglish: "<ol> se numbered list banti hai aur <ul> se bullet points wali unordered list banti hai.",
+                    hindi: "<ol> का मतलब Ordered List है जो 1, 2, 3 नंबर वाली सूची बनाती है।"
+                }
+            },
+            {
+                id: 7,
+                category: "Semantic HTML5",
+                code: null,
+                question: {
+                    english: "Which of the following is a Semantic HTML5 element?",
+                    hinglish: "Inme se kaunsa ek Semantic HTML5 element hai?",
+                    hindi: "निम्नलिखित में से कौन सा एक सिमेंटिक (Semantic) HTML5 तत्व है?"
+                },
+                options: [
+                    "<article>",
+                    "<div>",
+                    "<span>",
+                    "<b>"
+                ],
+                correctAnswer: 0,
+                explanation: {
+                    english: "Semantic elements like <article>, <section>, <nav>, <header>, and <footer> clearly describe their meaning to both the browser and the developer, unlike <div> or <span>.",
+                    hinglish: "Semantic tags (<article>, <nav>, <header>) browser aur developer ko content ka purpose batate hain. <div> non-semantic tag hai.",
+                    hindi: "<article>, <header>, <nav> सिमेंटिक टैग्स हैं जो कंटेंट के वास्तविक अर्थ को दर्शाते हैं।"
+                }
+            },
+            {
+                id: 8,
+                category: "HTML Forms & Input",
+                code: `<input type="checkbox"> vs <input type="radio">`,
+                question: {
+                    english: "What is the key difference between radio buttons and checkboxes?",
+                    hinglish: "Radio buttons aur Checkboxes ke beech main antar kya hai?",
+                    hindi: "रेडियो बटन और चेकबॉक्स में क्या अंतर है?"
+                },
+                options: [
+                    "Radio buttons allow selecting only ONE option in a named group; checkboxes allow multiple selections",
+                    "Checkboxes only accept numbers, radio buttons only accept text",
+                    "Radio buttons are square, checkboxes are circular",
+                    "Checkboxes cannot be submitted inside a <form>"
+                ],
+                correctAnswer: 0,
+                explanation: {
+                    english: "Radio inputs in a group (sharing the same 'name' attribute) are mutually exclusive (only one selection), whereas checkboxes allow multiple independent selections.",
+                    hinglish: "Radio button group me se sirf 1 option choose hota hai, jabki checkboxes me hum 1 se zyada options tick kar sakte hain.",
+                    hindi: "रेडियो बटन समूह में केवल एक विकल्प चुना जा सकता है, जबकि चेकबॉक्स में कई विकल्प चुने जा सकते हैं।"
+                }
+            },
+            {
+                id: 9,
+                category: "Tables in HTML",
+                code: `<table>\n  <tr><th>Name</th><th>Score</th></tr>\n  <tr><td>Alex</td><td>95</td></tr>\n</table>`,
+                question: {
+                    english: "Which tag is used to define a Table Header cell (bold and centered by default)?",
+                    hinglish: "HTML Table me header cell define karne ke liye kaunsa tag use hota hai?",
+                    hindi: "तालिका (Table) में हेडर सेल के लिए किस टैग का उपयोग किया जाता है?"
+                },
+                options: [
+                    "<th>",
+                    "<td>",
+                    "<tr>",
+                    "<thead>"
+                ],
+                correctAnswer: 0,
+                explanation: {
+                    english: "<th> defines a header cell in a table, styled with bold text and center alignment by default. <td> defines a standard data cell.",
+                    hinglish: "<th> table header ke liye hota hai jo default me bold aur center hota hai. <td> normal data cell ke liye hota hai.",
+                    hindi: "<th> टैग टेबल के हेडर सेल को परिभाषित करता है जो डिफ़ॉल्ट रूप से बोल्ड होता है।"
+                }
+            },
+            {
+                id: 10,
+                category: "Empty / Void Elements",
+                code: `<br>, <hr>, <img>, <input>, <meta>`,
+                question: {
+                    english: "What is a 'void' or 'self-closing' element in HTML?",
+                    hinglish: "HTML me 'void' ya self-closing elements kya hote hain?",
+                    hindi: "HTML में 'Void' या सेल्फ-क्लोजिंग एलिमेंट क्या होते हैं?"
+                },
+                options: [
+                    "Elements that cannot have any child content or closing tag (like <br> or <img>)",
+                    "Elements that are completely hidden from the browser DOM",
+                    "Deprecated elements that throw runtime JavaScript errors",
+                    "Elements that only run on backend servers"
+                ],
+                correctAnswer: 0,
+                explanation: {
+                    english: "Void elements (such as <img>, <br>, <hr>, <input>, <meta>) do not contain text or children and never have a closing tag like </br>.",
+                    hinglish: "Void elements vo tags hote hain jinka koi closing tag nahi hota (jaise <br>, <hr>, <img>). Inke andar koi text nahi hota.",
+                    hindi: "Void elements ऐसे टैग होते हैं जिनका क्लोजिंग टैग नहीं होता, जैसे <br>, <hr>, <img>।"
+                }
+            },
+            {
+                id: 11,
+                category: "Multimedia Elements",
+                code: `<video controls width="400">\n  <source src="movie.mp4" type="video/mp4">\n</video>`,
+                question: {
+                    english: "What does the 'controls' attribute do in an HTML5 <video> or <audio> tag?",
+                    hinglish: "<video> ya <audio> tag me 'controls' attribute ka kya role hai?",
+                    hindi: "<video> टैग में 'controls' एट्रिब्यूट का क्या कार्य है?"
+                },
+                options: [
+                    "Displays play, pause, volume, and seeker controls to the user",
+                    "Forces the video to automatically download to the user's hard drive",
+                    "Encrypts the media file against right-click downloads",
+                    "Loops the video playback infinitely in the background"
+                ],
+                correctAnswer: 0,
+                explanation: {
+                    english: "Adding the boolean 'controls' attribute adds the standard browser playback interface including Play/Pause, volume bar, fullscreen, and timeline seeker.",
+                    hinglish: "'controls' attribute likhne par browser Play/Pause, volume, aur seek bar buttons screen par display karta hai.",
+                    hindi: "'controls' एट्रिब्यूट प्ले, पॉज और वॉल्यूम कंट्रोल बार दिखाता है।"
+                }
+            },
+            {
+                id: 12,
+                category: "Meta Tags & Responsiveness",
+                code: `<meta name="viewport" content="width=device-width, initial-scale=1.0">`,
+                question: {
+                    english: "Why is the meta viewport tag essential for modern mobile responsive websites?",
+                    hinglish: "Mobile responsive website banane ke liye meta viewport tag kyu zaroori hai?",
+                    hindi: "मोबाइल रिस्पॉन्सिव वेबसाइट्स के लिए मेटा व्यूपोर्ट टैग क्यों आवश्यक है?"
+                },
+                options: [
+                    "It sets the screen width and initial zoom scale to match the device's physical screen width",
+                    "It forces mobile devices to render standard desktop 1920x1080 resolution",
+                    "It speeds up 5G network requests on mobile devices",
+                    "It converts HTML tags into native Android APK packages"
+                ],
+                correctAnswer: 0,
+                explanation: {
+                    english: "The viewport meta tag instructs mobile browsers to render the page at the true width of the device screen without artificial desktop scaling.",
+                    hinglish: "Viewport meta tag se page mobile screen ke exact width ke hisab se scale hota hai aur responsive banta hai.",
+                    hindi: "यह मोबाइल स्क्रीन की चौड़ाई के अनुसार वेब पेज को सही तरीके से स्केल करता है।"
+                }
+            },
+            {
+                id: 13,
+                category: "Inline vs Block Elements",
+                code: `<div>, <p>, <h1> vs <span>, <a>, <strong>`,
+                question: {
+                    english: "Which statement accurately describes a Block-level element?",
+                    hinglish: "Block-level element ke baare me kaunsa statement sahi hai?",
+                    hindi: "ब्लॉक-लेवल (Block-level) तत्व के बारे में कौन सा कथन सही है?"
+                },
+                options: [
+                    "It always starts on a new line and takes up the full width available",
+                    "It stays on the same line and only takes up as much width as its content",
+                    "It cannot contain any text or CSS styles",
+                    "It is invisible by default"
+                ],
+                correctAnswer: 0,
+                explanation: {
+                    english: "Block elements (like <div>, <p>, <h1>) always begin on a new line and expand to fill 100% of their parent width, whereas Inline elements only take up content width.",
+                    hinglish: "Block elements hamesha nayi line se start hote hain aur poori 100% width lete hain (jaise <div>, <p>).",
+                    hindi: "ब्लॉक तत्व हमेशा एक नई लाइन से शुरू होते हैं और पूरी उपलब्ध चौड़ाई घेरते हैं।"
+                }
+            },
+            {
+                id: 14,
+                category: "HTML Entities",
+                code: `&lt; &gt; &amp; &copy;`,
+                question: {
+                    english: "Which HTML entity is used to display the copyright symbol (©)?",
+                    hinglish: "Copyright symbol (©) display karne ke liye kaunsa HTML entity use hota hai?",
+                    hindi: "कॉपीराइट चिह्न (©) प्रदर्शित करने के लिए किस एंटिटी का उपयोग किया जाता है?"
+                },
+                options: [
+                    "&copy;",
+                    "&copyright;",
+                    "&cp;",
+                    "&c;"
+                ],
+                correctAnswer: 0,
+                explanation: {
+                    english: "The &copy; entity (or &#169;) safely outputs the copyright symbol © without character encoding conflicts.",
+                    hinglish: "&copy; entity se webpage par © copyright sign print hota hai.",
+                    hindi: "&copy; एंटिटी का उपयोग कॉपीराइट चिह्न (©) को दिखाने के लिए किया जाता है।"
+                }
+            },
+            {
+                id: 15,
+                category: "SEO & Best Practices",
+                code: null,
+                question: {
+                    english: "How many <h1> tags should ideally be used on a single webpage for optimal SEO?",
+                    hinglish: "SEO best practice ke mutabik ek page par kitne <h1> tags hone chahiye?",
+                    hindi: "SEO के अनुसार एक वेब पेज पर सामान्यतः कितने <h1> टैग होने चाहिए?"
+                },
+                options: [
+                    "Exactly 1 main <h1> heading per page",
+                    "At least 10 <h1> headings on every section",
+                    "Zero (h1 is deprecated)",
+                    "As many as possible for keyword stuffing"
+                ],
+                correctAnswer: 0,
+                explanation: {
+                    english: "Search engines and accessibility guidelines strongly recommend a single <h1> heading per page representing the central topic, followed by <h2> and <h3> subheadings.",
+                    hinglish: "SEO ke liye har page par sirf 1 main <h1> tag hona chahiye jo page ke core title ko represent kare.",
+                    hindi: "SEO और एक्सेसिबिलिटी के लिए प्रत्येक पेज पर केवल एक मुख्य <h1> टैग होना सबसे अच्छा अभ्यास है।"
+                }
+            }
+        ];
+
+        // State variables
+        let currentLang = 'english';
+        let currentIdx = 0;
+        let userAnswers = {};
+        let score = 0;
+        let streak = 0;
+        let timeLeft = 900; // 15 mins
+        let timerInterval = null;
+        let sessionQuestions = [];
+
+        // Fisher-Yates Array Shuffle
+        function shuffleArray(arr) {
+            const copy = [...arr];
+            for (let i = copy.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [copy[i], copy[j]] = [copy[j], copy[i]];
+            }
+            return copy;
+        }
+
+        // Build session with randomized option orders for every question
+        function buildShuffledSession() {
+            sessionQuestions = testQuestions.map(q => {
+                const originalCorrectText = q.options[q.correctAnswer];
+                const paired = q.options.map((opt) => ({
+                    text: opt,
+                    isCorrect: (opt === originalCorrectText)
+                }));
+                const shuffled = shuffleArray(paired);
+                return {
+                    ...q,
+                    options: shuffled.map(item => item.text),
+                    correctAnswer: shuffled.findIndex(item => item.isCorrect)
+                };
+            });
+        }
+
+        function initTest() {
+            buildShuffledSession();
+            startTimer();
+            renderQuestion();
+            updateLivePreview();
+        }
+
+        function setLang(lang) {
+            currentLang = lang;
+            document.querySelectorAll('.lang-tab').forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+            renderQuestion();
+        }
+
+        function startTimer() {
+            if (timerInterval) clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    finishTest();
+                    return;
+                }
+                timeLeft--;
+                const mins = Math.floor(timeLeft / 60);
+                const secs = timeLeft % 60;
+                document.getElementById('timer-display').innerText = 
+                    `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+            }, 1000);
+        }
+
+        function reshuffleCurrentOptions() {
+            if (userAnswers.hasOwnProperty(currentIdx)) {
+                alert("This question has already been answered! Option shuffling applies to unanswered questions or when retaking the test.");
+                return;
+            }
+            const q = sessionQuestions[currentIdx];
+            const currentCorrectText = q.options[q.correctAnswer];
+            const paired = q.options.map(opt => ({
+                text: opt,
+                isCorrect: (opt === currentCorrectText)
+            }));
+            const shuffled = shuffleArray(paired);
+            q.options = shuffled.map(item => item.text);
+            q.correctAnswer = shuffled.findIndex(item => item.isCorrect);
+
+            renderQuestion();
+        }
+
+        function renderQuestion() {
+            const q = sessionQuestions[currentIdx];
+            
+            // Category & Header
+            document.getElementById('question-category').innerHTML = `<span>🏷️</span> ${q.category}`;
+            document.getElementById('question-text').innerText = q.question[currentLang] || q.question.english;
+            
+            // Code snippet if any
+            const snippetBox = document.getElementById('code-snippet-box');
+            if (q.code) {
+                snippetBox.innerText = q.code;
+                snippetBox.style.display = 'block';
+            } else {
+                snippetBox.style.display = 'none';
+            }
+
+            // Progress labels
+            document.getElementById('question-progress-label').innerText = `Question ${currentIdx + 1} of ${sessionQuestions.length}`;
+            const pct = Math.round(((currentIdx + 1) / sessionQuestions.length) * 100);
+            document.getElementById('percentage-label').innerText = `${pct}% Completed`;
+            document.getElementById('progress-bar').style.width = `${pct}%`;
+
+            // Render Options
+            const container = document.getElementById('options-container');
+            container.innerHTML = '';
+
+            const isAnswered = userAnswers.hasOwnProperty(currentIdx);
+            const chosenAnswer = userAnswers[currentIdx];
+
+            const letters = ['A', 'B', 'C', 'D'];
+            q.options.forEach((optText, index) => {
+                const optDiv = document.createElement('div');
+                optDiv.className = 'option-item';
+                if (isAnswered) optDiv.classList.add('locked');
+
+                if (isAnswered) {
+                    if (index === q.correctAnswer) {
+                        optDiv.classList.add('correct');
+                    } else if (index === chosenAnswer) {
+                        optDiv.classList.add('wrong');
+                    }
+                }
+
+                optDiv.onclick = () => selectOption(index);
+
+                optDiv.innerHTML = `
+                    <div class="option-letter">${letters[index]}</div>
+                    <div style="flex: 1;">${optText.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</div>
+                `;
+                container.appendChild(optDiv);
+            });
+
+            // Explanation handling
+            const explanationBox = document.getElementById('explanation-box');
+            if (isAnswered) {
+                explanationBox.classList.add('active');
+                document.getElementById('explanation-text').innerHTML = q.explanation[currentLang] || q.explanation.english;
+            } else {
+                explanationBox.classList.remove('active');
+            }
+
+            // Button states
+            document.getElementById('btn-prev').disabled = (currentIdx === 0);
+            const btnShuffle = document.getElementById('btn-shuffle');
+            if (btnShuffle) {
+                btnShuffle.disabled = isAnswered;
+            }
+            const btnNext = document.getElementById('btn-next');
+            if (currentIdx === sessionQuestions.length - 1) {
+                btnNext.innerText = isAnswered ? 'Finish & See Results 🎉' : 'Submit & Finish';
+            } else {
+                btnNext.innerText = 'Next Question →';
+            }
+        }
+
+        function selectOption(index) {
+            if (userAnswers.hasOwnProperty(currentIdx)) return; // prevent changing
+
+            userAnswers[currentIdx] = index;
+            const q = sessionQuestions[currentIdx];
+
+            if (index === q.correctAnswer) {
+                score++;
+                streak++;
+            } else {
+                streak = 0;
+            }
+
+            document.getElementById('score-display').innerText = `${score} / ${sessionQuestions.length}`;
+            document.getElementById('streak-display').innerText = `${streak} 🔥`;
+
+            renderQuestion();
+        }
+
+        function nextQuestion() {
+            if (currentIdx < sessionQuestions.length - 1) {
+                currentIdx++;
+                renderQuestion();
+            } else {
+                finishTest();
+            }
+        }
+
+        function prevQuestion() {
+            if (currentIdx > 0) {
+                currentIdx--;
+                renderQuestion();
+            }
+        }
+
+        function finishTest() {
+            clearInterval(timerInterval);
+            document.getElementById('quiz-view').style.display = 'none';
+            document.getElementById('result-view').classList.add('active');
+            document.getElementById('final-score').innerText = `${score} / ${sessionQuestions.length}`;
+
+            const pct = (score / sessionQuestions.length) * 100;
+            let msg = "";
+            let trophy = "🏆";
+
+            if (pct >= 85) {
+                trophy = "🥇";
+                msg = "Outstanding! You scored above 85% and have achieved Master Level HTML proficiency. You are fully prepared for IGNOU BCA exams and frontend development!";
+            } else if (pct >= 60) {
+                trophy = "🥈";
+                msg = "Good Job! You passed with a solid score. Review the few missed questions to achieve perfection!";
+            } else {
+                trophy = "💪";
+                msg = "Keep practicing! Review the explanations in the lesson notes and take the quiz again to boost your score.";
+            }
+
+            document.getElementById('trophy-icon').innerText = trophy;
+            document.getElementById('result-message').innerText = msg;
+        }
+
+        function restartQuiz() {
+            buildShuffledSession(); // Re-shuffle options randomly for all questions on retake
+            currentIdx = 0;
+            userAnswers = {};
+            score = 0;
+            streak = 0;
+            timeLeft = 900;
+            document.getElementById('score-display').innerText = `0 / ${sessionQuestions.length}`;
+            document.getElementById('streak-display').innerText = `0 🔥`;
+            document.getElementById('result-view').classList.remove('active');
+            document.getElementById('quiz-view').style.display = 'flex';
+            startTimer();
+            renderQuestion();
+        }
+
+        function updateLivePreview() {
+            const code = document.getElementById('live-code-input').value;
+            document.getElementById('live-preview-box').innerHTML = code;
+        }
+
+        // Initialize on load
+        window.addEventListener('DOMContentLoaded', initTest);
+    </script>
+</body>
+</html>

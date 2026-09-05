@@ -20,7 +20,8 @@ interface NsSubjectNavBarProps {
 }
 
 const SUBJECT_TABS = [
-  { id: "html", label: "HTML", href: "/html", match: (p: string) => p.startsWith("/html") },
+  { id: "html", label: "HTML", href: "/html", match: (p: string) => p === "/html" || (p.startsWith("/html/") && !p.includes("/tags")) },
+  { id: "html-tags", label: "HTML TAGS (115+)", href: "/html/tags", match: (p: string) => p.includes("/html/tags") || p.includes("/html-tags") },
   { id: "css", label: "CSS", href: "/book/p2-1-selectors", match: (p: string) => p.includes("p2-") },
   { id: "js", label: "JAVASCRIPT", href: "/book/p3-1-basics", match: (p: string) => p.includes("p3-") },
   { id: "react", label: "REACT", href: "/book/p4-1-jsx", match: (p: string) => p.includes("p4-") },

@@ -58,8 +58,6 @@ export default function LessonBottomNavigation({ pathname }: LessonBottomNavigat
     }
   }, [pathname]);
 
-  if (isFullscreen) return null;
-
   useEffect(() => {
     if (typeof window !== "undefined") {
       const savedLang = (localStorage.getItem("nextsem_lesson_lang") || localStorage.getItem("nextsem_html_lang")) as Lang | null;
@@ -103,6 +101,8 @@ export default function LessonBottomNavigation({ pathname }: LessonBottomNavigat
       };
     }
   }, []);
+
+  if (isFullscreen) return null;
 
   const handleLangChange = (lang: Lang) => {
     setSelectedLang(lang);

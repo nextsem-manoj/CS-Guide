@@ -9,6 +9,7 @@ import { FontScaleHydrator } from "@/components/FontSizeControl";
 import SplashScreen from "@/components/SplashScreen";
 import GlobalNavigationWidget from "@/components/layout/GlobalNavigationWidget";
 import BottomNavigation from "@/components/layout/BottomNavigation";
+import SearchWidget from "@/components/SearchWidget";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -159,6 +160,7 @@ export default function RootLayout({
               {children}
             </div>
 
+            <SearchWidget />
             <BottomNavigation />
           </ProgressProvider>
         </ThemeProvider>

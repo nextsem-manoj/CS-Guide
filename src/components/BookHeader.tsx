@@ -2,8 +2,8 @@
 
 import React from 'react';
 import Link from 'next/link';
+import { Search } from 'lucide-react';
 import ProgressIndicator from './ProgressIndicator';
-
 
 const BookHeader = () => {
   return (
@@ -21,8 +21,20 @@ const BookHeader = () => {
         </h1>
       </div>
 
-      {/* Right: Progress */}
-      <div className="flex flex-row items-center gap-4">
+      {/* Right: Search & Progress */}
+      <div className="flex flex-row items-center gap-2.5 sm:gap-4">
+        <button
+          onClick={() => window.dispatchEvent(new CustomEvent('open-global-search'))}
+          className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-slate-900 border border-slate-700/80 hover:border-emerald-500/60 text-slate-300 hover:text-white transition-all text-xs font-bold cursor-pointer"
+          title="Search Topics (Ctrl+K)"
+        >
+          <Search size={14} className="text-emerald-400" />
+          <span className="hidden sm:inline">Search</span>
+          <kbd className="hidden md:inline-block text-[9px] bg-slate-800 border border-slate-700 px-1 py-0.5 rounded text-slate-400 font-mono">
+            Ctrl+K
+          </kbd>
+        </button>
+
         <div className="hidden sm:block">
           <ProgressIndicator />
         </div>
