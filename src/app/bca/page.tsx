@@ -69,10 +69,12 @@ export default function UniversityCoursesDashboard() {
       
       if (progParam === 'du-bsc' || progParam === 'ignou-bca' || progParam === 'ignou-mca') {
         setSelectedProgramId(progParam);
-      } else if (uniParam === 'du') {
-        setSelectedProgramId('du-bsc');
-      } else if (uniParam === 'ignou') {
+      } else if (progParam === 'mca' || uniParam === 'mca') {
+        setSelectedProgramId('ignou-mca');
+      } else if (progParam === 'bca' || uniParam === 'bca' || uniParam === 'ignou') {
         setSelectedProgramId('ignou-bca');
+      } else if (progParam === 'du' || uniParam === 'du') {
+        setSelectedProgramId('du-bsc');
       } else {
         const savedProg = localStorage.getItem('nextsem_preferred_university_program');
         if (savedProg === 'du-bsc' || savedProg === 'ignou-bca' || savedProg === 'ignou-mca') {

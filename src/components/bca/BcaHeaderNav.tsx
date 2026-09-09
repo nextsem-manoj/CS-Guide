@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
 import { Home, ChevronDown, BookOpen, X, Sparkles, GraduationCap, CheckCircle2, Search, Building2 } from 'lucide-react';
 import { bcaSemesters, BcaSemester, BcaSubject } from '@/data/bcaCoursesData';
-import { duCsSemesters, UniversitySemester, UniversitySubject } from '@/data/universityCoursesData';
+import { duCsSemesters, ignouMcaSemesters, UniversitySemester, UniversitySubject } from '@/data/universityCoursesData';
 
 interface BcaHeaderNavProps {
   currentSubjectCode?: string;
@@ -21,7 +21,7 @@ export default function BcaHeaderNav({
   const router = useRouter();
   const pathname = usePathname();
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [modalUniversityTab, setModalUniversityTab] = useState<'du' | 'ignou'>('du');
+  const [modalUniversityTab, setModalUniversityTab] = useState<'du' | 'ignou' | 'mca'>('du');
 
   return (
     <>
@@ -103,30 +103,42 @@ export default function BcaHeaderNav({
             </div>
 
             {/* University Switcher inside Dropdown */}
-            <div className="grid grid-cols-2 gap-2 p-1 bg-slate-900/90 border border-slate-800 rounded-xl">
+            <div className="grid grid-cols-3 gap-1.5 p-1 bg-slate-900/90 border border-slate-800 rounded-xl">
               <button
                 type="button"
                 onClick={() => setModalUniversityTab('du')}
-                className={`py-1.5 px-3 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+                className={`py-1.5 px-2 rounded-lg text-[11px] font-bold transition-all flex items-center justify-center gap-1 cursor-pointer truncate ${
                   modalUniversityTab === 'du'
                     ? 'bg-blue-600 text-white shadow-sm font-black'
                     : 'text-slate-400 hover:text-white'
                 }`}
               >
-                <Building2 size={13} />
-                <span>Delhi University (DU)</span>
+                <Building2 size={12} className="shrink-0" />
+                <span className="truncate">DU CS</span>
               </button>
               <button
                 type="button"
                 onClick={() => setModalUniversityTab('ignou')}
-                className={`py-1.5 px-3 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+                className={`py-1.5 px-2 rounded-lg text-[11px] font-bold transition-all flex items-center justify-center gap-1 cursor-pointer truncate ${
                   modalUniversityTab === 'ignou'
                     ? 'bg-emerald-600 text-white shadow-sm font-black'
                     : 'text-slate-400 hover:text-white'
                 }`}
               >
-                <GraduationCap size={13} />
-                <span>IGNOU (BCA)</span>
+                <GraduationCap size={12} className="shrink-0" />
+                <span className="truncate">BCA (UG)</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setModalUniversityTab('mca')}
+                className={`py-1.5 px-2 rounded-lg text-[11px] font-bold transition-all flex items-center justify-center gap-1 cursor-pointer truncate ${
+                  modalUniversityTab === 'mca'
+                    ? 'bg-amber-600 text-white shadow-sm font-black'
+                    : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                <Sparkles size={12} className="shrink-0" />
+                <span className="truncate">MCA (PG)</span>
               </button>
             </div>
 
@@ -168,7 +180,7 @@ export default function BcaHeaderNav({
                     </div>
                   </div>
                 ))
-              ) : (
+              ) : modalUniversityTab === 'ignou' ? (
                 /* IGNOU Subjects */
                 bcaSemesters.map((sem) => (
                   <div key={`modal-ignou-${sem.id}`} className="space-y-2">
@@ -219,6 +231,48 @@ export default function BcaHeaderNav({
                               <span className="truncate">{sub.name}</span>
                             </div>
                             {isCurrent && <CheckCircle2 size={14} className="text-cyan-400 shrink-0" />}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                ))
+              ) : (
+                /* IGNOU MCA Subjects */
+                ignouMcaSemesters.map((sem: UniversitySemester) => (
+                  <div key={`modal-mca-${sem.id}`} className="space-y-2">
+                    <div className="text-[10px] font-black uppercase tracking-widest text-amber-400 flex items-center justify-between">
+                      <span>IGNOU MCA • {sem.name}</span>
+                      <Link
+                        href={`/bca?prog=ignou-mca`}
+                        onClick={() => setDropdownOpen(false)}
+                        className="text-amber-400 hover:underline text-[9px]"
+                      >
+                        View Full Syllabus
+                      </Link>
+                    </div>
+
+                    <div className="space-y-1">
+                      {sem.subjects.map((sub: UniversitySubject) => {
+                        const isCurrent = sub.code.toUpperCase() === currentSubjectCode.toUpperCase();
+                        return (
+                          <button
+                            key={sub.code}
+                            onClick={() => {
+                              setDropdownOpen(false);
+                              router.push(`/bca?prog=ignou-mca`);
+                            }}
+                            className={`w-full text-left p-2.5 rounded-xl border transition-all flex items-center justify-between gap-2 text-xs font-bold cursor-pointer ${
+                              isCurrent
+                                ? "bg-amber-500/20 border-amber-400 text-amber-200"
+                                : "bg-slate-900/60 hover:bg-slate-800 border-slate-800 text-slate-300"
+                            }`}
+                          >
+                            <div className="min-w-0 truncate">
+                              <span className="text-[10px] font-black text-amber-400 mr-2 uppercase">{sub.code}</span>
+                              <span className="truncate">{sub.name}</span>
+                            </div>
+                            {isCurrent && <CheckCircle2 size={14} className="text-amber-400 shrink-0" />}
                           </button>
                         );
                       })}
