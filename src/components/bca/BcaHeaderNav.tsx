@@ -4,8 +4,8 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
 import { Home, ChevronDown, BookOpen, X, Sparkles, GraduationCap, CheckCircle2, Search, Building2 } from 'lucide-react';
-import { bcaSemesters } from '@/data/bcaCoursesData';
-import { duCsSemesters } from '@/data/universityCoursesData';
+import { bcaSemesters, BcaSemester, BcaSubject } from '@/data/bcaCoursesData';
+import { duCsSemesters, UniversitySemester, UniversitySubject } from '@/data/universityCoursesData';
 
 interface BcaHeaderNavProps {
   currentSubjectCode?: string;
@@ -134,7 +134,7 @@ export default function BcaHeaderNav({
             <div className="space-y-4 pt-1">
               {modalUniversityTab === 'du' ? (
                 /* DU CS Subjects */
-                duCsSemesters.map((sem) => (
+                duCsSemesters.map((sem: UniversitySemester) => (
                   <div key={`modal-du-${sem.id}`} className="space-y-2">
                     <div className="text-[10px] font-black uppercase tracking-widest text-blue-400 flex items-center justify-between">
                       <span>DU • {sem.name}</span>
@@ -142,7 +142,7 @@ export default function BcaHeaderNav({
                     </div>
 
                     <div className="space-y-1">
-                      {sem.subjects.map((sub) => {
+                      {sem.subjects.map((sub: UniversitySubject) => {
                         const isCurrent = sub.code.toUpperCase() === currentSubjectCode.toUpperCase();
                         return (
                           <button

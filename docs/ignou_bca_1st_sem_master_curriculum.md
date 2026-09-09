@@ -1078,9 +1078,35 @@ Total: 26 features shipped across 2 app versions (v25 → v26) 🎯
 - **Unit 2 Simple English, Exam English & Hinglish Multilingual Modes (2026-09-08)**:
   - Added comprehensive `Simple English` mode to `src/app/bca/semester-1/bcs-011-computer-basics/unit-2-operating-system/page.tsx` featuring beginner-friendly explanations, simplified analogies (Master Chef & City Traffic Controller), 4-layer architecture breakdown, 5-state process lifecycle guide, Windows 11 CMD commands, and quiz questions.
   - Added interactive mode switcher pill selector (`🌱 Simple English`, `🎓 Exam English`, `🇮🇳 Hinglish`) with persistent `localStorage` storage.
-- **Unified Computer Science University Hub — Delhi University (DU) & IGNOU (2026-09-10)**:
-  - Expanded the portal from solely IGNOU BCA into a unified **University Computer Science Courses Hub** featuring:
-    - **University of Delhi (DU)**: Official Department of Computer Science B.Sc. (Hons) Computer Science curriculum under NEP 2020 UGCF framework (CSDSC01 Python, CSDSC02 Computer System Architecture, CSDSC03 Maths for Computing, CSDSC04 C++, CSDSC06 Data Structures, CSDSC07 OS, CSDSC09 DBMS, CSDSC10 Algorithms, CSDSC12 Networks).
-    - **IGNOU**: Full 6-semester BCA curriculum with all existing interactive notes, Windows 11 terminal simulators, and textbook solutions preserved 100%.
-  - Added top interactive **University Switcher Ribbon** on `/bca` and dedicated `/du` route for seamless navigation between Delhi University and IGNOU.
-  - Enhanced `BcaHeaderNav.tsx` with modal university selection tabs and course badges.
+- **Unified Computer Science University Hub — Delhi University (DU), IGNOU BCA & MCA (2026-09-10)**:
+  - Expanded the portal into a comprehensive **University Computer Science Courses Hub** featuring:
+    - **🏛️ University of Delhi (DU)**: Official Department of Computer Science B.Sc. (Program) / B.Sc. (Mathematical Science) with Computer Science curriculum under NEP 2024 / UGCF (`https://cs.du.ac.in/uploads/syllabus/NEP/bscprog2024.html`):
+      - Sem 1: Discipline A1 — Programming using C++
+      - Sem 2: Discipline A2 — Data Structures (Exit: UG Certificate, 44 credits)
+      - Sem 3: Discipline A3 — Design & Analysis of Algorithms
+      - Sem 4: Discipline A4 — Operating Systems (Exit: UG Diploma, 88 credits)
+      - Sem 5: Discipline A5 — Database Management Systems
+      - Sem 6: Discipline A6 — Computer Networks (Exit: B.Sc. Degree, 132 credits)
+      - Sem 7: DSC-07 — Software Engineering
+      - Sem 8: DSC-08 — Information Security (Exit: B.Sc. Hons / Research, 176 credits)
+    - **🎓 IGNOU BCA (UG)**: Complete 6-semester revised CBCS syllabus with official Programme Guide PDF and interactive notes/labs.
+    - **🎓 IGNOU MCA (PG)**: New 2-Year Master of Computer Applications (AICTE Approved) covering MCS-211 to MCS-229 (DAA, Discrete Maths, Software Eng, Computer Networks, OOAD, Web Tech, AI/ML, Cloud/IoT, Big Data, and Major Dissertation).
+  - **Official Syllabus PDF Guides**:
+    - Downloaded and preserved official university PDFs in `public/syllabus/` & `docs/syllabus/`:
+      1. `IGNOU_BCA_Programme_Guide_Syllabus.pdf` (7.58 MB)
+      2. `IGNOU_MCA_Programme_Guide_Syllabus.pdf` (2.76 MB)
+      3. `DU_BSc_Prog_CS_Sem1_Programming_using_C++.pdf` (1.26 MB)
+      4. `DU_BSc_Prog_CS_Sem2_Data_Structures.pdf` (1.26 MB)
+      5. `DU_BSc_Prog_CS_Sem3_Design_and_Analysis_of_Algorithms.pdf` (923 KB)
+      6. `DU_BSc_Prog_CS_Sem4_Operating_Systems.pdf` (1.26 MB)
+      7. `DU_BSc_Prog_CS_Sem5_Database_Management_Systems.pdf` (1.26 MB)
+      8. `DU_BSc_Prog_CS_Sem6_Computer_Networks.pdf` (1.25 MB)
+      9. `DU_BSc_Prog_CS_Sem7_Software_Engineering.pdf` (1.58 MB)
+      10. `DU_BSc_Prog_CS_Sem8_Information_Security.pdf` (1.33 MB)
+  - **Interactive Degree Switcher Ribbon**:
+    - Added 3-way toggle ribbon on `/bca`: `🏛️ DU B.Sc. (P) Computer Science`, `🎓 IGNOU BCA (UG)`, `🎓 IGNOU MCA (PG)`.
+    - Added direct **"Download Official Syllabus PDF"** button on the hero banner for each active program.
+    - Added individual paper PDF download buttons and interactive unit chips on each semester accordion.
+  - **SPA Routing & Accessibility**:
+    - Dedicated `/du` route automatically loads DU B.Sc. Program CS view.
+    - `BcaHeaderNav.tsx` updated with modal university selection and search trigger.
