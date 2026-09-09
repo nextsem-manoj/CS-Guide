@@ -67,13 +67,13 @@ export default function BcaHeaderNav({
             href="/bca"
             className="flex items-center gap-2 px-2.5 py-1 rounded-xl bg-[#0c1328] border border-emerald-500/40 text-white hover:border-emerald-400 text-xs font-black shadow-md transition-all active:scale-95 cursor-pointer"
           >
-            <img src="/logo.svg" alt="University CS Logo" className="w-6 h-6 rounded-md border border-emerald-500/20 shrink-0" />
+            <img src="/code-icon.png" alt="CS Guide Logo" className="w-6 h-6 rounded-md border border-emerald-500/20 shrink-0 object-contain" />
             <div className="flex flex-col leading-none text-left">
               <span className="font-black text-xs tracking-tight text-white uppercase">
-                DU & IGNOU
+                CS Guide
               </span>
               <span className="text-[8px] font-mono text-[#04AA6D] font-bold tracking-tight">
-                CS Degree Hub
+                by NextSem
               </span>
             </div>
           </Link>

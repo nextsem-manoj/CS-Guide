@@ -166,8 +166,8 @@ export default function HomeClient() {
           {/* Logo & Brand */}
           <div className="flex items-center gap-6">
             <Link href="/" className="flex items-center gap-2.5 group">
-              <div className="w-8 h-8 rounded-xl bg-[#0c1328] border border-emerald-500/30 flex items-center justify-center text-[#04AA6D] font-black text-xs shadow-md group-hover:scale-105 transition-transform">
-                NS
+              <div className="w-8 h-8 rounded-xl bg-[#0c1328] border border-emerald-500/40 flex items-center justify-center overflow-hidden shadow-md group-hover:scale-105 transition-transform p-0.5">
+                <img src="/code-icon.png" alt="CS Guide Logo" className="w-full h-full object-contain rounded-lg" />
               </div>
               <div className="flex flex-col leading-none">
                 <span className="font-black text-base tracking-tight text-white uppercase group-hover:text-emerald-400 transition-colors">
