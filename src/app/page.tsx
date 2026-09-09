@@ -2,37 +2,35 @@ import type { Metadata } from 'next';
 import HomeClient from './HomeClient';
 
 export const metadata: Metadata = {
-  title: "IGNOU BCA Free Study Materials & Lessons | Er. Manoj Kumar",
-  description: "Free IGNOU BCA 1st Semester study materials, line-by-line textbook notes, BCS-111 Computer Basics, BCS-012 Math, BCSL-013 Lab, BEGLA-136 English & BEVAE-181 by Er. Manoj Kumar.",
+  title: "CS Guide by NextSem | University Computer Science (DU, IGNOU BCA & MCA)",
+  description: "Official Computer Science university curriculum, notes, and interactive simulators for Delhi University (DU B.Sc. Prog CS) and IGNOU (BCA & MCA New) by Er. Manoj Kumar.",
   keywords: [
-    "ignou",
+    "cs guide by nextsem",
+    "delhi university computer science",
+    "du bsc program computer science",
     "ignou bca",
+    "ignou mca new",
     "ignou bca free study materials",
     "ignou bca lessons",
     "ignou bca notes",
-    "ignou bca 1st semester hub",
     "bcs-111 computer basics ignou",
-    "bcs-011 computer basics and pc software",
     "bcs-012 basic mathematics ignou",
     "bcsl-013 software lab ignou",
-    "begla-136 workplace english ignou",
-    "bevae-181 environmental studies ignou",
-    "ignou bca solved assignments",
-    "ignou bca previous year questions",
-    "ignou study hub online"
+    "computer science university courses",
+    "nextsem computer science"
   ],
   alternates: { canonical: "https://ignou-study-notes-by-nextsem.web.app" },
   openGraph: {
-    title: "IGNOU BCA Free Study Materials & Lessons | Er. Manoj Kumar",
-    description: "Free line-by-line IGNOU BCA Semester 1 curriculum with interactive units, bilingual notes, MCQs, and lab simulators.",
+    title: "CS Guide by NextSem | University Computer Science (DU, IGNOU BCA & MCA)",
+    description: "Free university computer science study materials, official syllabi PDFs, interactive units, MCQs, and lab simulators.",
     url: "https://ignou-study-notes-by-nextsem.web.app",
-    siteName: "IGNOU BCA Hub by Nextsem",
+    siteName: "CS Guide by NextSem",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "IGNOU BCA Free Study Materials & Lessons | Er. Manoj Kumar",
-    description: "Bilingual IGNOU BCA courses, solved unit notes, lab simulators, and interactive MCQs.",
+    title: "CS Guide by NextSem | University Computer Science (DU, IGNOU BCA & MCA)",
+    description: "University computer science curriculum, official syllabi, lab simulators, and interactive notes.",
   },
 };
 
@@ -44,11 +42,11 @@ export default function Home() {
         "@type": "WebSite",
         "@id": "https://ignou-study-notes-by-nextsem.web.app/#website",
         "url": "https://ignou-study-notes-by-nextsem.web.app",
-        "name": "IGNOU BCA Study Hub",
-        "description": "Free IGNOU BCA Study Materials, Line-by-Line Textbook Notes & Practical Simulators",
+        "name": "CS Guide by NextSem",
+        "description": "University Computer Science Courses, Official Syllabi PDFs, Textbook Notes & Practical Simulators",
         "publisher": {
           "@type": "EducationalOrganization",
-          "name": "IGNOU BCA Hub • Nextsem Online",
+          "name": "CS Guide • Nextsem Online",
           "logo": {
             "@type": "ImageObject",
             "url": "https://ignou-study-notes-by-nextsem.web.app/icon.svg"
@@ -58,7 +56,7 @@ export default function Home() {
       {
         "@type": "EducationalOrganization",
         "@id": "https://ignou-study-notes-by-nextsem.web.app/#organization",
-        "name": "IGNOU BCA Study Hub by Nextsem",
+        "name": "CS Guide by NextSem",
         "url": "https://ignou-study-notes-by-nextsem.web.app",
         "founder": {
           "@type": "Person",

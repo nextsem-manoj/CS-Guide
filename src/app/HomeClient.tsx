@@ -12,7 +12,7 @@ import {
   Layers, Code, BookOpen, ChevronRight, Zap, 
   LogIn, LogOut, Terminal, Star, Search, X, 
   Sparkles, Compass, ArrowRight, GitBranch, Bot, 
-  GraduationCap, FileText
+  GraduationCap, FileText, Building2
 } from 'lucide-react';
 
 interface UserProfile {
@@ -171,26 +171,30 @@ export default function HomeClient() {
               </div>
               <div className="flex flex-col leading-none">
                 <span className="font-black text-base tracking-tight text-white uppercase group-hover:text-emerald-400 transition-colors">
-                  IGNOU BCA
+                  CS Guide
                 </span>
                 <span className="text-[10px] font-mono text-[#04AA6D] font-bold tracking-tight">
-                  Study Notes Hub
+                  by NextSem
                 </span>
               </div>
             </Link>
 
             {/* Nav Links */}
             <nav className="hidden md:flex items-center gap-1 text-xs font-bold text-slate-300">
-              <Link href="/bca/semester-1" className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg hover:bg-slate-800/80 hover:text-white transition-all">
-                <BookOpen size={14} className="text-[#04AA6D]" />
-                <span>Semester 1 Hub</span>
+              <Link href="/du" className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg hover:bg-slate-800/80 hover:text-white transition-all">
+                <Building2 size={14} className="text-blue-400" />
+                <span>DU CS (NEP)</span>
               </Link>
               <Link href="/bca" className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg hover:bg-slate-800/80 hover:text-white transition-all">
-                <Layers size={14} className="text-cyan-400" />
-                <span>All Semesters</span>
+                <GraduationCap size={14} className="text-emerald-400" />
+                <span>IGNOU BCA</span>
+              </Link>
+              <Link href="/mca" className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg hover:bg-slate-800/80 hover:text-white transition-all">
+                <Sparkles size={14} className="text-amber-400" />
+                <span>IGNOU MCA</span>
               </Link>
               <Link href="/cmd" target="_blank" className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg hover:bg-slate-800/80 hover:text-white transition-all">
-                <Terminal size={14} className="text-amber-400" />
+                <Terminal size={14} className="text-cyan-400" />
                 <span>Windows CMD</span>
               </Link>
               <Link href="/curriculum" className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg hover:bg-slate-800/80 hover:text-white transition-all">
@@ -261,19 +265,19 @@ export default function HomeClient() {
           {/* Badge */}
           <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-emerald-950/60 border border-emerald-500/30 text-emerald-400 text-[11px] sm:text-xs font-black uppercase tracking-wider shadow-lg">
             <Sparkles size={13} className="text-[#c1a648]" />
-            <span>100% Free Study Hub • Author: Er. Manoj Kumar</span>
+            <span>100% Free University CS Hub • Author: Er. Manoj Kumar</span>
           </div>
 
-          {/* 1. Complete IGNOU BCA Lessons (Theory + Practical) Headline */}
+          {/* 1. Complete CS Degree Lessons Headline */}
           <div className="space-y-1">
             <h1 className="text-2xl sm:text-4xl md:text-5xl font-black uppercase tracking-tight text-white leading-tight">
-              COMPLETE IGNOU BCA LESSONS
+              COMPUTER SCIENCE UNIVERSITY COURSES
             </h1>
-            <h2 className="text-lg sm:text-2xl md:text-3xl font-extrabold uppercase tracking-wide bg-gradient-to-r from-[#c1a648] via-emerald-300 to-cyan-300 bg-clip-text text-transparent">
-              THEORY + PRACTICAL LABS
+            <h2 className="text-lg sm:text-2xl md:text-3xl font-extrabold uppercase tracking-wide bg-gradient-to-r from-blue-400 via-emerald-300 to-amber-300 bg-clip-text text-transparent">
+              DELHI UNIVERSITY (DU) & IGNOU (BCA / MCA)
             </h2>
             <p className="text-slate-300 text-xs sm:text-sm font-medium max-w-xl mx-auto pt-0.5">
-              Line-by-Line Textbook Units, Bilingual Lessons, Solved Assignments & Browser Simulators.
+              Official UGCF & NEP Syllabi, Downloadable PDFs, Line-by-Line Textbook Notes & Interactive Simulators.
             </p>
           </div>
 
@@ -392,44 +396,55 @@ export default function HomeClient() {
             </div>
           </div>
 
-          {/* 3. Action Buttons: Start IGNOU BCA & Explore All 6 Semesters */}
+          {/* 3. Action Buttons: Degree Gateways */}
           <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
             <Link
-              href="/bca/semester-1"
-              className="inline-flex items-center gap-2 px-5 py-3 rounded-2xl bg-[#0c1328] hover:bg-[#101b38] text-white font-extrabold text-xs sm:text-sm border border-[#04AA6D]/50 hover:border-[#04AA6D] shadow-xl shadow-cyan-950/30 transition-all transform active:scale-95 cursor-pointer group"
+              href="/du"
+              className="inline-flex items-center gap-2 px-4 sm:px-5 py-3 rounded-2xl bg-[#0c1328] hover:bg-[#101b38] text-white font-extrabold text-xs sm:text-sm border border-blue-500/50 hover:border-blue-400 shadow-xl shadow-blue-950/30 transition-all transform active:scale-95 cursor-pointer group"
             >
-              <BookOpen size={16} className="text-[#c1a648] group-hover:scale-110 transition-transform" />
-              <span className="bg-gradient-to-r from-white via-cyan-200 to-emerald-300 bg-clip-text text-transparent">
-                Start IGNOU BCA Free Lessons
+              <Building2 size={16} className="text-blue-400 group-hover:scale-110 transition-transform" />
+              <span className="bg-gradient-to-r from-white via-blue-200 to-cyan-300 bg-clip-text text-transparent">
+                Delhi University (DU CS)
+              </span>
+              <ChevronRight size={16} className="text-blue-400 group-hover:translate-x-1 transition-transform" />
+            </Link>
+
+            <Link
+              href="/bca"
+              className="inline-flex items-center gap-2 px-4 sm:px-5 py-3 rounded-2xl bg-[#0c1328] hover:bg-[#101b38] text-white font-extrabold text-xs sm:text-sm border border-[#04AA6D]/50 hover:border-[#04AA6D] shadow-xl shadow-emerald-950/30 transition-all transform active:scale-95 cursor-pointer group"
+            >
+              <GraduationCap size={16} className="text-[#04AA6D] group-hover:scale-110 transition-transform" />
+              <span className="bg-gradient-to-r from-white via-emerald-200 to-teal-300 bg-clip-text text-transparent">
+                IGNOU BCA (UG)
               </span>
               <ChevronRight size={16} className="text-[#04AA6D] group-hover:translate-x-1 transition-transform" />
             </Link>
 
             <Link
-              href="/bca"
-              className="inline-flex items-center gap-2 px-4 sm:px-5 py-3 rounded-2xl bg-slate-900 hover:bg-slate-800 text-slate-200 hover:text-white font-extrabold text-xs sm:text-sm border border-slate-700 hover:border-slate-600 shadow-lg transition-all transform active:scale-95 cursor-pointer"
+              href="/mca"
+              className="inline-flex items-center gap-2 px-4 sm:px-5 py-3 rounded-2xl bg-slate-900 hover:bg-slate-800 text-slate-200 hover:text-white font-extrabold text-xs sm:text-sm border border-amber-500/40 hover:border-amber-400 shadow-lg transition-all transform active:scale-95 cursor-pointer group"
             >
-              <Layers size={15} className="text-cyan-400" />
-              <span>Explore All 6 Semesters »</span>
+              <Sparkles size={15} className="text-amber-400 group-hover:scale-110 transition-transform" />
+              <span>IGNOU MCA (PG) »</span>
             </Link>
           </div>
 
           {/* Compact Feature Highlights (Eliminates dead space elegantly) */}
           <div className="pt-3 flex flex-wrap items-center justify-center gap-2 text-[11px] sm:text-xs text-slate-400 font-medium">
             <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900/60 border border-slate-800">
-              <span className="text-[#04AA6D]">✓</span>
-              <span>500+ BCA Topics & Units</span>
+              <span className="text-blue-400">🏛️</span>
+              <span>DU, BCA & MCA Syllabi</span>
             </div>
             <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900/60 border border-slate-800">
               <span className="text-amber-400">⚡</span>
-              <span>Windows CMD & HTML Simulators</span>
+              <span>Windows CMD & Code Simulators</span>
             </div>
             <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900/60 border border-slate-800">
-              <span className="text-cyan-400">🌐</span>
-              <span>English & Hinglish Explanations</span>
+              <span className="text-emerald-400">📄</span>
+              <span>Official Syllabi PDFs</span>
             </div>
             <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900/60 border border-slate-800">
-              <span className="text-emerald-400">🎓</span>
+              <span className="text-cyan-400">🎓</span>
               <span>100% Free & Open Access</span>
             </div>
           </div>
@@ -516,16 +531,16 @@ export default function HomeClient() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10 grid grid-cols-2 md:grid-cols-4 gap-8 text-xs text-slate-400">
           
           <div className="space-y-2.5">
-            <h5 className="font-black uppercase text-white tracking-wider">IGNOU BCA 1st Sem</h5>
+            <h5 className="font-black uppercase text-white tracking-wider">University CS Hub</h5>
             <ul className="space-y-1.5 font-medium">
-              <li><Link href="/bca/semester-1/bcs-011-computer-basics" className="hover:text-white">BCS-111 Computer Basics</Link></li>
-              <li><Link href="/bca/semester-1/bcs-012-basic-mathematics" className="hover:text-white">BCS-012 Basic Math</Link></li>
-              <li><Link href="/bca/semester-1/bcsl-013-software-lab" className="hover:text-white">BCSL-013 Software Lab</Link></li>
-              <li><Link href="/bca/semester-1/begla-136-english" className="hover:text-white">BEGLA-136 English</Link></li>
+              <li><Link href="/du" className="hover:text-white">Delhi University B.Sc. CS</Link></li>
+              <li><Link href="/bca" className="hover:text-white">IGNOU BCA (6 Semesters)</Link></li>
+              <li><Link href="/mca" className="hover:text-white">IGNOU MCA (New 2-Year)</Link></li>
+              <li><Link href="/bca/semester-1" className="hover:text-white">BCA 1st Sem Hub</Link></li>
               <li>
-                <Link href="/bca/semester-1" className="text-emerald-400 font-bold hover:underline flex items-center gap-1">
+                <Link href="/bca" className="text-emerald-400 font-bold hover:underline flex items-center gap-1">
                   <GraduationCap size={13} />
-                  <span>1st Sem Study Hub</span>
+                  <span>All Degree Papers</span>
                 </Link>
               </li>
             </ul>
@@ -562,19 +577,19 @@ export default function HomeClient() {
           </div>
 
           <div className="space-y-2.5">
-            <h5 className="font-black uppercase text-white tracking-wider">Degree Pathways</h5>
+            <h5 className="font-black uppercase text-white tracking-wider">Official Syllabi</h5>
             <ul className="space-y-1.5 font-medium">
-              <li><Link href="/bca" className="hover:text-white">All 6 Semesters</Link></li>
-              <li><Link href="/curriculum" className="hover:text-white">Phase Tracker</Link></li>
-              <li><Link href="/bca/semester-1" className="hover:text-white">Solved Assignments</Link></li>
-              <li><Link href="/curriculum" className="hover:text-white">Exam Important Questions</Link></li>
+              <li><a href="/syllabus/DU_BSc_Prog_CS_Sem1_Programming_using_C++.pdf" target="_blank" rel="noopener noreferrer" className="hover:text-white">DU B.Sc. CS NEP PDF</a></li>
+              <li><a href="/syllabus/IGNOU_BCA_Programme_Guide_Syllabus.pdf" target="_blank" rel="noopener noreferrer" className="hover:text-white">IGNOU BCA Syllabus PDF</a></li>
+              <li><a href="/syllabus/IGNOU_MCA_Programme_Guide_Syllabus.pdf" target="_blank" rel="noopener noreferrer" className="hover:text-white">IGNOU MCA Syllabus PDF</a></li>
+              <li><Link href="/curriculum" className="hover:text-white">Curriculum Roadmap</Link></li>
             </ul>
           </div>
 
           <div className="space-y-2.5">
             <h5 className="font-black uppercase text-white tracking-wider">About & Legal</h5>
             <ul className="space-y-1.5 font-medium">
-              <li><Link href="/about" className="hover:text-white">About IGNOU BCA Hub</Link></li>
+              <li><Link href="/about" className="hover:text-white">About CS Guide</Link></li>
               <li><Link href="/privacy" className="hover:text-white">Privacy Policy</Link></li>
               <li><Link href="/terms" className="hover:text-white">Terms of Service</Link></li>
               <li><Link href="/contact" className="hover:text-white">Contact Support</Link></li>
@@ -586,10 +601,10 @@ export default function HomeClient() {
         {/* Copyright & Author Attribution */}
         <div className="bg-[#050914] text-[11px] text-slate-400 py-6 px-4 border-t border-slate-800/60 text-center space-y-2">
           <p className="max-w-2xl mx-auto leading-relaxed">
-            IGNOU BCA Study Hub by Nextsem is optimized for line-by-line degree learning and interactive exam preparation.
+            CS Guide by NextSem is optimized for university computer science students across Delhi University (DU) and IGNOU (BCA & MCA).
           </p>
           <p className="text-[#c1a648] font-bold uppercase tracking-wider">
-            © 2026 IGNOU BCA STUDY HUB • NEXTSEM.ONLINE • AUTHOR: ER. MANOJ KUMAR
+            © 2026 CS GUIDE BY NEXTSEM • NEXTSEM.ONLINE • AUTHOR: ER. MANOJ KUMAR
           </p>
         </div>
       </footer>
