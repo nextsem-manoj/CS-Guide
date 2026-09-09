@@ -1077,4 +1077,10 @@ Total: 26 features shipped across 2 app versions (v25 → v26) 🎯
   - Integrated Block 2 Unit 2 interactive links into `SubjectClient.tsx`, `ViewerClient.tsx`, `sitemap.ts`, and `sitemap/page.tsx`.
 - **Unit 2 Simple English, Exam English & Hinglish Multilingual Modes (2026-09-08)**:
   - Added comprehensive `Simple English` mode to `src/app/bca/semester-1/bcs-011-computer-basics/unit-2-operating-system/page.tsx` featuring beginner-friendly explanations, simplified analogies (Master Chef & City Traffic Controller), 4-layer architecture breakdown, 5-state process lifecycle guide, Windows 11 CMD commands, and quiz questions.
-  - Added interactive mode switcher pill selector (`🌱 Simple English`, `🎓 Exam English`, `🇮🇳 Hinglish`) with persistent `localStorage` storage.
+  - Added interactive mode switcher pill selector (`🌱 Simple English`, `🎓 Exam English`, `🇮🇳 Hinglish`) with persistent `localStorage` storage.
+- **Unified Computer Science University Hub — Delhi University (DU) & IGNOU (2026-09-10)**:
+  - Expanded the portal from solely IGNOU BCA into a unified **University Computer Science Courses Hub** featuring:
+    - **University of Delhi (DU)**: Official Department of Computer Science B.Sc. (Hons) Computer Science curriculum under NEP 2020 UGCF framework (CSDSC01 Python, CSDSC02 Computer System Architecture, CSDSC03 Maths for Computing, CSDSC04 C++, CSDSC06 Data Structures, CSDSC07 OS, CSDSC09 DBMS, CSDSC10 Algorithms, CSDSC12 Networks).
+    - **IGNOU**: Full 6-semester BCA curriculum with all existing interactive notes, Windows 11 terminal simulators, and textbook solutions preserved 100%.
+  - Added top interactive **University Switcher Ribbon** on `/bca` and dedicated `/du` route for seamless navigation between Delhi University and IGNOU.
+  - Enhanced `BcaHeaderNav.tsx` with modal university selection tabs and course badges.

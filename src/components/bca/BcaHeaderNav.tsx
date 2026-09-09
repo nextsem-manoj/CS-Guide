@@ -3,8 +3,9 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
-import { Home, ChevronDown, BookOpen, X, Sparkles, GraduationCap, CheckCircle2, Search } from 'lucide-react';
+import { Home, ChevronDown, BookOpen, X, Sparkles, GraduationCap, CheckCircle2, Search, Building2 } from 'lucide-react';
 import { bcaSemesters } from '@/data/bcaCoursesData';
+import { duCsSemesters } from '@/data/universityCoursesData';
 
 interface BcaHeaderNavProps {
   currentSubjectCode?: string;
@@ -20,6 +21,7 @@ export default function BcaHeaderNav({
   const router = useRouter();
   const pathname = usePathname();
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [modalUniversityTab, setModalUniversityTab] = useState<'du' | 'ignou'>('du');
 
   return (
     <>
@@ -45,7 +47,7 @@ export default function BcaHeaderNav({
           </button>
         </div>
 
-        {/* Center: Subject Switcher Dropdown (Matching image-20.png style) */}
+        {/* Center: Subject Switcher Dropdown */}
         <div className="relative">
           <button
             onClick={() => setDropdownOpen(!dropdownOpen)}
@@ -59,19 +61,19 @@ export default function BcaHeaderNav({
           </button>
         </div>
 
-        {/* Right: IGNOU Logo Badge Header Link */}
+        {/* Right: University CS Hub Logo Badge Header Link */}
         <div className="flex items-center gap-2">
           <Link
-            href="/"
+            href="/bca"
             className="flex items-center gap-2 px-2.5 py-1 rounded-xl bg-[#0c1328] border border-emerald-500/40 text-white hover:border-emerald-400 text-xs font-black shadow-md transition-all active:scale-95 cursor-pointer"
           >
-            <img src="/logo.svg" alt="IGNOU Logo" className="w-6 h-6 rounded-md border border-emerald-500/20 shrink-0" />
+            <img src="/logo.svg" alt="University CS Logo" className="w-6 h-6 rounded-md border border-emerald-500/20 shrink-0" />
             <div className="flex flex-col leading-none text-left">
               <span className="font-black text-xs tracking-tight text-white uppercase">
-                IGNOU
+                DU & IGNOU
               </span>
               <span className="text-[8px] font-mono text-[#04AA6D] font-bold tracking-tight">
-                Study Notes Hub
+                CS Degree Hub
               </span>
             </div>
           </Link>
@@ -86,77 +88,144 @@ export default function BcaHeaderNav({
             onClick={() => setDropdownOpen(false)}
           />
 
-          <div className="fixed top-16 right-4 left-4 sm:left-auto sm:right-8 sm:w-96 bg-[#0c1328]/95 backdrop-blur-2xl border border-cyan-500/40 rounded-3xl p-5 z-50 shadow-2xl shadow-cyan-950/60 animate-in zoom-in-95 duration-200 text-white space-y-4 max-h-[75vh] overflow-y-auto custom-scrollbar">
+          <div className="fixed top-16 right-4 left-4 sm:left-auto sm:right-8 sm:w-[420px] bg-[#0c1328]/95 backdrop-blur-2xl border border-cyan-500/40 rounded-3xl p-5 z-50 shadow-2xl shadow-cyan-950/60 animate-in zoom-in-95 duration-200 text-white space-y-4 max-h-[75vh] overflow-y-auto custom-scrollbar">
             <div className="flex items-center justify-between pb-3 border-b border-slate-800">
               <div className="flex items-center gap-2">
                 <Sparkles size={16} className="text-amber-400" />
-                <h3 className="font-extrabold text-sm text-cyan-300">Switch Subject / Semester</h3>
+                <h3 className="font-extrabold text-sm text-cyan-300">Switch University & Subject</h3>
               </div>
               <button
                 onClick={() => setDropdownOpen(false)}
-                className="p-1.5 rounded-full bg-slate-800 text-slate-400 hover:text-white transition-colors"
+                className="p-1.5 rounded-full bg-slate-800 text-slate-400 hover:text-white transition-colors cursor-pointer"
               >
                 <X size={16} />
               </button>
             </div>
 
-            {/* List all semesters and subjects */}
-            <div className="space-y-4">
-              {bcaSemesters.map((sem) => (
-                <div key={sem.id} className="space-y-2">
-                  <div className="text-[10px] font-black uppercase tracking-widest text-slate-400 flex items-center justify-between">
-                    <span>{sem.name}</span>
-                    <Link
-                      href={`/bca/semester-${sem.id}`}
-                      onClick={() => setDropdownOpen(false)}
-                      className="text-cyan-400 hover:underline"
-                    >
-                      View All
-                    </Link>
-                  </div>
+            {/* University Switcher inside Dropdown */}
+            <div className="grid grid-cols-2 gap-2 p-1 bg-slate-900/90 border border-slate-800 rounded-xl">
+              <button
+                type="button"
+                onClick={() => setModalUniversityTab('du')}
+                className={`py-1.5 px-3 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+                  modalUniversityTab === 'du'
+                    ? 'bg-blue-600 text-white shadow-sm font-black'
+                    : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                <Building2 size={13} />
+                <span>Delhi University (DU)</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setModalUniversityTab('ignou')}
+                className={`py-1.5 px-3 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+                  modalUniversityTab === 'ignou'
+                    ? 'bg-emerald-600 text-white shadow-sm font-black'
+                    : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                <GraduationCap size={13} />
+                <span>IGNOU (BCA)</span>
+              </button>
+            </div>
 
-                  <div className="space-y-1">
-                    {sem.subjects.map((sub) => {
-                      const isCurrent = sub.code.toUpperCase() === currentSubjectCode.toUpperCase() || currentSubjectCode.includes(sub.code);
-                      const isComputerBasics = sub.code === "BCS-111" || sub.code === "BCS-011";
-                      const targetUrl = sem.id === 1
-                        ? (isComputerBasics 
-                            ? "/bca/semester-1/bcs-011-computer-basics" 
-                            : sub.code === "BCS-012"
-                            ? "/bca/semester-1/bcs-012-basic-mathematics"
-                            : sub.code === "BCSL-013"
-                            ? "/bca/semester-1/bcsl-013-software-lab"
-                            : sub.code === "BEGLA-136"
-                            ? "/bca/semester-1/begla-136-english"
-                            : sub.code === "BEVAE-181"
-                            ? "/bca/semester-1/bevae-181-environmental-studies"
-                            : `/bca/semester-1/${sub.code.toLowerCase()}`)
-                        : `/bca/${sem.id}/${sub.code.toLowerCase()}`;
+            {/* List all semesters and subjects for active university modal tab */}
+            <div className="space-y-4 pt-1">
+              {modalUniversityTab === 'du' ? (
+                /* DU CS Subjects */
+                duCsSemesters.map((sem) => (
+                  <div key={`modal-du-${sem.id}`} className="space-y-2">
+                    <div className="text-[10px] font-black uppercase tracking-widest text-blue-400 flex items-center justify-between">
+                      <span>DU • {sem.name}</span>
+                      <span className="text-slate-500 font-mono text-[9px]">UGCF 2022</span>
+                    </div>
 
-                      return (
-                        <button
-                          key={sub.code}
-                          onClick={() => {
-                            setDropdownOpen(false);
-                            router.push(targetUrl);
-                          }}
-                          className={`w-full text-left p-2.5 rounded-xl border transition-all flex items-center justify-between gap-2 text-xs font-bold cursor-pointer ${
-                            isCurrent
-                              ? "bg-cyan-500/20 border-cyan-400 text-cyan-200"
-                              : "bg-slate-900/60 hover:bg-slate-800 border-slate-800 text-slate-300"
-                          }`}
-                        >
-                          <div className="min-w-0 truncate">
-                            <span className="text-[10px] font-black text-amber-400 mr-2 uppercase">{sub.code}</span>
-                            <span className="truncate">{sub.name}</span>
-                          </div>
-                          {isCurrent && <CheckCircle2 size={14} className="text-cyan-400 shrink-0" />}
-                        </button>
-                      );
-                    })}
+                    <div className="space-y-1">
+                      {sem.subjects.map((sub) => {
+                        const isCurrent = sub.code.toUpperCase() === currentSubjectCode.toUpperCase();
+                        return (
+                          <button
+                            key={sub.code}
+                            onClick={() => {
+                              setDropdownOpen(false);
+                              router.push(`/bca?uni=du`);
+                            }}
+                            className={`w-full text-left p-2.5 rounded-xl border transition-all flex items-center justify-between gap-2 text-xs font-bold cursor-pointer ${
+                              isCurrent
+                                ? "bg-blue-500/20 border-blue-400 text-blue-200"
+                                : "bg-slate-900/60 hover:bg-slate-800 border-slate-800 text-slate-300"
+                            }`}
+                          >
+                            <div className="min-w-0 truncate">
+                              <span className="text-[10px] font-black text-amber-400 mr-2 uppercase">{sub.code}</span>
+                              <span className="truncate">{sub.name}</span>
+                            </div>
+                            {isCurrent && <CheckCircle2 size={14} className="text-blue-400 shrink-0" />}
+                          </button>
+                        );
+                      })}
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))
+              ) : (
+                /* IGNOU Subjects */
+                bcaSemesters.map((sem) => (
+                  <div key={`modal-ignou-${sem.id}`} className="space-y-2">
+                    <div className="text-[10px] font-black uppercase tracking-widest text-emerald-400 flex items-center justify-between">
+                      <span>IGNOU • {sem.name}</span>
+                      <Link
+                        href={`/bca?uni=ignou`}
+                        onClick={() => setDropdownOpen(false)}
+                        className="text-cyan-400 hover:underline"
+                      >
+                        View All
+                      </Link>
+                    </div>
+
+                    <div className="space-y-1">
+                      {sem.subjects.map((sub) => {
+                        const isCurrent = sub.code.toUpperCase() === currentSubjectCode.toUpperCase() || currentSubjectCode.includes(sub.code);
+                        const isComputerBasics = sub.code === "BCS-111" || sub.code === "BCS-011";
+                        const targetUrl = sem.id === 1
+                          ? (isComputerBasics 
+                              ? "/bca/semester-1/bcs-011-computer-basics" 
+                              : sub.code === "BCS-012"
+                              ? "/bca/semester-1/bcs-012-basic-mathematics"
+                              : sub.code === "BCSL-013"
+                              ? "/bca/semester-1/bcsl-013-software-lab"
+                              : sub.code === "BEGLA-136"
+                              ? "/bca/semester-1/begla-136-english"
+                              : sub.code === "BEVAE-181"
+                              ? "/bca/semester-1/bevae-181-environmental-studies"
+                              : `/bca/semester-1/${sub.code.toLowerCase()}`)
+                          : `/bca/${sem.id}/${sub.code.toLowerCase()}`;
+
+                        return (
+                          <button
+                            key={sub.code}
+                            onClick={() => {
+                              setDropdownOpen(false);
+                              router.push(targetUrl);
+                            }}
+                            className={`w-full text-left p-2.5 rounded-xl border transition-all flex items-center justify-between gap-2 text-xs font-bold cursor-pointer ${
+                              isCurrent
+                                ? "bg-cyan-500/20 border-cyan-400 text-cyan-200"
+                                : "bg-slate-900/60 hover:bg-slate-800 border-slate-800 text-slate-300"
+                            }`}
+                          >
+                            <div className="min-w-0 truncate">
+                              <span className="text-[10px] font-black text-amber-400 mr-2 uppercase">{sub.code}</span>
+                              <span className="truncate">{sub.name}</span>
+                            </div>
+                            {isCurrent && <CheckCircle2 size={14} className="text-cyan-400 shrink-0" />}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                ))
+              )}
             </div>
           </div>
         </>
