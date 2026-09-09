@@ -20,6 +20,129 @@
       --text-muted: #94a3b8;
     }
 
+    body.light-theme {
+      --bg-dark: #f1f5f9;
+      --bg-card: #ffffff;
+      --border-card: #e2e8f0;
+      --text-main: #0f172a;
+      --text-muted: #475569;
+    }
+    body.light-theme .hero-title,
+    body.light-theme .card-title-text {
+      color: #0f172a !important;
+    }
+    body.light-theme .para-body {
+      color: #1e293b !important;
+    }
+    body.light-theme .sticky-toolbar {
+      background: rgba(255, 255, 255, 0.96) !important;
+      border-color: #cbd5e1 !important;
+    }
+    body.light-theme .page-jump-select {
+      background: #f8fafc !important;
+      color: #0f172a !important;
+      border-color: #cbd5e1 !important;
+    }
+    body.light-theme .blank-chip {
+      background: #f8fafc !important;
+      border-color: #f59e0b !important;
+      box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.06) !important;
+    }
+    body.light-theme .card-top {
+      border-bottom-color: #e2e8f0 !important;
+    }
+    body.light-theme .btn-tool {
+      border-color: #cbd5e1 !important;
+      color: #334155 !important;
+    }
+    body.light-theme .btn-tool:hover {
+      color: #0284c7 !important;
+      background: #f0f9ff !important;
+    }
+    body.light-theme .btn-nav {
+      background: #ffffff !important;
+      border-color: #cbd5e1 !important;
+      color: #334155 !important;
+    }
+    body.light-theme .btn-nav:hover {
+      background: #f1f5f9 !important;
+      color: #0284c7 !important;
+    }
+    body.light-theme header.top-nav-custom {
+      background: rgba(255, 255, 255, 0.96) !important;
+      border-bottom-color: #e2e8f0 !important;
+    }
+    body.light-theme .theme-btn-custom {
+      background: #f1f5f9 !important;
+      border-color: #cbd5e1 !important;
+      color: #0f172a !important;
+    }
+
+    .theme-btn-custom {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      border-radius: 9999px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      background: rgba(255, 255, 255, 0.08);
+      color: #f8fafc;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .theme-btn-custom:hover {
+      background: rgba(255, 255, 255, 0.16);
+      border-color: #06b6d4;
+    }
+
+    /* Desktop Top Navbar Breadcrumb */
+    .top-breadcrumb-bar {
+      background: #060c18;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 0.5rem 1rem;
+      font-size: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: #94a3b8;
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+    body.light-theme .top-breadcrumb-bar {
+      background: #ffffff !important;
+      border-bottom-color: #e2e8f0 !important;
+      color: #475569 !important;
+    }
+    .top-breadcrumb-bar a {
+      color: #38bdf8;
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.15s;
+    }
+    body.light-theme .top-breadcrumb-bar a {
+      color: #0284c7 !important;
+    }
+    .top-breadcrumb-bar a:hover {
+      color: #ffffff;
+      text-decoration: underline;
+    }
+    body.light-theme .top-breadcrumb-bar a:hover {
+      color: #0369a1 !important;
+    }
+    .top-breadcrumb-bar .sep {
+      color: #64748b;
+      font-size: 0.75rem;
+    }
+    .top-breadcrumb-bar .current {
+      color: #f8fafc;
+      font-weight: 700;
+    }
+    body.light-theme .top-breadcrumb-bar .current {
+      color: #0f172a !important;
+    }
+
     body {
       background-color: var(--bg-dark);
       color: var(--text-main);
@@ -27,6 +150,7 @@
       margin: 0;
       padding: 0;
       line-height: 1.7;
+      transition: background-color 0.25s ease, color 0.25s ease;
     }
 
     .os-container {
@@ -316,14 +440,51 @@
   </style>
 </head>
 <body>
+  <!-- Desktop Breadcrumb Navigation -->
+  <nav class="top-breadcrumb-bar" aria-label="Breadcrumb">
+    <a href="/">Home</a>
+    <span class="sep">❯</span>
+    <a href="/bca">IGNOU BCA</a>
+    <span class="sep">❯</span>
+    <a href="/bca/semester-1">Semester 1</a>
+    <span class="sep">❯</span>
+    <a href="/bca/semester-1/bcs-011-computer-basics">BCS-111: Computer Basics</a>
+    <span class="sep">❯</span>
+    <a href="/bca/semester-1/bcs-011-computer-basics/unit-2-operating-system">Unit 2: Operating System</a>
+    <span class="sep">❯</span>
+    <span class="current">Pages 46–57 Fill-in-the-Blanks</span>
+  </nav>
+
+  <!-- Top Sticky Navigation Bar -->
+  <header class="top-nav-custom" style="position: sticky; top: 0; z-index: 100; background: rgba(7, 13, 25, 0.9); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(255, 255, 255, 0.08); padding: 10px 20px;">
+    <div style="max-width: 1000px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 16px;">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <a href="/bca/semester-1/bcs-011-computer-basics" class="btn-nav" style="padding: 5px 12px; font-size: 0.8rem; font-weight: 700;">
+          ← Back to BCS-111
+        </a>
+        <span style="font-weight: 800; font-size: 0.9rem; color: #38bdf8;">Unit 2: Operating System</span>
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <button type="button" class="theme-btn-custom" id="themeToggleBtn" aria-label="Toggle Theme">
+          <span id="themeIcon">🌙</span>
+          <span id="themeLabel">Dark</span>
+        </button>
+        <a href="/bca/semester-1/bcs-011-computer-basics/unit-2-operating-system" class="btn-nav" style="padding: 5px 12px; font-size: 0.8rem; font-weight: 700;">
+          🖥️ Visual Lesson
+        </a>
+      </div>
+    </div>
+  </header>
+
   <div class="bg-grid"></div>
 
   <div class="os-container">
 
     <!-- Top Hero Header -->
     <header class="hero-banner">
-      <div class="badge-pill">Unit 2 • Operating System • Page-Wise Study (Pages 46 to 57)</div>
-      <h1 class="hero-title">Operating System Fundamentals & Evolution</h1>
+      <div class="badge-pill">IGNOU BCA 1st Semester • BCS-111 / BCS-011 Unit 2 • Pages 46 to 57</div>
+      <h1 class="hero-title">Unit 2: Operating System Fundamentals & Evolution</h1>
       <div class="hero-subtitle">
         Page-Wise Paragraph Fill-in-the-Blanks with <strong>Initial Alphabet Clues</strong> & Interactive Hidden Hints and Solutions.
       </div>
@@ -331,8 +492,9 @@
       <div class="nav-actions-row">
         <a href="#page-1" class="btn-nav primary">🚀 Start Page 1 (p.46)</a>
         <a href="/bca/semester-1/bcs-011-computer-basics/unit-2-operating-system" class="btn-nav">🖥️ Interactive Visual Lesson</a>
+        <a href="/bca/notes/bcs-011-unit-2-operating-system" class="btn-nav">📑 12-Page Notes Suite</a>
         <a href="/bca/semester-1/bcs-011-computer-basics" class="btn-nav">📘 BCS-111 Dashboard</a>
-        <a href="/bca/notes/bcs-011-unit-5" class="btn-nav">💻 Unit 5: Personal Computers</a>
+        <a href="/bca/semester-1" class="btn-nav">🎓 BCA Semester 1 Hub</a>
         <a href="/" class="btn-nav">🏠 Nextsem Home</a>
       </div>
     </header>
@@ -793,6 +955,10 @@
 
   </div>
 
+  <footer style="text-align: center; padding: 24px 16px; border-top: 1px solid var(--border-card); color: var(--text-muted); font-size: 0.85rem; margin-top: auto;">
+    <p>IGNOU BCA 1st Semester • BCS-111 / BCS-011 Unit 2 • Nextsem Academy &bull; Free Open Learning Platform</p>
+  </footer>
+
   <script>
     function toggleHints(show) {
       document.querySelectorAll('details.hint-box').forEach(el => el.open = show);
@@ -805,6 +971,34 @@
     function resetAll() {
       toggleHints(false);
       toggleAnswers(false);
+    }
+
+    // Theme toggle & persistent sync
+    const themeBtn = document.getElementById('themeToggleBtn');
+    const themeIcon = document.getElementById('themeIcon');
+    const themeLabel = document.getElementById('themeLabel');
+
+    try {
+      const savedTheme = localStorage.getItem('theme');
+      const isDarkPref = localStorage.getItem('nextsem_dark_mode');
+      if (savedTheme === 'light' || isDarkPref === 'false') {
+        document.body.classList.add('light-theme');
+        if (themeIcon) themeIcon.textContent = '☀️';
+        if (themeLabel) themeLabel.textContent = 'Light';
+      }
+    } catch (e) {}
+
+    if (themeBtn) {
+      themeBtn.addEventListener('click', () => {
+        document.body.classList.toggle('light-theme');
+        const isLight = document.body.classList.contains('light-theme');
+        if (themeIcon) themeIcon.textContent = isLight ? '☀️' : '🌙';
+        if (themeLabel) themeLabel.textContent = isLight ? 'Light' : 'Dark';
+        try {
+          localStorage.setItem('theme', isLight ? 'light' : 'dark');
+          localStorage.setItem('nextsem_dark_mode', (!isLight).toString());
+        } catch (e) {}
+      });
     }
   </script>
 </body>

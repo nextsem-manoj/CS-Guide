@@ -30,3 +30,4 @@
   5. **AdMob/AdSense PDF Download**: Each lesson must include a "Download Lesson PDF" option gated behind a rewarded ad (AdMob on native, simulation on web).
   6. **Data file**: HTML lessons use `src/data/htmlLessonsData.ts` (with `MultilingualExercise` interface). CLI lessons use `src/data/cliLessonsData.ts`. New subjects → create `src/data/<subject>LessonsData.ts` using the same interface.
   7. **Client component pattern**: Use `const currentExercise = lesson.exercise[selectedLang] ?? lesson.exercise.english` for language-aware MCQ rendering in each lesson client component.
+- **Theme Toggle Button in Bottom Navigation Standard (IMPORTANT - PERMANENT RULE)**: On every instance, page, and mobile bottom navigation bar, always include a dedicated **Theme Toggle** button (`Moon 🌙 / Sun ☀️` with live theme switching and persistent `localStorage` synchronization across Dark and Light modes).

@@ -146,3 +146,4 @@ ADD
 ### 🤖 Antigravity AI
 
 Clarified requirements and updated chat transcripts in `docs/search/search.md` and `chat-logs/search.md` with complete session trajectory, architecture choices, layout adjustments, and build verifications.
+

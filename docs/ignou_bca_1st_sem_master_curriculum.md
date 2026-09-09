@@ -1075,3 +1075,6 @@ Total: 26 features shipped across 2 app versions (v25 → v26) 🎯
   - Built rich visual lesson page with real-world analogies, 🪟 Windows 11 CMD diagnostic terminal simulator, and interactive quiz (`src/app/bca/semester-1/bcs-011-computer-basics/unit-2-operating-system/page.tsx`).
   - Designed vector SVG architectural diagrams: 4-Layer OS Architecture (`public/os_illustration.svg`) and Process State Transition Lifecycle (`public/os_process_illustration.svg`).
   - Integrated Block 2 Unit 2 interactive links into `SubjectClient.tsx`, `ViewerClient.tsx`, `sitemap.ts`, and `sitemap/page.tsx`.
+- **Unit 2 Simple English, Exam English & Hinglish Multilingual Modes (2026-09-08)**:
+  - Added comprehensive `Simple English` mode to `src/app/bca/semester-1/bcs-011-computer-basics/unit-2-operating-system/page.tsx` featuring beginner-friendly explanations, simplified analogies (Master Chef & City Traffic Controller), 4-layer architecture breakdown, 5-state process lifecycle guide, Windows 11 CMD commands, and quiz questions.
+  - Added interactive mode switcher pill selector (`🌱 Simple English`, `🎓 Exam English`, `🇮🇳 Hinglish`) with persistent `localStorage` storage.

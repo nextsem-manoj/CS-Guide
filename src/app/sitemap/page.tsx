@@ -32,6 +32,7 @@ export default function UserSitemap() {
     { title: "User Dashboard", url: "/profile", category: "core", description: "Personalized revision workspace tracking your XP, badges, and progress.", icon: <Star size={16} />, tag: "Personal" },
     { title: "BCA Semester Revision", url: "/course", category: "core", description: "Central dashboard directory for IGNOU BCA degree courses.", icon: <GraduationCap size={16} /> },
     { title: "Windows Command Simulator", url: "/cmd", category: "core", description: "Learn Windows Command Prompt in an interactive simulated CMD console.", icon: <Terminal size={16} />, tag: "Simulator" },
+    { title: "systeminfo | findstr OS Diagnostics", url: "/cli/windows-systeminfo-findstr-os-details", category: "core", description: "Filter Windows 11 OS Name, Version, and 64-bit System Type with findstr.", icon: <Terminal size={16} />, tag: "New Lab" },
     { title: "Operating System Desktop", url: "/simulator", category: "core", description: "Visual desktop sandbox featuring drag-and-drop file operations.", icon: <Monitor size={16} />, tag: "Simulator" },
     { title: "Interactive Sandbox", url: "/playground", category: "core", description: "Realtime coding editor and interactive logic components sandbox.", icon: <Code size={16} />, tag: "Interactive" },
     { title: "Git Basics Guide", url: "/git", category: "core", description: "Step-by-step documentation detailing Git repositories and branches.", icon: <BookOpen size={16} /> },
