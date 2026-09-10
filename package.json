@@ -8,8 +8,8 @@
     "start": "next start -p 3001",
     "lint": "eslint",
     "save-chat": "node scripts/save_chat.js",
-    "deploy:staging": "npm run build && npx firebase-tools deploy --only hosting:staging --project bca-nextsem",
-    "deploy:prod": "npm run build && npx firebase-tools deploy --only hosting:production --project bca-nextsem"
+    "deploy:staging": "npm run build && npx firebase-tools deploy --only hosting --project nextsem-staging",
+    "deploy:prod": "npm run build && npx firebase-tools deploy --only hosting --project ignou-study-notes-by-nextsem"
   },
   "dependencies": {
     "@capacitor-community/admob": "^8.0.0",
