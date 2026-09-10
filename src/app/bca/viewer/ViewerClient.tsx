@@ -117,24 +117,20 @@ export default function TextbookViewer() {
     }
   }, []);
 
-  // Timer: If PDF iframe fails to load or times out after 3.5s, trigger auto-download & show banner
+  // In-app web viewing: keep viewer active on webpage without forcing downloads
   useEffect(() => {
     let timer: NodeJS.Timeout | null = null;
     if (fileUrl && isPdfFile && !iframeLoaded) {
       timer = setTimeout(() => {
         if (!iframeLoaded) {
           setIframeTimedOut(true);
-          if (!autoDownloaded) {
-            setAutoDownloaded(true);
-            triggerAutoDownload(fileUrl, `${fileTitle}.pdf`);
-          }
         }
-      }, 3500);
+      }, 5000);
     }
     return () => {
       if (timer) clearTimeout(timer);
     };
-  }, [fileUrl, isPdfFile, iframeLoaded, autoDownloaded, fileTitle, triggerAutoDownload]);
+  }, [fileUrl, isPdfFile, iframeLoaded]);
 
   // Redirection for custom visual textbook notes pages
   useEffect(() => {

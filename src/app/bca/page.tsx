@@ -23,7 +23,8 @@ import {
   Terminal,
   ExternalLink,
   Download,
-  FileCheck
+  FileCheck,
+  Eye
 } from 'lucide-react';
 import { useProgress } from '@/context/ProgressContext';
 import { UNIVERSITY_PROGRAMS, UniversityProgram, UniversitySemester } from '@/data/universityCoursesData';
@@ -230,18 +231,15 @@ export default function UniversityCoursesDashboard() {
               {activeProgram.description}
             </p>
 
-            {/* Official Syllabus PDF Download Action Button */}
+            {/* Official Syllabus PDF View on Webpage Action Button */}
             <div className="pt-2 flex flex-wrap items-center gap-3">
-              <a
-                href={activeProgram.officialSyllabusPdf}
-                target="_blank"
-                rel="noopener noreferrer"
-                download
+              <Link
+                href={`/bca/viewer?url=${encodeURIComponent(activeProgram.officialSyllabusPdf)}&title=${encodeURIComponent(activeProgram.degreeName + " Official Syllabus")}`}
                 className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-extrabold text-xs sm:text-sm shadow-lg shadow-emerald-950/50 transition-all active:scale-95 cursor-pointer border border-emerald-400/40"
               >
-                <Download size={16} />
-                <span>Download Official Syllabus PDF</span>
-              </a>
+                <Eye size={16} />
+                <span>View Official Syllabus PDF</span>
+              </Link>
 
               <a
                 href={activeProgram.officialSourceUrl}
@@ -384,17 +382,14 @@ export default function UniversityCoursesDashboard() {
                               )}
 
                               {sub.pdfUrl && (
-                                <a
-                                  href={sub.pdfUrl}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  download
-                                  className="flex items-center justify-center gap-1 py-2 px-3 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700/80 text-emerald-400 hover:text-emerald-300 font-bold text-xs shadow-sm transition-all"
-                                  title="View/Download Official PDF"
+                                <Link
+                                  href={`/bca/viewer?url=${encodeURIComponent(sub.pdfUrl)}&title=${encodeURIComponent(sub.name + " (" + sub.code + ")")}`}
+                                  className="flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700/80 text-emerald-400 hover:text-emerald-300 font-bold text-xs shadow-sm transition-all cursor-pointer"
+                                  title="View Official PDF on Webpage"
                                 >
-                                  <FileText size={13} />
-                                  <span>PDF</span>
-                                </a>
+                                  <Eye size={13} />
+                                  <span>View PDF</span>
+                                </Link>
                               )}
                             </div>
                           </div>

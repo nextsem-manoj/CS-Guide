@@ -579,9 +579,9 @@ export default function HomeClient() {
           <div className="space-y-2.5">
             <h5 className="font-black uppercase text-white tracking-wider">Official Syllabi</h5>
             <ul className="space-y-1.5 font-medium">
-              <li><a href="/syllabus/DU_BSc_Prog_CS_Sem1_Programming_using_C++.pdf" target="_blank" rel="noopener noreferrer" className="hover:text-white">DU B.Sc. CS NEP PDF</a></li>
-              <li><a href="/syllabus/IGNOU_BCA_Programme_Guide_Syllabus.pdf" target="_blank" rel="noopener noreferrer" className="hover:text-white">IGNOU BCA Syllabus PDF</a></li>
-              <li><a href="/syllabus/IGNOU_MCA_Programme_Guide_Syllabus.pdf" target="_blank" rel="noopener noreferrer" className="hover:text-white">IGNOU MCA Syllabus PDF</a></li>
+              <li><Link href={`/bca/viewer?url=${encodeURIComponent('/syllabus/DU_BSc_Prog_CS_Sem1_Programming_using_C++.pdf')}&title=${encodeURIComponent('DU B.Sc. CS NEP 2024 Syllabus')}`} className="hover:text-white">DU B.Sc. CS NEP PDF</Link></li>
+              <li><Link href={`/bca/viewer?url=${encodeURIComponent('/syllabus/IGNOU_BCA_Programme_Guide_Syllabus.pdf')}&title=${encodeURIComponent('IGNOU BCA Programme Guide')}`} className="hover:text-white">IGNOU BCA Syllabus PDF</Link></li>
+              <li><Link href={`/bca/viewer?url=${encodeURIComponent('/syllabus/IGNOU_MCA_Programme_Guide_Syllabus.pdf')}&title=${encodeURIComponent('IGNOU MCA Programme Guide')}`} className="hover:text-white">IGNOU MCA Syllabus PDF</Link></li>
               <li><Link href="/curriculum" className="hover:text-white">Curriculum Roadmap</Link></li>
             </ul>
           </div>
