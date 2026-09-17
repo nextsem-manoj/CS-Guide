@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     title: `${title} | IGNOU BCA 1st Semester Notes`,
     description: `Official IGNOU BCA Semester 1 syllabus, block notes, and interactive textbook units for Nextsem's curriculum.`,
     alternates: {
-      canonical: `https://nextsem.online/bca/semester-1/${subjectSlug}`,
+      canonical: `https://ignou-study-notes-by-nextsem.web.app/bca/semester-1/${subjectSlug}`,
     },
   };
 }

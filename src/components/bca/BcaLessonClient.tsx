@@ -103,7 +103,7 @@ export default function BcaLessonClient({ lesson }: BcaLessonClientProps) {
       .map(s => `## ${s.heading}\n${s.content}\n${s.codeSnippet ? `\n\`\`\`\n${s.codeSnippet}\n\`\`\`\n` : ''}`)
       .join('\n\n');
 
-    const canonical = `https://nextsem.online/bca/semester-1/${lesson.subjectSlug}/${lesson.slug}`;
+    const canonical = `https://ignou-study-notes-by-nextsem.web.app/bca/semester-1/${lesson.subjectSlug}/${lesson.slug}`;
     setPdfDownloadUrl(canonical);
 
     generateAndDownloadLessonPdf({
@@ -755,7 +755,7 @@ export default function BcaLessonClient({ lesson }: BcaLessonClientProps) {
         <PdfReaderPromptModal
           isOpen={showReaderPrompt}
           onClose={() => setShowReaderPrompt(false)}
-          pdfUrl={pdfDownloadUrl || `https://nextsem.online/bca/semester-1/${lesson.subjectSlug}/${lesson.slug}`}
+          pdfUrl={pdfDownloadUrl || `https://ignou-study-notes-by-nextsem.web.app/bca/semester-1/${lesson.subjectSlug}/${lesson.slug}`}
         />
       </main>
     </div>

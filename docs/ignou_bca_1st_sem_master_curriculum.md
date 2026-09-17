@@ -231,7 +231,7 @@ Please generate the complete Sitemap XML in the format below:
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <!-- Home Page -->
   <url>
-    <loc>https://nextsem.online/bca/sem1</loc>
+    <loc>https://ignou-study-notes-by-nextsem.web.app/bca/sem1</loc>
     <lastmod>2026-07-30</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
@@ -239,31 +239,31 @@ Please generate the complete Sitemap XML in the format below:
   
   <!-- Course Overview Pages -->
   <url>
-    <loc>https://nextsem.online/bca/sem1/bcse011</loc>
+    <loc>https://ignou-study-notes-by-nextsem.web.app/bca/sem1/bcse011</loc>
     <lastmod>2026-07-30</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://nextsem.online/bca/sem1/bcsl013</loc>
+    <loc>https://ignou-study-notes-by-nextsem.web.app/bca/sem1/bcsl013</loc>
     <lastmod>2026-07-30</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://nextsem.online/bca/sem1/bcs012</loc>
+    <loc>https://ignou-study-notes-by-nextsem.web.app/bca/sem1/bcs012</loc>
     <lastmod>2026-07-30</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://nextsem.online/bca/sem1/begla136</loc>
+    <loc>https://ignou-study-notes-by-nextsem.web.app/bca/sem1/begla136</loc>
     <lastmod>2026-07-30</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://nextsem.online/bca/sem1/bevae181</loc>
+    <loc>https://ignou-study-notes-by-nextsem.web.app/bca/sem1/bevae181</loc>
     <lastmod>2026-07-30</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
@@ -271,7 +271,7 @@ Please generate the complete Sitemap XML in the format below:
   
   <!-- Practical Labs Overview -->
   <url>
-    <loc>https://nextsem.online/bca/sem1/labs</loc>
+    <loc>https://ignou-study-notes-by-nextsem.web.app/bca/sem1/labs</loc>
     <lastmod>2026-07-30</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -285,7 +285,7 @@ Please generate the complete Sitemap XML in the format below:
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <!-- Main Course Page -->
   <url>
-    <loc>https://nextsem.online/bca/sem1/bcse011</loc>
+    <loc>https://ignou-study-notes-by-nextsem.web.app/bca/sem1/bcse011</loc>
     <lastmod>2026-07-30</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
@@ -293,31 +293,31 @@ Please generate the complete Sitemap XML in the format below:
   
   <!-- Block 1: Introduction to Computer Systems -->
   <url>
-    <loc>https://nextsem.online/bca/sem1/bcse011/block1</loc>
+    <loc>https://ignou-study-notes-by-nextsem.web.app/bca/sem1/bcse011/block1</loc>
     <lastmod>2026-07-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://nextsem.online/bca/sem1/bcse011/block1/english/easy</loc>
+    <loc>https://ignou-study-notes-by-nextsem.web.app/bca/sem1/bcse011/block1/english/easy</loc>
     <lastmod>2026-07-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://nextsem.online/bca/sem1/bcse011/block1/english/normal</loc>
+    <loc>https://ignou-study-notes-by-nextsem.web.app/bca/sem1/bcse011/block1/english/normal</loc>
     <lastmod>2026-07-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://nextsem.online/bca/sem1/bcse011/block1/hinglish/easy</loc>
+    <loc>https://ignou-study-notes-by-nextsem.web.app/bca/sem1/bcse011/block1/hinglish/easy</loc>
     <lastmod>2026-07-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://nextsem.online/bca/sem1/bcse011/block1/hinglish/normal</loc>
+    <loc>https://ignou-study-notes-by-nextsem.web.app/bca/sem1/bcse011/block1/hinglish/normal</loc>
     <lastmod>2026-07-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -325,9 +325,9 @@ Please generate the complete Sitemap XML in the format below:
   
   <!-- Block 2: Computer Organization -->
   <url>
-    <loc>https://nextsem.online/bca/sem1/bcse011/block2</loc>
+    <loc>https://ignou-study-notes-by-nextsem.web.app/bca/sem1/bcse011/block2</loc>
     <lastmod>2026-07-30</lastmod>
-    <changefreq>weekly</change
+    <changefreq>weekly</changefreq>
 
 is anythin related to bca is present in the project ?
 auto read from this .md file as i write /learn it.
@@ -396,7 +396,7 @@ pdf ko dark mode m hi rakho aur pdf openere se open karo ho sake to new tab m ya
 ### ✍️ Author Credit & Golden Header Logo Rules Registered
 - **Author Attribution**: All lesson cards, PDF downloads, and metadata explicitly attribute the content author as **Er. Manoj Kumar**.
 - **Golden NS Logo on Header Right**: Renders the golden site logo badge in the header right.
-- **Exact Clickable Lesson URL**: PDF exports embed the exact lesson canonical URL (`https://nextsem.online/bca/semester-1/...`) so clicking it opens the active web lesson page directly.
+- **Exact Clickable Lesson URL**: PDF exports embed the exact lesson canonical URL (`https://ignou-study-notes-by-nextsem.web.app/bca/semester-1/...`) so clicking it opens the active web lesson page directly.
  ✍️ Author Credit ye har lesson jo m bna ra hu usme bhi mention karo.
   Aur pdf open hone se phle waha pe ek loader and cancel ka option dikhana hai agar user cancel kre to wapas use wahi lesson page pr le aana h.
 

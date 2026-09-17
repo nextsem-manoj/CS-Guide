@@ -105,7 +105,7 @@ export default function Unit1LessonClient({ lessonId }: Props) {
 
   const triggerPdfDownload = () => {
     const contentText = lesson.content[selectedLang];
-    const canonical = `https://nextsem.online/bca/semester-1/computer-basics-and-pc-software/${lesson.id}`;
+    const canonical = `https://ignou-study-notes-by-nextsem.web.app/bca/semester-1/computer-basics-and-pc-software/${lesson.id}`;
     const titleStr = selectedLang === 'hinglish' ? lesson.hinglishTitle : lesson.title;
     generateAndDownloadLessonPdf({
       title: titleStr,
@@ -717,7 +717,7 @@ export default function Unit1LessonClient({ lessonId }: Props) {
         <PdfReaderPromptModal
           isOpen={showReaderPrompt}
           onClose={() => setShowReaderPrompt(false)}
-          pdfUrl={`https://nextsem.online/bca/semester-1/computer-basics-and-pc-software/${lesson.id}`}
+          pdfUrl={`https://ignou-study-notes-by-nextsem.web.app/bca/semester-1/computer-basics-and-pc-software/${lesson.id}`}
         />
       </main>
     </div>
