@@ -1,6 +1,6 @@
 # @[c:\Users\nextsem\Documents\ncert.nextsem.online] is everything updated here
 
-*Saved on: 18/9/2026, 1:20:14 am*
+*Saved on: 18/9/2026, 1:20:50 am*
 *Conversation ID: 2e598d70-cdee-4b4a-93fd-9500103015b6*
 
 ---
@@ -295,6 +295,54 @@ Deleting obsolete versions in the background...
 ### 🤖 Antigravity AI
 
 Deploying the site to `https://ignou-study-notes-by-nextsem.web.app/` with storage cleared...
+
+---
+
+### 🤖 Antigravity AI
+
+### ✅ Changes Completed & Deployed Live
+
+The requested link and practice card have been placed directly below **Unit 3: Concept in Programming Language** in **Block 2** of **BCS-111 / BCS-011**, and all answers are **hidden by default** behind interactive toggles.
+
+---
+
+### 1. Direct Links
+- 🔗 **Subject Syllabus Page (Unit 3 Location):**
+  [https://ignou-study-notes-by-nextsem.web.app/bca/semester-1/bcs-111-computer-basics-and-pc-software](https://ignou-study-notes-by-nextsem.web.app/bca/semester-1/bcs-111-computer-basics-and-pc-software)
+  *(Also accessible via `/bca/1/BCS-111`)*
+
+- 🔗 **Interactive Problem 7 Studio:**
+  [https://ignou-study-notes-by-nextsem.web.app/algorithms-and-flowcharts-10-master-problems/#problem-7](https://ignou-study-notes-by-nextsem.web.app/algorithms-and-flowcharts-10-master-problems/#problem-7)
+
+---
+
+### 2. Implementation Summary
+
+#### A. Below Unit 3: Concept in Programming Language (`SubjectClient.tsx`)
+- **Direct Link Button**: Direct button pointing to `https://ignou-study-notes-by-nextsem.web.app/algorithms-and-flowcharts-10-master-problems/#problem-7`.
+- **Question Statement**: Displays the complete problem statement:
+  > *"Given coefficients a, b, and c of ax² + bx + c = 0, formulate a step-by-step algorithm and draw an ANSI flowchart to determine both real and complex roots across all three cases: D > 0, D = 0, and D < 0."*
+- **Answer Hidden by Default**:
+  - The answer is collapsed by default.
+  - Clicking **`👁️ View Answer to Question`** reveals the 8-step quadratic formula algorithm, discriminant logic ($D = b^2 - 4ac$), and a link to the complete flowchart studio.
+  - Clicking **`🙈 Hide Answer to Question`** collapses it back.
+
+#### B. Full Master Problems Studio (`algorithms-and-flowcharts-10-master-problems.html`)
+- All 10 problem solutions (Variable Tables, Algorithms, Flowcharts, and Trace Tables) are wrapped inside collapsible solution containers (`id="solution-1"` through `id="solution-10"`), hidden by default.
+- Each problem card includes an **`👁️ View Answer & Solution`** toggle button that dynamically renders Mermaid flowchart diagrams upon expansion.
+- Added **`👁️ Reveal All Answers`** / **`🙈 Hide All Answers`** bulk toggle in the navigation header for quick review.
+
+---
+
+### 3. Release & Maintenance
+- **Firebase Quota Cleanup**: Deleted 34 obsolete historical deployments from Firebase Hosting to reclaim storage space, and configured `retainedReleaseCount = 5` to permanently manage retention automatically.
+- **Git & Deployment**: Built with Turbopack, exported to `out/`, deployed to Firebase Hosting (`ignou-study-notes-by-nextsem`), committed and pushed to `origin/main`, and session archived in `chat-logs/`.
+
+---
+
+### 👤 User
+
+npm run dev
 
 ---
 

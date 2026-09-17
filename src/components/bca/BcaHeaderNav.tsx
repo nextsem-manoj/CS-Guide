@@ -67,7 +67,7 @@ export default function BcaHeaderNav({
             href="/bca"
             className="flex items-center gap-2 px-2.5 py-1 rounded-xl bg-[#0c1328] border border-emerald-500/40 text-white hover:border-emerald-400 text-xs font-black shadow-md transition-all active:scale-95 cursor-pointer"
           >
-            <img src="/code-icon.png" alt="CS Guide Logo" className="w-6 h-6 rounded-md border border-emerald-500/20 shrink-0 object-contain" />
+            <img src="/nextsem-emblem.png" alt="NextSem Logo" className="w-6 h-6 rounded-md shrink-0 object-contain" />
             <div className="flex flex-col leading-none text-left">
               <span className="font-black text-xs tracking-tight text-white uppercase">
                 CS Guide
