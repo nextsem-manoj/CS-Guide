@@ -1,6 +1,6 @@
 # @[c:\Users\nextsem\Documents\ncert.nextsem.online] is everything updated here
 
-*Saved on: 17/9/2026, 11:11:52 pm*
+*Saved on: 17/9/2026, 11:16:32 pm*
 *Conversation ID: 2e598d70-cdee-4b4a-93fd-9500103015b6*
 
 ---
@@ -116,6 +116,56 @@ The local dev server on port `3002` is running and serving this page:
 ### 👤 User
 
 update all links to use this  https://ignou-study-notes-by-nextsem.web.app/ this project is not hosted at https://nextsem.online
+
+---
+
+### 🤖 Antigravity AI
+
+### ✅ All Links Updated to `https://ignou-study-notes-by-nextsem.web.app/`
+
+All URLs in [`docs/IGNOU-Sem-1/1.md`](file:///c:/Users/nextsem/Documents/CS-Guide/docs/IGNOU-Sem-1/1.md) (and corresponding references across [`CS-Guide`](file:///c:/Users/nextsem/Documents/CS-Guide)) have been updated to use the official hosting domain `https://ignou-study-notes-by-nextsem.web.app/`:
+
+---
+
+### 📚 Updated Book Links in `docs/IGNOU-Sem-1/1.md`
+
+| Book | Code | Updated PDF Link | Updated ePub Link |
+| :--- | :--- | :--- | :--- |
+| **Computer Basics & Office Automation** | **BPAC-131** | [PDF](https://ignou-study-notes-by-nextsem.web.app/bca/bca-1st-sem/BPAC-131-Computer-Basics-Office-Automation-Notes.pdf) | [ePub](https://ignou-study-notes-by-nextsem.web.app/bca/bca-1st-sem/bca1-bpac131-computer-basics-office-automation.epub) |
+| **Procedural Systems and Programming Logic** | **BPAC-132** | [PDF](https://ignou-study-notes-by-nextsem.web.app/bca/bca-1st-sem/BPAC-132-Procedural-Systems-and-Programming-Logic-Notes.pdf) | [ePub](https://ignou-study-notes-by-nextsem.web.app/bca/bca-1st-sem/bca1-bpac132-procedural-systems-programming-logic.epub) |
+| **Communication Skills** | **BPCS-183** | [PDF](https://ignou-study-notes-by-nextsem.web.app/bca/bca-1st-sem/BPCS-183-Communication-Skills.pdf) | [ePub](https://ignou-study-notes-by-nextsem.web.app/bca/bca-1st-sem/bca1-bpcs183-communication-skills.epub) |
+| **Elements of Social Sciences** | **BPCS-185** | [PDF](https://ignou-study-notes-by-nextsem.web.app/bca/bca-1st-sem/BPCS-185-Elements-of-Social-Sciences.pdf) | [ePub](https://ignou-study-notes-by-nextsem.web.app/bca/bca-1st-sem/bca1-bpcs185-elements-of-social-sciences.epub) |
+| **Business Mathematics** | **MTE-03** | [PDF](https://ignou-study-notes-by-nextsem.web.app/bca/bca-1st-sem/MTE-03-Business-Mathematics.pdf) | [ePub](https://ignou-study-notes-by-nextsem.web.app/bca/bca-1st-sem/bca1-mte03-business-mathematics.epub) |
+| **Elements of Information Technology** | **IEC-01** | [PDF](https://ignou-study-notes-by-nextsem.web.app/bca/bca-1st-sem/IEC-01-Elements-of-Information-Technology.pdf) | [ePub](https://ignou-study-notes-by-nextsem.web.app/bca/bca-1st-sem/bca1-iec01-elements-information-technology.epub) |
+| **Mathematics for Computer Programming** | **MEG-08** | [PDF](https://ignou-study-notes-by-nextsem.web.app/bca/bca-1st-sem/MEG-08-Mathematics-for-Computer-Programming.pdf) | [ePub](https://ignou-study-notes-by-nextsem.web.app/bca/bca-1st-sem/bca1-meg08-mathematics-computer-programming.epub) |
+
+---
+
+### 🛠️ Also Synchronized Across `CS-Guide`:
+1. **[`src/lib/pdfHelper.ts`](file:///c:/Users/nextsem/Documents/CS-Guide/src/lib/pdfHelper.ts):** Updated default canonical URL fallback to `https://ignou-study-notes-by-nextsem.web.app/bca/semester-1`.
+2. **[`Unit1LessonClient.tsx`](file:///c:/Users/nextsem/Documents/CS-Guide/src/components/bca/Unit1LessonClient.tsx) & [`BcaLessonClient.tsx`](file:///c:/Users/nextsem/Documents/CS-Guide/src/components/bca/BcaLessonClient.tsx):** Updated PDF preview & canonical generation links.
+3. **Route Metadata Pages (`[subjectSlug]/page.tsx`, `[lessonSlug]/page.tsx`):** Canonical and OpenGraph URLs switched to `https://ignou-study-notes-by-nextsem.web.app/`.
+4. **[`AGENTS.md`](file:///c:/Users/nextsem/Documents/CS-Guide/AGENTS.md) & Master Curriculum:** Enforced project boundary rule reflecting that IGNOU BCA is hosted at `https://ignou-study-notes-by-nextsem.web.app/`.
+
+---
+
+### 👤 User
+
+remove this pge from https://nextsem-ncert-2403.web.app/algorithms-and-flowcharts-10-master-problems.html#problem-7 and put it under @[c:\Users\nextsem\Documents\CS-Guide] this project and also remove from https://nextsem.online/algorithms-and-flowcharts-10-master-problems/#problem-7
+
+---
+
+### 🤖 Antigravity AI
+
+I have removed `algorithms-and-flowcharts-10-master-problems.html` from `ncert.nextsem.online` and deployed the updated production site to Firebase (`nextsem-ncert-2403`).
+
+I am currently running the production build for `nextsem.online` to deploy the removal there as well. I'll continue as soon as it completes.
+
+---
+
+### 🤖 Antigravity AI
+
+I am deploying the update to `nextsem.online` so the page is removed from `https://nextsem.online/algorithms-and-flowcharts-10-master-problems/`. Once this finishes, I will deploy `CS-Guide` to make it live at `https://ignou-study-notes-by-nextsem.web.app/algorithms-and-flowcharts-10-master-problems.html#problem-7`.
 
 ---
 
