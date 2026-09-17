@@ -316,7 +316,30 @@ export default function BcaLessonClient({ lesson }: BcaLessonClientProps) {
       </div>
 
       {/* Main Content Area */}
-      <main className="max-w-4xl mx-auto px-4 pt-8 space-y-8">
+      <main className="max-w-4xl mx-auto px-4 pt-4 space-y-6">
+        {/* Navigation Breadcrumbs */}
+        <nav aria-label="Breadcrumbs" className="flex flex-wrap items-center gap-2 text-xs text-slate-300 font-bold py-1">
+          <Link href="/" className="hover:text-[#04AA6D] transition-colors flex items-center gap-1">
+            <span>🏠 Home</span>
+          </Link>
+          <span className="text-slate-600 font-bold">❯</span>
+          <Link href="/bca" className="hover:text-[#04AA6D] transition-colors">
+            BCA Hub
+          </Link>
+          <span className="text-slate-600 font-bold">❯</span>
+          <Link href="/bca/semester-1" className="hover:text-[#04AA6D] transition-colors">
+            Semester 1
+          </Link>
+          <span className="text-slate-600 font-bold">❯</span>
+          <Link href={`/bca/semester-1/${lesson.subjectSlug}`} className="hover:text-[#04AA6D] transition-colors">
+            {lesson.subjectCode}
+          </Link>
+          <span className="text-slate-600 font-bold">❯</span>
+          <span className="text-cyan-300 font-extrabold truncate max-w-[200px] sm:max-w-none">
+            Unit {lesson.unitNumber}
+          </span>
+        </nav>
+
         {/* Course Banner Hero Card */}
         <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-[#0c162d] to-[#0a1122] border border-slate-800/90 p-6 sm:p-8 shadow-2xl shadow-cyan-950/20">
           <div className="absolute top-0 right-0 -mt-10 -mr-10 w-48 h-48 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />

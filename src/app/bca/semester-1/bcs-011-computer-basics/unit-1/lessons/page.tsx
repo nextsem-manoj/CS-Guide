@@ -43,10 +43,31 @@ export default function Unit1LessonsHubPage() {
       <BcaHeaderNav currentSubjectCode="BCS-111" currentSubjectName="Computer Basics & PC Software" />
 
       <main className="max-w-5xl mx-auto px-4 py-6 w-full flex-1">
+        {/* Navigation Breadcrumbs */}
+        <nav aria-label="Breadcrumbs" className="flex flex-wrap items-center gap-2 text-xs text-slate-300 font-bold py-1 mb-4">
+          <Link href="/" className="hover:text-[#04AA6D] transition-colors flex items-center gap-1">
+            <span>🏠 Home</span>
+          </Link>
+          <span className="text-slate-600 font-bold">❯</span>
+          <Link href="/bca" className="hover:text-[#04AA6D] transition-colors">
+            BCA Hub
+          </Link>
+          <span className="text-slate-600 font-bold">❯</span>
+          <Link href="/bca/semester-1" className="hover:text-[#04AA6D] transition-colors">
+            Semester 1
+          </Link>
+          <span className="text-slate-600 font-bold">❯</span>
+          <Link href="/bca/semester-1/bcs-011-computer-basics" className="hover:text-[#04AA6D] transition-colors">
+            BCS-111
+          </Link>
+          <span className="text-slate-600 font-bold">❯</span>
+          <span className="text-cyan-300 font-extrabold">Unit 1 Lessons Hub</span>
+        </nav>
+
         {/* Back Link */}
         <div className="mb-4">
           <Link
-            href="/bca/1/bcs-111"
+            href="/bca/semester-1/bcs-011-computer-basics"
             className="inline-flex items-center gap-1.5 text-xs font-bold text-cyan-400 hover:text-cyan-300 bg-slate-900/80 px-3 py-1.5 rounded-xl border border-cyan-500/20 transition-all"
           >
             <ArrowLeft size={14} />

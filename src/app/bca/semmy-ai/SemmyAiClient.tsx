@@ -836,13 +836,29 @@ export default function SemmyAiClient() {
           <main className="flex-1 flex flex-col h-full bg-[#0a0a12] relative overflow-hidden">
             {/* Header bar */}
             <header className="h-14 border-b border-white/5 bg-[#0a0a12] flex items-center justify-between px-6 shrink-0 z-10">
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2 sm:gap-3">
                 <button
                   onClick={() => setIsSidebarOpen(true)}
                   className="p-1.5 hover:bg-slate-900 rounded-lg md:hidden text-slate-400 hover:text-white cursor-pointer"
                 >
                   <Menu size={18} />
                 </button>
+
+                <Link
+                  href="/"
+                  className="flex items-center gap-1 text-slate-300 hover:text-white font-bold text-xs bg-slate-900 hover:bg-slate-800 border border-slate-800 px-2.5 py-1 rounded-xl transition-colors shrink-0 shadow-sm"
+                  title="Return to Home"
+                >
+                  <span>🏠 Home</span>
+                </Link>
+                <span className="text-slate-600 font-bold text-xs">❯</span>
+                <Link
+                  href="/bca"
+                  className="text-slate-300 hover:text-[#04AA6D] font-bold text-xs shrink-0 transition-colors hidden sm:inline"
+                >
+                  BCA Hub
+                </Link>
+                <span className="text-slate-600 font-bold text-xs hidden sm:inline">❯</span>
 
                 <div className="text-left leading-tight">
                   <span className="text-xs font-black text-white block">

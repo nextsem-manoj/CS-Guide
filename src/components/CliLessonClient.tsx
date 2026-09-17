@@ -297,9 +297,22 @@ export default function CliLessonClient({ lesson }: CliLessonClientProps) {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       {/* Top Banner Ad */}
       <AdSenseBanner />
+
+      {/* Navigation Breadcrumbs */}
+      <nav aria-label="Breadcrumbs" className="flex flex-wrap items-center gap-2 text-xs text-slate-300 font-bold py-1">
+        <Link href="/" className="hover:text-[#04AA6D] transition-colors flex items-center gap-1">
+          <span>🏠 Home</span>
+        </Link>
+        <span className="text-slate-600 font-bold">❯</span>
+        <Link href="/cli" className="hover:text-[#04AA6D] transition-colors">
+          Windows CLI
+        </Link>
+        <span className="text-slate-600 font-bold">❯</span>
+        <span className="text-[#04AA6D] font-extrabold truncate max-w-[200px] sm:max-w-none">{lesson.title}</span>
+      </nav>
 
       {/* Nextsem Academy Clean Header (Previous + Exact Lesson Title + Save + Next) */}
       <div className="flex items-center justify-between gap-3 pb-4 border-b border-slate-800/60 pt-2">

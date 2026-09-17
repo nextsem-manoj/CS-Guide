@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { 
   ArrowLeft, BookOpen, Sparkles, Check, HelpCircle, AlertCircle, 
   Award, ChevronRight, ChevronLeft, Zap, Menu, X, Star, FileText
@@ -760,18 +761,28 @@ export default function MyPersonalComputerVisualGuide() {
 
         {/* Content Section */}
         <main className="flex-1 w-full max-w-5xl mx-auto px-4 md:px-8 py-6 flex flex-col justify-between overflow-y-auto">
-          {/* Progress Banner */}
-          <div className="mb-6 flex items-center justify-between text-[10px] text-slate-500 font-black uppercase tracking-widest shrink-0">
-            <div className="flex items-center gap-1.5">
-              <span>BCA</span>
-              <span>›</span>
-              <span>Semester 1</span>
-              <span>›</span>
-              <span>BCS-011</span>
-              <span>›</span>
-              <span className="text-slate-350">Unit 5 (Page {activeLesson.pageNo})</span>
-            </div>
-            <div className="bg-slate-900/60 border border-slate-850 px-2.5 py-1 rounded-md text-emerald-400">
+          {/* Navigation Breadcrumbs */}
+          <div className="mb-6 flex items-center justify-between gap-2 shrink-0 flex-wrap">
+            <nav aria-label="Breadcrumbs" className="flex flex-wrap items-center gap-2 text-xs text-slate-300 font-bold py-1">
+              <Link href="/" className="hover:text-[#04AA6D] transition-colors flex items-center gap-1">
+                <span>🏠 Home</span>
+              </Link>
+              <span className="text-slate-600 font-bold">❯</span>
+              <Link href="/bca" className="hover:text-[#04AA6D] transition-colors">
+                BCA Hub
+              </Link>
+              <span className="text-slate-600 font-bold">❯</span>
+              <Link href="/bca/semester-1" className="hover:text-[#04AA6D] transition-colors">
+                Semester 1
+              </Link>
+              <span className="text-slate-600 font-bold">❯</span>
+              <Link href="/bca/semester-1/bcs-011-computer-basics" className="hover:text-[#04AA6D] transition-colors">
+                BCS-111
+              </Link>
+              <span className="text-slate-600 font-bold">❯</span>
+              <span className="text-cyan-300 font-extrabold">Unit 5 (Page {activeLesson.pageNo})</span>
+            </nav>
+            <div className="bg-slate-900/60 border border-slate-800 px-2.5 py-1 rounded-md text-emerald-400 text-[10px] font-mono font-bold">
               Slide {activeIdx + 1} of {LESSONS.length}
             </div>
           </div>

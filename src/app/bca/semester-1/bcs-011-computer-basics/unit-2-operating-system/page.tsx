@@ -282,7 +282,28 @@ export default function Unit2OperatingSystemLessonPage() {
       <BcaHeaderNav currentSubjectCode="BCS-111" currentSubjectName="Computer Basics & PC Software" />
 
       {/* Main Lesson Container */}
-      <main className="flex-1 max-w-5xl w-full mx-auto px-3 sm:px-6 py-6 space-y-8">
+      <main className="flex-1 max-w-5xl w-full mx-auto px-3 sm:px-6 py-6 space-y-6">
+
+        {/* Navigation Breadcrumbs */}
+        <nav aria-label="Breadcrumbs" className="flex flex-wrap items-center gap-2 text-xs text-slate-300 font-bold py-1">
+          <Link href="/" className="hover:text-[#04AA6D] transition-colors flex items-center gap-1">
+            <span>🏠 Home</span>
+          </Link>
+          <span className="text-slate-600 font-bold">❯</span>
+          <Link href="/bca" className="hover:text-[#04AA6D] transition-colors">
+            BCA Hub
+          </Link>
+          <span className="text-slate-600 font-bold">❯</span>
+          <Link href="/bca/semester-1" className="hover:text-[#04AA6D] transition-colors">
+            Semester 1
+          </Link>
+          <span className="text-slate-600 font-bold">❯</span>
+          <Link href="/bca/semester-1/bcs-011-computer-basics" className="hover:text-[#04AA6D] transition-colors">
+            BCS-111
+          </Link>
+          <span className="text-slate-600 font-bold">❯</span>
+          <span className="text-cyan-300 font-extrabold">Unit 2: Operating System</span>
+        </nav>
 
         {/* Top Breadcrumb & Hero Banner */}
         <div className="p-6 sm:p-8 bg-[#0c1328] border border-slate-800 rounded-3xl shadow-2xl space-y-5">

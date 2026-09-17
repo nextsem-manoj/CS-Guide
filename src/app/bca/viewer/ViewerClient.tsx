@@ -370,16 +370,22 @@ export default function TextbookViewer() {
       
       {/* Header bar */}
       <header className="h-16 border-b border-slate-800/80 bg-[#060c18]/95 flex items-center justify-between px-3 md:px-6 shrink-0 z-30 shadow-md">
-        <div className="flex items-center gap-3 min-w-0">
-          <button 
-            onClick={() => router.back()} 
-            className="flex items-center gap-1 text-slate-400 hover:text-white font-bold text-xs uppercase tracking-wider transition-colors shrink-0 p-1.5 rounded-lg hover:bg-slate-900"
+        <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+          <Link 
+            href="/" 
+            className="flex items-center gap-1 text-slate-300 hover:text-white font-bold text-xs bg-slate-900 hover:bg-slate-800 border border-slate-800 transition-colors shrink-0 px-2.5 py-1.5 rounded-xl shadow-sm"
+            title="Return to Home"
           >
-            <ArrowLeft size={16} />
-            <span className="hidden sm:inline">Back</span>
-          </button>
-          
-          <div className="h-5 w-px bg-slate-800 hidden sm:block shrink-0" />
+            <span>🏠 Home</span>
+          </Link>
+          <span className="text-slate-600 font-bold text-xs">❯</span>
+          <Link
+            href="/bca"
+            className="text-slate-300 hover:text-[#04AA6D] font-bold text-xs shrink-0 transition-colors hidden sm:inline"
+          >
+            BCA Hub
+          </Link>
+          <span className="text-slate-600 font-bold text-xs hidden sm:inline">❯</span>
           
           <div className="min-w-0 text-left">
             <span className="text-[8px] text-amber-400 font-black uppercase tracking-widest block">Textbook Reader</span>

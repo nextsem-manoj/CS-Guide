@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import Link from 'next/link';
 import matter from 'gray-matter';
 import { MDXRemote } from 'next-mdx-remote/rsc';
 import BookPagination from '@/components/BookPagination';
@@ -154,7 +155,7 @@ export default async function ChapterPage({
   }
 
   const fileContent = fs.readFileSync(filePath, 'utf8');
-  const { content } = matter(fileContent);
+  const { data, content } = matter(fileContent);
 
   // Parse out Practice Assignment if present
   let mdxSource = content;
@@ -187,10 +188,19 @@ export default async function ChapterPage({
   ));
 
   return (
-    <div className="animate-in fade-in duration-500">
-      <div className="mb-4">
-        <AdSenseBanner />
-      </div>
+    <div className="animate-in fade-in duration-500 space-y-4">
+      <AdSenseBanner />
+
+      {/* Navigation Breadcrumbs */}
+      <nav aria-label="Breadcrumbs" className="flex flex-wrap items-center gap-2 text-xs text-slate-300 font-bold py-1">
+        <Link href="/" className="hover:text-[#04AA6D] transition-colors flex items-center gap-1">
+          <span>🏠 Home</span>
+        </Link>
+        <span className="text-slate-600 font-bold">❯</span>
+        <span className="text-[#04AA6D] font-extrabold truncate max-w-[280px] sm:max-w-none">
+          {data?.title || chapter}
+        </span>
+      </nav>
 
       <PaginatedSections
         slides={renderedSlides}

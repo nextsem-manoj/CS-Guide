@@ -155,8 +155,17 @@ export default function UniversityCoursesDashboard() {
       />
 
       {/* Main Content Container */}
-      <main className="flex-1 w-full max-w-5xl mx-auto px-4 sm:px-6 py-6 space-y-8">
+      <main className="flex-1 w-full max-w-5xl mx-auto px-4 sm:px-6 py-6 space-y-6">
         
+        {/* Navigation Breadcrumbs */}
+        <nav aria-label="Breadcrumbs" className="flex flex-wrap items-center gap-2 text-xs text-slate-300 font-bold py-1">
+          <Link href="/" className="hover:text-[#04AA6D] transition-colors flex items-center gap-1">
+            <span>🏠 Home</span>
+          </Link>
+          <span className="text-slate-600 font-bold">❯</span>
+          <span className="text-cyan-300 font-extrabold">BCA &amp; University CS Hub</span>
+        </nav>
+
         {/* ── 3-WAY UNIVERSITY & DEGREE PROGRAM SELECTOR ── */}
         <div className="flex flex-col md:flex-row items-center justify-between gap-4 p-2.5 bg-[#090f24]/90 border border-slate-800/90 rounded-2xl shadow-xl backdrop-blur-md">
           <div className="flex items-center gap-2 w-full md:w-auto">
