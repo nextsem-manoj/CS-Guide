@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, Star, FileText, Sparkles, HelpCircle, BookOpen, ChevronRight, CheckCircle2, Play } from 'lucide-react';
+import { ArrowLeft, Star, FileText, Sparkles, HelpCircle, BookOpen, ChevronRight, CheckCircle2, Play, ExternalLink } from 'lucide-react';
 import { useProgress } from '@/context/ProgressContext';
 import { bcaSemesters } from '@/data/bcaCoursesData';
 import AdSenseBanner from '@/components/AdSenseBanner';
@@ -44,6 +44,7 @@ export default function SubjectSyllabusDashboard({ semester, subject }: { semest
   const [isLabOpen, setIsLabOpen] = useState(false);
   const [labUnitNum, setLabUnitNum] = useState<number>(1);
   const [labDefaultTab, setLabDefaultTab] = useState<string>("home");
+  const [showProblem7Answer, setShowProblem7Answer] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -63,14 +64,6 @@ export default function SubjectSyllabusDashboard({ semester, subject }: { semest
       setPoints(parseInt(savedPoints) || 0);
     }
   }, []);
-
-  if (!mounted) {
-    return (
-      <div className="w-full h-screen bg-[#060c18] flex items-center justify-center">
-        <div className="w-10 h-10 border-4 border-t-emerald-500 border-slate-800 rounded-full animate-spin" />
-      </div>
-    );
-  }
 
   if (!currentSemester || !currentSubject) {
     return (
@@ -238,6 +231,10 @@ export default function SubjectSyllabusDashboard({ semester, subject }: { semest
                         (subjectCode === "BCS-111" || subjectCode === "BCS-011") &&
                         (unit.fileName.toLowerCase().includes("unit 5") ||
                           unit.fileName.toLowerCase().includes("unit-5"));
+                      const isConceptInProgrammingLanguage =
+                        (subjectCode === "BCS-111" || subjectCode === "BCS-011") &&
+                        (unit.displayName.toLowerCase().includes("concept in programming language") ||
+                          (block.name.toLowerCase().includes("block 2") && unit.fileName.toLowerCase().includes("unit-3")));
 
 
                       const interactiveLessonUrl = isComputerBasicsUnit1
@@ -257,71 +254,159 @@ export default function SubjectSyllabusDashboard({ semester, subject }: { semest
                       };
 
                       return (
-                        <div
-                          key={unit.fileName}
-                          onClick={handleUnitClick}
-                          className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-slate-950/80 hover:bg-slate-900/90 border border-slate-800/80 hover:border-cyan-500/40 rounded-2xl cursor-pointer transition-all duration-200 group shadow-sm"
-                        >
-                          <div className="flex items-start gap-3.5 min-w-0 pr-2">
-                            <div className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 text-xs font-black ${
-                              isCompleted 
-                                ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30' 
-                                : 'bg-slate-900 text-cyan-300 border border-slate-800'
-                            }`}>
-                              {isCompleted ? '✓' : uIdx + 1}
+                        <div key={unit.fileName} className="space-y-2.5">
+                          <div
+                            onClick={handleUnitClick}
+                            className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-slate-950/80 hover:bg-slate-900/90 border border-slate-800/80 hover:border-cyan-500/40 rounded-2xl cursor-pointer transition-all duration-200 group shadow-sm"
+                          >
+                            <div className="flex items-start gap-3.5 min-w-0 pr-2">
+                              <div className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 text-xs font-black ${
+                                isCompleted 
+                                  ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30' 
+                                  : 'bg-slate-900 text-cyan-300 border border-slate-800'
+                              }`}>
+                                {isCompleted ? '✓' : uIdx + 1}
+                              </div>
+                              <div className="min-w-0 text-left">
+                                <h4 className="text-xs sm:text-sm font-extrabold text-white truncate leading-snug group-hover:text-cyan-300 transition-colors flex items-center gap-1.5">
+                                  <span>{unit.displayName}</span>
+                                  {interactiveLessonUrl && (
+                                    <span className="text-[9px] font-black uppercase px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                                      Interactive Lesson
+                                    </span>
+                                  )}
+                                </h4>
+                                <p className="text-[9px] text-slate-500 font-mono mt-0.5">{unit.fileName}</p>
+                              </div>
                             </div>
-                            <div className="min-w-0 text-left">
-                              <h4 className="text-xs sm:text-sm font-extrabold text-white truncate leading-snug group-hover:text-cyan-300 transition-colors flex items-center gap-1.5">
-                                <span>{unit.displayName}</span>
-                                {interactiveLessonUrl && (
-                                  <span className="text-[9px] font-black uppercase px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
-                                    Interactive Lesson
+
+                            <div className="flex items-center gap-2 mt-3 sm:mt-0 justify-end">
+                              {interactiveLessonUrl && (
+                                <button
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    router.push(interactiveLessonUrl);
+                                  }}
+                                  className="px-3.5 py-1.5 bg-gradient-to-r from-emerald-600 to-cyan-600 hover:from-emerald-500 hover:to-cyan-500 text-white rounded-xl text-[10px] font-extrabold uppercase tracking-wider transition-all cursor-pointer flex items-center gap-1.5 shadow-md"
+                                >
+                                  <Play size={11} className="fill-white" />
+                                  <span>Start Lesson</span>
+                                </button>
+                              )}
+
+                              {/* LAB SIMULATION — only show if no dedicated interactive lesson page */}
+                              {unit.isInteractive && !interactiveLessonUrl && (
+                                <button
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleOpenInteractive(unit.fileName, unit.defaultTab);
+                                  }}
+                                  className="px-3 py-1.5 bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 rounded-xl text-[10px] font-black uppercase text-cyan-300 tracking-wider transition-all cursor-pointer flex items-center gap-1"
+                                >
+                                  <Sparkles size={11} className="text-cyan-400" />
+                                  <span>Lab Simulation</span>
+                                </button>
+                              )}
+
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  router.push(`/bca/viewer?file=${encodeURIComponent(pdfPath)}&title=${encodeURIComponent(unit.displayName)}`);
+                                }}
+                                className="px-3 py-1.5 bg-slate-900 border border-slate-800 hover:bg-slate-800 text-[10px] font-bold text-slate-300 rounded-xl transition-all shrink-0 cursor-pointer flex items-center gap-1.5"
+                              >
+                                <FileText size={11} />
+                                <span>PDF Notes</span>
+                              </button>
+                            </div>
+                          </div>
+
+                          {/* Dedicated Practice Link & Question Section directly below Unit 3 */}
+                          {isConceptInProgrammingLanguage && (
+                            <div className="p-4 bg-[#080d1a] border border-cyan-500/30 rounded-2xl space-y-3 ml-0 sm:ml-4 shadow-lg">
+                              <div className="flex flex-wrap items-center justify-between gap-2 pb-2.5 border-b border-slate-800">
+                                <div className="flex items-center gap-2">
+                                  <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[10px] font-black uppercase tracking-wider">
+                                    Practice Problem 7
                                   </span>
+                                  <h5 className="text-xs sm:text-sm font-extrabold text-white">
+                                    Roots of Quadratic Equation (Algorithm &amp; Flowchart)
+                                  </h5>
+                                </div>
+                                <a
+                                  href="https://ignou-study-notes-by-nextsem.web.app/algorithms-and-flowcharts-10-master-problems/#problem-7"
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  onClick={(e) => e.stopPropagation()}
+                                  className="px-3.5 py-1.5 bg-gradient-to-r from-emerald-600 to-cyan-600 hover:from-emerald-500 hover:to-cyan-500 text-white rounded-xl text-[10px] font-extrabold uppercase tracking-wider transition-all flex items-center gap-1.5 shrink-0"
+                                >
+                                  <span>Open Problem 7 Studio</span>
+                                  <ExternalLink size={11} />
+                                </a>
+                              </div>
+
+                              {/* Question / Problem Statement */}
+                              <div className="p-3 bg-slate-900/80 rounded-xl border border-slate-800 text-xs text-slate-200">
+                                <span className="text-[10px] font-bold uppercase text-slate-400 block mb-1">Question / Problem Statement:</span>
+                                <p className="leading-relaxed">
+                                  Given coefficients <strong className="text-white">a</strong>, <strong className="text-white">b</strong>, and <strong className="text-white">c</strong> of <strong className="text-emerald-400">ax² + bx + c = 0</strong>, formulate a step-by-step algorithm and draw an ANSI flowchart to determine both real and complex roots across all three cases: <span className="text-cyan-300 font-mono">D &gt; 0</span>, <span className="text-cyan-300 font-mono">D = 0</span>, and <span className="text-cyan-300 font-mono">D &lt; 0</span>.
+                                </p>
+                              </div>
+
+                              {/* Toggle Answer Button */}
+                              <div className="pt-1">
+                                <button
+                                  type="button"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setShowProblem7Answer(!showProblem7Answer);
+                                  }}
+                                  className="px-3.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-cyan-300 text-xs font-bold border border-slate-700 transition flex items-center gap-2 cursor-pointer"
+                                >
+                                  {showProblem7Answer ? "🙈 Hide Answer to Question" : "👁️ View Answer to Question"}
+                                </button>
+
+                                {/* Answer Content - Hidden by default */}
+                                {showProblem7Answer && (
+                                  <div className="mt-3 p-3.5 bg-slate-950 border border-slate-800 rounded-xl space-y-3 text-xs">
+                                    <div className="flex items-center justify-between">
+                                      <span className="text-emerald-400 font-bold uppercase tracking-wider text-[10px]">Algorithm Solution (Steps 1 to 8):</span>
+                                      <span className="text-slate-500 text-[10px]">Discriminant D = b² - 4ac</span>
+                                    </div>
+                                    <pre className="bg-[#090b10] border border-slate-800/80 rounded-lg p-3 text-[11px] font-mono text-slate-200 overflow-x-auto leading-relaxed whitespace-pre-wrap">
+{`Step 1: Start.
+Step 2: Read coefficients a, b, c.
+Step 3: If a == 0, Print 'Not quadratic (Linear equation)' and Stop.
+Step 4: Compute Discriminant D = (b * b) - (4 * a * c).
+Step 5: If D > 0 (Two distinct real roots):
+         root1 = (-b + sqrt(D)) / (2 * a).
+         root2 = (-b - sqrt(D)) / (2 * a).
+         Print root1, root2.
+Step 6: Else if D == 0 (Two equal real roots):
+         root1 = -b / (2 * a).
+         Print 'Real and Equal Roots:', root1.
+Step 7: Else (D < 0, Complex conjugate roots):
+         realPart = -b / (2 * a).
+         imagPart = sqrt(-D) / (2 * a).
+         Print 'Complex Roots: realPart +/- imagPart * i'.
+Step 8: Stop.`}
+                                    </pre>
+                                    <div className="flex flex-wrap items-center justify-between gap-2 pt-1 border-t border-slate-900">
+                                      <span className="text-[11px] text-slate-400">View complete flowchart diagram &amp; dry-run trace table:</span>
+                                      <a
+                                        href="https://ignou-study-notes-by-nextsem.web.app/algorithms-and-flowcharts-10-master-problems/#problem-7"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="text-[#04AA6D] hover:underline font-bold text-xs"
+                                      >
+                                        Open Full Interactive Studio (#problem-7) →
+                                      </a>
+                                    </div>
+                                  </div>
                                 )}
-                              </h4>
-                              <p className="text-[9px] text-slate-500 font-mono mt-0.5">{unit.fileName}</p>
+                              </div>
                             </div>
-                          </div>
-
-                          <div className="flex items-center gap-2 mt-3 sm:mt-0 justify-end">
-                            {interactiveLessonUrl && (
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  router.push(interactiveLessonUrl);
-                                }}
-                                className="px-3.5 py-1.5 bg-gradient-to-r from-emerald-600 to-cyan-600 hover:from-emerald-500 hover:to-cyan-500 text-white rounded-xl text-[10px] font-extrabold uppercase tracking-wider transition-all cursor-pointer flex items-center gap-1.5 shadow-md"
-                              >
-                                <Play size={11} className="fill-white" />
-                                <span>Start Lesson</span>
-                              </button>
-                            )}
-
-                            {/* LAB SIMULATION — only show if no dedicated interactive lesson page */}
-                            {unit.isInteractive && !interactiveLessonUrl && (
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  handleOpenInteractive(unit.fileName, unit.defaultTab);
-                                }}
-                                className="px-3 py-1.5 bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 rounded-xl text-[10px] font-black uppercase text-cyan-300 tracking-wider transition-all cursor-pointer flex items-center gap-1"
-                              >
-                                <Sparkles size={11} className="text-cyan-400" />
-                                <span>Lab Simulation</span>
-                              </button>
-                            )}
-
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                router.push(`/bca/viewer?file=${encodeURIComponent(pdfPath)}&title=${encodeURIComponent(unit.displayName)}`);
-                              }}
-                              className="px-3 py-1.5 bg-slate-900 border border-slate-800 hover:bg-slate-800 text-[10px] font-bold text-slate-300 rounded-xl transition-all shrink-0 cursor-pointer flex items-center gap-1.5"
-                            >
-                              <FileText size={11} />
-                              <span>PDF Notes</span>
-                            </button>
-                          </div>
+                          )}
                         </div>
                       );
                     })
