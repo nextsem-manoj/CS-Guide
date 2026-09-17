@@ -149,11 +149,17 @@ export default function SemesterSubjectsDashboard({ semester }: { semester: stri
       <main className="flex-1 w-full max-w-5xl mx-auto px-4 md:px-8 py-6 space-y-6">
         
         {/* Navigation Breadcrumbs */}
-        <div className="flex items-center gap-1.5 text-[10px] text-slate-400 font-black uppercase tracking-widest">
-          <Link href="/bca" className="hover:text-white transition-colors">🏠 BCA Hub</Link>
-          <span>›</span>
-          <span className="text-cyan-300 font-bold">{currentSemester.name}</span>
-        </div>
+        <nav aria-label="Breadcrumbs" className="flex flex-wrap items-center gap-2 text-xs text-slate-300 font-bold py-1">
+          <Link href="/" className="hover:text-[#04AA6D] transition-colors flex items-center gap-1">
+            <span>🏠 Home</span>
+          </Link>
+          <span className="text-slate-600 font-bold">❯</span>
+          <Link href="/bca" className="hover:text-[#04AA6D] transition-colors">
+            BCA Hub
+          </Link>
+          <span className="text-slate-600 font-bold">❯</span>
+          <span className="text-cyan-300 font-extrabold">{currentSemester.name}</span>
+        </nav>
 
         {/* Title Hero Section */}
         <section className="p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-[#0c1328] via-[#090f20] to-[#060c18] border border-cyan-500/30 shadow-2xl space-y-4 md:flex md:items-center md:justify-between gap-6">
