@@ -40,6 +40,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/bca/semester-1/bcs-011-computer-basics/unit-1-introduction-to-computer-systems",
     "/bca/semester-1/bcs-011-computer-basics/unit-2-operating-system",
     "/bca/notes/bcs-011-unit-2-operating-system",
+    "/bca/notes/bcs-011-unit-3-programming-languages",
     "/bca/semester-1/bcs-011-computer-basics/unit-5-introduction-to-personal-computers",
     "/bca/notes/bcs-011-unit-5",
     "/bca/semester-1/bcsl-013-software-lab",

@@ -1109,4 +1109,16 @@ Total: 26 features shipped across 2 app versions (v25 → v26) 🎯
     - Added individual paper PDF download buttons and interactive unit chips on each semester accordion.
   - **SPA Routing & Accessibility**:
     - Dedicated `/du` route automatically loads DU B.Sc. Program CS view.
-    - `BcaHeaderNav.tsx` updated with modal university selection and search trigger.
+    - `BcaHeaderNav.tsx` updated with modal university selection and search trigger.
+- **Unit 3: Concept in Programming Language (Pages 65–67) Interactive Notes & Question Bank (2026-09-18)**:
+  - Extracted and structured 100% textbook notes line-by-line from `public/BCA_NEW_Books/1st Semester/BCS-011 Computer Basics and PC Software/Block 2 Basics of Computer Software/UNIT-3.pdf` across Pages 65, 66, and 67.
+  - Authored comprehensive interactive study suite at `src/app/bca/notes/bcs-011-unit-3-programming-languages/page.tsx`:
+    - **Page 65 (Section 3.3)**: Concept of Programming Language, Problem-Solving Pipeline (Algorithm ➔ Program), Primitive Building Blocks, Syntax (Structure) vs Semantics (Meaning), and Domain Suitability.
+    - **Page 66 (Section 3.3.1)**: Syntax rules, Parsing, Semantics in compiler execution, formal Grammar Quadruplet $L(T, N, P, S)$ (Terminals, Non-Terminals, Productions, Start Symbol), BNF Notation ($S \rightarrow A, A \rightarrow Ab \mid b$), concrete code grammar (`Stmt: var=expression` $\rightarrow$ `x=y+2`), and natural language analogy (`Ram ate biscuits`).
+    - **Page 67 (Section 3.3.2)**: Component Derivations, Infinite sentence generation from finite rules, and Grammar Ambiguity (why ambiguity yields multiple parse trees and must be strictly avoided).
+  - Integrated interactive initial-letter pill-reveal Fill-in-the-Blanks with instant solution checking.
+  - Implemented 10-Question Master Test simulator with automated grading, explanations, and local progress sync.
+  - Added IGNOU BCA Semester 1 BCS-011 Model Examination Q&A Bank (5-mark and 10-mark descriptive answers).
+  - Wired routes into `SubjectClient.tsx` (`isConceptInProgrammingLanguage`), `ViewerClient.tsx` (PDF automatic redirect), `bcaCoursesData.ts` (`isInteractive: true`), `sitemap.ts`, and `sitemap/page.tsx`.
+  - Added multilingual lesson definition to `src/data/bcaLessonsData.ts`.
+  - Attributed author as **Er. Manoj Kumar** with platform dark theme palette (`#060c18` background, `#0c1328` card surface, gold `#c1a648`, emerald `#04AA6D`, cyan accents).

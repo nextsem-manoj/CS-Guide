@@ -251,6 +251,8 @@ export default function SubjectSyllabusDashboard({ semester, subject }: { semest
                         ? "/bca/notes/bcs-011-unit-2-operating-system"
                         : isComputerBasicsUnit5
                         ? "/bca/notes/bcs-011-unit-5"
+                        : isConceptInProgrammingLanguage
+                        ? "/bca/notes/bcs-011-unit-3-programming-languages"
                         : null;
 
                       const handleUnitClick = () => {

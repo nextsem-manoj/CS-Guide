@@ -75,6 +75,14 @@ export default function UserSitemap() {
         tag: "Interactive Notes" 
       },
       { 
+        title: "Unit 3: Concept in Programming Language (Visual Notes & Quiz)", 
+        url: "/bca/notes/bcs-011-unit-3-programming-languages", 
+        category: "bca", 
+        description: "Line-by-line notes on Pages 65–67, Grammar Quadruplet L(T,N,P,S), BNF notation, parsing, ambiguity, and master quiz.", 
+        icon: <Sparkles size={16} />, 
+        tag: "Interactive Notes" 
+      },
+      { 
         title: "Unit 5: My Personal Computer (Visual Notes)", 
         url: "/bca/notes/bcs-011-unit-5", 
         category: "bca", 

@@ -90,7 +90,8 @@ export const bcaSemesters: BcaSemester[] = [
               {
                 "fileName": "Unit-3.pdf",
                 "displayName": "Concept in Programming Language",
-                "isInteractive": false
+                "isInteractive": true,
+                "defaultTab": "notes"
               },
               {
                 "fileName": "Unit-4.pdf",

@@ -141,6 +141,11 @@ export default function TextbookViewer() {
       (fileUrl.toLowerCase().includes('unit-2.pdf') || fileUrl.toLowerCase().includes('unit 2.pdf') || fileUrl.toLowerCase().includes('unit-2'))
     ) {
       router.replace('/bca/notes/bcs-011-unit-2-operating-system');
+    } else if (
+      (fileUrl.toLowerCase().includes('block 2') || fileUrl.toLowerCase().includes('block%202')) &&
+      (fileUrl.toLowerCase().includes('unit-3.pdf') || fileUrl.toLowerCase().includes('unit 3.pdf') || fileUrl.toLowerCase().includes('unit-3'))
+    ) {
+      router.replace('/bca/notes/bcs-011-unit-3-programming-languages');
     }
   }, [fileUrl, router]);
 
