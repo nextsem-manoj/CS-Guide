@@ -72,5 +72,26 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.9,
   }));
 
-  return [...baseRoutes, ...bcaSubjectRoutes, ...courseRoutes, ...htmlLessonRoutes];
+  // Algorithms and 10 Master Problems dedicated routes
+  const algorithmRoutes = [
+    "/algorithms-and-flowcharts-10-master-problems.html",
+    "/algorithms-and-flowcharts",
+    "/algorithms-and-flowcharts/problem-1-largest-of-three-numbers",
+    "/algorithms-and-flowcharts/problem-2-prime-or-composite-number",
+    "/algorithms-and-flowcharts/problem-3-factorial-of-a-number",
+    "/algorithms-and-flowcharts/problem-4-fibonacci-series",
+    "/algorithms-and-flowcharts/problem-5-reverse-number-and-palindrome",
+    "/algorithms-and-flowcharts/problem-6-simple-and-compound-interest",
+    "/algorithms-and-flowcharts/problem-7-quadratic-equation-roots",
+    "/algorithms-and-flowcharts/problem-8-linear-search-in-array",
+    "/algorithms-and-flowcharts/problem-9-armstrong-and-sum-of-digits",
+    "/algorithms-and-flowcharts/problem-10-temperature-converter-menu",
+  ].map((route) => ({
+    url: `${baseUrl}${route}`,
+    lastModified: new Date(),
+    changeFrequency: "weekly" as const,
+    priority: 0.95,
+  }));
+
+  return [...baseRoutes, ...bcaSubjectRoutes, ...algorithmRoutes, ...courseRoutes, ...htmlLessonRoutes];
 }

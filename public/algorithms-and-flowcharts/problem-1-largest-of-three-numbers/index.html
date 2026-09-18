@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Problem 1: Find the Largest of Three Numbers | NextSem Academy</title>
+  <meta name="description" content="Step-by-step algorithm, interactive flowchart, ANSI SVG diagram, ASCII chart, dry-run trace table, and complete C++ program for Problem 1: Find the Largest of Three Numbers. By Er. Manoj Kumar.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'dark',
+      themeVariables: {
+        darkMode: true,
+        background: '#17181c',
+        primaryColor: '#04AA6D',
+        primaryTextColor: '#ffffff',
+        primaryBorderColor: '#04AA6D',
+        lineColor: '#04AA6D',
+        secondaryColor: '#1e293b',
+        tertiaryColor: '#0f172a'
+      }
+    });
+  </script>
+  <style>
+    body { background-color: #17181c; color: #f8fafc; font-family: system-ui, -apple-system, sans-serif; }
+    .emerald-glow { box-shadow: 0 0 25px rgba(4, 170, 109, 0.2); }
+    .glass-card { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.08); }
+    pre { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col items-center selection:bg-[#04AA6D] selection:text-black">
+
+  <!-- Top Navigation / Breadcrumb -->
+  <nav class="w-full bg-[#0e1015] border-b border-slate-800 sticky top-0 z-50 px-4 py-3">
+    <div class="max-w-6xl mx-auto flex flex-wrap items-center justify-between gap-3">
+      <div class="flex items-center flex-wrap gap-2 text-xs">
+        <a href="/" class="flex items-center gap-2 text-white font-black text-base sm:text-lg tracking-tight hover:text-[#04AA6D] transition-colors group">
+          <div class="w-8 h-8 rounded-xl bg-[#0c1328] border border-emerald-500/40 flex items-center justify-center p-1 shadow-md shadow-emerald-500/10 group-hover:border-emerald-400 group-hover:scale-105 transition-all shrink-0">
+            <img src="/nextsem-emblem.png" alt="NextSem Logo" class="w-full h-full object-contain rounded-lg" />
+          </div>
+          <span class="tracking-tight hidden sm:inline">NextSem <span class="text-[#04AA6D]">Academy</span></span>
+        </a>
+        <span class="text-slate-600 font-bold">❯</span>
+        <a href="/" class="text-slate-300 hover:text-[#04AA6D] font-bold transition-colors">🏠 Home</a>
+        <span class="text-slate-600 font-bold">❯</span>
+        <a href="/bca" class="text-slate-300 hover:text-[#04AA6D] font-bold transition-colors">BCA Hub</a>
+        <span class="text-slate-600 font-bold">❯</span>
+        <a href="/bca/semester-1/bcs-111-computer-basics-and-pc-software" class="text-slate-300 hover:text-[#04AA6D] font-bold transition-colors">BCS-111</a>
+        <span class="text-slate-600 font-bold">❯</span>
+        <a href="/algorithms-and-flowcharts-10-master-problems.html" class="text-slate-300 hover:text-[#04AA6D] font-bold transition-colors">10 Master Problems</a>
+        <span class="text-slate-600 font-bold">❯</span>
+        <span class="text-emerald-400 font-extrabold bg-emerald-500/10 border border-emerald-500/30 px-2 py-0.5 rounded-md">Problem 1</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <a href="/algorithms-and-flowcharts-10-master-problems.html" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold border border-slate-700 transition flex items-center gap-1.5">
+          📚 <span>All 10 Problems Hub</span>
+        </a>
+        <button onclick="window.print()" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold border border-slate-700 transition flex items-center gap-1.5 cursor-pointer">
+          🖨️ <span>Print</span>
+        </button>
+        <a href="/" class="px-3 py-1.5 rounded-lg bg-[#04AA6D] hover:bg-[#039861] text-black font-extrabold text-xs transition flex items-center gap-1">
+          🏠 <span>Home</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="w-full max-w-5xl mx-auto px-4 py-8 space-y-8">
+
+    <!-- Problem Header Banner -->
+    <header class="glass-card rounded-2xl p-6 sm:p-8 emerald-glow border border-slate-800 space-y-4">
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/15 text-emerald-400 border-emerald-500/30 text-xs font-black uppercase tracking-wider">
+          <span>Problem 1 • Branching</span>
+        </div>
+        <div class="text-xs text-slate-400 font-medium">
+          Author: <span class="text-white font-bold">Er. Manoj Kumar</span> • Computer Science Fundamentals
+        </div>
+      </div>
+      <h1 class="text-3xl sm:text-4xl font-black text-white tracking-tight leading-tight">
+        Find the Largest of Three Numbers
+      </h1>
+      <div class="flex flex-wrap items-center gap-2 pt-2 border-t border-slate-800/80 text-xs">
+        <span class="text-slate-400">Jump to Section:</span>
+        <a href="#algorithm" class="text-slate-300 hover:text-[#04AA6D] font-bold underline">Algorithm</a>
+        <span class="text-slate-600">•</span>
+        <a href="#flowchart-mermaid" class="text-slate-300 hover:text-[#04AA6D] font-bold underline">Flowchart</a>
+        <span class="text-slate-600">•</span>
+        <a href="#dry-run" class="text-slate-300 hover:text-[#04AA6D] font-bold underline">Trace Table</a>
+        <span class="text-slate-600">•</span>
+        <a href="#cpp-code" class="text-emerald-400 hover:text-emerald-300 font-bold underline">C++ Program</a>
+      </div>
+    </header>
+
+    <!-- SECTION 1: PROBLEM STATEMENT -->
+    <section class="glass-card rounded-2xl p-6 border border-slate-800 space-y-3">
+      <div class="flex items-center gap-2">
+        <span class="text-lg">📋</span>
+        <h2 class="text-lg font-black text-white uppercase tracking-wide">Problem Statement</h2>
+      </div>
+      <p class="text-slate-200 text-sm sm:text-base leading-relaxed bg-slate-900/80 p-4 rounded-xl border border-slate-800">
+        Given three distinct numbers A, B, and C, formulate a step-by-step algorithm and draw a flowchart to determine and print the largest number among them using minimal nested comparison branches.
+      </p>
+    </section>
+
+    <!-- SECTION 2: VARIABLE DICTIONARY -->
+    <section class="glass-card rounded-2xl p-6 border border-slate-800 space-y-3">
+      <div class="flex items-center gap-2">
+        <span class="text-lg">📊</span>
+        <h2 class="text-lg font-black text-white uppercase tracking-wide">Variable Dictionary / Table</h2>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs sm:text-sm border-collapse">
+          <thead>
+            <tr class="bg-slate-900/80 border-b border-slate-700 text-slate-300">
+              <th class="p-3 font-bold">Variable Name</th>
+              <th class="p-3 font-bold">Data Type</th>
+              <th class="p-3 font-bold">Role & Purpose</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-800 text-slate-300 font-mono text-xs">
+            
+              <tr>
+                <td class="p-3 font-bold text-[#04AA6D]">A, B, C</td>
+                <td class="p-3 text-slate-400 font-sans">Float / Double</td>
+                <td class="p-3 font-sans">Three input numerical values to compare</td>
+              </tr>
+            
+              <tr>
+                <td class="p-3 font-bold text-[#04AA6D]">largest</td>
+                <td class="p-3 text-slate-400 font-sans">Float / Double</td>
+                <td class="p-3 font-sans">Stores the maximum identified value</td>
+              </tr>
+            
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- SECTION 3: STEP-BY-STEP ALGORITHM -->
+    <section id="algorithm" class="glass-card rounded-2xl p-6 border border-slate-800 space-y-3">
+      <div class="flex items-center justify-between flex-wrap gap-2">
+        <div class="flex items-center gap-2">
+          <span class="text-lg">📝</span>
+          <h2 class="text-lg font-black text-white uppercase tracking-wide">Step-by-Step Formal Algorithm</h2>
+        </div>
+        <button onclick="copyText('algo-content', this)" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold border border-slate-700 transition flex items-center gap-1.5 cursor-pointer">
+          📋 <span>Copy Algorithm</span>
+        </button>
+      </div>
+      <pre id="algo-content" class="bg-[#090b10] border border-slate-800 rounded-xl p-4 text-xs sm:text-sm text-slate-200 overflow-x-auto leading-relaxed whitespace-pre-wrap">Step 1: Start.
+Step 2: Read values of A, B, and C.
+Step 3: If A >= B:
+         If A >= C:
+             largest = A
+         Else:
+             largest = C
+Step 4: Else (B > A):
+         If B >= C:
+             largest = B
+         Else:
+             largest = C
+Step 5: Print 'The largest number is:', largest.
+Step 6: Stop.</pre>
+    </section>
+
+    <!-- SECTION 4: INTERACTIVE MERMAID FLOWCHART -->
+    <section id="flowchart-mermaid" class="glass-card rounded-2xl p-6 border border-slate-800 space-y-4">
+      <div class="flex items-center gap-2">
+        <span class="text-lg">🔀</span>
+        <h2 class="text-lg font-black text-white uppercase tracking-wide">Flowchart (Interactive Graphical Diagram)</h2>
+      </div>
+      <div class="bg-[#0b0d13] border border-slate-800 rounded-xl p-4 sm:p-6 overflow-x-auto flex justify-center">
+        <div class="mermaid">
+flowchart TD
+    Start([Start]) --> Input[/Read A, B, C/]
+    Input --> Dec1{"Is A >= B ?"}
+    Dec1 -- Yes --> Dec2{"Is A >= C ?"}
+    Dec1 -- No --> Dec3{"Is B >= C ?"}
+    Dec2 -- Yes --> OutA[/"Print 'A is Largest'"/]
+    Dec2 -- No --> OutC1[/"Print 'C is Largest'"/]
+    Dec3 -- Yes --> OutB[/"Print 'B is Largest'"/]
+    Dec3 -- No --> OutC2[/"Print 'C is Largest'"/]
+    OutA --> Stop([Stop])
+    OutC1 --> Stop
+    OutB --> Stop
+    OutC2 --> Stop
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 5: VISUAL ASCII FLOWCHART -->
+    <section class="glass-card rounded-2xl p-6 border border-slate-800 space-y-3">
+      <div class="flex items-center justify-between flex-wrap gap-2">
+        <div class="flex items-center gap-2">
+          <span class="text-lg">🖥️</span>
+          <h2 class="text-lg font-black text-white uppercase tracking-wide">Flowchart (ANSI Terminal ASCII Chart)</h2>
+        </div>
+        <button onclick="copyText('ascii-content', this)" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold border border-slate-700 transition flex items-center gap-1.5 cursor-pointer">
+          📋 <span>Copy ASCII Chart</span>
+        </button>
+      </div>
+      <pre id="ascii-content" class="bg-[#090b10] border border-slate-800 rounded-xl p-4 text-xs font-mono text-[#04AA6D] overflow-x-auto leading-tight">         +-----------------+
+         |     [ START ]   |
+         +-----------------+
+                  |
+                  v
+         +-----------------+
+         |  Read A, B, C   |
+         +-----------------+
+                  |
+                  v
+               /     \
+             / A >= B ? \
+             \         /
+            YES/     \NO
+             v         v
+          /     \   /     \
+        / A >= C?\ / B >= C?\
+        \       /  \       /
+        Y|     |N   Y|     |N
+         v     v     v     v
+       [A]    [C]   [B]   [C]
+        |      |     |     |
+        +------+-----+-----+
+                  |
+                  v
+         +-----------------+
+         |     [ STOP ]    |
+         +-----------------+</pre>
+    </section>
+
+    <!-- SECTION 6: DRY-RUN TRACE TABLE -->
+    <section id="dry-run" class="glass-card rounded-2xl p-6 border border-slate-800 space-y-3">
+      <div class="flex items-center gap-2">
+        <span class="text-lg">🧪</span>
+        <h2 class="text-lg font-black text-white uppercase tracking-wide">Dry-Run Execution Trace Table</h2>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs sm:text-sm border-collapse">
+          <thead>
+            <tr class="bg-slate-900/80 border-b border-slate-700 text-slate-300">
+              <th class="p-3 font-bold">Execution Step / Case</th>
+              <th class="p-3 font-bold">Variables State 1</th>
+              <th class="p-3 font-bold">Variables State 2</th>
+              <th class="p-3 font-bold">Condition Evaluation</th>
+              <th class="p-3 font-bold">Output / Result</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-800 text-slate-300 text-xs">
+            
+              <tr>
+                <td class="p-3 font-bold text-white">Test Case 1</td>
+                <td class="p-3 font-mono text-slate-300">A=25, B=14, C=9</td>
+                <td class="p-3 font-mono text-slate-300">A >= B (True), A >= C (True)</td>
+                <td class="p-3 text-slate-400 font-sans">Branch Dec1 -> Dec2</td>
+                <td class="p-3 font-bold text-[#04AA6D]">Largest = 25 (A)</td>
+              </tr>
+            
+              <tr>
+                <td class="p-3 font-bold text-white">Test Case 2</td>
+                <td class="p-3 font-mono text-slate-300">A=10, B=80, C=45</td>
+                <td class="p-3 font-mono text-slate-300">A >= B (False), B >= C (True)</td>
+                <td class="p-3 text-slate-400 font-sans">Branch Dec1 -> Dec3</td>
+                <td class="p-3 font-bold text-[#04AA6D]">Largest = 80 (B)</td>
+              </tr>
+            
+              <tr>
+                <td class="p-3 font-bold text-white">Test Case 3</td>
+                <td class="p-3 font-mono text-slate-300">A=5, B=12, C=99</td>
+                <td class="p-3 font-mono text-slate-300">A >= B (False), B >= C (False)</td>
+                <td class="p-3 text-slate-400 font-sans">Branch Dec1 -> Dec3 -> C</td>
+                <td class="p-3 font-bold text-[#04AA6D]">Largest = 99 (C)</td>
+              </tr>
+            
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- SECTION 7: PRODUCTION C++ PROGRAM -->
+    <section id="cpp-code" class="glass-card rounded-2xl p-6 border border-slate-800 space-y-4">
+      <div class="flex items-center justify-between flex-wrap gap-2">
+        <div class="flex items-center gap-2">
+          <span class="text-lg">💻</span>
+          <h2 class="text-lg font-black text-white uppercase tracking-wide">Complete C++ Program Implementation</h2>
+          <span class="px-2.5 py-0.5 rounded-full bg-blue-500/15 text-blue-400 text-[10px] font-black uppercase font-mono border border-blue-500/30">C++ 17 / 20</span>
+        </div>
+        <button onclick="copyText('cpp-code-block', this)" class="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-emerald-600 to-cyan-600 hover:from-emerald-500 hover:to-cyan-500 text-white text-xs font-extrabold transition flex items-center gap-1.5 cursor-pointer shadow-lg shadow-emerald-500/10">
+          📋 <span>Copy C++ Code</span>
+        </button>
+      </div>
+      <p class="text-slate-300 text-xs leading-relaxed">
+        Production-ready, highly commented C++ implementation with input validation, optimal algorithmic complexity, and structured I/O formatting.
+      </p>
+      <pre id="cpp-code-block" class="bg-[#090b10] border border-slate-800 rounded-xl p-4 text-xs font-mono text-cyan-300 overflow-x-auto leading-relaxed whitespace-pre-wrap">#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+    double a, b, c;
+    cout &lt;&lt; "Enter three numbers (A B C): ";
+    if (!(cin &gt;&gt; a &gt;&gt; b &gt;&gt; c)) {
+        cout &lt;&lt; "Invalid input! Please enter valid numeric values.\n";
+        return 1;
+    }
+
+    double largest;
+    // Step-by-step nested branching
+    if (a &gt;= b) {
+        if (a &gt;= c) {
+            largest = a;
+        } else {
+            largest = c;
+        }
+    } else {
+        if (b &gt;= c) {
+            largest = b;
+        } else {
+            largest = c;
+        }
+    }
+
+    cout &lt;&lt; "\n========================================\n";
+    cout &lt;&lt; "Input values: A = " &lt;&lt; a &lt;&lt; ", B = " &lt;&lt; b &lt;&lt; ", C = " &lt;&lt; c &lt;&lt; "\n";
+    cout &lt;&lt; "Result      : Largest Number is " &lt;&lt; largest &lt;&lt; "\n";
+    cout &lt;&lt; "========================================\n";
+    return 0;
+}</pre>
+
+      <div class="bg-slate-900/70 border border-slate-800 rounded-xl p-4 space-y-2">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-bold text-slate-300 uppercase tracking-wider">Sample Terminal Run:</span>
+          <span class="text-[10px] text-slate-500 font-mono">Compile: g++ -O2 problem_1.cpp -o problem_1</span>
+        </div>
+        <pre class="text-slate-200 text-xs font-mono bg-black/40 p-3 rounded-lg border border-slate-800/80 whitespace-pre-wrap">Input:
+25.5 89.2 44.0
+
+Output:
+========================================
+Input values: A = 25.5, B = 89.2, C = 44
+Result      : Largest Number is 89.2
+========================================</pre>
+      </div>
+    </section>
+
+    <!-- SECTION 8: DEVELOPER KEY TAKEAWAY -->
+    <section class="bg-[#04AA6D]/10 border border-[#04AA6D]/30 rounded-2xl p-6 flex items-start gap-4">
+      <span class="text-2xl">💡</span>
+      <div class="space-y-1">
+        <div class="text-xs font-black text-[#04AA6D] uppercase tracking-wider">Developer & Exam Key Takeaway</div>
+        <p class="text-sm text-slate-200 leading-relaxed font-medium">
+          Nested conditional logic guarantees finding the maximum in exactly 2 comparisons, which is optimal for 3 elements (log2(3!) ≈ 2.58).
+        </p>
+      </div>
+    </section>
+
+    <!-- SEQUENTIAL PROBLEM NAVIGATION -->
+    <footer class="glass-card rounded-2xl p-6 border border-slate-800 flex flex-wrap items-center justify-between gap-4">
+      <div>
+        
+          <span class="text-xs text-slate-500 italic">First Master Problem</span>
+        
+      </div>
+
+      <a href="/algorithms-and-flowcharts-10-master-problems.html" class="px-4 py-2.5 rounded-xl bg-[#04AA6D]/15 hover:bg-[#04AA6D]/25 text-[#04AA6D] border border-[#04AA6D]/30 text-xs font-extrabold transition flex items-center gap-1.5">
+        📚 <span>View All 10 Master Problems</span>
+      </a>
+
+      <div>
+        
+          <a href="/algorithms-and-flowcharts/problem-2-prime-or-composite-number/" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-200 hover:text-white border border-slate-800 hover:border-slate-700 text-xs font-bold transition">
+            <span>Next: Problem 2 (Check...) →</span>
+          </a>
+        
+      </div>
+    </footer>
+
+  </main>
+
+  <!-- Standard Platform Footer -->
+  <footer class="w-full border-t border-slate-800 bg-[#0a0c10] py-8 text-center text-xs text-slate-500 space-y-3 mt-12">
+    <div class="flex items-center justify-center gap-2">
+      <div class="w-5 h-5 rounded bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center p-0.5">
+        <img src="/nextsem-emblem.png" alt="NextSem Logo" class="w-full h-full object-contain" />
+      </div>
+      <span class="text-slate-400 font-bold">Nextsem Academy • Complete Free Dev Curriculum</span>
+    </div>
+    <div class="flex flex-wrap items-center justify-center gap-4 text-slate-400">
+      <a href="/" class="hover:text-white transition-colors">Home</a>
+      <span>•</span>
+      <a href="/privacy" class="hover:text-white transition-colors">Privacy Policy</a>
+      <span>•</span>
+      <a href="/terms" class="hover:text-white transition-colors">Terms of Service</a>
+      <span>•</span>
+      <a href="/sitemap" class="hover:text-white transition-colors">XML Sitemap</a>
+      <span>•</span>
+      <a href="/contact" class="hover:text-white transition-colors">Contact Support</a>
+    </div>
+    <p class="text-[11px] text-slate-600">
+      Authored by Er. Manoj Kumar • Computer Science and BCA First Semester Mastery Series.
+    </p>
+  </footer>
+
+  <script>
+    function copyText(elemId, btn) {
+      const el = document.getElementById(elemId);
+      if (!el) return;
+      const text = el.innerText || el.textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        const orig = btn.innerHTML;
+        btn.innerHTML = '✅ Copied!';
+        setTimeout(() => { btn.innerHTML = orig; }, 2000);
+      });
+    }
+  </script>
+</body>
+</html>

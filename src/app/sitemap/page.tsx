@@ -89,6 +89,30 @@ export default function UserSitemap() {
         description: "Deeply visual revision slides, interactive self-check MCQs, and fill-in-the-blank drills.", 
         icon: <Sparkles size={16} />, 
         tag: "Interactive Notes" 
+      },
+      { 
+        title: "10 Master Problems: Algorithms & Flowcharts Hub", 
+        url: "/algorithms-and-flowcharts", 
+        category: "bca", 
+        description: "Overview and directory of the 10 core computer science problem-solving archetypes with C++ programs.", 
+        icon: <Code size={16} />, 
+        tag: "Algorithms Hub" 
+      },
+      { 
+        title: "Problem 7: Real & Complex Roots of Quadratic Equation", 
+        url: "/algorithms-and-flowcharts/problem-7-quadratic-equation-roots", 
+        category: "bca", 
+        description: "Step-by-step algorithm, interactive Mermaid diagram, ANSI SVG vector flowchart, and production C++ program.", 
+        icon: <Code size={16} />, 
+        tag: "Problem 7" 
+      },
+      { 
+        title: "Problem 8: Linear Search with Early Exit in Array", 
+        url: "/algorithms-and-flowcharts/problem-8-linear-search-in-array", 
+        category: "bca", 
+        description: "Sequential search algorithm, syntax-validated Mermaid flowchart, ANSI SVG diagram, and C++ vector program.", 
+        icon: <Code size={16} />, 
+        tag: "Problem 8" 
       }
     ];
 

@@ -344,13 +344,13 @@ export default function SubjectSyllabusDashboard({ semester, subject }: { semest
                                   </h5>
                                 </div>
                                 <a
-                                  href="https://ignou-study-notes-by-nextsem.web.app/algorithms-and-flowcharts-10-master-problems/#problem-7"
+                                  href="/algorithms-and-flowcharts/problem-7-quadratic-equation-roots/"
                                   target="_blank"
                                   rel="noopener noreferrer"
                                   onClick={(e) => e.stopPropagation()}
                                   className="px-3.5 py-1.5 bg-gradient-to-r from-emerald-600 to-cyan-600 hover:from-emerald-500 hover:to-cyan-500 text-white rounded-xl text-[10px] font-extrabold uppercase tracking-wider transition-all flex items-center gap-1.5 shrink-0"
                                 >
-                                  <span>Open Problem 7 Studio</span>
+                                  <span>Open Dedicated Page ↗</span>
                                   <ExternalLink size={11} />
                                 </a>
                               </div>
@@ -373,7 +373,7 @@ export default function SubjectSyllabusDashboard({ semester, subject }: { semest
                                   }}
                                   className="px-3.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-cyan-300 text-xs font-bold border border-slate-700 transition flex items-center gap-2 cursor-pointer"
                                 >
-                                  {showProblem7Answer ? "🙈 Hide Answer to Question" : "👁️ View Answer to Question"}
+                                  {showProblem7Answer ? "🙈 Hide Answer to Question" : "👁️ View Answer to Question & C++ Program"}
                                 </button>
 
                                 {/* Answer Content - Hidden by default */}
@@ -401,15 +401,56 @@ Step 7: Else (D < 0, Complex conjugate roots):
          Print 'Complex Roots: realPart +/- imagPart * i'.
 Step 8: Stop.`}
                                     </pre>
-                                    <div className="flex flex-wrap items-center justify-between gap-2 pt-1 border-t border-slate-900">
-                                      <span className="text-[11px] text-slate-400">View complete flowchart diagram &amp; dry-run trace table:</span>
+
+                                    {/* C++ Code Snippet */}
+                                    <div className="pt-2 border-t border-slate-900 space-y-1.5">
+                                      <div className="flex items-center justify-between">
+                                        <span className="text-cyan-400 font-bold uppercase tracking-wider text-[10px]">C++ 17/20 Implementation:</span>
+                                        <span className="text-slate-500 text-[10px] font-mono">#include &lt;cmath&gt;</span>
+                                      </div>
+                                      <pre className="bg-[#090b10] border border-slate-800/80 rounded-lg p-3 text-[11px] font-mono text-cyan-300 overflow-x-auto leading-relaxed whitespace-pre-wrap">
+{`#include <iostream>
+#include <cmath>
+#include <iomanip>
+using namespace std;
+
+int main() {
+    double a, b, c;
+    if (!(cin >> a >> b >> c) || a == 0) return 1;
+
+    double D = (b * b) - (4.0 * a * c);
+    if (D > 0) {
+        double r1 = (-b + sqrt(D)) / (2.0 * a);
+        double r2 = (-b - sqrt(D)) / (2.0 * a);
+        cout << "Real Distinct: " << r1 << ", " << r2 << "\\n";
+    } else if (D == 0) {
+        cout << "Real Equal: " << (-b / (2.0 * a)) << "\\n";
+    } else {
+        double real = -b / (2.0 * a);
+        double imag = sqrt(-D) / (2.0 * a);
+        cout << "Complex: " << real << " +/- " << imag << "i\\n";
+    }
+    return 0;
+}`}
+                                      </pre>
+                                    </div>
+
+                                    <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-900">
                                       <a
-                                        href="https://ignou-study-notes-by-nextsem.web.app/algorithms-and-flowcharts-10-master-problems/#problem-7"
+                                        href="/algorithms-and-flowcharts/problem-7-quadratic-equation-roots/"
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="text-[#04AA6D] hover:underline font-bold text-xs"
+                                        className="text-[#04AA6D] hover:underline font-bold text-xs flex items-center gap-1"
                                       >
-                                        Open Full Interactive Studio (#problem-7) →
+                                        <span>Open Dedicated Problem 7 Page (Interactive Studio) →</span>
+                                      </a>
+                                      <a
+                                        href="/algorithms-and-flowcharts-10-master-problems.html#problem-7"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="text-slate-400 hover:text-white font-medium text-xs"
+                                      >
+                                        View on Master Hub (#problem-7)
                                       </a>
                                     </div>
                                   </div>

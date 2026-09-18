@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Problem 2: Check Whether an Integer is Prime or Composite | NextSem Academy</title>
+  <meta name="description" content="Step-by-step algorithm, interactive flowchart, ANSI SVG diagram, ASCII chart, dry-run trace table, and complete C++ program for Problem 2: Check Whether an Integer is Prime or Composite. By Er. Manoj Kumar.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'dark',
+      themeVariables: {
+        darkMode: true,
+        background: '#17181c',
+        primaryColor: '#04AA6D',
+        primaryTextColor: '#ffffff',
+        primaryBorderColor: '#04AA6D',
+        lineColor: '#04AA6D',
+        secondaryColor: '#1e293b',
+        tertiaryColor: '#0f172a'
+      }
+    });
+  </script>
+  <style>
+    body { background-color: #17181c; color: #f8fafc; font-family: system-ui, -apple-system, sans-serif; }
+    .emerald-glow { box-shadow: 0 0 25px rgba(4, 170, 109, 0.2); }
+    .glass-card { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.08); }
+    pre { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col items-center selection:bg-[#04AA6D] selection:text-black">
+
+  <!-- Top Navigation / Breadcrumb -->
+  <nav class="w-full bg-[#0e1015] border-b border-slate-800 sticky top-0 z-50 px-4 py-3">
+    <div class="max-w-6xl mx-auto flex flex-wrap items-center justify-between gap-3">
+      <div class="flex items-center flex-wrap gap-2 text-xs">
+        <a href="/" class="flex items-center gap-2 text-white font-black text-base sm:text-lg tracking-tight hover:text-[#04AA6D] transition-colors group">
+          <div class="w-8 h-8 rounded-xl bg-[#0c1328] border border-emerald-500/40 flex items-center justify-center p-1 shadow-md shadow-emerald-500/10 group-hover:border-emerald-400 group-hover:scale-105 transition-all shrink-0">
+            <img src="/nextsem-emblem.png" alt="NextSem Logo" class="w-full h-full object-contain rounded-lg" />
+          </div>
+          <span class="tracking-tight hidden sm:inline">NextSem <span class="text-[#04AA6D]">Academy</span></span>
+        </a>
+        <span class="text-slate-600 font-bold">❯</span>
+        <a href="/" class="text-slate-300 hover:text-[#04AA6D] font-bold transition-colors">🏠 Home</a>
+        <span class="text-slate-600 font-bold">❯</span>
+        <a href="/bca" class="text-slate-300 hover:text-[#04AA6D] font-bold transition-colors">BCA Hub</a>
+        <span class="text-slate-600 font-bold">❯</span>
+        <a href="/bca/semester-1/bcs-111-computer-basics-and-pc-software" class="text-slate-300 hover:text-[#04AA6D] font-bold transition-colors">BCS-111</a>
+        <span class="text-slate-600 font-bold">❯</span>
+        <a href="/algorithms-and-flowcharts-10-master-problems.html" class="text-slate-300 hover:text-[#04AA6D] font-bold transition-colors">10 Master Problems</a>
+        <span class="text-slate-600 font-bold">❯</span>
+        <span class="text-emerald-400 font-extrabold bg-emerald-500/10 border border-emerald-500/30 px-2 py-0.5 rounded-md">Problem 2</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <a href="/algorithms-and-flowcharts-10-master-problems.html" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold border border-slate-700 transition flex items-center gap-1.5">
+          📚 <span>All 10 Problems Hub</span>
+        </a>
+        <button onclick="window.print()" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold border border-slate-700 transition flex items-center gap-1.5 cursor-pointer">
+          🖨️ <span>Print</span>
+        </button>
+        <a href="/" class="px-3 py-1.5 rounded-lg bg-[#04AA6D] hover:bg-[#039861] text-black font-extrabold text-xs transition flex items-center gap-1">
+          🏠 <span>Home</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="w-full max-w-5xl mx-auto px-4 py-8 space-y-8">
+
+    <!-- Problem Header Banner -->
+    <header class="glass-card rounded-2xl p-6 sm:p-8 emerald-glow border border-slate-800 space-y-4">
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/15 text-cyan-400 border-cyan-500/30 text-xs font-black uppercase tracking-wider">
+          <span>Problem 2 • Loops</span>
+        </div>
+        <div class="text-xs text-slate-400 font-medium">
+          Author: <span class="text-white font-bold">Er. Manoj Kumar</span> • Computer Science Fundamentals
+        </div>
+      </div>
+      <h1 class="text-3xl sm:text-4xl font-black text-white tracking-tight leading-tight">
+        Check Whether an Integer is Prime or Composite
+      </h1>
+      <div class="flex flex-wrap items-center gap-2 pt-2 border-t border-slate-800/80 text-xs">
+        <span class="text-slate-400">Jump to Section:</span>
+        <a href="#algorithm" class="text-slate-300 hover:text-[#04AA6D] font-bold underline">Algorithm</a>
+        <span class="text-slate-600">•</span>
+        <a href="#flowchart-mermaid" class="text-slate-300 hover:text-[#04AA6D] font-bold underline">Flowchart</a>
+        <span class="text-slate-600">•</span>
+        <a href="#dry-run" class="text-slate-300 hover:text-[#04AA6D] font-bold underline">Trace Table</a>
+        <span class="text-slate-600">•</span>
+        <a href="#cpp-code" class="text-emerald-400 hover:text-emerald-300 font-bold underline">C++ Program</a>
+      </div>
+    </header>
+
+    <!-- SECTION 1: PROBLEM STATEMENT -->
+    <section class="glass-card rounded-2xl p-6 border border-slate-800 space-y-3">
+      <div class="flex items-center gap-2">
+        <span class="text-lg">📋</span>
+        <h2 class="text-lg font-black text-white uppercase tracking-wide">Problem Statement</h2>
+      </div>
+      <p class="text-slate-200 text-sm sm:text-base leading-relaxed bg-slate-900/80 p-4 rounded-xl border border-slate-800">
+        Given a positive integer N, determine whether it is a Prime number, Composite number, or Neither (<= 1) using an optimized trial division loop running up to sqrt(N).
+      </p>
+    </section>
+
+    <!-- SECTION 2: VARIABLE DICTIONARY -->
+    <section class="glass-card rounded-2xl p-6 border border-slate-800 space-y-3">
+      <div class="flex items-center gap-2">
+        <span class="text-lg">📊</span>
+        <h2 class="text-lg font-black text-white uppercase tracking-wide">Variable Dictionary / Table</h2>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs sm:text-sm border-collapse">
+          <thead>
+            <tr class="bg-slate-900/80 border-b border-slate-700 text-slate-300">
+              <th class="p-3 font-bold">Variable Name</th>
+              <th class="p-3 font-bold">Data Type</th>
+              <th class="p-3 font-bold">Role & Purpose</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-800 text-slate-300 font-mono text-xs">
+            
+              <tr>
+                <td class="p-3 font-bold text-[#04AA6D]">N</td>
+                <td class="p-3 text-slate-400 font-sans">Integer (Long Long)</td>
+                <td class="p-3 font-sans">Input integer to test for primality</td>
+              </tr>
+            
+              <tr>
+                <td class="p-3 font-bold text-[#04AA6D]">i</td>
+                <td class="p-3 text-slate-400 font-sans">Integer (Long Long)</td>
+                <td class="p-3 font-sans">Loop divisor candidate (2, 3, 5, 7...)</td>
+              </tr>
+            
+              <tr>
+                <td class="p-3 font-bold text-[#04AA6D]">isPrime</td>
+                <td class="p-3 text-slate-400 font-sans">Boolean</td>
+                <td class="p-3 font-sans">Primality flag</td>
+              </tr>
+            
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- SECTION 3: STEP-BY-STEP ALGORITHM -->
+    <section id="algorithm" class="glass-card rounded-2xl p-6 border border-slate-800 space-y-3">
+      <div class="flex items-center justify-between flex-wrap gap-2">
+        <div class="flex items-center gap-2">
+          <span class="text-lg">📝</span>
+          <h2 class="text-lg font-black text-white uppercase tracking-wide">Step-by-Step Formal Algorithm</h2>
+        </div>
+        <button onclick="copyText('algo-content', this)" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold border border-slate-700 transition flex items-center gap-1.5 cursor-pointer">
+          📋 <span>Copy Algorithm</span>
+        </button>
+      </div>
+      <pre id="algo-content" class="bg-[#090b10] border border-slate-800 rounded-xl p-4 text-xs sm:text-sm text-slate-200 overflow-x-auto leading-relaxed whitespace-pre-wrap">Step 1: Start.
+Step 2: Read integer N.
+Step 3: If N <= 1:
+         Print 'Neither Prime nor Composite' and Stop.
+Step 4: If N == 2 or N == 3:
+         Print 'Prime Number' and Stop.
+Step 5: If N % 2 == 0:
+         Print 'Composite Number' and Stop.
+Step 6: Initialize i = 3.
+Step 7: While (i * i <= N):
+         If (N % i == 0):
+             Print 'Composite Number' and Stop.
+         i = i + 2.
+Step 8: Print 'Prime Number'.
+Step 9: Stop.</pre>
+    </section>
+
+    <!-- SECTION 4: INTERACTIVE MERMAID FLOWCHART -->
+    <section id="flowchart-mermaid" class="glass-card rounded-2xl p-6 border border-slate-800 space-y-4">
+      <div class="flex items-center gap-2">
+        <span class="text-lg">🔀</span>
+        <h2 class="text-lg font-black text-white uppercase tracking-wide">Flowchart (Interactive Graphical Diagram)</h2>
+      </div>
+      <div class="bg-[#0b0d13] border border-slate-800 rounded-xl p-4 sm:p-6 overflow-x-auto flex justify-center">
+        <div class="mermaid">
+flowchart TD
+    Start([Start]) --> In[/"Read integer N"/]
+    In --> Chk1{"Is N <= 1 ?"}
+    Chk1 -- Yes --> Out1[/"Print 'Neither Prime nor Composite'"/]
+    Out1 --> Stop([Stop])
+    Chk1 -- No --> Chk2{"Is N == 2 or N == 3 ?"}
+    Chk2 -- Yes --> Out2[/"Print 'Prime Number'"/]
+    Out2 --> Stop
+    Chk2 -- No --> ChkEven{"Is N % 2 == 0 ?"}
+    ChkEven -- Yes --> OutComp[/"Print 'Composite Number'"/]
+    OutComp --> Stop
+    ChkEven -- No --> Init["Set i = 3"]
+    Init --> LoopCond{"Is i * i <= N ?"}
+    LoopCond -- Yes --> DivTest{"Does N % i == 0 ?"}
+    DivTest -- Yes --> OutComp2[/"Print 'Composite Number'"/]
+    OutComp2 --> Stop
+    DivTest -- No --> Inc["i = i + 2"]
+    Inc --> LoopCond
+    LoopCond -- No --> OutPrime[/"Print 'Prime Number'"/]
+    OutPrime --> Stop
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 5: VISUAL ASCII FLOWCHART -->
+    <section class="glass-card rounded-2xl p-6 border border-slate-800 space-y-3">
+      <div class="flex items-center justify-between flex-wrap gap-2">
+        <div class="flex items-center gap-2">
+          <span class="text-lg">🖥️</span>
+          <h2 class="text-lg font-black text-white uppercase tracking-wide">Flowchart (ANSI Terminal ASCII Chart)</h2>
+        </div>
+        <button onclick="copyText('ascii-content', this)" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold border border-slate-700 transition flex items-center gap-1.5 cursor-pointer">
+          📋 <span>Copy ASCII Chart</span>
+        </button>
+      </div>
+      <pre id="ascii-content" class="bg-[#090b10] border border-slate-800 rounded-xl p-4 text-xs font-mono text-[#04AA6D] overflow-x-auto leading-tight">         +-----------------+
+         |     [ START ]   |
+         +-----------------+
+                  |
+                  v
+         +-----------------+
+         |     Read N      |
+         +-----------------+
+                  |
+                  v
+               /     \
+             / N <= 1?\ ---YES--> [Print Neither] --> [STOP]
+             \       /
+                  | NO
+                  v
+               /     \
+             / N==2,3?\ ---YES--> [Print Prime]   --> [STOP]
+             \       /
+                  | NO
+                  v
+               /     \
+             / N%2==0?\ ---YES--> [Print Composite]--> [STOP]
+             \       /
+                  | NO
+                  v
+         +-----------------+
+         |    Set i = 3    |
+         +-----------------+
+                  |
+                  v
+               /     \
+             /i*i <= N?\ ---NO---> [Print Prime]   --> [STOP]
+             \       /
+                  | YES
+                  v
+               /     \
+             / N%i==0?\ ---YES--> [Print Composite]--> [STOP]
+             \       /
+                  | NO
+                  v
+         +-----------------+
+         |    i = i + 2    | ----> (Loop to i*i <= N)
+         +-----------------+</pre>
+    </section>
+
+    <!-- SECTION 6: DRY-RUN TRACE TABLE -->
+    <section id="dry-run" class="glass-card rounded-2xl p-6 border border-slate-800 space-y-3">
+      <div class="flex items-center gap-2">
+        <span class="text-lg">🧪</span>
+        <h2 class="text-lg font-black text-white uppercase tracking-wide">Dry-Run Execution Trace Table</h2>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs sm:text-sm border-collapse">
+          <thead>
+            <tr class="bg-slate-900/80 border-b border-slate-700 text-slate-300">
+              <th class="p-3 font-bold">Execution Step / Case</th>
+              <th class="p-3 font-bold">Variables State 1</th>
+              <th class="p-3 font-bold">Variables State 2</th>
+              <th class="p-3 font-bold">Condition Evaluation</th>
+              <th class="p-3 font-bold">Output / Result</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-800 text-slate-300 text-xs">
+            
+              <tr>
+                <td class="p-3 font-bold text-white">Test Case N=29</td>
+                <td class="p-3 font-mono text-slate-300">N=29, i=3</td>
+                <td class="p-3 font-mono text-slate-300">3*3=9 <= 29, 29%3!=0</td>
+                <td class="p-3 text-slate-400 font-sans">i becomes 5; 5*5=25 <= 29, 29%5!=0; i becomes 7; 7*7=49 > 29</td>
+                <td class="p-3 font-bold text-[#04AA6D]">Loop terminates -> 29 is PRIME</td>
+              </tr>
+            
+              <tr>
+                <td class="p-3 font-bold text-white">Test Case N=49</td>
+                <td class="p-3 font-mono text-slate-300">N=49, i=3, 5, 7</td>
+                <td class="p-3 font-mono text-slate-300">7*7=49 <= 49, 49%7 == 0</td>
+                <td class="p-3 text-slate-400 font-sans">Divisor found at i=7</td>
+                <td class="p-3 font-bold text-[#04AA6D]">Early Exit -> 49 is COMPOSITE</td>
+              </tr>
+            
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- SECTION 7: PRODUCTION C++ PROGRAM -->
+    <section id="cpp-code" class="glass-card rounded-2xl p-6 border border-slate-800 space-y-4">
+      <div class="flex items-center justify-between flex-wrap gap-2">
+        <div class="flex items-center gap-2">
+          <span class="text-lg">💻</span>
+          <h2 class="text-lg font-black text-white uppercase tracking-wide">Complete C++ Program Implementation</h2>
+          <span class="px-2.5 py-0.5 rounded-full bg-blue-500/15 text-blue-400 text-[10px] font-black uppercase font-mono border border-blue-500/30">C++ 17 / 20</span>
+        </div>
+        <button onclick="copyText('cpp-code-block', this)" class="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-emerald-600 to-cyan-600 hover:from-emerald-500 hover:to-cyan-500 text-white text-xs font-extrabold transition flex items-center gap-1.5 cursor-pointer shadow-lg shadow-emerald-500/10">
+          📋 <span>Copy C++ Code</span>
+        </button>
+      </div>
+      <p class="text-slate-300 text-xs leading-relaxed">
+        Production-ready, highly commented C++ implementation with input validation, optimal algorithmic complexity, and structured I/O formatting.
+      </p>
+      <pre id="cpp-code-block" class="bg-[#090b10] border border-slate-800 rounded-xl p-4 text-xs font-mono text-cyan-300 overflow-x-auto leading-relaxed whitespace-pre-wrap">#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+    long long n;
+    cout &lt;&lt; "Enter a positive integer: ";
+    if (!(cin &gt;&gt; n)) {
+        cout &lt;&lt; "Invalid input! Please enter a valid integer.\n";
+        return 1;
+    }
+
+    if (n &lt;= 1) {
+        cout &lt;&lt; n &lt;&lt; " is NEITHER prime nor composite (by definition).\n";
+        return 0;
+    }
+    if (n == 2 || n == 3) {
+        cout &lt;&lt; n &lt;&lt; " is a PRIME number.\n";
+        return 0;
+    }
+    if (n % 2 == 0) {
+        cout &lt;&lt; n &lt;&lt; " is a COMPOSITE number (divisible by 2).\n";
+        return 0;
+    }
+
+    bool isPrime = true;
+    for (long long i = 3; i * i &lt;= n; i += 2) {
+        if (n % i == 0) {
+            isPrime = false;
+            cout &lt;&lt; n &lt;&lt; " is a COMPOSITE number (divisible by " &lt;&lt; i &lt;&lt; ").\n";
+            break;
+        }
+    }
+
+    if (isPrime) {
+        cout &lt;&lt; n &lt;&lt; " is a PRIME number.\n";
+    }
+    return 0;
+}</pre>
+
+      <div class="bg-slate-900/70 border border-slate-800 rounded-xl p-4 space-y-2">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-bold text-slate-300 uppercase tracking-wider">Sample Terminal Run:</span>
+          <span class="text-[10px] text-slate-500 font-mono">Compile: g++ -O2 problem_2.cpp -o problem_2</span>
+        </div>
+        <pre class="text-slate-200 text-xs font-mono bg-black/40 p-3 rounded-lg border border-slate-800/80 whitespace-pre-wrap">Input:
+997
+
+Output:
+997 is a PRIME number.</pre>
+      </div>
+    </section>
+
+    <!-- SECTION 8: DEVELOPER KEY TAKEAWAY -->
+    <section class="bg-[#04AA6D]/10 border border-[#04AA6D]/30 rounded-2xl p-6 flex items-start gap-4">
+      <span class="text-2xl">💡</span>
+      <div class="space-y-1">
+        <div class="text-xs font-black text-[#04AA6D] uppercase tracking-wider">Developer & Exam Key Takeaway</div>
+        <p class="text-sm text-slate-200 leading-relaxed font-medium">
+          Testing up to sqrt(N) drops time complexity from O(N) to O(sqrt(N)), enabling instant primality verification even for numbers up to 10^12.
+        </p>
+      </div>
+    </section>
+
+    <!-- SEQUENTIAL PROBLEM NAVIGATION -->
+    <footer class="glass-card rounded-2xl p-6 border border-slate-800 flex flex-wrap items-center justify-between gap-4">
+      <div>
+        
+          <a href="/algorithms-and-flowcharts/problem-1-largest-of-three-numbers/" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-200 hover:text-white border border-slate-800 hover:border-slate-700 text-xs font-bold transition">
+            <span>← Previous: Problem 1 (Find...)</span>
+          </a>
+        
+      </div>
+
+      <a href="/algorithms-and-flowcharts-10-master-problems.html" class="px-4 py-2.5 rounded-xl bg-[#04AA6D]/15 hover:bg-[#04AA6D]/25 text-[#04AA6D] border border-[#04AA6D]/30 text-xs font-extrabold transition flex items-center gap-1.5">
+        📚 <span>View All 10 Master Problems</span>
+      </a>
+
+      <div>
+        
+          <a href="/algorithms-and-flowcharts/problem-3-factorial-of-a-number/" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-200 hover:text-white border border-slate-800 hover:border-slate-700 text-xs font-bold transition">
+            <span>Next: Problem 3 (Calculate...) →</span>
+          </a>
+        
+      </div>
+    </footer>
+
+  </main>
+
+  <!-- Standard Platform Footer -->
+  <footer class="w-full border-t border-slate-800 bg-[#0a0c10] py-8 text-center text-xs text-slate-500 space-y-3 mt-12">
+    <div class="flex items-center justify-center gap-2">
+      <div class="w-5 h-5 rounded bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center p-0.5">
+        <img src="/nextsem-emblem.png" alt="NextSem Logo" class="w-full h-full object-contain" />
+      </div>
+      <span class="text-slate-400 font-bold">Nextsem Academy • Complete Free Dev Curriculum</span>
+    </div>
+    <div class="flex flex-wrap items-center justify-center gap-4 text-slate-400">
+      <a href="/" class="hover:text-white transition-colors">Home</a>
+      <span>•</span>
+      <a href="/privacy" class="hover:text-white transition-colors">Privacy Policy</a>
+      <span>•</span>
+      <a href="/terms" class="hover:text-white transition-colors">Terms of Service</a>
+      <span>•</span>
+      <a href="/sitemap" class="hover:text-white transition-colors">XML Sitemap</a>
+      <span>•</span>
+      <a href="/contact" class="hover:text-white transition-colors">Contact Support</a>
+    </div>
+    <p class="text-[11px] text-slate-600">
+      Authored by Er. Manoj Kumar • Computer Science and BCA First Semester Mastery Series.
+    </p>
+  </footer>
+
+  <script>
+    function copyText(elemId, btn) {
+      const el = document.getElementById(elemId);
+      if (!el) return;
+      const text = el.innerText || el.textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        const orig = btn.innerHTML;
+        btn.innerHTML = '✅ Copied!';
+        setTimeout(() => { btn.innerHTML = orig; }, 2000);
+      });
+    }
+  </script>
+</body>
+</html>

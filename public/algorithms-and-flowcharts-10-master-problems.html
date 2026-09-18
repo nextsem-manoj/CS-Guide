@@ -367,9 +367,15 @@
                 Find the Largest of Three Numbers
               </h3>
             </div>
-            <a href="#problemsContainer" class="text-xs text-slate-400 hover:text-[#04AA6D] font-bold transition-colors">
-              ↑ Back to Top
-            </a>
+            
+            <div class="flex items-center gap-2">
+              <a href="/algorithms-and-flowcharts/problem-1-largest-of-three-numbers/" class="px-3 py-1.5 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-400 hover:text-emerald-300 text-xs font-extrabold border border-emerald-500/30 transition flex items-center gap-1">
+                <span>🚀 Dedicated Page ↗</span>
+              </a>
+              <a href="#problemsContainer" class="text-xs text-slate-400 hover:text-[#04AA6D] font-bold transition-colors">
+                ↑ Top
+              </a>
+            </div>
           </div>
 
           <!-- Problem Statement -->
@@ -550,6 +556,65 @@ YES          NO       YES          NO
               <p class="text-xs sm:text-sm text-slate-200 mt-0.5 leading-relaxed">Always use nested decision trees rather than multiple independent if-statements to minimize redundant comparisons from 3 comparisons to at most 2 comparisons.</p>
             </div>
           </div>
+
+          <!-- C++ Program Implementation -->
+          <div class="mt-6 pt-6 border-t border-slate-800">
+            <div class="flex items-center justify-between flex-wrap gap-2 mb-3">
+              <div class="flex items-center gap-2">
+                <span class="px-2.5 py-0.5 rounded-full bg-blue-500/15 text-blue-400 text-[10px] font-black uppercase font-mono border border-blue-500/30">C++ 17 / 20</span>
+                <h4 class="text-xs font-black uppercase text-slate-300 tracking-wider">C++ Program Implementation</h4>
+              </div>
+              <button onclick="copyText('cpp-1', this)" class="px-3 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold border border-slate-700 transition flex items-center gap-1.5 cursor-pointer">
+                📋 <span>Copy C++ Code</span>
+              </button>
+            </div>
+            <pre id="cpp-1" class="bg-[#090b10] border border-slate-800 rounded-xl p-4 text-xs font-mono text-cyan-300 overflow-x-auto leading-relaxed whitespace-pre-wrap">#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+    double a, b, c;
+    cout &lt;&lt; "Enter three numbers (A B C): ";
+    if (!(cin &gt;&gt; a &gt;&gt; b &gt;&gt; c)) {
+        cout &lt;&lt; "Invalid input! Please enter valid numeric values.\n";
+        return 1;
+    }
+
+    double largest;
+    // Step-by-step nested branching
+    if (a &gt;= b) {
+        if (a &gt;= c) {
+            largest = a;
+        } else {
+            largest = c;
+        }
+    } else {
+        if (b &gt;= c) {
+            largest = b;
+        } else {
+            largest = c;
+        }
+    }
+
+    cout &lt;&lt; "\n========================================\n";
+    cout &lt;&lt; "Input values: A = " &lt;&lt; a &lt;&lt; ", B = " &lt;&lt; b &lt;&lt; ", C = " &lt;&lt; c &lt;&lt; "\n";
+    cout &lt;&lt; "Result      : Largest Number is " &lt;&lt; largest &lt;&lt; "\n";
+    cout &lt;&lt; "========================================\n";
+    return 0;
+}</pre>
+            
+            <div class="mt-3 bg-slate-900/60 border border-slate-800/80 rounded-xl p-3 text-xs font-mono">
+              <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Sample Terminal Output:</span>
+              <pre class="text-slate-300 text-[11px] whitespace-pre-wrap">Input:
+25.5 89.2 44.0
+
+Output:
+========================================
+Input values: A = 25.5, B = 89.2, C = 44
+Result      : Largest Number is 89.2
+========================================</pre>
+            </div>
+          </div>
+
           </div>
         </article>
       
@@ -565,9 +630,15 @@ YES          NO       YES          NO
                 Check Whether an Integer is Prime or Composite
               </h3>
             </div>
-            <a href="#problemsContainer" class="text-xs text-slate-400 hover:text-[#04AA6D] font-bold transition-colors">
-              ↑ Back to Top
-            </a>
+            
+            <div class="flex items-center gap-2">
+              <a href="/algorithms-and-flowcharts/problem-2-prime-or-composite-number/" class="px-3 py-1.5 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-400 hover:text-emerald-300 text-xs font-extrabold border border-emerald-500/30 transition flex items-center gap-1">
+                <span>🚀 Dedicated Page ↗</span>
+              </a>
+              <a href="#problemsContainer" class="text-xs text-slate-400 hover:text-[#04AA6D] font-bold transition-colors">
+                ↑ Top
+              </a>
+            </div>
           </div>
 
           <!-- Problem Statement -->
@@ -761,6 +832,67 @@ flowchart TD
               <p class="text-xs sm:text-sm text-slate-200 mt-0.5 leading-relaxed">Checking up to sqrt(N) reduces loop operations from O(N) to O(sqrt(N)), turning millions of operations into a few hundred.</p>
             </div>
           </div>
+
+          <!-- C++ Program Implementation -->
+          <div class="mt-6 pt-6 border-t border-slate-800">
+            <div class="flex items-center justify-between flex-wrap gap-2 mb-3">
+              <div class="flex items-center gap-2">
+                <span class="px-2.5 py-0.5 rounded-full bg-blue-500/15 text-blue-400 text-[10px] font-black uppercase font-mono border border-blue-500/30">C++ 17 / 20</span>
+                <h4 class="text-xs font-black uppercase text-slate-300 tracking-wider">C++ Program Implementation</h4>
+              </div>
+              <button onclick="copyText('cpp-2', this)" class="px-3 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold border border-slate-700 transition flex items-center gap-1.5 cursor-pointer">
+                📋 <span>Copy C++ Code</span>
+              </button>
+            </div>
+            <pre id="cpp-2" class="bg-[#090b10] border border-slate-800 rounded-xl p-4 text-xs font-mono text-cyan-300 overflow-x-auto leading-relaxed whitespace-pre-wrap">#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+    long long n;
+    cout &lt;&lt; "Enter a positive integer: ";
+    if (!(cin &gt;&gt; n)) {
+        cout &lt;&lt; "Invalid input! Please enter a valid integer.\n";
+        return 1;
+    }
+
+    if (n &lt;= 1) {
+        cout &lt;&lt; n &lt;&lt; " is NEITHER prime nor composite (by definition).\n";
+        return 0;
+    }
+    if (n == 2 || n == 3) {
+        cout &lt;&lt; n &lt;&lt; " is a PRIME number.\n";
+        return 0;
+    }
+    if (n % 2 == 0) {
+        cout &lt;&lt; n &lt;&lt; " is a COMPOSITE number (divisible by 2).\n";
+        return 0;
+    }
+
+    bool isPrime = true;
+    for (long long i = 3; i * i &lt;= n; i += 2) {
+        if (n % i == 0) {
+            isPrime = false;
+            cout &lt;&lt; n &lt;&lt; " is a COMPOSITE number (divisible by " &lt;&lt; i &lt;&lt; ").\n";
+            break;
+        }
+    }
+
+    if (isPrime) {
+        cout &lt;&lt; n &lt;&lt; " is a PRIME number.\n";
+    }
+    return 0;
+}</pre>
+            
+            <div class="mt-3 bg-slate-900/60 border border-slate-800/80 rounded-xl p-3 text-xs font-mono">
+              <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Sample Terminal Output:</span>
+              <pre class="text-slate-300 text-[11px] whitespace-pre-wrap">Input:
+997
+
+Output:
+997 is a PRIME number.</pre>
+            </div>
+          </div>
+
           </div>
         </article>
       
@@ -776,9 +908,15 @@ flowchart TD
                 Calculate Factorial of an Integer (N!)
               </h3>
             </div>
-            <a href="#problemsContainer" class="text-xs text-slate-400 hover:text-[#04AA6D] font-bold transition-colors">
-              ↑ Back to Top
-            </a>
+            
+            <div class="flex items-center gap-2">
+              <a href="/algorithms-and-flowcharts/problem-3-factorial-of-a-number/" class="px-3 py-1.5 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-400 hover:text-emerald-300 text-xs font-extrabold border border-emerald-500/30 transition flex items-center gap-1">
+                <span>🚀 Dedicated Page ↗</span>
+              </a>
+              <a href="#problemsContainer" class="text-xs text-slate-400 hover:text-[#04AA6D] font-bold transition-colors">
+                ↑ Top
+              </a>
+            </div>
           </div>
 
           <!-- Problem Statement -->
@@ -980,6 +1118,53 @@ flowchart TD
               <p class="text-xs sm:text-sm text-slate-200 mt-0.5 leading-relaxed">Factorials grow at an astronomical rate O(N^N). In practical engineering, use 64-bit BigInt for N > 20 to prevent numeric overflow.</p>
             </div>
           </div>
+
+          <!-- C++ Program Implementation -->
+          <div class="mt-6 pt-6 border-t border-slate-800">
+            <div class="flex items-center justify-between flex-wrap gap-2 mb-3">
+              <div class="flex items-center gap-2">
+                <span class="px-2.5 py-0.5 rounded-full bg-blue-500/15 text-blue-400 text-[10px] font-black uppercase font-mono border border-blue-500/30">C++ 17 / 20</span>
+                <h4 class="text-xs font-black uppercase text-slate-300 tracking-wider">C++ Program Implementation</h4>
+              </div>
+              <button onclick="copyText('cpp-3', this)" class="px-3 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold border border-slate-700 transition flex items-center gap-1.5 cursor-pointer">
+                📋 <span>Copy C++ Code</span>
+              </button>
+            </div>
+            <pre id="cpp-3" class="bg-[#090b10] border border-slate-800 rounded-xl p-4 text-xs font-mono text-cyan-300 overflow-x-auto leading-relaxed whitespace-pre-wrap">#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+    int n;
+    cout &lt;&lt; "Enter a non-negative integer (0 to 20): ";
+    if (!(cin &gt;&gt; n)) {
+        cout &lt;&lt; "Invalid input! Please enter an integer.\n";
+        return 1;
+    }
+
+    if (n &lt; 0) {
+        cout &lt;&lt; "Error: Factorial is undefined for negative integers!\n";
+        return 1;
+    }
+
+    unsigned long long fact = 1;
+    for (int i = 1; i &lt;= n; ++i) {
+        fact *= i;
+    }
+
+    cout &lt;&lt; n &lt;&lt; "! = " &lt;&lt; fact &lt;&lt; "\n";
+    return 0;
+}</pre>
+            
+            <div class="mt-3 bg-slate-900/60 border border-slate-800/80 rounded-xl p-3 text-xs font-mono">
+              <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Sample Terminal Output:</span>
+              <pre class="text-slate-300 text-[11px] whitespace-pre-wrap">Input:
+6
+
+Output:
+6! = 720</pre>
+            </div>
+          </div>
+
           </div>
         </article>
       
@@ -995,9 +1180,15 @@ flowchart TD
                 Generate the First N Terms of the Fibonacci Series
               </h3>
             </div>
-            <a href="#problemsContainer" class="text-xs text-slate-400 hover:text-[#04AA6D] font-bold transition-colors">
-              ↑ Back to Top
-            </a>
+            
+            <div class="flex items-center gap-2">
+              <a href="/algorithms-and-flowcharts/problem-4-fibonacci-series/" class="px-3 py-1.5 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-400 hover:text-emerald-300 text-xs font-extrabold border border-emerald-500/30 transition flex items-center gap-1">
+                <span>🚀 Dedicated Page ↗</span>
+              </a>
+              <a href="#problemsContainer" class="text-xs text-slate-400 hover:text-[#04AA6D] font-bold transition-colors">
+                ↑ Top
+              </a>
+            </div>
           </div>
 
           <!-- Problem Statement -->
@@ -1210,6 +1401,59 @@ flowchart TD
               <p class="text-xs sm:text-sm text-slate-200 mt-0.5 leading-relaxed">The sliding window technique T1=T2, T2=Next maintains state with O(1) auxiliary memory space, avoiding unnecessary arrays.</p>
             </div>
           </div>
+
+          <!-- C++ Program Implementation -->
+          <div class="mt-6 pt-6 border-t border-slate-800">
+            <div class="flex items-center justify-between flex-wrap gap-2 mb-3">
+              <div class="flex items-center gap-2">
+                <span class="px-2.5 py-0.5 rounded-full bg-blue-500/15 text-blue-400 text-[10px] font-black uppercase font-mono border border-blue-500/30">C++ 17 / 20</span>
+                <h4 class="text-xs font-black uppercase text-slate-300 tracking-wider">C++ Program Implementation</h4>
+              </div>
+              <button onclick="copyText('cpp-4', this)" class="px-3 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold border border-slate-700 transition flex items-center gap-1.5 cursor-pointer">
+                📋 <span>Copy C++ Code</span>
+              </button>
+            </div>
+            <pre id="cpp-4" class="bg-[#090b10] border border-slate-800 rounded-xl p-4 text-xs font-mono text-cyan-300 overflow-x-auto leading-relaxed whitespace-pre-wrap">#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+    int n;
+    cout &lt;&lt; "Enter the number of terms N: ";
+    if (!(cin &gt;&gt; n) || n &lt;= 0) {
+        cout &lt;&lt; "Please enter a positive integer (N &gt;= 1).\n";
+        return 1;
+    }
+
+    long long t1 = 0, t2 = 1;
+    cout &lt;&lt; "\nFibonacci Series (" &lt;&lt; n &lt;&lt; " terms):\n";
+
+    if (n == 1) {
+        cout &lt;&lt; t1 &lt;&lt; "\n";
+        return 0;
+    }
+
+    cout &lt;&lt; t1 &lt;&lt; ", " &lt;&lt; t2;
+    for (int count = 3; count &lt;= n; ++count) {
+        long long nextTerm = t1 + t2;
+        cout &lt;&lt; ", " &lt;&lt; nextTerm;
+        t1 = t2;
+        t2 = nextTerm;
+    }
+    cout &lt;&lt; "\n";
+    return 0;
+}</pre>
+            
+            <div class="mt-3 bg-slate-900/60 border border-slate-800/80 rounded-xl p-3 text-xs font-mono">
+              <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Sample Terminal Output:</span>
+              <pre class="text-slate-300 text-[11px] whitespace-pre-wrap">Input:
+8
+
+Output:
+Fibonacci Series (8 terms):
+0, 1, 1, 2, 3, 5, 8, 13</pre>
+            </div>
+          </div>
+
           </div>
         </article>
       
@@ -1225,9 +1469,15 @@ flowchart TD
                 Reverse an Integer and Check for Palindrome
               </h3>
             </div>
-            <a href="#problemsContainer" class="text-xs text-slate-400 hover:text-[#04AA6D] font-bold transition-colors">
-              ↑ Back to Top
-            </a>
+            
+            <div class="flex items-center gap-2">
+              <a href="/algorithms-and-flowcharts/problem-5-reverse-number-and-palindrome/" class="px-3 py-1.5 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-400 hover:text-emerald-300 text-xs font-extrabold border border-emerald-500/30 transition flex items-center gap-1">
+                <span>🚀 Dedicated Page ↗</span>
+              </a>
+              <a href="#problemsContainer" class="text-xs text-slate-400 hover:text-[#04AA6D] font-bold transition-colors">
+                ↑ Top
+              </a>
+            </div>
           </div>
 
           <!-- Problem Statement -->
@@ -1426,6 +1676,63 @@ flowchart TD
               <p class="text-xs sm:text-sm text-slate-200 mt-0.5 leading-relaxed">The place-value shifting formula Rev = Rev * 10 + Rem eliminates the overhead of string conversions.</p>
             </div>
           </div>
+
+          <!-- C++ Program Implementation -->
+          <div class="mt-6 pt-6 border-t border-slate-800">
+            <div class="flex items-center justify-between flex-wrap gap-2 mb-3">
+              <div class="flex items-center gap-2">
+                <span class="px-2.5 py-0.5 rounded-full bg-blue-500/15 text-blue-400 text-[10px] font-black uppercase font-mono border border-blue-500/30">C++ 17 / 20</span>
+                <h4 class="text-xs font-black uppercase text-slate-300 tracking-wider">C++ Program Implementation</h4>
+              </div>
+              <button onclick="copyText('cpp-5', this)" class="px-3 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold border border-slate-700 transition flex items-center gap-1.5 cursor-pointer">
+                📋 <span>Copy C++ Code</span>
+              </button>
+            </div>
+            <pre id="cpp-5" class="bg-[#090b10] border border-slate-800 rounded-xl p-4 text-xs font-mono text-cyan-300 overflow-x-auto leading-relaxed whitespace-pre-wrap">#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+    long long n;
+    cout &lt;&lt; "Enter an integer: ";
+    if (!(cin &gt;&gt; n)) {
+        cout &lt;&lt; "Invalid input! Please enter an integer.\n";
+        return 1;
+    }
+
+    long long original = n;
+    long long temp = (n &lt; 0) ? -n : n;
+    long long reversed = 0;
+
+    while (temp &gt; 0) {
+        long long rem = temp % 10;
+        reversed = (reversed * 10) + rem;
+        temp /= 10;
+    }
+
+    cout &lt;&lt; "\nOriginal Value : " &lt;&lt; original &lt;&lt; "\n";
+    cout &lt;&lt; "Reversed Value : " &lt;&lt; reversed &lt;&lt; "\n";
+
+    if (n &gt;= 0 && original == reversed) {
+        cout &lt;&lt; "Result         : " &lt;&lt; original &lt;&lt; " is a PALINDROME number.\n";
+    } else {
+        cout &lt;&lt; "Result         : " &lt;&lt; original &lt;&lt; " is NOT a palindrome number.\n";
+    }
+
+    return 0;
+}</pre>
+            
+            <div class="mt-3 bg-slate-900/60 border border-slate-800/80 rounded-xl p-3 text-xs font-mono">
+              <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Sample Terminal Output:</span>
+              <pre class="text-slate-300 text-[11px] whitespace-pre-wrap">Input:
+12321
+
+Output:
+Original Value : 12321
+Reversed Value : 12321
+Result         : 12321 is a PALINDROME number.</pre>
+            </div>
+          </div>
+
           </div>
         </article>
       
@@ -1441,9 +1748,15 @@ flowchart TD
                 Simple & Compound Interest with Tiered Bonus Rate
               </h3>
             </div>
-            <a href="#problemsContainer" class="text-xs text-slate-400 hover:text-[#04AA6D] font-bold transition-colors">
-              ↑ Back to Top
-            </a>
+            
+            <div class="flex items-center gap-2">
+              <a href="/algorithms-and-flowcharts/problem-6-simple-and-compound-interest/" class="px-3 py-1.5 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-400 hover:text-emerald-300 text-xs font-extrabold border border-emerald-500/30 transition flex items-center gap-1">
+                <span>🚀 Dedicated Page ↗</span>
+              </a>
+              <a href="#problemsContainer" class="text-xs text-slate-400 hover:text-[#04AA6D] font-bold transition-colors">
+                ↑ Top
+              </a>
+            </div>
           </div>
 
           <!-- Problem Statement -->
@@ -1538,11 +1851,11 @@ Step 8: Stop.</pre>
               <div class="mermaid">
 flowchart TD
     Start([Start]) --> In[/Read P, R, T/]
-    In --> Valid{P>0 & R>0 & T>0 ?}
+    In --> Valid{"Is P > 0, R > 0, and T > 0 ?"}
     Valid -- No --> Err[/Print 'Invalid Inputs'/] --> Stop([Stop])
-    Valid -- Yes --> Bonus{T > 5 ?}
-    Bonus -- Yes --> Add[EffectiveRate = R + 2]
-    Bonus -- No --> Base[EffectiveRate = R]
+    Valid -- Yes --> Bonus{"Is T > 5 ?"}
+    Bonus -- Yes --> Add["EffectiveRate = R + 2"]
+    Bonus -- No --> Base["EffectiveRate = R"]
     Add --> Calc[SI = P * EffectiveRate * T / 100<br/>CI = P * (1 + EffectiveRate/100)^T - P]
     Base --> Calc
     Calc --> Out[/Print SI, CI, Rate/] --> Stop
@@ -1639,6 +1952,782 @@ flowchart TD
               <p class="text-xs sm:text-sm text-slate-200 mt-0.5 leading-relaxed">Applying conditional modifiers prior to calculation pipelines centralizes business rules and prevents code duplication.</p>
             </div>
           </div>
+
+          <!-- C++ Program Implementation -->
+          <div class="mt-6 pt-6 border-t border-slate-800">
+            <div class="flex items-center justify-between flex-wrap gap-2 mb-3">
+              <div class="flex items-center gap-2">
+                <span class="px-2.5 py-0.5 rounded-full bg-blue-500/15 text-blue-400 text-[10px] font-black uppercase font-mono border border-blue-500/30">C++ 17 / 20</span>
+                <h4 class="text-xs font-black uppercase text-slate-300 tracking-wider">C++ Program Implementation</h4>
+              </div>
+              <button onclick="copyText('cpp-6', this)" class="px-3 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold border border-slate-700 transition flex items-center gap-1.5 cursor-pointer">
+                📋 <span>Copy C++ Code</span>
+              </button>
+            </div>
+            <pre id="cpp-6" class="bg-[#090b10] border border-slate-800 rounded-xl p-4 text-xs font-mono text-cyan-300 overflow-x-auto leading-relaxed whitespace-pre-wrap">#include &lt;iostream&gt;
+#include &lt;cmath&gt;
+#include &lt;iomanip&gt;
+using namespace std;
+
+int main() {
+    double P, R, T;
+    cout &lt;&lt; "Enter Principal (P), Base Rate % (R), Time in years (T): ";
+    if (!(cin &gt;&gt; P &gt;&gt; R &gt;&gt; T) || P &lt;= 0 || R &lt;= 0 || T &lt;= 0) {
+        cout &lt;&lt; "Invalid inputs! P, R, and T must be strictly positive.\n";
+        return 1;
+    }
+
+    double effectiveRate = (T &gt; 5.0) ? (R + 2.0) : R;
+
+    double SI = (P * effectiveRate * T) / 100.0;
+    double CI = P * pow(1.0 + (effectiveRate / 100.0), T) - P;
+
+    cout &lt;&lt; fixed &lt;&lt; setprecision(2);
+    cout &lt;&lt; "\n========================================\n";
+    cout &lt;&lt; "   FINANCIAL INTEREST CALCULATION REPORT\n";
+    cout &lt;&lt; "========================================\n";
+    cout &lt;&lt; "Principal (P)        : $" &lt;&lt; P &lt;&lt; "\n";
+    cout &lt;&lt; "Base Rate            : " &lt;&lt; R &lt;&lt; "%\n";
+    cout &lt;&lt; "Tenure (T)           : " &lt;&lt; T &lt;&lt; " years\n";
+    cout &lt;&lt; "Effective Rate       : " &lt;&lt; effectiveRate &lt;&lt; "%" 
+         &lt;&lt; (T &gt; 5.0 ? " (+2% Long-Term Loyalty Bonus)" : "") &lt;&lt; "\n";
+    cout &lt;&lt; "----------------------------------------\n";
+    cout &lt;&lt; "Simple Interest (SI) : $" &lt;&lt; SI &lt;&lt; " (Total: $" &lt;&lt; (P + SI) &lt;&lt; ")\n";
+    cout &lt;&lt; "Compound Interest(CI): $" &lt;&lt; CI &lt;&lt; " (Total: $" &lt;&lt; (P + CI) &lt;&lt; ")\n";
+    cout &lt;&lt; "Compounding Edge     : +$" &lt;&lt; (CI - SI) &lt;&lt; "\n";
+    cout &lt;&lt; "========================================\n";
+    return 0;
+}</pre>
+            
+            <div class="mt-3 bg-slate-900/60 border border-slate-800/80 rounded-xl p-3 text-xs font-mono">
+              <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Sample Terminal Output:</span>
+              <pre class="text-slate-300 text-[11px] whitespace-pre-wrap">Input:
+10000 8 6
+
+Output:
+========================================
+   FINANCIAL INTEREST CALCULATION REPORT
+========================================
+Principal (P)        : id="solution-6" class="hidden space-y-6 pt-2">
+            <!-- Variable Table -->
+          <div>
+            <h4 class="text-xs font-black uppercase text-slate-400 tracking-wider mb-2">Variable Table</h4>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs sm:text-sm border-collapse">
+                <thead>
+                  <tr class="bg-slate-900/80 border-b border-slate-700 text-slate-300">
+                    <th class="p-2.5 font-bold">Variable</th>
+                    <th class="p-2.5 font-bold">Data Type</th>
+                    <th class="p-2.5 font-bold">Purpose / Role</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-800 text-slate-300 font-mono text-xs">
+                  
+                    <tr>
+                      <td class="p-2.5 font-bold text-[#04AA6D]">P</td>
+                      <td class="p-2.5 text-slate-400 font-sans">Float</td>
+                      <td class="p-2.5 font-sans">Principal investment amount</td>
+                    </tr>
+                  
+                    <tr>
+                      <td class="p-2.5 font-bold text-[#04AA6D]">R</td>
+                      <td class="p-2.5 text-slate-400 font-sans">Float</td>
+                      <td class="p-2.5 font-sans">Base annual interest rate (e.g., 7.5)</td>
+                    </tr>
+                  
+                    <tr>
+                      <td class="p-2.5 font-bold text-[#04AA6D]">T</td>
+                      <td class="p-2.5 text-slate-400 font-sans">Float</td>
+                      <td class="p-2.5 font-sans">Investment duration in years</td>
+                    </tr>
+                  
+                    <tr>
+                      <td class="p-2.5 font-bold text-[#04AA6D]">SI</td>
+                      <td class="p-2.5 text-slate-400 font-sans">Float</td>
+                      <td class="p-2.5 font-sans">Calculated simple interest</td>
+                    </tr>
+                  
+                    <tr>
+                      <td class="p-2.5 font-bold text-[#04AA6D]">CI</td>
+                      <td class="p-2.5 text-slate-400 font-sans">Float</td>
+                      <td class="p-2.5 font-sans">Calculated compound interest</td>
+                    </tr>
+                  
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Step-by-Step Algorithm -->
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <h4 class="text-xs font-black uppercase text-slate-400 tracking-wider">Step-by-Step Algorithm</h4>
+              <button onclick="copyText('algo-6', this)" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold border border-slate-700 transition cursor-pointer">
+                📋 Copy
+              </button>
+            </div>
+            <pre id="algo-6" class="bg-[#090b10] border border-slate-800 rounded-xl p-4 text-xs sm:text-sm text-slate-200 overflow-x-auto leading-relaxed whitespace-pre-wrap">Step 1: Start.
+Step 2: Read Principal P, Rate R, and Time T.
+Step 3: If P <= 0 or R <= 0 or T <= 0, Print 'Inputs must be positive' and Stop.
+Step 4: Check if T > 5:
+         If True: EffectiveRate = R + 2.0 (Bonus Tier).
+         Else: EffectiveRate = R.
+Step 5: Compute SI = (P * EffectiveRate * T) / 100.
+Step 6: Compute CI = P * ((1 + EffectiveRate / 100) ^ T) - P.
+Step 7: Print EffectiveRate, SI, CI.
+Step 8: Stop.</pre>
+          </div>
+
+          <!-- Flowchart: Mermaid Graphical Diagram -->
+          <div>
+            <h4 class="text-xs font-black uppercase text-slate-400 tracking-wider mb-2">Flowchart (Interactive Graphical Diagram)</h4>
+            <div class="bg-[#0b0d13] border border-slate-800 rounded-xl p-4 sm:p-6 overflow-x-auto flex justify-center">
+              <div class="mermaid">
+flowchart TD
+    Start([Start]) --> In[/Read P, R, T/]
+    In --> Valid{"Is P > 0, R > 0, and T > 0 ?"}
+    Valid -- No --> Err[/Print 'Invalid Inputs'/] --> Stop([Stop])
+    Valid -- Yes --> Bonus{"Is T > 5 ?"}
+    Bonus -- Yes --> Add["EffectiveRate = R + 2"]
+    Bonus -- No --> Base["EffectiveRate = R"]
+    Add --> Calc[SI = P * EffectiveRate * T / 100<br/>CI = P * (1 + EffectiveRate/100)^T - P]
+    Base --> Calc
+    Calc --> Out[/Print SI, CI, Rate/] --> Stop
+              </div>
+            </div>
+          </div>
+
+          <!-- Flowchart: Clean Visual ASCII Diagram -->
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <h4 class="text-xs font-black uppercase text-slate-400 tracking-wider">Flowchart (Visual ASCII Diagram)</h4>
+              <button onclick="copyText('ascii-6', this)" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold border border-slate-700 transition cursor-pointer">
+                📋 Copy
+              </button>
+            </div>
+            <pre id="ascii-6" class="bg-[#090b10] border border-slate-800 rounded-xl p-4 text-xs font-mono text-[#04AA6D] overflow-x-auto leading-tight">         +-----------------+
+         |     [ START ]   |
+         +-----------------+
+                  |
+                  v
+         +-----------------+
+         |   Read P, R, T  |
+         +-----------------+
+                  |
+                  v
+               /     \
+             /  T > 5? \
+             \         /
+            YES /   \ NO
+               v     v
+         +-------+ +-------+
+         |Eff=R+2| |Eff=R  |
+         +-------+ +-------+
+             \      /
+              v    v
+         +-----------------------------+
+         | SI = P * Eff * T / 100      |
+         | CI = P * (1+Eff/100)^T - P  |
+         +-----------------------------+
+                  |
+                  v
+         +-----------------+
+         |  Print SI & CI  |
+         +-----------------+
+                  |
+                  v
+         +-----------------+
+         |     [ STOP ]    |
+         +-----------------+</pre>
+          </div>
+
+          <!-- Dry Run Trace Table -->
+          <div>
+            <h4 class="text-xs font-black uppercase text-slate-400 tracking-wider mb-2">Dry-Run Trace Table</h4>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs sm:text-sm border-collapse">
+                <thead>
+                  <tr class="bg-slate-900/80 border-b border-slate-700 text-slate-300">
+                    <th class="p-2.5 font-bold">Execution Step</th>
+                    <th class="p-2.5 font-bold">Var State 1</th>
+                    <th class="p-2.5 font-bold">Var State 2</th>
+                    <th class="p-2.5 font-bold">Evaluation</th>
+                    <th class="p-2.5 font-bold">Output / Result</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-800 text-slate-300 text-xs">
+                  
+                    <tr>
+                      <td class="p-2.5 font-bold text-white">Case 1</td>
+                      <td class="p-2.5 font-mono text-slate-300">P = 10,000</td>
+                      <td class="p-2.5 font-mono text-slate-300">R = 8%</td>
+                      <td class="p-2.5 text-slate-400">T > 5 (False) -> Rate = 8%</td>
+                      <td class="p-2.5 font-bold text-[#04AA6D]">CI = 10000*(1.08)^3 - 10000 = 2,597.12</td>
+                    </tr>
+                  
+                    <tr>
+                      <td class="p-2.5 font-bold text-white">Case 2</td>
+                      <td class="p-2.5 font-mono text-slate-300">P = 10,000</td>
+                      <td class="p-2.5 font-mono text-slate-300">R = 8%</td>
+                      <td class="p-2.5 text-slate-400">T > 5 (True) -> Rate = 10%</td>
+                      <td class="p-2.5 font-bold text-[#04AA6D]">CI = 10000*(1.10)^6 - 10000 = 7,715.61</td>
+                    </tr>
+                  
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Key Takeaway Callout -->
+          <div class="bg-[#04AA6D]/10 border border-[#04AA6D]/30 rounded-xl p-4 flex items-start gap-3">
+            <span class="text-xl">💡</span>
+            <div>
+              <div class="text-xs font-bold text-[#04AA6D] uppercase tracking-wide">Developer Key Takeaway</div>
+              <p class="text-xs sm:text-sm text-slate-200 mt-0.5 leading-relaxed">Applying conditional modifiers prior to calculation pipelines centralizes business rules and prevents code duplication.</p>
+            </div>
+          </div>0000.00
+Base Rate            : 8.00%
+Tenure (T)           : 6.00 years
+Effective Rate       : 10.00% (+2% Long-Term Loyalty Bonus)
+----------------------------------------
+Simple Interest (SI) : $6000.00 (Total: id="solution-6" class="hidden space-y-6 pt-2">
+            <!-- Variable Table -->
+          <div>
+            <h4 class="text-xs font-black uppercase text-slate-400 tracking-wider mb-2">Variable Table</h4>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs sm:text-sm border-collapse">
+                <thead>
+                  <tr class="bg-slate-900/80 border-b border-slate-700 text-slate-300">
+                    <th class="p-2.5 font-bold">Variable</th>
+                    <th class="p-2.5 font-bold">Data Type</th>
+                    <th class="p-2.5 font-bold">Purpose / Role</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-800 text-slate-300 font-mono text-xs">
+                  
+                    <tr>
+                      <td class="p-2.5 font-bold text-[#04AA6D]">P</td>
+                      <td class="p-2.5 text-slate-400 font-sans">Float</td>
+                      <td class="p-2.5 font-sans">Principal investment amount</td>
+                    </tr>
+                  
+                    <tr>
+                      <td class="p-2.5 font-bold text-[#04AA6D]">R</td>
+                      <td class="p-2.5 text-slate-400 font-sans">Float</td>
+                      <td class="p-2.5 font-sans">Base annual interest rate (e.g., 7.5)</td>
+                    </tr>
+                  
+                    <tr>
+                      <td class="p-2.5 font-bold text-[#04AA6D]">T</td>
+                      <td class="p-2.5 text-slate-400 font-sans">Float</td>
+                      <td class="p-2.5 font-sans">Investment duration in years</td>
+                    </tr>
+                  
+                    <tr>
+                      <td class="p-2.5 font-bold text-[#04AA6D]">SI</td>
+                      <td class="p-2.5 text-slate-400 font-sans">Float</td>
+                      <td class="p-2.5 font-sans">Calculated simple interest</td>
+                    </tr>
+                  
+                    <tr>
+                      <td class="p-2.5 font-bold text-[#04AA6D]">CI</td>
+                      <td class="p-2.5 text-slate-400 font-sans">Float</td>
+                      <td class="p-2.5 font-sans">Calculated compound interest</td>
+                    </tr>
+                  
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Step-by-Step Algorithm -->
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <h4 class="text-xs font-black uppercase text-slate-400 tracking-wider">Step-by-Step Algorithm</h4>
+              <button onclick="copyText('algo-6', this)" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold border border-slate-700 transition cursor-pointer">
+                📋 Copy
+              </button>
+            </div>
+            <pre id="algo-6" class="bg-[#090b10] border border-slate-800 rounded-xl p-4 text-xs sm:text-sm text-slate-200 overflow-x-auto leading-relaxed whitespace-pre-wrap">Step 1: Start.
+Step 2: Read Principal P, Rate R, and Time T.
+Step 3: If P <= 0 or R <= 0 or T <= 0, Print 'Inputs must be positive' and Stop.
+Step 4: Check if T > 5:
+         If True: EffectiveRate = R + 2.0 (Bonus Tier).
+         Else: EffectiveRate = R.
+Step 5: Compute SI = (P * EffectiveRate * T) / 100.
+Step 6: Compute CI = P * ((1 + EffectiveRate / 100) ^ T) - P.
+Step 7: Print EffectiveRate, SI, CI.
+Step 8: Stop.</pre>
+          </div>
+
+          <!-- Flowchart: Mermaid Graphical Diagram -->
+          <div>
+            <h4 class="text-xs font-black uppercase text-slate-400 tracking-wider mb-2">Flowchart (Interactive Graphical Diagram)</h4>
+            <div class="bg-[#0b0d13] border border-slate-800 rounded-xl p-4 sm:p-6 overflow-x-auto flex justify-center">
+              <div class="mermaid">
+flowchart TD
+    Start([Start]) --> In[/Read P, R, T/]
+    In --> Valid{"Is P > 0, R > 0, and T > 0 ?"}
+    Valid -- No --> Err[/Print 'Invalid Inputs'/] --> Stop([Stop])
+    Valid -- Yes --> Bonus{"Is T > 5 ?"}
+    Bonus -- Yes --> Add["EffectiveRate = R + 2"]
+    Bonus -- No --> Base["EffectiveRate = R"]
+    Add --> Calc[SI = P * EffectiveRate * T / 100<br/>CI = P * (1 + EffectiveRate/100)^T - P]
+    Base --> Calc
+    Calc --> Out[/Print SI, CI, Rate/] --> Stop
+              </div>
+            </div>
+          </div>
+
+          <!-- Flowchart: Clean Visual ASCII Diagram -->
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <h4 class="text-xs font-black uppercase text-slate-400 tracking-wider">Flowchart (Visual ASCII Diagram)</h4>
+              <button onclick="copyText('ascii-6', this)" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold border border-slate-700 transition cursor-pointer">
+                📋 Copy
+              </button>
+            </div>
+            <pre id="ascii-6" class="bg-[#090b10] border border-slate-800 rounded-xl p-4 text-xs font-mono text-[#04AA6D] overflow-x-auto leading-tight">         +-----------------+
+         |     [ START ]   |
+         +-----------------+
+                  |
+                  v
+         +-----------------+
+         |   Read P, R, T  |
+         +-----------------+
+                  |
+                  v
+               /     \
+             /  T > 5? \
+             \         /
+            YES /   \ NO
+               v     v
+         +-------+ +-------+
+         |Eff=R+2| |Eff=R  |
+         +-------+ +-------+
+             \      /
+              v    v
+         +-----------------------------+
+         | SI = P * Eff * T / 100      |
+         | CI = P * (1+Eff/100)^T - P  |
+         +-----------------------------+
+                  |
+                  v
+         +-----------------+
+         |  Print SI & CI  |
+         +-----------------+
+                  |
+                  v
+         +-----------------+
+         |     [ STOP ]    |
+         +-----------------+</pre>
+          </div>
+
+          <!-- Dry Run Trace Table -->
+          <div>
+            <h4 class="text-xs font-black uppercase text-slate-400 tracking-wider mb-2">Dry-Run Trace Table</h4>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs sm:text-sm border-collapse">
+                <thead>
+                  <tr class="bg-slate-900/80 border-b border-slate-700 text-slate-300">
+                    <th class="p-2.5 font-bold">Execution Step</th>
+                    <th class="p-2.5 font-bold">Var State 1</th>
+                    <th class="p-2.5 font-bold">Var State 2</th>
+                    <th class="p-2.5 font-bold">Evaluation</th>
+                    <th class="p-2.5 font-bold">Output / Result</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-800 text-slate-300 text-xs">
+                  
+                    <tr>
+                      <td class="p-2.5 font-bold text-white">Case 1</td>
+                      <td class="p-2.5 font-mono text-slate-300">P = 10,000</td>
+                      <td class="p-2.5 font-mono text-slate-300">R = 8%</td>
+                      <td class="p-2.5 text-slate-400">T > 5 (False) -> Rate = 8%</td>
+                      <td class="p-2.5 font-bold text-[#04AA6D]">CI = 10000*(1.08)^3 - 10000 = 2,597.12</td>
+                    </tr>
+                  
+                    <tr>
+                      <td class="p-2.5 font-bold text-white">Case 2</td>
+                      <td class="p-2.5 font-mono text-slate-300">P = 10,000</td>
+                      <td class="p-2.5 font-mono text-slate-300">R = 8%</td>
+                      <td class="p-2.5 text-slate-400">T > 5 (True) -> Rate = 10%</td>
+                      <td class="p-2.5 font-bold text-[#04AA6D]">CI = 10000*(1.10)^6 - 10000 = 7,715.61</td>
+                    </tr>
+                  
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Key Takeaway Callout -->
+          <div class="bg-[#04AA6D]/10 border border-[#04AA6D]/30 rounded-xl p-4 flex items-start gap-3">
+            <span class="text-xl">💡</span>
+            <div>
+              <div class="text-xs font-bold text-[#04AA6D] uppercase tracking-wide">Developer Key Takeaway</div>
+              <p class="text-xs sm:text-sm text-slate-200 mt-0.5 leading-relaxed">Applying conditional modifiers prior to calculation pipelines centralizes business rules and prevents code duplication.</p>
+            </div>
+          </div>6000.00)
+Compound Interest(CI): $7715.61 (Total: id="solution-6" class="hidden space-y-6 pt-2">
+            <!-- Variable Table -->
+          <div>
+            <h4 class="text-xs font-black uppercase text-slate-400 tracking-wider mb-2">Variable Table</h4>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs sm:text-sm border-collapse">
+                <thead>
+                  <tr class="bg-slate-900/80 border-b border-slate-700 text-slate-300">
+                    <th class="p-2.5 font-bold">Variable</th>
+                    <th class="p-2.5 font-bold">Data Type</th>
+                    <th class="p-2.5 font-bold">Purpose / Role</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-800 text-slate-300 font-mono text-xs">
+                  
+                    <tr>
+                      <td class="p-2.5 font-bold text-[#04AA6D]">P</td>
+                      <td class="p-2.5 text-slate-400 font-sans">Float</td>
+                      <td class="p-2.5 font-sans">Principal investment amount</td>
+                    </tr>
+                  
+                    <tr>
+                      <td class="p-2.5 font-bold text-[#04AA6D]">R</td>
+                      <td class="p-2.5 text-slate-400 font-sans">Float</td>
+                      <td class="p-2.5 font-sans">Base annual interest rate (e.g., 7.5)</td>
+                    </tr>
+                  
+                    <tr>
+                      <td class="p-2.5 font-bold text-[#04AA6D]">T</td>
+                      <td class="p-2.5 text-slate-400 font-sans">Float</td>
+                      <td class="p-2.5 font-sans">Investment duration in years</td>
+                    </tr>
+                  
+                    <tr>
+                      <td class="p-2.5 font-bold text-[#04AA6D]">SI</td>
+                      <td class="p-2.5 text-slate-400 font-sans">Float</td>
+                      <td class="p-2.5 font-sans">Calculated simple interest</td>
+                    </tr>
+                  
+                    <tr>
+                      <td class="p-2.5 font-bold text-[#04AA6D]">CI</td>
+                      <td class="p-2.5 text-slate-400 font-sans">Float</td>
+                      <td class="p-2.5 font-sans">Calculated compound interest</td>
+                    </tr>
+                  
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Step-by-Step Algorithm -->
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <h4 class="text-xs font-black uppercase text-slate-400 tracking-wider">Step-by-Step Algorithm</h4>
+              <button onclick="copyText('algo-6', this)" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold border border-slate-700 transition cursor-pointer">
+                📋 Copy
+              </button>
+            </div>
+            <pre id="algo-6" class="bg-[#090b10] border border-slate-800 rounded-xl p-4 text-xs sm:text-sm text-slate-200 overflow-x-auto leading-relaxed whitespace-pre-wrap">Step 1: Start.
+Step 2: Read Principal P, Rate R, and Time T.
+Step 3: If P <= 0 or R <= 0 or T <= 0, Print 'Inputs must be positive' and Stop.
+Step 4: Check if T > 5:
+         If True: EffectiveRate = R + 2.0 (Bonus Tier).
+         Else: EffectiveRate = R.
+Step 5: Compute SI = (P * EffectiveRate * T) / 100.
+Step 6: Compute CI = P * ((1 + EffectiveRate / 100) ^ T) - P.
+Step 7: Print EffectiveRate, SI, CI.
+Step 8: Stop.</pre>
+          </div>
+
+          <!-- Flowchart: Mermaid Graphical Diagram -->
+          <div>
+            <h4 class="text-xs font-black uppercase text-slate-400 tracking-wider mb-2">Flowchart (Interactive Graphical Diagram)</h4>
+            <div class="bg-[#0b0d13] border border-slate-800 rounded-xl p-4 sm:p-6 overflow-x-auto flex justify-center">
+              <div class="mermaid">
+flowchart TD
+    Start([Start]) --> In[/Read P, R, T/]
+    In --> Valid{"Is P > 0, R > 0, and T > 0 ?"}
+    Valid -- No --> Err[/Print 'Invalid Inputs'/] --> Stop([Stop])
+    Valid -- Yes --> Bonus{"Is T > 5 ?"}
+    Bonus -- Yes --> Add["EffectiveRate = R + 2"]
+    Bonus -- No --> Base["EffectiveRate = R"]
+    Add --> Calc[SI = P * EffectiveRate * T / 100<br/>CI = P * (1 + EffectiveRate/100)^T - P]
+    Base --> Calc
+    Calc --> Out[/Print SI, CI, Rate/] --> Stop
+              </div>
+            </div>
+          </div>
+
+          <!-- Flowchart: Clean Visual ASCII Diagram -->
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <h4 class="text-xs font-black uppercase text-slate-400 tracking-wider">Flowchart (Visual ASCII Diagram)</h4>
+              <button onclick="copyText('ascii-6', this)" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold border border-slate-700 transition cursor-pointer">
+                📋 Copy
+              </button>
+            </div>
+            <pre id="ascii-6" class="bg-[#090b10] border border-slate-800 rounded-xl p-4 text-xs font-mono text-[#04AA6D] overflow-x-auto leading-tight">         +-----------------+
+         |     [ START ]   |
+         +-----------------+
+                  |
+                  v
+         +-----------------+
+         |   Read P, R, T  |
+         +-----------------+
+                  |
+                  v
+               /     \
+             /  T > 5? \
+             \         /
+            YES /   \ NO
+               v     v
+         +-------+ +-------+
+         |Eff=R+2| |Eff=R  |
+         +-------+ +-------+
+             \      /
+              v    v
+         +-----------------------------+
+         | SI = P * Eff * T / 100      |
+         | CI = P * (1+Eff/100)^T - P  |
+         +-----------------------------+
+                  |
+                  v
+         +-----------------+
+         |  Print SI & CI  |
+         +-----------------+
+                  |
+                  v
+         +-----------------+
+         |     [ STOP ]    |
+         +-----------------+</pre>
+          </div>
+
+          <!-- Dry Run Trace Table -->
+          <div>
+            <h4 class="text-xs font-black uppercase text-slate-400 tracking-wider mb-2">Dry-Run Trace Table</h4>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs sm:text-sm border-collapse">
+                <thead>
+                  <tr class="bg-slate-900/80 border-b border-slate-700 text-slate-300">
+                    <th class="p-2.5 font-bold">Execution Step</th>
+                    <th class="p-2.5 font-bold">Var State 1</th>
+                    <th class="p-2.5 font-bold">Var State 2</th>
+                    <th class="p-2.5 font-bold">Evaluation</th>
+                    <th class="p-2.5 font-bold">Output / Result</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-800 text-slate-300 text-xs">
+                  
+                    <tr>
+                      <td class="p-2.5 font-bold text-white">Case 1</td>
+                      <td class="p-2.5 font-mono text-slate-300">P = 10,000</td>
+                      <td class="p-2.5 font-mono text-slate-300">R = 8%</td>
+                      <td class="p-2.5 text-slate-400">T > 5 (False) -> Rate = 8%</td>
+                      <td class="p-2.5 font-bold text-[#04AA6D]">CI = 10000*(1.08)^3 - 10000 = 2,597.12</td>
+                    </tr>
+                  
+                    <tr>
+                      <td class="p-2.5 font-bold text-white">Case 2</td>
+                      <td class="p-2.5 font-mono text-slate-300">P = 10,000</td>
+                      <td class="p-2.5 font-mono text-slate-300">R = 8%</td>
+                      <td class="p-2.5 text-slate-400">T > 5 (True) -> Rate = 10%</td>
+                      <td class="p-2.5 font-bold text-[#04AA6D]">CI = 10000*(1.10)^6 - 10000 = 7,715.61</td>
+                    </tr>
+                  
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Key Takeaway Callout -->
+          <div class="bg-[#04AA6D]/10 border border-[#04AA6D]/30 rounded-xl p-4 flex items-start gap-3">
+            <span class="text-xl">💡</span>
+            <div>
+              <div class="text-xs font-bold text-[#04AA6D] uppercase tracking-wide">Developer Key Takeaway</div>
+              <p class="text-xs sm:text-sm text-slate-200 mt-0.5 leading-relaxed">Applying conditional modifiers prior to calculation pipelines centralizes business rules and prevents code duplication.</p>
+            </div>
+          </div>7715.61)
+Compounding Edge     : +id="solution-6" class="hidden space-y-6 pt-2">
+            <!-- Variable Table -->
+          <div>
+            <h4 class="text-xs font-black uppercase text-slate-400 tracking-wider mb-2">Variable Table</h4>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs sm:text-sm border-collapse">
+                <thead>
+                  <tr class="bg-slate-900/80 border-b border-slate-700 text-slate-300">
+                    <th class="p-2.5 font-bold">Variable</th>
+                    <th class="p-2.5 font-bold">Data Type</th>
+                    <th class="p-2.5 font-bold">Purpose / Role</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-800 text-slate-300 font-mono text-xs">
+                  
+                    <tr>
+                      <td class="p-2.5 font-bold text-[#04AA6D]">P</td>
+                      <td class="p-2.5 text-slate-400 font-sans">Float</td>
+                      <td class="p-2.5 font-sans">Principal investment amount</td>
+                    </tr>
+                  
+                    <tr>
+                      <td class="p-2.5 font-bold text-[#04AA6D]">R</td>
+                      <td class="p-2.5 text-slate-400 font-sans">Float</td>
+                      <td class="p-2.5 font-sans">Base annual interest rate (e.g., 7.5)</td>
+                    </tr>
+                  
+                    <tr>
+                      <td class="p-2.5 font-bold text-[#04AA6D]">T</td>
+                      <td class="p-2.5 text-slate-400 font-sans">Float</td>
+                      <td class="p-2.5 font-sans">Investment duration in years</td>
+                    </tr>
+                  
+                    <tr>
+                      <td class="p-2.5 font-bold text-[#04AA6D]">SI</td>
+                      <td class="p-2.5 text-slate-400 font-sans">Float</td>
+                      <td class="p-2.5 font-sans">Calculated simple interest</td>
+                    </tr>
+                  
+                    <tr>
+                      <td class="p-2.5 font-bold text-[#04AA6D]">CI</td>
+                      <td class="p-2.5 text-slate-400 font-sans">Float</td>
+                      <td class="p-2.5 font-sans">Calculated compound interest</td>
+                    </tr>
+                  
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Step-by-Step Algorithm -->
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <h4 class="text-xs font-black uppercase text-slate-400 tracking-wider">Step-by-Step Algorithm</h4>
+              <button onclick="copyText('algo-6', this)" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold border border-slate-700 transition cursor-pointer">
+                📋 Copy
+              </button>
+            </div>
+            <pre id="algo-6" class="bg-[#090b10] border border-slate-800 rounded-xl p-4 text-xs sm:text-sm text-slate-200 overflow-x-auto leading-relaxed whitespace-pre-wrap">Step 1: Start.
+Step 2: Read Principal P, Rate R, and Time T.
+Step 3: If P <= 0 or R <= 0 or T <= 0, Print 'Inputs must be positive' and Stop.
+Step 4: Check if T > 5:
+         If True: EffectiveRate = R + 2.0 (Bonus Tier).
+         Else: EffectiveRate = R.
+Step 5: Compute SI = (P * EffectiveRate * T) / 100.
+Step 6: Compute CI = P * ((1 + EffectiveRate / 100) ^ T) - P.
+Step 7: Print EffectiveRate, SI, CI.
+Step 8: Stop.</pre>
+          </div>
+
+          <!-- Flowchart: Mermaid Graphical Diagram -->
+          <div>
+            <h4 class="text-xs font-black uppercase text-slate-400 tracking-wider mb-2">Flowchart (Interactive Graphical Diagram)</h4>
+            <div class="bg-[#0b0d13] border border-slate-800 rounded-xl p-4 sm:p-6 overflow-x-auto flex justify-center">
+              <div class="mermaid">
+flowchart TD
+    Start([Start]) --> In[/Read P, R, T/]
+    In --> Valid{"Is P > 0, R > 0, and T > 0 ?"}
+    Valid -- No --> Err[/Print 'Invalid Inputs'/] --> Stop([Stop])
+    Valid -- Yes --> Bonus{"Is T > 5 ?"}
+    Bonus -- Yes --> Add["EffectiveRate = R + 2"]
+    Bonus -- No --> Base["EffectiveRate = R"]
+    Add --> Calc[SI = P * EffectiveRate * T / 100<br/>CI = P * (1 + EffectiveRate/100)^T - P]
+    Base --> Calc
+    Calc --> Out[/Print SI, CI, Rate/] --> Stop
+              </div>
+            </div>
+          </div>
+
+          <!-- Flowchart: Clean Visual ASCII Diagram -->
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <h4 class="text-xs font-black uppercase text-slate-400 tracking-wider">Flowchart (Visual ASCII Diagram)</h4>
+              <button onclick="copyText('ascii-6', this)" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold border border-slate-700 transition cursor-pointer">
+                📋 Copy
+              </button>
+            </div>
+            <pre id="ascii-6" class="bg-[#090b10] border border-slate-800 rounded-xl p-4 text-xs font-mono text-[#04AA6D] overflow-x-auto leading-tight">         +-----------------+
+         |     [ START ]   |
+         +-----------------+
+                  |
+                  v
+         +-----------------+
+         |   Read P, R, T  |
+         +-----------------+
+                  |
+                  v
+               /     \
+             /  T > 5? \
+             \         /
+            YES /   \ NO
+               v     v
+         +-------+ +-------+
+         |Eff=R+2| |Eff=R  |
+         +-------+ +-------+
+             \      /
+              v    v
+         +-----------------------------+
+         | SI = P * Eff * T / 100      |
+         | CI = P * (1+Eff/100)^T - P  |
+         +-----------------------------+
+                  |
+                  v
+         +-----------------+
+         |  Print SI & CI  |
+         +-----------------+
+                  |
+                  v
+         +-----------------+
+         |     [ STOP ]    |
+         +-----------------+</pre>
+          </div>
+
+          <!-- Dry Run Trace Table -->
+          <div>
+            <h4 class="text-xs font-black uppercase text-slate-400 tracking-wider mb-2">Dry-Run Trace Table</h4>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs sm:text-sm border-collapse">
+                <thead>
+                  <tr class="bg-slate-900/80 border-b border-slate-700 text-slate-300">
+                    <th class="p-2.5 font-bold">Execution Step</th>
+                    <th class="p-2.5 font-bold">Var State 1</th>
+                    <th class="p-2.5 font-bold">Var State 2</th>
+                    <th class="p-2.5 font-bold">Evaluation</th>
+                    <th class="p-2.5 font-bold">Output / Result</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-800 text-slate-300 text-xs">
+                  
+                    <tr>
+                      <td class="p-2.5 font-bold text-white">Case 1</td>
+                      <td class="p-2.5 font-mono text-slate-300">P = 10,000</td>
+                      <td class="p-2.5 font-mono text-slate-300">R = 8%</td>
+                      <td class="p-2.5 text-slate-400">T > 5 (False) -> Rate = 8%</td>
+                      <td class="p-2.5 font-bold text-[#04AA6D]">CI = 10000*(1.08)^3 - 10000 = 2,597.12</td>
+                    </tr>
+                  
+                    <tr>
+                      <td class="p-2.5 font-bold text-white">Case 2</td>
+                      <td class="p-2.5 font-mono text-slate-300">P = 10,000</td>
+                      <td class="p-2.5 font-mono text-slate-300">R = 8%</td>
+                      <td class="p-2.5 text-slate-400">T > 5 (True) -> Rate = 10%</td>
+                      <td class="p-2.5 font-bold text-[#04AA6D]">CI = 10000*(1.10)^6 - 10000 = 7,715.61</td>
+                    </tr>
+                  
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Key Takeaway Callout -->
+          <div class="bg-[#04AA6D]/10 border border-[#04AA6D]/30 rounded-xl p-4 flex items-start gap-3">
+            <span class="text-xl">💡</span>
+            <div>
+              <div class="text-xs font-bold text-[#04AA6D] uppercase tracking-wide">Developer Key Takeaway</div>
+              <p class="text-xs sm:text-sm text-slate-200 mt-0.5 leading-relaxed">Applying conditional modifiers prior to calculation pipelines centralizes business rules and prevents code duplication.</p>
+            </div>
+          </div>715.61
+========================================</pre>
+            </div>
+          </div>
+
           </div>
         </article>
       
@@ -1654,9 +2743,15 @@ flowchart TD
                 Find Real & Complex Roots of a Quadratic Equation
               </h3>
             </div>
-            <a href="#problemsContainer" class="text-xs text-slate-400 hover:text-[#04AA6D] font-bold transition-colors">
-              ↑ Back to Top
-            </a>
+            
+            <div class="flex items-center gap-2">
+              <a href="/algorithms-and-flowcharts/problem-7-quadratic-equation-roots/" class="px-3 py-1.5 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-400 hover:text-emerald-300 text-xs font-extrabold border border-emerald-500/30 transition flex items-center gap-1">
+                <span>🚀 Dedicated Page ↗</span>
+              </a>
+              <a href="#problemsContainer" class="text-xs text-slate-400 hover:text-[#04AA6D] font-bold transition-colors">
+                ↑ Top
+              </a>
+            </div>
           </div>
 
           <!-- Problem Statement -->
@@ -1757,6 +2852,126 @@ flowchart TD
             </div>
           </div>
 
+          <!-- Flowchart: ANSI Standard High-Resolution Vector Diagram -->
+          <div>
+            <h4 class="text-xs font-black uppercase text-slate-400 tracking-wider mb-2">Flowchart (ANSI Standard Visual SVG Diagram)</h4>
+            <div class="bg-[#080b11] border border-slate-800 rounded-xl p-3 sm:p-6 overflow-x-auto flex justify-center">
+              <svg viewBox="0 0 760 980" class="w-full max-w-[660px] h-auto text-white select-none font-sans" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <linearGradient id="grad-pill-7" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#04AA6D" />
+                    <stop offset="100%" stop-color="#02734a" />
+                  </linearGradient>
+                  <linearGradient id="grad-card-7" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#141c2e" />
+                    <stop offset="100%" stop-color="#0c1322" />
+                  </linearGradient>
+                  <linearGradient id="grad-cyan-7" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#0284c7" />
+                    <stop offset="100%" stop-color="#0369a1" />
+                  </linearGradient>
+                  <filter id="glow-7" x="-20%" y="-20%" width="140%" height="140%">
+                    <feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#04AA6D" flood-opacity="0.35"/>
+                  </filter>
+                  <marker id="arr-7" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+                    <polygon points="0 1, 8 4.5, 0 8" fill="#38bdf8" />
+                  </marker>
+                  <marker id="arr-green-7" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+                    <polygon points="0 1, 8 4.5, 0 8" fill="#04AA6D" />
+                  </marker>
+                  <marker id="arr-red-7" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+                    <polygon points="0 1, 8 4.5, 0 8" fill="#ef4444" />
+                  </marker>
+                </defs>
+
+                <!-- START -->
+                <rect x="290" y="20" width="180" height="46" rx="23" fill="url(#grad-pill-7)" stroke="#34d399" stroke-width="2" filter="url(#glow-7)" />
+                <text x="380" y="49" text-anchor="middle" font-size="14" font-weight="900" fill="#ffffff" letter-spacing="1.5">START</text>
+
+                <path d="M 380 66 L 380 95" stroke="#38bdf8" stroke-width="2.5" marker-end="url(#arr-7)" />
+
+                <!-- INPUT a, b, c -->
+                <polygon points="260,100 500,100 460,150 220,150" fill="url(#grad-cyan-7)" stroke="#38bdf8" stroke-width="2" />
+                <text x="360" y="127" text-anchor="middle" font-size="13" font-weight="800" fill="#ffffff">INPUT: Read a, b, c</text>
+                <text x="360" y="142" text-anchor="middle" font-size="10" font-weight="600" fill="#bae6fd">Quadratic: ax² + bx + c = 0</text>
+
+                <path d="M 360 150 L 360 185" stroke="#38bdf8" stroke-width="2.5" marker-end="url(#arr-7)" />
+
+                <!-- CHECK a == 0 -->
+                <polygon points="360,190 480,240 360,290 240,240" fill="#1e293b" stroke="#f59e0b" stroke-width="2" />
+                <text x="360" y="236" text-anchor="middle" font-size="13" font-weight="800" fill="#fef3c7">Is a == 0 ?</text>
+                <text x="360" y="252" text-anchor="middle" font-size="10" font-weight="600" fill="#fde68a">(Linear Degeneracy)</text>
+
+                <!-- a == 0 YES -->
+                <path d="M 480 240 L 590 240 L 590 290" stroke="#ef4444" stroke-width="2" marker-end="url(#arr-red-7)" />
+                <text x="520" y="232" font-size="11" font-weight="800" fill="#fca5a5">YES</text>
+                <polygon points="510,295 670,295 640,345 480,345" fill="#450a0a" stroke="#ef4444" stroke-width="1.5" />
+                <text x="575" y="322" text-anchor="middle" font-size="11" font-weight="700" fill="#fecaca">Print 'Not Quadratic'</text>
+                <path d="M 575 345 L 575 920 L 465 920" stroke="#ef4444" stroke-width="2" stroke-dasharray="4,4" marker-end="url(#arr-red-7)" />
+
+                <!-- a == 0 NO -->
+                <path d="M 360 290 L 360 335" stroke="#04AA6D" stroke-width="2.5" marker-end="url(#arr-green-7)" />
+                <text x="372" y="312" font-size="11" font-weight="800" fill="#6ee7b7">NO</text>
+
+                <!-- COMPUTE DISCRIMINANT D -->
+                <rect x="230" y="340" width="260" height="55" rx="10" fill="url(#grad-card-7)" stroke="#38bdf8" stroke-width="2" />
+                <text x="360" y="364" text-anchor="middle" font-size="13" font-weight="800" fill="#ffffff">D = (b × b) - (4 × a × c)</text>
+                <text x="360" y="382" text-anchor="middle" font-size="10" font-weight="600" fill="#94a3b8">Calculate Discriminant</text>
+
+                <path d="M 360 395 L 360 435" stroke="#38bdf8" stroke-width="2.5" marker-end="url(#arr-7)" />
+
+                <!-- CHECK D > 0 -->
+                <polygon points="360,440 480,490 360,540 240,490" fill="#1e293b" stroke="#38bdf8" stroke-width="2" />
+                <text x="360" y="486" text-anchor="middle" font-size="13" font-weight="800" fill="#ffffff">Is D &gt; 0 ?</text>
+                <text x="360" y="502" text-anchor="middle" font-size="10" font-weight="600" fill="#7dd3fc">(2 Real Distinct Roots)</text>
+
+                <!-- D > 0 YES -->
+                <path d="M 240 490 L 120 490 L 120 560" stroke="#04AA6D" stroke-width="2" marker-end="url(#arr-green-7)" />
+                <text x="170" y="482" font-size="11" font-weight="800" fill="#6ee7b7">YES</text>
+
+                <polygon points="40,565 200,565 170,635 10,635" fill="#064e3b" stroke="#10b981" stroke-width="2" />
+                <text x="105" y="592" text-anchor="middle" font-size="11" font-weight="800" fill="#a7f3d0">root1 = (-b+√D)/(2a)</text>
+                <text x="105" y="608" text-anchor="middle" font-size="11" font-weight="800" fill="#a7f3d0">root2 = (-b-√D)/(2a)</text>
+                <text x="105" y="624" text-anchor="middle" font-size="9" font-weight="600" fill="#6ee7b7">Print Distinct Real Roots</text>
+                <path d="M 105 635 L 105 920 L 295 920" stroke="#10b981" stroke-width="2" marker-end="url(#arr-green-7)" />
+
+                <!-- D > 0 NO -->
+                <path d="M 360 540 L 360 595" stroke="#38bdf8" stroke-width="2.5" marker-end="url(#arr-7)" />
+                <text x="372" y="565" font-size="11" font-weight="800" fill="#94a3b8">NO</text>
+
+                <!-- CHECK D == 0 -->
+                <polygon points="360,600 480,650 360,700 240,650" fill="#1e293b" stroke="#c084fc" stroke-width="2" />
+                <text x="360" y="646" text-anchor="middle" font-size="13" font-weight="800" fill="#f3e8ff">Is D == 0 ?</text>
+                <text x="360" y="662" text-anchor="middle" font-size="10" font-weight="600" fill="#e9d5ff">(Equal Real Roots)</text>
+
+                <!-- D == 0 YES -->
+                <path d="M 480 650 L 590 650 L 590 720" stroke="#04AA6D" stroke-width="2" marker-end="url(#arr-green-7)" />
+                <text x="520" y="642" font-size="11" font-weight="800" fill="#6ee7b7">YES</text>
+
+                <polygon points="510,725 670,725 640,785 480,785" fill="#1e1b4b" stroke="#818cf8" stroke-width="2" />
+                <text x="575" y="752" text-anchor="middle" font-size="11" font-weight="800" fill="#c7d2fe">root = -b / (2a)</text>
+                <text x="575" y="770" text-anchor="middle" font-size="9" font-weight="600" fill="#a5b4fc">Print Real &amp; Equal Roots</text>
+                <path d="M 575 785 L 575 920 L 465 920" stroke="#818cf8" stroke-width="2" marker-end="url(#arr-7)" />
+
+                <!-- D == 0 NO (Complex D < 0) -->
+                <path d="M 360 700 L 360 745" stroke="#ec4899" stroke-width="2.5" marker-end="url(#arr-7)" />
+                <text x="372" y="725" font-size="11" font-weight="800" fill="#f472b6">NO (D &lt; 0)</text>
+
+                <polygon points="270,750 450,750 420,830 240,830" fill="#831843" stroke="#f43f5e" stroke-width="2" />
+                <text x="345" y="775" text-anchor="middle" font-size="11" font-weight="800" fill="#ffe4e6">real = -b / (2a)</text>
+                <text x="345" y="793" text-anchor="middle" font-size="11" font-weight="800" fill="#ffe4e6">imag = √(-D) / (2a)</text>
+                <text x="345" y="812" text-anchor="middle" font-size="9" font-weight="600" fill="#fbcfe8">Print 'real ± imag · i'</text>
+
+                <path d="M 345 830 L 345 895" stroke="#f43f5e" stroke-width="2.5" marker-end="url(#arr-7)" />
+
+                <!-- STOP -->
+                <rect x="290" y="900" width="180" height="46" rx="23" fill="url(#grad-pill-7)" stroke="#34d399" stroke-width="2" filter="url(#glow-7)" />
+                <text x="380" y="929" text-anchor="middle" font-size="14" font-weight="900" fill="#ffffff" letter-spacing="1.5">STOP</text>
+              </svg>
+            </div>
+          </div>
+
+
           <!-- Flowchart: Clean Visual ASCII Diagram -->
           <div>
             <div class="flex items-center justify-between mb-2">
@@ -1853,6 +3068,85 @@ flowchart TD
               <p class="text-xs sm:text-sm text-slate-200 mt-0.5 leading-relaxed">Handling D < 0 prevents invalid mathematical domains like Math.sqrt(-16) from crashing production software with NaN errors.</p>
             </div>
           </div>
+
+          <!-- C++ Program Implementation -->
+          <div class="mt-6 pt-6 border-t border-slate-800">
+            <div class="flex items-center justify-between flex-wrap gap-2 mb-3">
+              <div class="flex items-center gap-2">
+                <span class="px-2.5 py-0.5 rounded-full bg-blue-500/15 text-blue-400 text-[10px] font-black uppercase font-mono border border-blue-500/30">C++ 17 / 20</span>
+                <h4 class="text-xs font-black uppercase text-slate-300 tracking-wider">C++ Program Implementation</h4>
+              </div>
+              <button onclick="copyText('cpp-7', this)" class="px-3 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold border border-slate-700 transition flex items-center gap-1.5 cursor-pointer">
+                📋 <span>Copy C++ Code</span>
+              </button>
+            </div>
+            <pre id="cpp-7" class="bg-[#090b10] border border-slate-800 rounded-xl p-4 text-xs font-mono text-cyan-300 overflow-x-auto leading-relaxed whitespace-pre-wrap">#include &lt;iostream&gt;
+#include &lt;cmath&gt;
+#include &lt;iomanip&gt;
+using namespace std;
+
+int main() {
+    double a, b, c;
+    cout &lt;&lt; "Enter coefficients a, b, and c (ax^2 + bx + c = 0): ";
+    if (!(cin &gt;&gt; a &gt;&gt; b &gt;&gt; c)) {
+        cout &lt;&lt; "Invalid input! Please enter numeric coefficients.\n";
+        return 1;
+    }
+
+    if (a == 0) {
+        cout &lt;&lt; "\n[!] Error: Coefficient 'a' cannot be 0 in a quadratic equation.\n";
+        if (b != 0) {
+            cout &lt;&lt; "Linear root (bx + c = 0): x = " &lt;&lt; (-c / b) &lt;&lt; "\n";
+        }
+        return 0;
+    }
+
+    double D = (b * b) - (4.0 * a * c);
+    cout &lt;&lt; fixed &lt;&lt; setprecision(4);
+    cout &lt;&lt; "\n========================================\n";
+    cout &lt;&lt; "Equation      : (" &lt;&lt; a &lt;&lt; ")x^2 + (" &lt;&lt; b &lt;&lt; ")x + (" &lt;&lt; c &lt;&lt; ") = 0\n";
+    cout &lt;&lt; "Discriminant D: " &lt;&lt; D &lt;&lt; "\n";
+    cout &lt;&lt; "----------------------------------------\n";
+
+    if (D &gt; 0) {
+        double sqrtD = sqrt(D);
+        double root1 = (-b + sqrtD) / (2.0 * a);
+        double root2 = (-b - sqrtD) / (2.0 * a);
+        cout &lt;&lt; "Nature: REAL, UNEQUAL, AND DISTINCT ROOTS\n";
+        cout &lt;&lt; "Root 1 = " &lt;&lt; root1 &lt;&lt; "\n";
+        cout &lt;&lt; "Root 2 = " &lt;&lt; root2 &lt;&lt; "\n";
+    } else if (D == 0) {
+        double root = -b / (2.0 * a);
+        cout &lt;&lt; "Nature: REAL AND EQUAL ROOTS\n";
+        cout &lt;&lt; "Root 1 = Root 2 = " &lt;&lt; root &lt;&lt; "\n";
+    } else {
+        double realPart = -b / (2.0 * a);
+        double imagPart = sqrt(-D) / (2.0 * a);
+        cout &lt;&lt; "Nature: COMPLEX CONJUGATE ROOTS\n";
+        cout &lt;&lt; "Root 1 = " &lt;&lt; realPart &lt;&lt; " + " &lt;&lt; imagPart &lt;&lt; "i\n";
+        cout &lt;&lt; "Root 2 = " &lt;&lt; realPart &lt;&lt; " - " &lt;&lt; imagPart &lt;&lt; "i\n";
+    }
+    cout &lt;&lt; "========================================\n";
+    return 0;
+}</pre>
+            
+            <div class="mt-3 bg-slate-900/60 border border-slate-800/80 rounded-xl p-3 text-xs font-mono">
+              <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Sample Terminal Output:</span>
+              <pre class="text-slate-300 text-[11px] whitespace-pre-wrap">Input:
+1 2 5
+
+Output:
+========================================
+Equation      : (1.0000)x^2 + (2.0000)x + (5.0000) = 0
+Discriminant D: -16.0000
+----------------------------------------
+Nature: COMPLEX CONJUGATE ROOTS
+Root 1 = -1.0000 + 2.0000i
+Root 2 = -1.0000 - 2.0000i
+========================================</pre>
+            </div>
+          </div>
+
           </div>
         </article>
       
@@ -1868,9 +3162,15 @@ flowchart TD
                 Linear Search in an Array of N Elements with Early Exit
               </h3>
             </div>
-            <a href="#problemsContainer" class="text-xs text-slate-400 hover:text-[#04AA6D] font-bold transition-colors">
-              ↑ Back to Top
-            </a>
+            
+            <div class="flex items-center gap-2">
+              <a href="/algorithms-and-flowcharts/problem-8-linear-search-in-array/" class="px-3 py-1.5 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-400 hover:text-emerald-300 text-xs font-extrabold border border-emerald-500/30 transition flex items-center gap-1">
+                <span>🚀 Dedicated Page ↗</span>
+              </a>
+              <a href="#problemsContainer" class="text-xs text-slate-400 hover:text-[#04AA6D] font-bold transition-colors">
+                ↑ Top
+              </a>
+            </div>
           </div>
 
           <!-- Problem Statement -->
@@ -1968,21 +3268,23 @@ Step 7: Stop.</pre>
             <div class="bg-[#0b0d13] border border-slate-800 rounded-xl p-4 sm:p-6 overflow-x-auto flex justify-center">
               <div class="mermaid">
 flowchart TD
-    Start([Start]) --> InArr[/Read N and Arr[0..N-1]/]
-    InArr --> InKey[/Read target Key/]
-    InKey --> Init[Initialize i = 0, Found = 0]
-    Init --> LoopCond{i < N ?}
+    Start([Start]) --> InArr[/"Read N and Array elements Arr[0..N-1]"/]
+    InArr --> InKey[/"Read target Key to search"/]
+    InKey --> Init["Initialize index i = 0, Found = 0"]
+    Init --> LoopCond{"Is i < N ?"}
     
-    LoopCond -- Yes --> MatchCond{Arr[i] == Key ?}
-    MatchCond -- Yes --> SetFound[Found = 1]
-    SetFound --> OutFound[/Print 'Key found at position i'/]
-    OutFound --> EarlyExit[/⚡ Early Exit Break /] --> Stop([Stop])
+    LoopCond -- Yes --> MatchCond{"Does Arr[i] == Key ?"}
+    MatchCond -- Yes --> SetFound["Set Found = 1"]
+    SetFound --> OutFound[/"Print 'Key found at index i'"/]
+    OutFound --> EarlyExit[/"⚡ Early Exit Break Loop"/]
+    EarlyExit --> Stop([Stop])
     
-    MatchCond -- No --> Inc[i = i + 1]
+    MatchCond -- No --> Inc["i = i + 1"]
     Inc --> LoopCond
     
-    LoopCond -- No --> ChkFound{Found == 0 ?}
-    ChkFound -- Yes --> OutNotFound[/Print 'Key not present in array'/] --> Stop
+    LoopCond -- No --> ChkFound{"Is Found == 0 ?"}
+    ChkFound -- Yes --> OutNotFound[/"Print 'Key not present in array'"/]
+    OutNotFound --> Stop
     ChkFound -- No --> Stop
               </div>
             </div>
@@ -2241,6 +3543,81 @@ flowchart TD
               <p class="text-xs sm:text-sm text-slate-200 mt-0.5 leading-relaxed">An early exit break avoids unnecessary comparisons on remaining array elements, saving significant CPU cycles in large datasets.</p>
             </div>
           </div>
+
+          <!-- C++ Program Implementation -->
+          <div class="mt-6 pt-6 border-t border-slate-800">
+            <div class="flex items-center justify-between flex-wrap gap-2 mb-3">
+              <div class="flex items-center gap-2">
+                <span class="px-2.5 py-0.5 rounded-full bg-blue-500/15 text-blue-400 text-[10px] font-black uppercase font-mono border border-blue-500/30">C++ 17 / 20</span>
+                <h4 class="text-xs font-black uppercase text-slate-300 tracking-wider">C++ Program Implementation</h4>
+              </div>
+              <button onclick="copyText('cpp-8', this)" class="px-3 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold border border-slate-700 transition flex items-center gap-1.5 cursor-pointer">
+                📋 <span>Copy C++ Code</span>
+              </button>
+            </div>
+            <pre id="cpp-8" class="bg-[#090b10] border border-slate-800 rounded-xl p-4 text-xs font-mono text-cyan-300 overflow-x-auto leading-relaxed whitespace-pre-wrap">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+using namespace std;
+
+int main() {
+    int n;
+    cout &lt;&lt; "Enter number of elements in array N: ";
+    if (!(cin &gt;&gt; n) || n &lt;= 0) {
+        cout &lt;&lt; "Invalid array size N!\n";
+        return 1;
+    }
+
+    vector&lt;int&gt; arr(n);
+    cout &lt;&lt; "Enter " &lt;&lt; n &lt;&lt; " integers:\n";
+    for (int i = 0; i &lt; n; ++i) {
+        cin &gt;&gt; arr[i];
+    }
+
+    int key;
+    cout &lt;&lt; "Enter target key to search: ";
+    cin &gt;&gt; key;
+
+    int foundIndex = -1;
+    int comparisons = 0;
+
+    // Linear search with early exit
+    for (int i = 0; i &lt; n; ++i) {
+        comparisons++;
+        if (arr[i] == key) {
+            foundIndex = i;
+            break; // Early exit break
+        }
+    }
+
+    cout &lt;&lt; "\n========================================\n";
+    if (foundIndex != -1) {
+        cout &lt;&lt; "SUCCESS: Target key [" &lt;&lt; key &lt;&lt; "] FOUND at index " &lt;&lt; foundIndex 
+             &lt;&lt; " (Position " &lt;&lt; (foundIndex + 1) &lt;&lt; " in array).\n";
+        cout &lt;&lt; "Comparisons executed : " &lt;&lt; comparisons &lt;&lt; " of " &lt;&lt; n 
+             &lt;&lt; " (" &lt;&lt; (n - comparisons) &lt;&lt; " comparisons saved!)\n";
+    } else {
+        cout &lt;&lt; "FAILURE: Target key [" &lt;&lt; key &lt;&lt; "] NOT FOUND in the array.\n";
+        cout &lt;&lt; "Comparisons executed : " &lt;&lt; comparisons &lt;&lt; " (Full scan completed).\n";
+    }
+    cout &lt;&lt; "========================================\n";
+    return 0;
+}</pre>
+            
+            <div class="mt-3 bg-slate-900/60 border border-slate-800/80 rounded-xl p-3 text-xs font-mono">
+              <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Sample Terminal Output:</span>
+              <pre class="text-slate-300 text-[11px] whitespace-pre-wrap">Input:
+5
+15 23 7 42 9
+7
+
+Output:
+========================================
+SUCCESS: Target key [7] FOUND at index 2 (Position 3 in array).
+Comparisons executed : 3 of 5 (2 comparisons saved!)
+========================================</pre>
+            </div>
+          </div>
+
           </div>
         </article>
       
@@ -2256,9 +3633,15 @@ flowchart TD
                 Sum of Digits & Armstrong (Narcissistic) Number Check
               </h3>
             </div>
-            <a href="#problemsContainer" class="text-xs text-slate-400 hover:text-[#04AA6D] font-bold transition-colors">
-              ↑ Back to Top
-            </a>
+            
+            <div class="flex items-center gap-2">
+              <a href="/algorithms-and-flowcharts/problem-9-armstrong-and-sum-of-digits/" class="px-3 py-1.5 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-400 hover:text-emerald-300 text-xs font-extrabold border border-emerald-500/30 transition flex items-center gap-1">
+                <span>🚀 Dedicated Page ↗</span>
+              </a>
+              <a href="#problemsContainer" class="text-xs text-slate-400 hover:text-[#04AA6D] font-bold transition-colors">
+                ↑ Top
+              </a>
+            </div>
           </div>
 
           <!-- Problem Statement -->
@@ -2465,6 +3848,72 @@ flowchart TD
               <p class="text-xs sm:text-sm text-slate-200 mt-0.5 leading-relaxed">Single-pass extraction allows calculating multiple statistical metrics (sum of digits, Armstrong sum, digit count) in a single O(log10 N) loop.</p>
             </div>
           </div>
+
+          <!-- C++ Program Implementation -->
+          <div class="mt-6 pt-6 border-t border-slate-800">
+            <div class="flex items-center justify-between flex-wrap gap-2 mb-3">
+              <div class="flex items-center gap-2">
+                <span class="px-2.5 py-0.5 rounded-full bg-blue-500/15 text-blue-400 text-[10px] font-black uppercase font-mono border border-blue-500/30">C++ 17 / 20</span>
+                <h4 class="text-xs font-black uppercase text-slate-300 tracking-wider">C++ Program Implementation</h4>
+              </div>
+              <button onclick="copyText('cpp-9', this)" class="px-3 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold border border-slate-700 transition flex items-center gap-1.5 cursor-pointer">
+                📋 <span>Copy C++ Code</span>
+              </button>
+            </div>
+            <pre id="cpp-9" class="bg-[#090b10] border border-slate-800 rounded-xl p-4 text-xs font-mono text-cyan-300 overflow-x-auto leading-relaxed whitespace-pre-wrap">#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+    int n;
+    cout &lt;&lt; "Enter a positive integer: ";
+    if (!(cin &gt;&gt; n) || n &lt; 0) {
+        cout &lt;&lt; "Invalid input! Please enter a non-negative integer.\n";
+        return 1;
+    }
+
+    int original = n;
+    int sumOfDigits = 0;
+    int armstrongSum = 0; // Sum of cubes of digits
+
+    int temp = n;
+    while (temp &gt; 0) {
+        int digit = temp % 10;
+        sumOfDigits += digit;
+        armstrongSum += (digit * digit * digit);
+        temp /= 10;
+    }
+
+    cout &lt;&lt; "\n========================================\n";
+    cout &lt;&lt; "Original Number     : " &lt;&lt; original &lt;&lt; "\n";
+    cout &lt;&lt; "Sum of Digits       : " &lt;&lt; sumOfDigits &lt;&lt; "\n";
+    cout &lt;&lt; "Sum of Cubed Digits : " &lt;&lt; armstrongSum &lt;&lt; "\n";
+    cout &lt;&lt; "----------------------------------------\n";
+
+    if (armstrongSum == original) {
+        cout &lt;&lt; "Result: " &lt;&lt; original &lt;&lt; " is a 3-DIGIT ARMSTRONG (Narcissistic) NUMBER!\n";
+    } else {
+        cout &lt;&lt; "Result: " &lt;&lt; original &lt;&lt; " is NOT an Armstrong number.\n";
+    }
+    cout &lt;&lt; "========================================\n";
+    return 0;
+}</pre>
+            
+            <div class="mt-3 bg-slate-900/60 border border-slate-800/80 rounded-xl p-3 text-xs font-mono">
+              <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Sample Terminal Output:</span>
+              <pre class="text-slate-300 text-[11px] whitespace-pre-wrap">Input:
+153
+
+Output:
+========================================
+Original Number     : 153
+Sum of Digits       : 9
+Sum of Cubed Digits : 153
+----------------------------------------
+Result: 153 is a 3-DIGIT ARMSTRONG (Narcissistic) NUMBER!
+========================================</pre>
+            </div>
+          </div>
+
           </div>
         </article>
       
@@ -2480,9 +3929,15 @@ flowchart TD
                 Menu-Driven Temperature Conversion (Celsius ⇋ Fahrenheit)
               </h3>
             </div>
-            <a href="#problemsContainer" class="text-xs text-slate-400 hover:text-[#04AA6D] font-bold transition-colors">
-              ↑ Back to Top
-            </a>
+            
+            <div class="flex items-center gap-2">
+              <a href="/algorithms-and-flowcharts/problem-10-temperature-converter-menu/" class="px-3 py-1.5 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-400 hover:text-emerald-300 text-xs font-extrabold border border-emerald-500/30 transition flex items-center gap-1">
+                <span>🚀 Dedicated Page ↗</span>
+              </a>
+              <a href="#problemsContainer" class="text-xs text-slate-400 hover:text-[#04AA6D] font-bold transition-colors">
+                ↑ Top
+              </a>
+            </div>
           </div>
 
           <!-- Problem Statement -->
@@ -2683,6 +4138,84 @@ flowchart TD
               <p class="text-xs sm:text-sm text-slate-200 mt-0.5 leading-relaxed">Menu-driven designs structure software into modular execution paths with defensive default error fallbacks.</p>
             </div>
           </div>
+
+          <!-- C++ Program Implementation -->
+          <div class="mt-6 pt-6 border-t border-slate-800">
+            <div class="flex items-center justify-between flex-wrap gap-2 mb-3">
+              <div class="flex items-center gap-2">
+                <span class="px-2.5 py-0.5 rounded-full bg-blue-500/15 text-blue-400 text-[10px] font-black uppercase font-mono border border-blue-500/30">C++ 17 / 20</span>
+                <h4 class="text-xs font-black uppercase text-slate-300 tracking-wider">C++ Program Implementation</h4>
+              </div>
+              <button onclick="copyText('cpp-10', this)" class="px-3 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold border border-slate-700 transition flex items-center gap-1.5 cursor-pointer">
+                📋 <span>Copy C++ Code</span>
+              </button>
+            </div>
+            <pre id="cpp-10" class="bg-[#090b10] border border-slate-800 rounded-xl p-4 text-xs font-mono text-cyan-300 overflow-x-auto leading-relaxed whitespace-pre-wrap">#include &lt;iostream&gt;
+#include &lt;iomanip&gt;
+using namespace std;
+
+int main() {
+    int choice;
+    cout &lt;&lt; fixed &lt;&lt; setprecision(2);
+
+    do {
+        cout &lt;&lt; "\n========================================\n";
+        cout &lt;&lt; "   TEMPERATURE CONVERTER SYSTEM MENU    \n";
+        cout &lt;&lt; "========================================\n";
+        cout &lt;&lt; "  1. Celsius to Fahrenheit (C -&gt; F)\n";
+        cout &lt;&lt; "  2. Fahrenheit to Celsius (F -&gt; C)\n";
+        cout &lt;&lt; "  3. Exit Application\n";
+        cout &lt;&lt; "----------------------------------------\n";
+        cout &lt;&lt; "Enter your choice (1 - 3): ";
+
+        if (!(cin &gt;&gt; choice)) {
+            cout &lt;&lt; "Invalid input! Exiting program...\n";
+            break;
+        }
+
+        switch (choice) {
+            case 1: {
+                double c;
+                cout &lt;&lt; "Enter temperature in Celsius (°C): ";
+                cin &gt;&gt; c;
+                double f = (c * 9.0 / 5.0) + 32.0;
+                cout &lt;&lt; "&gt;&gt;&gt; Result: " &lt;&lt; c &lt;&lt; " °C = " &lt;&lt; f &lt;&lt; " °F\n";
+                break;
+            }
+            case 2: {
+                double f;
+                cout &lt;&lt; "Enter temperature in Fahrenheit (°F): ";
+                cin &gt;&gt; f;
+                double c = (f - 32.0) * (5.0 / 9.0);
+                cout &lt;&lt; "&gt;&gt;&gt; Result: " &lt;&lt; f &lt;&lt; " °F = " &lt;&lt; c &lt;&lt; " °C\n";
+                break;
+            }
+            case 3:
+                cout &lt;&lt; "\nThank you for using Temperature Converter. Goodbye!\n";
+                break;
+            default:
+                cout &lt;&lt; "\n[!] Error: Invalid selection! Please enter 1, 2, or 3.\n";
+                break;
+        }
+
+    } while (choice != 3);
+
+    return 0;
+}</pre>
+            
+            <div class="mt-3 bg-slate-900/60 border border-slate-800/80 rounded-xl p-3 text-xs font-mono">
+              <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Sample Terminal Output:</span>
+              <pre class="text-slate-300 text-[11px] whitespace-pre-wrap">Input:
+1
+100
+3
+
+Output:
+&gt;&gt;&gt; Result: 100.00 °C = 212.00 °F
+Thank you for using Temperature Converter. Goodbye!</pre>
+            </div>
+          </div>
+
           </div>
         </article>
       
