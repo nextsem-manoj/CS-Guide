@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import { getLockModalHtml, getLockJsScript } from './add_security_lock.mjs';
 
 const publicDir = path.resolve('public');
 const masterHtmlPath = path.join(publicDir, 'algorithms-and-flowcharts-10-master-problems.html');
@@ -1817,6 +1818,18 @@ if (!masterHtml.includes('function runCppCode(')) {
   masterHtml = masterHtml.replace(/<script>[\s\S]*?function runCppCode[\s\S]*?<\/script>/, compilerJsScript);
 }
 
+if (!masterHtml.includes('id="security-lock-modal"')) {
+  masterHtml = masterHtml.replace(
+    /(<body[^>]*>)/i,
+    `$1\n${getLockModalHtml()}\n<div id="protected-content" style="display: none;" class="w-full flex flex-col items-center">`
+  );
+  masterHtml = masterHtml.replace(
+    /(<button onclick="window\.print\(\)"[^>]*>[\s\S]*?<\/button>)/,
+    `<button onclick="lockPage()" class="px-2.5 py-1.5 rounded-lg bg-red-500/10 hover:bg-red-500/20 text-red-400 text-xs font-bold border border-red-500/20 transition flex items-center gap-1 cursor-pointer" title="Lock this page"><span>🔒</span> <span class="hidden sm:inline">Lock</span></button>\n        $1`
+  );
+  masterHtml = masterHtml.replace('</body>', `</div><!-- /protected-content -->\n${getLockJsScript()}\n</body>`);
+}
+
 fs.writeFileSync(masterHtmlPath, masterHtml, 'utf8');
 console.log('Master HTML updated with interactive C++ Compiler widgets & JS engine!');
 
@@ -1860,6 +1873,8 @@ function generateStandaloneHtml(p, prevP, nextP) {
   </style>
 </head>
 <body class="min-h-screen flex flex-col items-center selection:bg-[#04AA6D] selection:text-black">
+  ${getLockModalHtml()}
+  <div id="protected-content" style="display: none;" class="w-full flex flex-col items-center">
 
   <!-- Top Navigation / Breadcrumb -->
   <nav class="w-full bg-[#0e1015] border-b border-slate-800 sticky top-0 z-50 px-4 py-3">
@@ -1883,6 +1898,7 @@ function generateStandaloneHtml(p, prevP, nextP) {
         <span class="text-emerald-400 font-extrabold bg-emerald-500/10 border border-emerald-500/30 px-2 py-0.5 rounded-md">Problem ${p.id}</span>
       </div>
       <div class="flex items-center gap-2">
+        <button onclick="lockPage()" class="px-2.5 py-1.5 rounded-lg bg-red-500/10 hover:bg-red-500/20 text-red-400 text-xs font-bold border border-red-500/20 transition flex items-center gap-1 cursor-pointer" title="Lock this page"><span>🔒</span> <span class="hidden sm:inline">Lock</span></button>
         <a href="/algorithms-and-flowcharts-10-master-problems.html" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold border border-slate-700 transition flex items-center gap-1.5">
           📚 <span>All 10 Problems Hub</span>
         </a>
@@ -2138,6 +2154,8 @@ ${p.mermaid}
   </script>
 
   ${compilerJsScript}
+</div><!-- /protected-content -->
+  ${getLockJsScript()}
 </body>
 </html>`;
 }
