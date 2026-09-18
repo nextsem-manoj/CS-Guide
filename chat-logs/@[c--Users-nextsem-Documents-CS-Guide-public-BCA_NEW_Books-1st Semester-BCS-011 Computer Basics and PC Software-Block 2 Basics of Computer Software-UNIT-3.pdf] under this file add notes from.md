@@ -1,6 +1,6 @@
 # @[c:\Users\nextsem\Documents\CS-Guide\public\BCA_NEW_Books\1st Semester\BCS-011 Computer Basics and PC Software\Block 2 Basics of Computer Software\UNIT-3.pdf] under this file add notes from
 
-*Saved on: 18/9/2026, 1:50:00 pm*
+*Saved on: 18/9/2026, 2:08:30 pm*
 *Conversation ID: 5a4cce97-9a03-4a7f-89c0-579b63e4bd7e*
 
 ---
@@ -163,6 +163,24 @@ All changes, interactive features, questions, and routing for **BCS-011 Block 2 
 ### 👤 User
 
 update on git
+
+---
+
+### 👤 User
+
+also complete the flowchart on this page https://ignou-study-notes-by-nextsem.web.app/algorithms-and-flowcharts-10-master-problems/#problem-8
+
+---
+
+### 🤖 Antigravity AI
+
+I am monitoring the production build of `CS-Guide` to compile the updated static assets and flowcharts. I will proceed as soon as the build finishes.
+
+---
+
+### 🤖 Antigravity AI
+
+Deploying the completed Problem 8 flowchart updates to Firebase Hosting (`ignou-study-notes-by-nextsem`). I will verify the live site as soon as the deployment finishes.
 
 ---
 
