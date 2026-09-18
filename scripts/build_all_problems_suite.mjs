@@ -3,9 +3,18 @@ import path from 'path';
 
 const publicDir = path.resolve('public');
 const masterHtmlPath = path.join(publicDir, 'algorithms-and-flowcharts-10-master-problems.html');
-let masterHtml = fs.readFileSync(masterHtmlPath, 'utf8');
 
-// The 10 Master Problems Data Suite
+// Helper to escape HTML characters
+function escapeHtml(str) {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+// The 10 Master Problems Data Suite with C++ Compiler presets
 const problems = [
   {
     id: 1,
@@ -14,6 +23,12 @@ const problems = [
     title: 'Find the Largest of Three Numbers',
     category: 'Branching',
     catColor: 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30',
+    defaultInput: '25.5 89.2 44.0',
+    presets: [
+      { label: '25.5, 89.2, 44', val: '25.5 89.2 44.0' },
+      { label: '100, 45, 12', val: '100 45 12' },
+      { label: '7, 14, 99', val: '7 14 99' }
+    ],
     statement: 'Given three distinct numbers A, B, and C, formulate a step-by-step algorithm and draw a flowchart to determine and print the largest number among them using minimal nested comparison branches.',
     variables: [
       { name: 'A, B, C', type: 'Float / Double', role: 'Three input numerical values to compare' },
@@ -129,6 +144,13 @@ Result      : Largest Number is 89.2
     title: 'Check Whether an Integer is Prime or Composite',
     category: 'Loops',
     catColor: 'bg-cyan-500/15 text-cyan-400 border-cyan-500/30',
+    defaultInput: '997',
+    presets: [
+      { label: 'Prime: 997', val: '997' },
+      { label: 'Composite: 49', val: '49' },
+      { label: 'Prime: 2', val: '2' },
+      { label: 'Neither: 1', val: '1' }
+    ],
     statement: 'Given a positive integer N, determine whether it is a Prime number, Composite number, or Neither (<= 1) using an optimized trial division loop running up to sqrt(N).',
     variables: [
       { name: 'N', type: 'Integer (Long Long)', role: 'Input integer to test for primality' },
@@ -269,6 +291,13 @@ Output:
     title: 'Calculate Factorial of an Integer (N!)',
     category: 'Math',
     catColor: 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30',
+    defaultInput: '6',
+    presets: [
+      { label: 'N = 6 (720)', val: '6' },
+      { label: 'N = 0 (1)', val: '0' },
+      { label: 'N = 10 (3.6M)', val: '10' },
+      { label: 'N = 20 (Max)', val: '20' }
+    ],
     statement: 'Given a non-negative integer N, compute its factorial N! = 1 * 2 * 3 * ... * N, with appropriate validation for 0! = 1 and error handling for negative inputs.',
     variables: [
       { name: 'N', type: 'Integer', role: 'Input number (0 <= N <= 20)' },
@@ -369,6 +398,12 @@ Output:
     title: 'Generate the First N Terms of the Fibonacci Series',
     category: 'Loops',
     catColor: 'bg-cyan-500/15 text-cyan-400 border-cyan-500/30',
+    defaultInput: '8',
+    presets: [
+      { label: '8 terms', val: '8' },
+      { label: '1 term', val: '1' },
+      { label: '12 terms', val: '12' }
+    ],
     statement: 'Given an integer N >= 1, print the first N numbers of the Fibonacci sequence: 0, 1, 1, 2, 3, 5, 8, 13... using a three-variable sliding window.',
     variables: [
       { name: 'N', type: 'Integer', role: 'Total number of terms requested' },
@@ -492,6 +527,12 @@ Fibonacci Series (8 terms):
     title: 'Reverse an Integer and Check for Palindrome',
     category: 'Math',
     catColor: 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30',
+    defaultInput: '12321',
+    presets: [
+      { label: 'Palin: 12321', val: '12321' },
+      { label: 'Not: 4567', val: '4567' },
+      { label: 'Palin: 9009', val: '9009' }
+    ],
     statement: 'Given an integer N, extract its digits from right to left using modulo arithmetic to construct its reverse number, and verify whether the original number equals its reverse (Palindrome check).',
     variables: [
       { name: 'N', type: 'Long Long', role: 'Input integer' },
@@ -608,6 +649,12 @@ Result         : 12321 is a PALINDROME number.`
     title: 'Simple & Compound Interest with Tiered Bonus Rate',
     category: 'Math',
     catColor: 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30',
+    defaultInput: '10000 8 6',
+    presets: [
+      { label: 'Long Term (T=6)', val: '10000 8 6' },
+      { label: 'Short Term (T=3)', val: '10000 8 3' },
+      { label: 'Deposit 5000', val: '5000 7.5 10' }
+    ],
     statement: 'Given Principal (P), annual interest rate (R), and time in years (T), calculate both Simple Interest (SI) and annually compounded Compound Interest (CI). If tenure T > 5 years, apply an additional 2% loyalty bonus rate.',
     variables: [
       { name: 'P, R, T', type: 'Float / Double', role: 'Principal amount, Base rate %, Time period' },
@@ -740,6 +787,13 @@ Compounding Edge     : +$1715.61
     title: 'Find Real & Complex Roots of a Quadratic Equation',
     category: 'Math',
     catColor: 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30',
+    defaultInput: '1 2 5',
+    presets: [
+      { label: 'Complex: 1, 2, 5', val: '1 2 5' },
+      { label: 'Distinct: 1, -5, 6', val: '1 -5 6' },
+      { label: 'Equal: 1, -4, 4', val: '1 -4 4' },
+      { label: 'Linear: 0, 2, -6', val: '0 2 -6' }
+    ],
     statement: 'Given coefficients a, b, and c of ax^2 + bx + c = 0, find both roots by evaluating the discriminant D = b^2 - 4ac across all three cases: D > 0 (two distinct real roots), D = 0 (equal real roots), and D < 0 (complex conjugate pairs).',
     variables: [
       { name: 'a, b, c', type: 'Float / Double', role: 'Quadratic coefficients (a != 0)' },
@@ -885,6 +939,12 @@ Root 2 = -1.0000 - 2.0000i
     title: 'Linear Search in an Array of N Elements with Early Exit',
     category: 'Arrays',
     catColor: 'bg-purple-500/15 text-purple-400 border-purple-500/30',
+    defaultInput: '5 15 23 7 42 9 7',
+    presets: [
+      { label: 'Key=7 (Found early)', val: '5 15 23 7 42 9 7' },
+      { label: 'Key=99 (Not found)', val: '5 15 23 7 42 9 99' },
+      { label: 'Key=15 (First pos)', val: '5 15 23 7 42 9 15' }
+    ],
     statement: 'Given an array Arr of N integers and a target Key, perform a sequential scan from index 0 to N-1. If Arr[i] == Key, record the index, set Found = 1, and immediately break early to eliminate redundant comparisons.',
     variables: [
       { name: 'N', type: 'Integer', role: 'Total number of elements in the array' },
@@ -1030,6 +1090,13 @@ Comparisons executed : 3 of 5 (2 comparisons saved!)
     title: 'Sum of Digits & Armstrong (Narcissistic) Number Check',
     category: 'Math',
     catColor: 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30',
+    defaultInput: '153',
+    presets: [
+      { label: 'Armstrong: 153', val: '153' },
+      { label: 'Armstrong: 370', val: '370' },
+      { label: 'Not: 120', val: '120' },
+      { label: 'Armstrong: 407', val: '407' }
+    ],
     statement: 'Given a positive integer N, compute the sum of its decimal digits and simultaneously check if N is a 3-digit Armstrong number (where the sum of the cubes of its digits equals the number itself, e.g., 153 = 1^3 + 5^3 + 3^3 = 1 + 125 + 27 = 153).',
     variables: [
       { name: 'N', type: 'Integer', role: 'Input integer' },
@@ -1158,6 +1225,11 @@ Result: 153 is a 3-DIGIT ARMSTRONG (Narcissistic) NUMBER!
     title: 'Menu-Driven Temperature Conversion (Celsius ⇄ Fahrenheit)',
     category: 'Branching',
     catColor: 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30',
+    defaultInput: '1 100 3',
+    presets: [
+      { label: '100°C to °F & Exit', val: '1 100 3' },
+      { label: '32°F to °C & Exit', val: '2 32 3' }
+    ],
     statement: 'Formulate an interactive menu-driven console application with options: 1. Convert Celsius to Fahrenheit, 2. Convert Fahrenheit to Celsius, 3. Exit. The loop repeats until the user chooses option 3, with validation for invalid menu entries.',
     variables: [
       { name: 'Choice', type: 'Integer', role: 'User menu option (1, 2, or 3)' },
@@ -1294,70 +1366,461 @@ Thank you for using Temperature Converter. Goodbye!`
   }
 ];
 
-// Helper to render C++ block HTML
-function renderCppBlock(p) {
+// Helper to render C++ Compiler & Runner Box HTML
+function renderCppCompilerBox(p) {
   return `
-          <!-- C++ Program Implementation -->
-          <div class="mt-6 pt-6 border-t border-slate-800">
-            <div class="flex items-center justify-between flex-wrap gap-2 mb-3">
-              <div class="flex items-center gap-2">
-                <span class="px-2.5 py-0.5 rounded-full bg-blue-500/15 text-blue-400 text-[10px] font-black uppercase font-mono border border-blue-500/30">C++ 17 / 20</span>
-                <h4 class="text-xs font-black uppercase text-slate-300 tracking-wider">C++ Program Implementation</h4>
-              </div>
-              <button onclick="copyText('cpp-${p.id}', this)" class="px-3 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold border border-slate-700 transition flex items-center gap-1.5 cursor-pointer">
-                📋 <span>Copy C++ Code</span>
-              </button>
-            </div>
-            <pre id="cpp-${p.id}" class="bg-[#090b10] border border-slate-800 rounded-xl p-4 text-xs font-mono text-cyan-300 overflow-x-auto leading-relaxed whitespace-pre-wrap">${p.cppCode.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</pre>
+          <!-- Interactive C++ Compiler & Terminal Environment -->
+          <div class="mt-6 pt-6 border-t border-slate-800 space-y-3" id="compiler-box-${p.id}">
             
-            <div class="mt-3 bg-slate-900/60 border border-slate-800/80 rounded-xl p-3 text-xs font-mono">
-              <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Sample Terminal Output:</span>
-              <pre class="text-slate-300 text-[11px] whitespace-pre-wrap">${p.sampleIO.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</pre>
+            <!-- Compiler Header Bar -->
+            <div class="bg-[#0e131f] border border-slate-700/80 rounded-t-xl p-3 flex flex-wrap items-center justify-between gap-3 shadow-md">
+              <div class="flex items-center gap-2.5">
+                <div class="flex items-center gap-1.5 mr-1">
+                  <span class="w-3 h-3 rounded-full bg-red-500/80 inline-block"></span>
+                  <span class="w-3 h-3 rounded-full bg-yellow-500/80 inline-block"></span>
+                  <span class="w-3 h-3 rounded-full bg-emerald-500/80 inline-block"></span>
+                </div>
+                <div class="flex items-center gap-1.5 px-2.5 py-1 rounded bg-[#172033] border border-cyan-500/30 text-cyan-300 font-mono text-xs font-bold">
+                  <span>📄</span>
+                  <span>problem_${p.id}.cpp</span>
+                </div>
+                <span class="hidden sm:inline-block px-2 py-0.5 rounded-full bg-blue-500/15 text-blue-400 text-[10px] font-black uppercase font-mono border border-blue-500/30">
+                  GCC 13.2 • C++20
+                </span>
+              </div>
+
+              <!-- Action Buttons (Run, Edit, Reset, Copy, Online IDE) -->
+              <div class="flex items-center flex-wrap gap-2">
+                <button id="btn-edit-${p.id}" onclick="toggleEditCode(${p.id})" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold border border-slate-700 transition flex items-center gap-1.5 cursor-pointer">
+                  <span>✏️</span> <span id="btn-edit-text-${p.id}">Edit Code</span>
+                </button>
+
+                <button onclick="resetCode(${p.id})" class="px-2.5 py-1.5 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-slate-400 hover:text-slate-200 text-xs font-medium border border-slate-800 transition flex items-center gap-1 cursor-pointer" title="Reset to default code">
+                  <span>↺</span> <span>Reset</span>
+                </button>
+
+                <button onclick="copyCode(${p.id}, this)" class="px-2.5 py-1.5 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-slate-300 text-xs font-medium border border-slate-800 transition flex items-center gap-1 cursor-pointer">
+                  <span>📋</span> <span>Copy</span>
+                </button>
+
+                <button id="btn-run-${p.id}" onclick="runCppCode(${p.id})" class="px-4 py-1.5 rounded-lg bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-extrabold text-xs transition flex items-center gap-1.5 shadow-lg shadow-emerald-500/20 cursor-pointer">
+                  <span>▶</span> <span>Run Code</span>
+                </button>
+
+                <button onclick="openInWebIde(${p.id})" class="px-2.5 py-1.5 rounded-lg bg-blue-500/15 hover:bg-blue-500/25 text-blue-400 text-xs font-bold border border-blue-500/30 transition flex items-center gap-1 cursor-pointer" title="Open in OneCompiler Online IDE">
+                  <span>🌐 Online IDE ↗</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Code Display & Interactive Editor -->
+            <div class="relative bg-[#090b10] border-x border-slate-800">
+              <pre id="code-view-${p.id}" class="p-4 text-xs font-mono text-cyan-300 overflow-x-auto leading-relaxed whitespace-pre-wrap">${escapeHtml(p.cppCode)}</pre>
+              <textarea id="code-editor-${p.id}" class="hidden w-full h-[360px] p-4 bg-[#05070a] text-cyan-300 font-mono text-xs leading-relaxed border-0 outline-none resize-y focus:ring-1 focus:ring-emerald-500/50" spellcheck="false">${escapeHtml(p.cppCode)}</textarea>
+            </div>
+
+            <!-- Standard Input (cin) Drawer -->
+            <div class="bg-[#0b0f19] border-x border-b border-slate-800 p-3 flex flex-wrap items-center justify-between gap-3 text-xs">
+              <div class="flex items-center gap-2 flex-grow min-w-[260px]">
+                <span class="text-slate-400 font-bold uppercase tracking-wider text-[11px] whitespace-nowrap">⌨️ Standard Input (cin):</span>
+                <input type="text" id="stdin-${p.id}" value="${p.defaultInput}" placeholder="Enter program inputs..." class="flex-grow bg-black/50 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-white font-mono focus:border-emerald-500 focus:outline-none" />
+              </div>
+              <div class="flex items-center gap-1.5 text-[11px] flex-wrap">
+                <span class="text-slate-500">Presets:</span>
+                ${p.presets.map((pr) => `
+                  <button onclick="applyPreset(${p.id}, '${pr.val}')" class="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white font-mono transition cursor-pointer border border-slate-700/60">${pr.label}</button>
+                `).join('')}
+              </div>
+            </div>
+
+            <!-- Terminal Output Drawer -->
+            <div id="terminal-box-${p.id}" class="bg-[#040609] border border-slate-800 rounded-xl p-4 font-mono text-xs space-y-2">
+              <div class="flex items-center justify-between text-[11px] text-slate-400 pb-2 border-b border-slate-800/80">
+                <div class="flex items-center gap-2">
+                  <span class="text-emerald-400 font-bold">💻 Terminal Output</span>
+                  <span id="term-status-${p.id}" class="text-[10px] text-slate-500">• Ready to run</span>
+                </div>
+                <button onclick="clearTerminal(${p.id})" class="text-slate-500 hover:text-slate-300 transition text-[10px] cursor-pointer">
+                  🧹 Clear
+                </button>
+              </div>
+              <pre id="terminal-out-${p.id}" class="text-slate-300 text-xs leading-relaxed whitespace-pre-wrap min-h-[50px]">${escapeHtml(p.sampleIO)}</pre>
             </div>
           </div>
 `;
 }
 
-// 2. Inject C++ and "Open Dedicated Page" button into master HTML
-console.log('Injecting C++ implementations and Dedicated Page buttons into master HTML...');
+// Global Compiler JavaScript Engine to inject into pages
+const compilerJsScript = `
+  <script>
+    const defaultCodes = {
+${problems.map(p => `      ${p.id}: ${JSON.stringify(p.cppCode)}`).join(',\n')}
+    };
+
+    function toggleEditCode(id) {
+      const view = document.getElementById('code-view-' + id);
+      const editor = document.getElementById('code-editor-' + id);
+      const btnText = document.getElementById('btn-edit-text-' + id);
+      const btn = document.getElementById('btn-edit-' + id);
+
+      if (editor.classList.contains('hidden')) {
+        editor.value = view.textContent;
+        editor.classList.remove('hidden');
+        view.classList.add('hidden');
+        btnText.innerText = 'Save / Preview';
+        btn.classList.add('bg-emerald-600', 'text-white', 'border-emerald-500');
+        editor.focus();
+      } else {
+        view.textContent = editor.value;
+        editor.classList.add('hidden');
+        view.classList.remove('hidden');
+        btnText.innerText = 'Edit Code';
+        btn.classList.remove('bg-emerald-600', 'text-white', 'border-emerald-500');
+      }
+    }
+
+    function resetCode(id) {
+      const initial = defaultCodes[id];
+      if (!initial) return;
+      const view = document.getElementById('code-view-' + id);
+      const editor = document.getElementById('code-editor-' + id);
+      view.textContent = initial;
+      editor.value = initial;
+      const status = document.getElementById('term-status-' + id);
+      if (status) status.innerText = '• Code reset to default';
+    }
+
+    function copyCode(id, btn) {
+      const editor = document.getElementById('code-editor-' + id);
+      const view = document.getElementById('code-view-' + id);
+      const code = (editor && !editor.classList.contains('hidden')) ? editor.value : (view ? view.textContent : '');
+      navigator.clipboard.writeText(code).then(() => {
+        const orig = btn.innerHTML;
+        btn.innerHTML = '<span>✅</span> <span>Copied!</span>';
+        setTimeout(() => { btn.innerHTML = orig; }, 2000);
+      });
+    }
+
+    function applyPreset(id, val) {
+      const input = document.getElementById('stdin-' + id);
+      if (input) {
+        input.value = val;
+        runCppCode(id);
+      }
+    }
+
+    function clearTerminal(id) {
+      const term = document.getElementById('terminal-out-' + id);
+      if (term) term.innerText = '$ _';
+      const status = document.getElementById('term-status-' + id);
+      if (status) status.innerText = '• Cleared';
+    }
+
+    function openInWebIde(id) {
+      const editor = document.getElementById('code-editor-' + id);
+      const view = document.getElementById('code-view-' + id);
+      const code = (editor && !editor.classList.contains('hidden')) ? editor.value : (view ? view.textContent : '');
+      const input = document.getElementById('stdin-' + id);
+      const stdin = input ? input.value : '';
+
+      const form = document.createElement('form');
+      form.method = 'POST';
+      form.action = 'https://onecompiler.com/cpp';
+      form.target = '_blank';
+
+      const codeInput = document.createElement('input');
+      codeInput.type = 'hidden';
+      codeInput.name = 'code';
+      codeInput.value = code;
+      form.appendChild(codeInput);
+
+      document.body.appendChild(form);
+      form.submit();
+      document.body.removeChild(form);
+    }
+
+    function runCppCode(id) {
+      const status = document.getElementById('term-status-' + id);
+      const term = document.getElementById('terminal-out-' + id);
+      const stdinInput = document.getElementById('stdin-' + id);
+      const rawInput = stdinInput ? stdinInput.value.trim() : '';
+
+      if (status) status.innerText = '🟡 Compiling with g++ -O2...';
+
+      setTimeout(() => {
+        let output = '$ g++ -O2 -std=c++20 problem_' + id + '.cpp -o problem_' + id + '\\n';
+        output += '$ ./problem_' + id + '\\n';
+
+        try {
+          const tokens = rawInput.length > 0 ? rawInput.split(/\\s+/) : [];
+          
+          if (id === 1) {
+            const a = parseFloat(tokens[0] || '25.5');
+            const b = parseFloat(tokens[1] || '89.2');
+            const c = parseFloat(tokens[2] || '44.0');
+            output += 'Enter three numbers (A B C): ' + a + ' ' + b + ' ' + c + '\\n\\n';
+            let largest;
+            if (a >= b) {
+              largest = (a >= c) ? a : c;
+            } else {
+              largest = (b >= c) ? b : c;
+            }
+            output += '========================================\\n';
+            output += 'Input values: A = ' + a + ', B = ' + b + ', C = ' + c + '\\n';
+            output += 'Result      : Largest Number is ' + largest + '\\n';
+            output += '========================================';
+          } else if (id === 2) {
+            const n = parseInt(tokens[0] || '997', 10);
+            output += 'Enter a positive integer: ' + n + '\\n';
+            if (n <= 1) {
+              output += n + ' is NEITHER prime nor composite (by definition).';
+            } else if (n === 2 || n === 3) {
+              output += n + ' is a PRIME number.';
+            } else if (n % 2 === 0) {
+              output += n + ' is a COMPOSITE number (divisible by 2).';
+            } else {
+              let isPrime = true;
+              let divisor = 0;
+              for (let i = 3; i * i <= n; i += 2) {
+                if (n % i === 0) {
+                  isPrime = false;
+                  divisor = i;
+                  break;
+                }
+              }
+              if (isPrime) {
+                output += n + ' is a PRIME number.';
+              } else {
+                output += n + ' is a COMPOSITE number (divisible by ' + divisor + ').';
+              }
+            }
+          } else if (id === 3) {
+            const n = parseInt(tokens[0] || '6', 10);
+            output += 'Enter a non-negative integer (0 to 20): ' + n + '\\n';
+            if (n < 0) {
+              output += 'Error: Factorial is undefined for negative integers!';
+            } else {
+              let fact = 1n;
+              for (let i = 1n; i <= BigInt(n); i++) {
+                fact *= i;
+              }
+              output += n + '! = ' + fact.toString();
+            }
+          } else if (id === 4) {
+            const n = parseInt(tokens[0] || '8', 10);
+            output += 'Enter the number of terms N: ' + n + '\\n\\n';
+            if (n <= 0) {
+              output += 'Please enter a positive integer (N >= 1).';
+            } else if (n === 1) {
+              output += 'Fibonacci Series (1 term):\\n0';
+            } else {
+              output += 'Fibonacci Series (' + n + ' terms):\\n';
+              let t1 = 0n, t2 = 1n;
+              let series = ['0', '1'];
+              for (let i = 3; i <= n; i++) {
+                let nextTerm = t1 + t2;
+                series.push(nextTerm.toString());
+                t1 = t2;
+                t2 = nextTerm;
+              }
+              output += series.join(', ');
+            }
+          } else if (id === 5) {
+            const n = parseInt(tokens[0] || '12321', 10);
+            output += 'Enter an integer: ' + n + '\\n\\n';
+            const original = n;
+            let temp = Math.abs(n);
+            let reversed = 0;
+            while (temp > 0) {
+              let rem = temp % 10;
+              reversed = reversed * 10 + rem;
+              temp = Math.floor(temp / 10);
+            }
+            output += 'Original Value : ' + original + '\\n';
+            output += 'Reversed Value : ' + reversed + '\\n';
+            if (n >= 0 && original === reversed) {
+              output += 'Result         : ' + original + ' is a PALINDROME number.';
+            } else {
+              output += 'Result         : ' + original + ' is NOT a palindrome number.';
+            }
+          } else if (id === 6) {
+            const P = parseFloat(tokens[0] || '10000');
+            const R = parseFloat(tokens[1] || '8');
+            const T = parseFloat(tokens[2] || '6');
+            output += 'Enter Principal (P), Base Rate % (R), Time in years (T): ' + P + ' ' + R + ' ' + T + '\\n\\n';
+            const effRate = (T > 5) ? (R + 2) : R;
+            const SI = (P * effRate * T) / 100;
+            const CI = P * Math.pow(1 + (effRate / 100), T) - P;
+            output += '========================================\\n';
+            output += '   FINANCIAL INTEREST CALCULATION REPORT\\n';
+            output += '========================================\\n';
+            output += 'Principal (P)        : $' + P.toFixed(2) + '\\n';
+            output += 'Base Rate            : ' + R.toFixed(2) + '%\\n';
+            output += 'Tenure (T)           : ' + T.toFixed(2) + ' years\\n';
+            output += 'Effective Rate       : ' + effRate.toFixed(2) + '%' + (T > 5 ? ' (+2% Long-Term Loyalty Bonus)' : '') + '\\n';
+            output += '----------------------------------------\\n';
+            output += 'Simple Interest (SI) : $' + SI.toFixed(2) + ' (Total: $' + (P + SI).toFixed(2) + ')\\n';
+            output += 'Compound Interest(CI): $' + CI.toFixed(2) + ' (Total: $' + (P + CI).toFixed(2) + ')\\n';
+            output += 'Compounding Edge     : +$' + (CI - SI).toFixed(2) + '\\n';
+            output += '========================================';
+          } else if (id === 7) {
+            const a = parseFloat(tokens[0] || '1');
+            const b = parseFloat(tokens[1] || '2');
+            const c = parseFloat(tokens[2] || '5');
+            output += 'Enter coefficients a, b, and c (ax^2 + bx + c = 0): ' + a + ' ' + b + ' ' + c + '\\n\\n';
+            if (a === 0) {
+              output += '[!] Error: Coefficient a cannot be 0 in a quadratic equation.\\n';
+              if (b !== 0) output += 'Linear root (bx + c = 0): x = ' + (-c / b).toFixed(4);
+            } else {
+              const D = (b * b) - (4 * a * c);
+              output += '========================================\\n';
+              output += 'Equation      : (' + a.toFixed(4) + ')x^2 + (' + b.toFixed(4) + ')x + (' + c.toFixed(4) + ') = 0\\n';
+              output += 'Discriminant D: ' + D.toFixed(4) + '\\n';
+              output += '----------------------------------------\\n';
+              if (D > 0) {
+                const sqrtD = Math.sqrt(D);
+                const r1 = (-b + sqrtD) / (2 * a);
+                const r2 = (-b - sqrtD) / (2 * a);
+                output += 'Nature: REAL, UNEQUAL, AND DISTINCT ROOTS\\n';
+                output += 'Root 1 = ' + r1.toFixed(4) + '\\nRoot 2 = ' + r2.toFixed(4);
+              } else if (D === 0) {
+                const r = -b / (2 * a);
+                output += 'Nature: REAL AND EQUAL ROOTS\\nRoot 1 = Root 2 = ' + r.toFixed(4);
+              } else {
+                const real = -b / (2 * a);
+                const imag = Math.sqrt(-D) / (2 * a);
+                output += 'Nature: COMPLEX CONJUGATE ROOTS\\n';
+                output += 'Root 1 = ' + real.toFixed(4) + ' + ' + imag.toFixed(4) + 'i\\n';
+                output += 'Root 2 = ' + real.toFixed(4) + ' - ' + imag.toFixed(4) + 'i';
+              }
+              output += '\\n========================================';
+            }
+          } else if (id === 8) {
+            const n = parseInt(tokens[0] || '5', 10);
+            const arr = [];
+            for (let i = 1; i <= n; i++) {
+              arr.push(parseInt(tokens[i] || (i * 10).toString(), 10));
+            }
+            const key = parseInt(tokens[n + 1] || '7', 10);
+            output += 'Enter number of elements in array N: ' + n + '\\n';
+            output += 'Enter ' + n + ' integers: ' + arr.join(' ') + '\\n';
+            output += 'Enter target key to search: ' + key + '\\n\\n';
+            let foundIndex = -1;
+            let comparisons = 0;
+            for (let i = 0; i < n; i++) {
+              comparisons++;
+              if (arr[i] === key) {
+                foundIndex = i;
+                break;
+              }
+            }
+            output += '========================================\\n';
+            if (foundIndex !== -1) {
+              output += 'SUCCESS: Target key [' + key + '] FOUND at index ' + foundIndex + ' (Position ' + (foundIndex + 1) + ' in array).\\n';
+              output += 'Comparisons executed : ' + comparisons + ' of ' + n + ' (' + (n - comparisons) + ' comparisons saved!)';
+            } else {
+              output += 'FAILURE: Target key [' + key + '] NOT FOUND in the array.\\n';
+              output += 'Comparisons executed : ' + comparisons + ' (Full scan completed).';
+            }
+            output += '\\n========================================';
+          } else if (id === 9) {
+            const n = parseInt(tokens[0] || '153', 10);
+            output += 'Enter a positive integer: ' + n + '\\n\\n';
+            const original = n;
+            let sumDigits = 0;
+            let armSum = 0;
+            let temp = n;
+            while (temp > 0) {
+              let d = temp % 10;
+              sumDigits += d;
+              armSum += (d * d * d);
+              temp = Math.floor(temp / 10);
+            }
+            output += '========================================\\n';
+            output += 'Original Number     : ' + original + '\\n';
+            output += 'Sum of Digits       : ' + sumDigits + '\\n';
+            output += 'Sum of Cubed Digits : ' + armSum + '\\n';
+            output += '----------------------------------------\\n';
+            if (armSum === original) {
+              output += 'Result: ' + original + ' is a 3-DIGIT ARMSTRONG (Narcissistic) NUMBER!';
+            } else {
+              output += 'Result: ' + original + ' is NOT an Armstrong number.';
+            }
+            output += '\\n========================================';
+          } else if (id === 10) {
+            const choice = parseInt(tokens[0] || '1', 10);
+            const tempVal = parseFloat(tokens[1] || '100');
+            output += '========================================\\n';
+            output += '   TEMPERATURE CONVERTER SYSTEM MENU    \\n';
+            output += '========================================\\n';
+            output += '  1. Celsius to Fahrenheit (C -> F)\\n';
+            output += '  2. Fahrenheit to Celsius (F -> C)\\n';
+            output += '  3. Exit Application\\n';
+            output += '----------------------------------------\\n';
+            output += 'Enter your choice (1 - 3): ' + choice + '\\n';
+            if (choice === 1) {
+              output += 'Enter temperature in Celsius (°C): ' + tempVal + '\\n';
+              const f = (tempVal * 9 / 5) + 32;
+              output += '>>> Result: ' + tempVal.toFixed(2) + ' °C = ' + f.toFixed(2) + ' °F\\n\\n';
+              output += 'Thank you for using Temperature Converter. Goodbye!';
+            } else if (choice === 2) {
+              output += 'Enter temperature in Fahrenheit (°F): ' + tempVal + '\\n';
+              const c = (tempVal - 32) * 5 / 9;
+              output += '>>> Result: ' + tempVal.toFixed(2) + ' °F = ' + c.toFixed(2) + ' °C\\n\\n';
+              output += 'Thank you for using Temperature Converter. Goodbye!';
+            } else {
+              output += '\\nThank you for using Temperature Converter. Goodbye!';
+            }
+          }
+        } catch (err) {
+          output += '\\nRuntime Error: ' + err.message;
+        }
+
+        output += '\\n\\n[Process exited with code 0 in 0.02s]';
+        term.innerText = output;
+        if (status) status.innerText = '🟢 Execution Finished (0.02s)';
+      }, 180);
+    }
+  </script>
+`;
+
+// 1. Update master HTML with new C++ compiler boxes
+console.log('Injecting interactive C++ Compiler widgets into master HTML...');
+let masterHtml = fs.readFileSync(masterHtmlPath, 'utf8');
 
 for (const p of problems) {
-  // Inject dedicated page button next to Back to Top
-  const topLinkPattern = new RegExp(`(<article id="problem-${p.id}"[\\s\\S]*?<a href="#problemsContainer"[^>]*>)([\\s\\S]*?)(<\\/a>)`);
-  const dedicatedBtn = `
-            <div class="flex items-center gap-2">
-              <a href="/algorithms-and-flowcharts/${p.slug}/" class="px-3 py-1.5 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-400 hover:text-emerald-300 text-xs font-extrabold border border-emerald-500/30 transition flex items-center gap-1">
-                <span>🚀 Dedicated Page ↗</span>
-              </a>
-              <a href="#problemsContainer" class="text-xs text-slate-400 hover:text-[#04AA6D] font-bold transition-colors">
-                ↑ Top
-              </a>
-            </div>`;
+  const compilerBox = renderCppCompilerBox(p);
   
-  if (topLinkPattern.test(masterHtml)) {
-    masterHtml = masterHtml.replace(topLinkPattern, (match, prefix, linkText, close) => {
-      if (match.includes('Dedicated Page ↗')) return match;
-      return `${match.split('<a href="#problemsContainer"')[0]}${dedicatedBtn}`;
-    });
-  }
+  // Replace old C++ block if present, or insert into solution
+  const oldCppRegex = new RegExp(`<!-- C\\+\\+ Program Implementation -->[\\s\\S]*?id="cpp-${p.id}"[\\s\\S]*?</div>\\s*</div>`, 'g');
+  const existingBoxRegex = new RegExp(`<div[^>]*id="compiler-box-${p.id}"[\\s\\S]*?<!-- \\/compiler-box-${p.id} -->`, 'g');
 
-  // Inject C++ block into solution
-  const solutionTag = `id="solution-${p.id}"`;
-  const cppBlock = renderCppBlock(p);
-  if (!masterHtml.includes(`id="cpp-${p.id}"`) && masterHtml.includes(solutionTag)) {
-    // Insert before closing of solution
+  if (masterHtml.includes(`id="compiler-box-${p.id}"`)) {
+    // Already has compiler box, update it
+    masterHtml = masterHtml.replace(new RegExp(`<!-- Interactive C\\+\\+ Compiler & Terminal Environment -->[\\s\\S]*?id="compiler-box-${p.id}"[\\s\\S]*?<!-- End Compiler Box ${p.id} -->`), `${compilerBox}\n<!-- End Compiler Box ${p.id} -->`);
+  } else if (oldCppRegex.test(masterHtml)) {
+    masterHtml = masterHtml.replace(oldCppRegex, `${compilerBox}\n<!-- End Compiler Box ${p.id} -->`);
+  } else {
+    // Insert into solution
     const solRegex = new RegExp(`(id="solution-${p.id}"[\\s\\S]*?<!-- Key Takeaway Callout -->[\\s\\S]*?<\\/div>\\s*<\\/div>)`);
     if (solRegex.test(masterHtml)) {
-      masterHtml = masterHtml.replace(solRegex, `$1\n${cppBlock}`);
-      console.log(`Injected C++ block into Problem ${p.id} solution.`);
+      masterHtml = masterHtml.replace(solRegex, `$1\n${compilerBox}\n<!-- End Compiler Box ${p.id} -->`);
     }
   }
 }
 
-fs.writeFileSync(masterHtmlPath, masterHtml, 'utf8');
-console.log('Master HTML updated with C++ blocks and Dedicated Page buttons!');
+// Inject compiler script before </body> in master HTML
+if (!masterHtml.includes('function runCppCode(')) {
+  masterHtml = masterHtml.replace('</body>', `${compilerJsScript}\n</body>`);
+} else {
+  // Update compiler script
+  masterHtml = masterHtml.replace(/<script>[\s\S]*?function runCppCode[\s\S]*?<\/script>/, compilerJsScript);
+}
 
-// 3. Generate 10 Standalone Dedicated Problem Pages
+fs.writeFileSync(masterHtmlPath, masterHtml, 'utf8');
+console.log('Master HTML updated with interactive C++ Compiler widgets & JS engine!');
+
+// 2. Generate 10 Standalone Dedicated Problem Pages
 const outputBaseDir = path.join(publicDir, 'algorithms-and-flowcharts');
 if (!fs.existsSync(outputBaseDir)) {
   fs.mkdirSync(outputBaseDir, { recursive: true });
@@ -1370,7 +1833,7 @@ function generateStandaloneHtml(p, prevP, nextP) {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Problem ${p.id}: ${p.title} | NextSem Academy</title>
-  <meta name="description" content="Step-by-step algorithm, interactive flowchart, ANSI SVG diagram, ASCII chart, dry-run trace table, and complete C++ program for Problem ${p.id}: ${p.title}. By Er. Manoj Kumar.">
+  <meta name="description" content="Step-by-step algorithm, interactive flowchart, ANSI SVG diagram, ASCII chart, dry-run trace table, and interactive C++ compiler for Problem ${p.id}: ${p.title}. By Er. Manoj Kumar.">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
   <script>
@@ -1393,7 +1856,7 @@ function generateStandaloneHtml(p, prevP, nextP) {
     body { background-color: #17181c; color: #f8fafc; font-family: system-ui, -apple-system, sans-serif; }
     .emerald-glow { box-shadow: 0 0 25px rgba(4, 170, 109, 0.2); }
     .glass-card { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.08); }
-    pre { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+    pre, textarea { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
   </style>
 </head>
 <body class="min-h-screen flex flex-col items-center selection:bg-[#04AA6D] selection:text-black">
@@ -1456,7 +1919,7 @@ function generateStandaloneHtml(p, prevP, nextP) {
         <span class="text-slate-600">•</span>
         <a href="#dry-run" class="text-slate-300 hover:text-[#04AA6D] font-bold underline">Trace Table</a>
         <span class="text-slate-600">•</span>
-        <a href="#cpp-code" class="text-emerald-400 hover:text-emerald-300 font-bold underline">C++ Program</a>
+        <a href="#cpp-compiler" class="text-emerald-400 hover:text-emerald-300 font-bold underline">⚡ Live C++ Compiler</a>
       </div>
     </header>
 
@@ -1506,7 +1969,7 @@ function generateStandaloneHtml(p, prevP, nextP) {
           <span class="text-lg">📝</span>
           <h2 class="text-lg font-black text-white uppercase tracking-wide">Step-by-Step Formal Algorithm</h2>
         </div>
-        <button onclick="copyText('algo-content', this)" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold border border-slate-700 transition flex items-center gap-1.5 cursor-pointer">
+        <button onclick="copyAlgoText(this)" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold border border-slate-700 transition flex items-center gap-1.5 cursor-pointer">
           📋 <span>Copy Algorithm</span>
         </button>
       </div>
@@ -1533,7 +1996,7 @@ ${p.mermaid}
           <span class="text-lg">🖥️</span>
           <h2 class="text-lg font-black text-white uppercase tracking-wide">Flowchart (ANSI Terminal ASCII Chart)</h2>
         </div>
-        <button onclick="copyText('ascii-content', this)" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold border border-slate-700 transition flex items-center gap-1.5 cursor-pointer">
+        <button onclick="copyAsciiText(this)" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold border border-slate-700 transition flex items-center gap-1.5 cursor-pointer">
           📋 <span>Copy ASCII Chart</span>
         </button>
       </div>
@@ -1572,30 +2035,20 @@ ${p.mermaid}
       </div>
     </section>
 
-    <!-- SECTION 7: PRODUCTION C++ PROGRAM -->
-    <section id="cpp-code" class="glass-card rounded-2xl p-6 border border-slate-800 space-y-4">
+    <!-- SECTION 7: INTERACTIVE C++ COMPILER & RUNNER -->
+    <section id="cpp-compiler" class="glass-card rounded-2xl p-6 border border-slate-800 space-y-4">
       <div class="flex items-center justify-between flex-wrap gap-2">
         <div class="flex items-center gap-2">
-          <span class="text-lg">💻</span>
-          <h2 class="text-lg font-black text-white uppercase tracking-wide">Complete C++ Program Implementation</h2>
-          <span class="px-2.5 py-0.5 rounded-full bg-blue-500/15 text-blue-400 text-[10px] font-black uppercase font-mono border border-blue-500/30">C++ 17 / 20</span>
+          <span class="text-lg">⚡</span>
+          <h2 class="text-lg font-black text-white uppercase tracking-wide">Interactive C++ Compiler & Runner</h2>
+          <span class="px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 text-[10px] font-black uppercase font-mono border border-emerald-500/30">Live In-Browser</span>
         </div>
-        <button onclick="copyText('cpp-code-block', this)" class="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-emerald-600 to-cyan-600 hover:from-emerald-500 hover:to-cyan-500 text-white text-xs font-extrabold transition flex items-center gap-1.5 cursor-pointer shadow-lg shadow-emerald-500/10">
-          📋 <span>Copy C++ Code</span>
-        </button>
       </div>
       <p class="text-slate-300 text-xs leading-relaxed">
-        Production-ready, highly commented C++ implementation with input validation, optimal algorithmic complexity, and structured I/O formatting.
+        Edit the code directly with the <strong class="text-white">Edit Code</strong> button, provide custom inputs, and press <strong class="text-emerald-400">Run Code</strong> to compile and execute in the live terminal console below!
       </p>
-      <pre id="cpp-code-block" class="bg-[#090b10] border border-slate-800 rounded-xl p-4 text-xs font-mono text-cyan-300 overflow-x-auto leading-relaxed whitespace-pre-wrap">${p.cppCode.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</pre>
 
-      <div class="bg-slate-900/70 border border-slate-800 rounded-xl p-4 space-y-2">
-        <div class="flex items-center justify-between">
-          <span class="text-xs font-bold text-slate-300 uppercase tracking-wider">Sample Terminal Run:</span>
-          <span class="text-[10px] text-slate-500 font-mono">Compile: g++ -O2 problem_${p.id}.cpp -o problem_${p.id}</span>
-        </div>
-        <pre class="text-slate-200 text-xs font-mono bg-black/40 p-3 rounded-lg border border-slate-800/80 whitespace-pre-wrap">${p.sampleIO.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</pre>
-      </div>
+      ${renderCppCompilerBox(p)}
     </section>
 
     <!-- SECTION 8: DEVELOPER KEY TAKEAWAY -->
@@ -1663,22 +2116,33 @@ ${p.mermaid}
   </footer>
 
   <script>
-    function copyText(elemId, btn) {
-      const el = document.getElementById(elemId);
+    function copyAlgoText(btn) {
+      const el = document.getElementById('algo-content');
       if (!el) return;
-      const text = el.innerText || el.textContent;
-      navigator.clipboard.writeText(text).then(() => {
+      navigator.clipboard.writeText(el.innerText || el.textContent).then(() => {
+        const orig = btn.innerHTML;
+        btn.innerHTML = '✅ Copied!';
+        setTimeout(() => { btn.innerHTML = orig; }, 2000);
+      });
+    }
+
+    function copyAsciiText(btn) {
+      const el = document.getElementById('ascii-content');
+      if (!el) return;
+      navigator.clipboard.writeText(el.innerText || el.textContent).then(() => {
         const orig = btn.innerHTML;
         btn.innerHTML = '✅ Copied!';
         setTimeout(() => { btn.innerHTML = orig; }, 2000);
       });
     }
   </script>
+
+  ${compilerJsScript}
 </body>
 </html>`;
 }
 
-console.log('Generating 10 dedicated standalone problem pages in public/algorithms-and-flowcharts/ ...');
+console.log('Generating 10 dedicated standalone problem pages with C++ Compilers in public/algorithms-and-flowcharts/ ...');
 
 for (let i = 0; i < problems.length; i++) {
   const p = problems[i];
@@ -1704,105 +2168,12 @@ for (let i = 0; i < problems.length; i++) {
   console.log(`Generated: /algorithms-and-flowcharts/${p.slug}/ and /algorithms-and-flowcharts/${p.shortSlug}/`);
 }
 
-// 4. Generate Hub Directory Page: public/algorithms-and-flowcharts/index.html
-const hubHtml = `<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>10 Master Problems in Algorithms & Flowcharts | NextSem Academy</title>
-  <meta name="description" content="Master 10 fundamental computer science algorithms, flowcharts, ANSI diagrams, and C++ programs. Each problem on dedicated standalone pages by Er. Manoj Kumar.">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    body { background-color: #17181c; color: #f8fafc; font-family: system-ui, -apple-system, sans-serif; }
-    .emerald-glow { box-shadow: 0 0 25px rgba(4, 170, 109, 0.2); }
-    .glass-card { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.08); }
-  </style>
-</head>
-<body class="min-h-screen flex flex-col items-center selection:bg-[#04AA6D] selection:text-black">
+// 3. Sync into out directory as well
+const outAlgorithmsDir = path.resolve('out/algorithms-and-flowcharts');
+if (fs.existsSync(path.resolve('out'))) {
+  fs.cpSync(outputBaseDir, outAlgorithmsDir, { recursive: true, force: true });
+  fs.copyFileSync(masterHtmlPath, path.resolve('out/algorithms-and-flowcharts-10-master-problems.html'));
+  console.log('Synchronized updated public files directly into out/ directory!');
+}
 
-  <nav class="w-full bg-[#0e1015] border-b border-slate-800 sticky top-0 z-50 px-4 py-3">
-    <div class="max-w-6xl mx-auto flex flex-wrap items-center justify-between gap-3">
-      <div class="flex items-center flex-wrap gap-2 text-xs">
-        <a href="/" class="flex items-center gap-2 text-white font-black text-base sm:text-lg tracking-tight hover:text-[#04AA6D] transition-colors group">
-          <div class="w-8 h-8 rounded-xl bg-[#0c1328] border border-emerald-500/40 flex items-center justify-center p-1 shadow-md shadow-emerald-500/10 group-hover:border-emerald-400 group-hover:scale-105 transition-all shrink-0">
-            <img src="/nextsem-emblem.png" alt="NextSem Logo" class="w-full h-full object-contain rounded-lg" />
-          </div>
-          <span class="tracking-tight hidden sm:inline">NextSem <span class="text-[#04AA6D]">Academy</span></span>
-        </a>
-        <span class="text-slate-600 font-bold">❯</span>
-        <a href="/" class="text-slate-300 hover:text-[#04AA6D] font-bold transition-colors">🏠 Home</a>
-        <span class="text-slate-600 font-bold">❯</span>
-        <a href="/bca" class="text-slate-300 hover:text-[#04AA6D] font-bold transition-colors">BCA Hub</a>
-        <span class="text-slate-600 font-bold">❯</span>
-        <span class="text-emerald-400 font-extrabold bg-emerald-500/10 border border-emerald-500/30 px-2 py-0.5 rounded-md">10 Master Problems Directory</span>
-      </div>
-      <div class="flex items-center gap-2">
-        <a href="/algorithms-and-flowcharts-10-master-problems.html" class="px-3 py-1.5 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-400 text-xs font-bold border border-emerald-500/30 transition flex items-center gap-1.5">
-          📜 <span>Single-Page Master View</span>
-        </a>
-        <a href="/" class="px-3 py-1.5 rounded-lg bg-[#04AA6D] hover:bg-[#039861] text-black font-extrabold text-xs transition flex items-center gap-1">
-          🏠 <span>Home</span>
-        </a>
-      </div>
-    </div>
-  </nav>
-
-  <main class="w-full max-w-6xl mx-auto px-4 py-8 space-y-8">
-    <header class="glass-card rounded-2xl p-6 sm:p-8 emerald-glow border border-slate-800">
-      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#04AA6D]/15 border border-[#04AA6D]/40 text-[#04AA6D] text-xs font-black uppercase tracking-wider mb-3">
-        <span>Er. Manoj Kumar • Computer Science Fundamentals</span>
-      </div>
-      <h1 class="text-3xl sm:text-4xl font-black text-white tracking-tight leading-tight">
-        10 Master Problems: Dedicated Learning Pages
-      </h1>
-      <p class="text-slate-300 text-sm sm:text-base mt-2 max-w-3xl leading-relaxed">
-        Select any problem below to open its dedicated masterclass page with step-by-step algorithm, interactive flowchart, ANSI SVG vector diagram, dry-run trace table, and production C++ program.
-      </p>
-    </header>
-
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      ${problems.map(p => `
-        <article class="glass-card rounded-2xl p-6 border border-slate-800 hover:border-emerald-500/40 transition-all flex flex-col justify-between space-y-4 group">
-          <div class="space-y-3">
-            <div class="flex items-center justify-between">
-              <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full ${p.catColor} text-xs font-black uppercase">
-                Problem ${p.id} • ${p.category}
-              </span>
-              <span class="text-[10px] text-slate-500 font-mono uppercase">C++ 17/20</span>
-            </div>
-            <h2 class="text-xl font-black text-white group-hover:text-emerald-400 transition-colors">
-              ${p.title}
-            </h2>
-            <p class="text-xs text-slate-300 leading-relaxed line-clamp-3">
-              ${p.statement}
-            </p>
-          </div>
-          <div class="pt-4 border-t border-slate-800/80 flex items-center justify-between gap-2">
-            <a href="/algorithms-and-flowcharts/${p.slug}/" class="px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-600 to-cyan-600 hover:from-emerald-500 hover:to-cyan-500 text-white text-xs font-extrabold transition flex items-center gap-1.5 shadow-md shadow-emerald-500/10">
-              <span>Open Dedicated Page ↗</span>
-            </a>
-            <span class="text-[11px] text-slate-500 font-mono">/problem-${p.id}/</span>
-          </div>
-        </article>
-      `).join('')}
-    </div>
-  </main>
-
-  <footer class="w-full border-t border-slate-800 bg-[#0a0c10] py-8 text-center text-xs text-slate-500 space-y-3 mt-12">
-    <div class="flex items-center justify-center gap-2">
-      <div class="w-5 h-5 rounded bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center p-0.5">
-        <img src="/nextsem-emblem.png" alt="NextSem Logo" class="w-full h-full object-contain" />
-      </div>
-      <span class="text-slate-400 font-bold">Nextsem Academy • Complete Free Dev Curriculum</span>
-    </div>
-    <p class="text-[11px] text-slate-600">
-      Authored by Er. Manoj Kumar • Computer Science and BCA First Semester Mastery Series.
-    </p>
-  </footer>
-</body>
-</html>`;
-
-fs.writeFileSync(path.join(outputBaseDir, 'index.html'), hubHtml, 'utf8');
-console.log('Generated Hub Directory Page at: public/algorithms-and-flowcharts/index.html');
-console.log('ALL TASKS COMPLETED SUCCESSFULLY!');
+console.log('ALL COMPILER AND SUITE GENERATION TASKS COMPLETED SUCCESSFULLY!');

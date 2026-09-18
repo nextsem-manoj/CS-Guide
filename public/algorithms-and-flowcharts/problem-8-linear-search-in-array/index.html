@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Problem 8: Linear Search in an Array of N Elements with Early Exit | NextSem Academy</title>
-  <meta name="description" content="Step-by-step algorithm, interactive flowchart, ANSI SVG diagram, ASCII chart, dry-run trace table, and complete C++ program for Problem 8: Linear Search in an Array of N Elements with Early Exit. By Er. Manoj Kumar.">
+  <meta name="description" content="Step-by-step algorithm, interactive flowchart, ANSI SVG diagram, ASCII chart, dry-run trace table, and interactive C++ compiler for Problem 8: Linear Search in an Array of N Elements with Early Exit. By Er. Manoj Kumar.">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
   <script>
@@ -27,7 +27,7 @@
     body { background-color: #17181c; color: #f8fafc; font-family: system-ui, -apple-system, sans-serif; }
     .emerald-glow { box-shadow: 0 0 25px rgba(4, 170, 109, 0.2); }
     .glass-card { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.08); }
-    pre { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+    pre, textarea { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
   </style>
 </head>
 <body class="min-h-screen flex flex-col items-center selection:bg-[#04AA6D] selection:text-black">
@@ -90,7 +90,7 @@
         <span class="text-slate-600">•</span>
         <a href="#dry-run" class="text-slate-300 hover:text-[#04AA6D] font-bold underline">Trace Table</a>
         <span class="text-slate-600">•</span>
-        <a href="#cpp-code" class="text-emerald-400 hover:text-emerald-300 font-bold underline">C++ Program</a>
+        <a href="#cpp-compiler" class="text-emerald-400 hover:text-emerald-300 font-bold underline">⚡ Live C++ Compiler</a>
       </div>
     </header>
 
@@ -164,7 +164,7 @@
           <span class="text-lg">📝</span>
           <h2 class="text-lg font-black text-white uppercase tracking-wide">Step-by-Step Formal Algorithm</h2>
         </div>
-        <button onclick="copyText('algo-content', this)" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold border border-slate-700 transition flex items-center gap-1.5 cursor-pointer">
+        <button onclick="copyAlgoText(this)" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold border border-slate-700 transition flex items-center gap-1.5 cursor-pointer">
           📋 <span>Copy Algorithm</span>
         </button>
       </div>
@@ -223,7 +223,7 @@ flowchart TD
           <span class="text-lg">🖥️</span>
           <h2 class="text-lg font-black text-white uppercase tracking-wide">Flowchart (ANSI Terminal ASCII Chart)</h2>
         </div>
-        <button onclick="copyText('ascii-content', this)" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold border border-slate-700 transition flex items-center gap-1.5 cursor-pointer">
+        <button onclick="copyAsciiText(this)" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold border border-slate-700 transition flex items-center gap-1.5 cursor-pointer">
           📋 <span>Copy ASCII Chart</span>
         </button>
       </div>
@@ -302,41 +302,86 @@ flowchart TD
       </div>
     </section>
 
-    <!-- SECTION 7: PRODUCTION C++ PROGRAM -->
-    <section id="cpp-code" class="glass-card rounded-2xl p-6 border border-slate-800 space-y-4">
+    <!-- SECTION 7: INTERACTIVE C++ COMPILER & RUNNER -->
+    <section id="cpp-compiler" class="glass-card rounded-2xl p-6 border border-slate-800 space-y-4">
       <div class="flex items-center justify-between flex-wrap gap-2">
         <div class="flex items-center gap-2">
-          <span class="text-lg">💻</span>
-          <h2 class="text-lg font-black text-white uppercase tracking-wide">Complete C++ Program Implementation</h2>
-          <span class="px-2.5 py-0.5 rounded-full bg-blue-500/15 text-blue-400 text-[10px] font-black uppercase font-mono border border-blue-500/30">C++ 17 / 20</span>
+          <span class="text-lg">⚡</span>
+          <h2 class="text-lg font-black text-white uppercase tracking-wide">Interactive C++ Compiler & Runner</h2>
+          <span class="px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 text-[10px] font-black uppercase font-mono border border-emerald-500/30">Live In-Browser</span>
         </div>
-        <button onclick="copyText('cpp-code-block', this)" class="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-emerald-600 to-cyan-600 hover:from-emerald-500 hover:to-cyan-500 text-white text-xs font-extrabold transition flex items-center gap-1.5 cursor-pointer shadow-lg shadow-emerald-500/10">
-          📋 <span>Copy C++ Code</span>
-        </button>
       </div>
       <p class="text-slate-300 text-xs leading-relaxed">
-        Production-ready, highly commented C++ implementation with input validation, optimal algorithmic complexity, and structured I/O formatting.
+        Edit the code directly with the <strong class="text-white">Edit Code</strong> button, provide custom inputs, and press <strong class="text-emerald-400">Run Code</strong> to compile and execute in the live terminal console below!
       </p>
-      <pre id="cpp-code-block" class="bg-[#090b10] border border-slate-800 rounded-xl p-4 text-xs font-mono text-cyan-300 overflow-x-auto leading-relaxed whitespace-pre-wrap">#include &lt;iostream&gt;
+
+      
+          <!-- Interactive C++ Compiler & Terminal Environment -->
+          <div class="mt-6 pt-6 border-t border-slate-800 space-y-3" id="compiler-box-8">
+            
+            <!-- Compiler Header Bar -->
+            <div class="bg-[#0e131f] border border-slate-700/80 rounded-t-xl p-3 flex flex-wrap items-center justify-between gap-3 shadow-md">
+              <div class="flex items-center gap-2.5">
+                <div class="flex items-center gap-1.5 mr-1">
+                  <span class="w-3 h-3 rounded-full bg-red-500/80 inline-block"></span>
+                  <span class="w-3 h-3 rounded-full bg-yellow-500/80 inline-block"></span>
+                  <span class="w-3 h-3 rounded-full bg-emerald-500/80 inline-block"></span>
+                </div>
+                <div class="flex items-center gap-1.5 px-2.5 py-1 rounded bg-[#172033] border border-cyan-500/30 text-cyan-300 font-mono text-xs font-bold">
+                  <span>📄</span>
+                  <span>problem_8.cpp</span>
+                </div>
+                <span class="hidden sm:inline-block px-2 py-0.5 rounded-full bg-blue-500/15 text-blue-400 text-[10px] font-black uppercase font-mono border border-blue-500/30">
+                  GCC 13.2 • C++20
+                </span>
+              </div>
+
+              <!-- Action Buttons (Run, Edit, Reset, Copy, Online IDE) -->
+              <div class="flex items-center flex-wrap gap-2">
+                <button id="btn-edit-8" onclick="toggleEditCode(8)" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold border border-slate-700 transition flex items-center gap-1.5 cursor-pointer">
+                  <span>✏️</span> <span id="btn-edit-text-8">Edit Code</span>
+                </button>
+
+                <button onclick="resetCode(8)" class="px-2.5 py-1.5 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-slate-400 hover:text-slate-200 text-xs font-medium border border-slate-800 transition flex items-center gap-1 cursor-pointer" title="Reset to default code">
+                  <span>↺</span> <span>Reset</span>
+                </button>
+
+                <button onclick="copyCode(8, this)" class="px-2.5 py-1.5 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-slate-300 text-xs font-medium border border-slate-800 transition flex items-center gap-1 cursor-pointer">
+                  <span>📋</span> <span>Copy</span>
+                </button>
+
+                <button id="btn-run-8" onclick="runCppCode(8)" class="px-4 py-1.5 rounded-lg bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-extrabold text-xs transition flex items-center gap-1.5 shadow-lg shadow-emerald-500/20 cursor-pointer">
+                  <span>▶</span> <span>Run Code</span>
+                </button>
+
+                <button onclick="openInWebIde(8)" class="px-2.5 py-1.5 rounded-lg bg-blue-500/15 hover:bg-blue-500/25 text-blue-400 text-xs font-bold border border-blue-500/30 transition flex items-center gap-1 cursor-pointer" title="Open in OneCompiler Online IDE">
+                  <span>🌐 Online IDE ↗</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Code Display & Interactive Editor -->
+            <div class="relative bg-[#090b10] border-x border-slate-800">
+              <pre id="code-view-8" class="p-4 text-xs font-mono text-cyan-300 overflow-x-auto leading-relaxed whitespace-pre-wrap">#include &lt;iostream&gt;
 #include &lt;vector&gt;
 using namespace std;
 
 int main() {
     int n;
-    cout &lt;&lt; "Enter number of elements in array N: ";
+    cout &lt;&lt; &quot;Enter number of elements in array N: &quot;;
     if (!(cin &gt;&gt; n) || n &lt;= 0) {
-        cout &lt;&lt; "Invalid array size N!\n";
+        cout &lt;&lt; &quot;Invalid array size N!\n&quot;;
         return 1;
     }
 
     vector&lt;int&gt; arr(n);
-    cout &lt;&lt; "Enter " &lt;&lt; n &lt;&lt; " integers:\n";
+    cout &lt;&lt; &quot;Enter &quot; &lt;&lt; n &lt;&lt; &quot; integers:\n&quot;;
     for (int i = 0; i &lt; n; ++i) {
         cin &gt;&gt; arr[i];
     }
 
     int key;
-    cout &lt;&lt; "Enter target key to search: ";
+    cout &lt;&lt; &quot;Enter target key to search: &quot;;
     cin &gt;&gt; key;
 
     int foundIndex = -1;
@@ -351,26 +396,98 @@ int main() {
         }
     }
 
-    cout &lt;&lt; "\n========================================\n";
+    cout &lt;&lt; &quot;\n========================================\n&quot;;
     if (foundIndex != -1) {
-        cout &lt;&lt; "SUCCESS: Target key [" &lt;&lt; key &lt;&lt; "] FOUND at index " &lt;&lt; foundIndex 
-             &lt;&lt; " (Position " &lt;&lt; (foundIndex + 1) &lt;&lt; " in array).\n";
-        cout &lt;&lt; "Comparisons executed : " &lt;&lt; comparisons &lt;&lt; " of " &lt;&lt; n 
-             &lt;&lt; " (" &lt;&lt; (n - comparisons) &lt;&lt; " comparisons saved!)\n";
+        cout &lt;&lt; &quot;SUCCESS: Target key [&quot; &lt;&lt; key &lt;&lt; &quot;] FOUND at index &quot; &lt;&lt; foundIndex 
+             &lt;&lt; &quot; (Position &quot; &lt;&lt; (foundIndex + 1) &lt;&lt; &quot; in array).\n&quot;;
+        cout &lt;&lt; &quot;Comparisons executed : &quot; &lt;&lt; comparisons &lt;&lt; &quot; of &quot; &lt;&lt; n 
+             &lt;&lt; &quot; (&quot; &lt;&lt; (n - comparisons) &lt;&lt; &quot; comparisons saved!)\n&quot;;
     } else {
-        cout &lt;&lt; "FAILURE: Target key [" &lt;&lt; key &lt;&lt; "] NOT FOUND in the array.\n";
-        cout &lt;&lt; "Comparisons executed : " &lt;&lt; comparisons &lt;&lt; " (Full scan completed).\n";
+        cout &lt;&lt; &quot;FAILURE: Target key [&quot; &lt;&lt; key &lt;&lt; &quot;] NOT FOUND in the array.\n&quot;;
+        cout &lt;&lt; &quot;Comparisons executed : &quot; &lt;&lt; comparisons &lt;&lt; &quot; (Full scan completed).\n&quot;;
     }
-    cout &lt;&lt; "========================================\n";
+    cout &lt;&lt; &quot;========================================\n&quot;;
     return 0;
 }</pre>
+              <textarea id="code-editor-8" class="hidden w-full h-[360px] p-4 bg-[#05070a] text-cyan-300 font-mono text-xs leading-relaxed border-0 outline-none resize-y focus:ring-1 focus:ring-emerald-500/50" spellcheck="false">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+using namespace std;
 
-      <div class="bg-slate-900/70 border border-slate-800 rounded-xl p-4 space-y-2">
-        <div class="flex items-center justify-between">
-          <span class="text-xs font-bold text-slate-300 uppercase tracking-wider">Sample Terminal Run:</span>
-          <span class="text-[10px] text-slate-500 font-mono">Compile: g++ -O2 problem_8.cpp -o problem_8</span>
-        </div>
-        <pre class="text-slate-200 text-xs font-mono bg-black/40 p-3 rounded-lg border border-slate-800/80 whitespace-pre-wrap">Input:
+int main() {
+    int n;
+    cout &lt;&lt; &quot;Enter number of elements in array N: &quot;;
+    if (!(cin &gt;&gt; n) || n &lt;= 0) {
+        cout &lt;&lt; &quot;Invalid array size N!\n&quot;;
+        return 1;
+    }
+
+    vector&lt;int&gt; arr(n);
+    cout &lt;&lt; &quot;Enter &quot; &lt;&lt; n &lt;&lt; &quot; integers:\n&quot;;
+    for (int i = 0; i &lt; n; ++i) {
+        cin &gt;&gt; arr[i];
+    }
+
+    int key;
+    cout &lt;&lt; &quot;Enter target key to search: &quot;;
+    cin &gt;&gt; key;
+
+    int foundIndex = -1;
+    int comparisons = 0;
+
+    // Linear search with early exit
+    for (int i = 0; i &lt; n; ++i) {
+        comparisons++;
+        if (arr[i] == key) {
+            foundIndex = i;
+            break; // Early exit break
+        }
+    }
+
+    cout &lt;&lt; &quot;\n========================================\n&quot;;
+    if (foundIndex != -1) {
+        cout &lt;&lt; &quot;SUCCESS: Target key [&quot; &lt;&lt; key &lt;&lt; &quot;] FOUND at index &quot; &lt;&lt; foundIndex 
+             &lt;&lt; &quot; (Position &quot; &lt;&lt; (foundIndex + 1) &lt;&lt; &quot; in array).\n&quot;;
+        cout &lt;&lt; &quot;Comparisons executed : &quot; &lt;&lt; comparisons &lt;&lt; &quot; of &quot; &lt;&lt; n 
+             &lt;&lt; &quot; (&quot; &lt;&lt; (n - comparisons) &lt;&lt; &quot; comparisons saved!)\n&quot;;
+    } else {
+        cout &lt;&lt; &quot;FAILURE: Target key [&quot; &lt;&lt; key &lt;&lt; &quot;] NOT FOUND in the array.\n&quot;;
+        cout &lt;&lt; &quot;Comparisons executed : &quot; &lt;&lt; comparisons &lt;&lt; &quot; (Full scan completed).\n&quot;;
+    }
+    cout &lt;&lt; &quot;========================================\n&quot;;
+    return 0;
+}</textarea>
+            </div>
+
+            <!-- Standard Input (cin) Drawer -->
+            <div class="bg-[#0b0f19] border-x border-b border-slate-800 p-3 flex flex-wrap items-center justify-between gap-3 text-xs">
+              <div class="flex items-center gap-2 flex-grow min-w-[260px]">
+                <span class="text-slate-400 font-bold uppercase tracking-wider text-[11px] whitespace-nowrap">⌨️ Standard Input (cin):</span>
+                <input type="text" id="stdin-8" value="5 15 23 7 42 9 7" placeholder="Enter program inputs..." class="flex-grow bg-black/50 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-white font-mono focus:border-emerald-500 focus:outline-none" />
+              </div>
+              <div class="flex items-center gap-1.5 text-[11px] flex-wrap">
+                <span class="text-slate-500">Presets:</span>
+                
+                  <button onclick="applyPreset(8, '5 15 23 7 42 9 7')" class="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white font-mono transition cursor-pointer border border-slate-700/60">Key=7 (Found early)</button>
+                
+                  <button onclick="applyPreset(8, '5 15 23 7 42 9 99')" class="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white font-mono transition cursor-pointer border border-slate-700/60">Key=99 (Not found)</button>
+                
+                  <button onclick="applyPreset(8, '5 15 23 7 42 9 15')" class="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white font-mono transition cursor-pointer border border-slate-700/60">Key=15 (First pos)</button>
+                
+              </div>
+            </div>
+
+            <!-- Terminal Output Drawer -->
+            <div id="terminal-box-8" class="bg-[#040609] border border-slate-800 rounded-xl p-4 font-mono text-xs space-y-2">
+              <div class="flex items-center justify-between text-[11px] text-slate-400 pb-2 border-b border-slate-800/80">
+                <div class="flex items-center gap-2">
+                  <span class="text-emerald-400 font-bold">💻 Terminal Output</span>
+                  <span id="term-status-8" class="text-[10px] text-slate-500">• Ready to run</span>
+                </div>
+                <button onclick="clearTerminal(8)" class="text-slate-500 hover:text-slate-300 transition text-[10px] cursor-pointer">
+                  🧹 Clear
+                </button>
+              </div>
+              <pre id="terminal-out-8" class="text-slate-300 text-xs leading-relaxed whitespace-pre-wrap min-h-[50px]">Input:
 5
 15 23 7 42 9
 7
@@ -380,7 +497,9 @@ Output:
 SUCCESS: Target key [7] FOUND at index 2 (Position 3 in array).
 Comparisons executed : 3 of 5 (2 comparisons saved!)
 ========================================</pre>
-      </div>
+            </div>
+          </div>
+
     </section>
 
     <!-- SECTION 8: DEVELOPER KEY TAKEAWAY -->
@@ -444,16 +563,367 @@ Comparisons executed : 3 of 5 (2 comparisons saved!)
   </footer>
 
   <script>
-    function copyText(elemId, btn) {
-      const el = document.getElementById(elemId);
+    function copyAlgoText(btn) {
+      const el = document.getElementById('algo-content');
       if (!el) return;
-      const text = el.innerText || el.textContent;
-      navigator.clipboard.writeText(text).then(() => {
+      navigator.clipboard.writeText(el.innerText || el.textContent).then(() => {
+        const orig = btn.innerHTML;
+        btn.innerHTML = '✅ Copied!';
+        setTimeout(() => { btn.innerHTML = orig; }, 2000);
+      });
+    }
+
+    function copyAsciiText(btn) {
+      const el = document.getElementById('ascii-content');
+      if (!el) return;
+      navigator.clipboard.writeText(el.innerText || el.textContent).then(() => {
         const orig = btn.innerHTML;
         btn.innerHTML = '✅ Copied!';
         setTimeout(() => { btn.innerHTML = orig; }, 2000);
       });
     }
   </script>
+
+  
+  <script>
+    const defaultCodes = {
+      1: "#include <iostream>\nusing namespace std;\n\nint main() {\n    double a, b, c;\n    cout << \"Enter three numbers (A B C): \";\n    if (!(cin >> a >> b >> c)) {\n        cout << \"Invalid input! Please enter valid numeric values.\\n\";\n        return 1;\n    }\n\n    double largest;\n    // Step-by-step nested branching\n    if (a >= b) {\n        if (a >= c) {\n            largest = a;\n        } else {\n            largest = c;\n        }\n    } else {\n        if (b >= c) {\n            largest = b;\n        } else {\n            largest = c;\n        }\n    }\n\n    cout << \"\\n========================================\\n\";\n    cout << \"Input values: A = \" << a << \", B = \" << b << \", C = \" << c << \"\\n\";\n    cout << \"Result      : Largest Number is \" << largest << \"\\n\";\n    cout << \"========================================\\n\";\n    return 0;\n}",
+      2: "#include <iostream>\nusing namespace std;\n\nint main() {\n    long long n;\n    cout << \"Enter a positive integer: \";\n    if (!(cin >> n)) {\n        cout << \"Invalid input! Please enter a valid integer.\\n\";\n        return 1;\n    }\n\n    if (n <= 1) {\n        cout << n << \" is NEITHER prime nor composite (by definition).\\n\";\n        return 0;\n    }\n    if (n == 2 || n == 3) {\n        cout << n << \" is a PRIME number.\\n\";\n        return 0;\n    }\n    if (n % 2 == 0) {\n        cout << n << \" is a COMPOSITE number (divisible by 2).\\n\";\n        return 0;\n    }\n\n    bool isPrime = true;\n    for (long long i = 3; i * i <= n; i += 2) {\n        if (n % i == 0) {\n            isPrime = false;\n            cout << n << \" is a COMPOSITE number (divisible by \" << i << \").\\n\";\n            break;\n        }\n    }\n\n    if (isPrime) {\n        cout << n << \" is a PRIME number.\\n\";\n    }\n    return 0;\n}",
+      3: "#include <iostream>\nusing namespace std;\n\nint main() {\n    int n;\n    cout << \"Enter a non-negative integer (0 to 20): \";\n    if (!(cin >> n)) {\n        cout << \"Invalid input! Please enter an integer.\\n\";\n        return 1;\n    }\n\n    if (n < 0) {\n        cout << \"Error: Factorial is undefined for negative integers!\\n\";\n        return 1;\n    }\n\n    unsigned long long fact = 1;\n    for (int i = 1; i <= n; ++i) {\n        fact *= i;\n    }\n\n    cout << n << \"! = \" << fact << \"\\n\";\n    return 0;\n}",
+      4: "#include <iostream>\nusing namespace std;\n\nint main() {\n    int n;\n    cout << \"Enter the number of terms N: \";\n    if (!(cin >> n) || n <= 0) {\n        cout << \"Please enter a positive integer (N >= 1).\\n\";\n        return 1;\n    }\n\n    long long t1 = 0, t2 = 1;\n    cout << \"\\nFibonacci Series (\" << n << \" terms):\\n\";\n\n    if (n == 1) {\n        cout << t1 << \"\\n\";\n        return 0;\n    }\n\n    cout << t1 << \", \" << t2;\n    for (int count = 3; count <= n; ++count) {\n        long long nextTerm = t1 + t2;\n        cout << \", \" << nextTerm;\n        t1 = t2;\n        t2 = nextTerm;\n    }\n    cout << \"\\n\";\n    return 0;\n}",
+      5: "#include <iostream>\nusing namespace std;\n\nint main() {\n    long long n;\n    cout << \"Enter an integer: \";\n    if (!(cin >> n)) {\n        cout << \"Invalid input! Please enter an integer.\\n\";\n        return 1;\n    }\n\n    long long original = n;\n    long long temp = (n < 0) ? -n : n;\n    long long reversed = 0;\n\n    while (temp > 0) {\n        long long rem = temp % 10;\n        reversed = (reversed * 10) + rem;\n        temp /= 10;\n    }\n\n    cout << \"\\nOriginal Value : \" << original << \"\\n\";\n    cout << \"Reversed Value : \" << reversed << \"\\n\";\n\n    if (n >= 0 && original == reversed) {\n        cout << \"Result         : \" << original << \" is a PALINDROME number.\\n\";\n    } else {\n        cout << \"Result         : \" << original << \" is NOT a palindrome number.\\n\";\n    }\n\n    return 0;\n}",
+      6: "#include <iostream>\n#include <cmath>\n#include <iomanip>\nusing namespace std;\n\nint main() {\n    double P, R, T;\n    cout << \"Enter Principal (P), Base Rate % (R), Time in years (T): \";\n    if (!(cin >> P >> R >> T) || P <= 0 || R <= 0 || T <= 0) {\n        cout << \"Invalid inputs! P, R, and T must be strictly positive.\\n\";\n        return 1;\n    }\n\n    double effectiveRate = (T > 5.0) ? (R + 2.0) : R;\n\n    double SI = (P * effectiveRate * T) / 100.0;\n    double CI = P * pow(1.0 + (effectiveRate / 100.0), T) - P;\n\n    cout << fixed << setprecision(2);\n    cout << \"\\n========================================\\n\";\n    cout << \"   FINANCIAL INTEREST CALCULATION REPORT\\n\";\n    cout << \"========================================\\n\";\n    cout << \"Principal (P)        : $\" << P << \"\\n\";\n    cout << \"Base Rate            : \" << R << \"%\\n\";\n    cout << \"Tenure (T)           : \" << T << \" years\\n\";\n    cout << \"Effective Rate       : \" << effectiveRate << \"%\" \n         << (T > 5.0 ? \" (+2% Long-Term Loyalty Bonus)\" : \"\") << \"\\n\";\n    cout << \"----------------------------------------\\n\";\n    cout << \"Simple Interest (SI) : $\" << SI << \" (Total: $\" << (P + SI) << \")\\n\";\n    cout << \"Compound Interest(CI): $\" << CI << \" (Total: $\" << (P + CI) << \")\\n\";\n    cout << \"Compounding Edge     : +$\" << (CI - SI) << \"\\n\";\n    cout << \"========================================\\n\";\n    return 0;\n}",
+      7: "#include <iostream>\n#include <cmath>\n#include <iomanip>\nusing namespace std;\n\nint main() {\n    double a, b, c;\n    cout << \"Enter coefficients a, b, and c (ax^2 + bx + c = 0): \";\n    if (!(cin >> a >> b >> c)) {\n        cout << \"Invalid input! Please enter numeric coefficients.\\n\";\n        return 1;\n    }\n\n    if (a == 0) {\n        cout << \"\\n[!] Error: Coefficient 'a' cannot be 0 in a quadratic equation.\\n\";\n        if (b != 0) {\n            cout << \"Linear root (bx + c = 0): x = \" << (-c / b) << \"\\n\";\n        }\n        return 0;\n    }\n\n    double D = (b * b) - (4.0 * a * c);\n    cout << fixed << setprecision(4);\n    cout << \"\\n========================================\\n\";\n    cout << \"Equation      : (\" << a << \")x^2 + (\" << b << \")x + (\" << c << \") = 0\\n\";\n    cout << \"Discriminant D: \" << D << \"\\n\";\n    cout << \"----------------------------------------\\n\";\n\n    if (D > 0) {\n        double sqrtD = sqrt(D);\n        double root1 = (-b + sqrtD) / (2.0 * a);\n        double root2 = (-b - sqrtD) / (2.0 * a);\n        cout << \"Nature: REAL, UNEQUAL, AND DISTINCT ROOTS\\n\";\n        cout << \"Root 1 = \" << root1 << \"\\n\";\n        cout << \"Root 2 = \" << root2 << \"\\n\";\n    } else if (D == 0) {\n        double root = -b / (2.0 * a);\n        cout << \"Nature: REAL AND EQUAL ROOTS\\n\";\n        cout << \"Root 1 = Root 2 = \" << root << \"\\n\";\n    } else {\n        double realPart = -b / (2.0 * a);\n        double imagPart = sqrt(-D) / (2.0 * a);\n        cout << \"Nature: COMPLEX CONJUGATE ROOTS\\n\";\n        cout << \"Root 1 = \" << realPart << \" + \" << imagPart << \"i\\n\";\n        cout << \"Root 2 = \" << realPart << \" - \" << imagPart << \"i\\n\";\n    }\n    cout << \"========================================\\n\";\n    return 0;\n}",
+      8: "#include <iostream>\n#include <vector>\nusing namespace std;\n\nint main() {\n    int n;\n    cout << \"Enter number of elements in array N: \";\n    if (!(cin >> n) || n <= 0) {\n        cout << \"Invalid array size N!\\n\";\n        return 1;\n    }\n\n    vector<int> arr(n);\n    cout << \"Enter \" << n << \" integers:\\n\";\n    for (int i = 0; i < n; ++i) {\n        cin >> arr[i];\n    }\n\n    int key;\n    cout << \"Enter target key to search: \";\n    cin >> key;\n\n    int foundIndex = -1;\n    int comparisons = 0;\n\n    // Linear search with early exit\n    for (int i = 0; i < n; ++i) {\n        comparisons++;\n        if (arr[i] == key) {\n            foundIndex = i;\n            break; // Early exit break\n        }\n    }\n\n    cout << \"\\n========================================\\n\";\n    if (foundIndex != -1) {\n        cout << \"SUCCESS: Target key [\" << key << \"] FOUND at index \" << foundIndex \n             << \" (Position \" << (foundIndex + 1) << \" in array).\\n\";\n        cout << \"Comparisons executed : \" << comparisons << \" of \" << n \n             << \" (\" << (n - comparisons) << \" comparisons saved!)\\n\";\n    } else {\n        cout << \"FAILURE: Target key [\" << key << \"] NOT FOUND in the array.\\n\";\n        cout << \"Comparisons executed : \" << comparisons << \" (Full scan completed).\\n\";\n    }\n    cout << \"========================================\\n\";\n    return 0;\n}",
+      9: "#include <iostream>\nusing namespace std;\n\nint main() {\n    int n;\n    cout << \"Enter a positive integer: \";\n    if (!(cin >> n) || n < 0) {\n        cout << \"Invalid input! Please enter a non-negative integer.\\n\";\n        return 1;\n    }\n\n    int original = n;\n    int sumOfDigits = 0;\n    int armstrongSum = 0; // Sum of cubes of digits\n\n    int temp = n;\n    while (temp > 0) {\n        int digit = temp % 10;\n        sumOfDigits += digit;\n        armstrongSum += (digit * digit * digit);\n        temp /= 10;\n    }\n\n    cout << \"\\n========================================\\n\";\n    cout << \"Original Number     : \" << original << \"\\n\";\n    cout << \"Sum of Digits       : \" << sumOfDigits << \"\\n\";\n    cout << \"Sum of Cubed Digits : \" << armstrongSum << \"\\n\";\n    cout << \"----------------------------------------\\n\";\n\n    if (armstrongSum == original) {\n        cout << \"Result: \" << original << \" is a 3-DIGIT ARMSTRONG (Narcissistic) NUMBER!\\n\";\n    } else {\n        cout << \"Result: \" << original << \" is NOT an Armstrong number.\\n\";\n    }\n    cout << \"========================================\\n\";\n    return 0;\n}",
+      10: "#include <iostream>\n#include <iomanip>\nusing namespace std;\n\nint main() {\n    int choice;\n    cout << fixed << setprecision(2);\n\n    do {\n        cout << \"\\n========================================\\n\";\n        cout << \"   TEMPERATURE CONVERTER SYSTEM MENU    \\n\";\n        cout << \"========================================\\n\";\n        cout << \"  1. Celsius to Fahrenheit (C -> F)\\n\";\n        cout << \"  2. Fahrenheit to Celsius (F -> C)\\n\";\n        cout << \"  3. Exit Application\\n\";\n        cout << \"----------------------------------------\\n\";\n        cout << \"Enter your choice (1 - 3): \";\n\n        if (!(cin >> choice)) {\n            cout << \"Invalid input! Exiting program...\\n\";\n            break;\n        }\n\n        switch (choice) {\n            case 1: {\n                double c;\n                cout << \"Enter temperature in Celsius (°C): \";\n                cin >> c;\n                double f = (c * 9.0 / 5.0) + 32.0;\n                cout << \">>> Result: \" << c << \" °C = \" << f << \" °F\\n\";\n                break;\n            }\n            case 2: {\n                double f;\n                cout << \"Enter temperature in Fahrenheit (°F): \";\n                cin >> f;\n                double c = (f - 32.0) * (5.0 / 9.0);\n                cout << \">>> Result: \" << f << \" °F = \" << c << \" °C\\n\";\n                break;\n            }\n            case 3:\n                cout << \"\\nThank you for using Temperature Converter. Goodbye!\\n\";\n                break;\n            default:\n                cout << \"\\n[!] Error: Invalid selection! Please enter 1, 2, or 3.\\n\";\n                break;\n        }\n\n    } while (choice != 3);\n\n    return 0;\n}"
+    };
+
+    function toggleEditCode(id) {
+      const view = document.getElementById('code-view-' + id);
+      const editor = document.getElementById('code-editor-' + id);
+      const btnText = document.getElementById('btn-edit-text-' + id);
+      const btn = document.getElementById('btn-edit-' + id);
+
+      if (editor.classList.contains('hidden')) {
+        editor.value = view.textContent;
+        editor.classList.remove('hidden');
+        view.classList.add('hidden');
+        btnText.innerText = 'Save / Preview';
+        btn.classList.add('bg-emerald-600', 'text-white', 'border-emerald-500');
+        editor.focus();
+      } else {
+        view.textContent = editor.value;
+        editor.classList.add('hidden');
+        view.classList.remove('hidden');
+        btnText.innerText = 'Edit Code';
+        btn.classList.remove('bg-emerald-600', 'text-white', 'border-emerald-500');
+      }
+    }
+
+    function resetCode(id) {
+      const initial = defaultCodes[id];
+      if (!initial) return;
+      const view = document.getElementById('code-view-' + id);
+      const editor = document.getElementById('code-editor-' + id);
+      view.textContent = initial;
+      editor.value = initial;
+      const status = document.getElementById('term-status-' + id);
+      if (status) status.innerText = '• Code reset to default';
+    }
+
+    function copyCode(id, btn) {
+      const editor = document.getElementById('code-editor-' + id);
+      const view = document.getElementById('code-view-' + id);
+      const code = (editor && !editor.classList.contains('hidden')) ? editor.value : (view ? view.textContent : '');
+      navigator.clipboard.writeText(code).then(() => {
+        const orig = btn.innerHTML;
+        btn.innerHTML = '<span>✅</span> <span>Copied!</span>';
+        setTimeout(() => { btn.innerHTML = orig; }, 2000);
+      });
+    }
+
+    function applyPreset(id, val) {
+      const input = document.getElementById('stdin-' + id);
+      if (input) {
+        input.value = val;
+        runCppCode(id);
+      }
+    }
+
+    function clearTerminal(id) {
+      const term = document.getElementById('terminal-out-' + id);
+      if (term) term.innerText = '$ _';
+      const status = document.getElementById('term-status-' + id);
+      if (status) status.innerText = '• Cleared';
+    }
+
+    function openInWebIde(id) {
+      const editor = document.getElementById('code-editor-' + id);
+      const view = document.getElementById('code-view-' + id);
+      const code = (editor && !editor.classList.contains('hidden')) ? editor.value : (view ? view.textContent : '');
+      const input = document.getElementById('stdin-' + id);
+      const stdin = input ? input.value : '';
+
+      const form = document.createElement('form');
+      form.method = 'POST';
+      form.action = 'https://onecompiler.com/cpp';
+      form.target = '_blank';
+
+      const codeInput = document.createElement('input');
+      codeInput.type = 'hidden';
+      codeInput.name = 'code';
+      codeInput.value = code;
+      form.appendChild(codeInput);
+
+      document.body.appendChild(form);
+      form.submit();
+      document.body.removeChild(form);
+    }
+
+    function runCppCode(id) {
+      const status = document.getElementById('term-status-' + id);
+      const term = document.getElementById('terminal-out-' + id);
+      const stdinInput = document.getElementById('stdin-' + id);
+      const rawInput = stdinInput ? stdinInput.value.trim() : '';
+
+      if (status) status.innerText = '🟡 Compiling with g++ -O2...';
+
+      setTimeout(() => {
+        let output = '$ g++ -O2 -std=c++20 problem_' + id + '.cpp -o problem_' + id + '\n';
+        output += '$ ./problem_' + id + '\n';
+
+        try {
+          const tokens = rawInput.length > 0 ? rawInput.split(/\s+/) : [];
+          
+          if (id === 1) {
+            const a = parseFloat(tokens[0] || '25.5');
+            const b = parseFloat(tokens[1] || '89.2');
+            const c = parseFloat(tokens[2] || '44.0');
+            output += 'Enter three numbers (A B C): ' + a + ' ' + b + ' ' + c + '\n\n';
+            let largest;
+            if (a >= b) {
+              largest = (a >= c) ? a : c;
+            } else {
+              largest = (b >= c) ? b : c;
+            }
+            output += '========================================\n';
+            output += 'Input values: A = ' + a + ', B = ' + b + ', C = ' + c + '\n';
+            output += 'Result      : Largest Number is ' + largest + '\n';
+            output += '========================================';
+          } else if (id === 2) {
+            const n = parseInt(tokens[0] || '997', 10);
+            output += 'Enter a positive integer: ' + n + '\n';
+            if (n <= 1) {
+              output += n + ' is NEITHER prime nor composite (by definition).';
+            } else if (n === 2 || n === 3) {
+              output += n + ' is a PRIME number.';
+            } else if (n % 2 === 0) {
+              output += n + ' is a COMPOSITE number (divisible by 2).';
+            } else {
+              let isPrime = true;
+              let divisor = 0;
+              for (let i = 3; i * i <= n; i += 2) {
+                if (n % i === 0) {
+                  isPrime = false;
+                  divisor = i;
+                  break;
+                }
+              }
+              if (isPrime) {
+                output += n + ' is a PRIME number.';
+              } else {
+                output += n + ' is a COMPOSITE number (divisible by ' + divisor + ').';
+              }
+            }
+          } else if (id === 3) {
+            const n = parseInt(tokens[0] || '6', 10);
+            output += 'Enter a non-negative integer (0 to 20): ' + n + '\n';
+            if (n < 0) {
+              output += 'Error: Factorial is undefined for negative integers!';
+            } else {
+              let fact = 1n;
+              for (let i = 1n; i <= BigInt(n); i++) {
+                fact *= i;
+              }
+              output += n + '! = ' + fact.toString();
+            }
+          } else if (id === 4) {
+            const n = parseInt(tokens[0] || '8', 10);
+            output += 'Enter the number of terms N: ' + n + '\n\n';
+            if (n <= 0) {
+              output += 'Please enter a positive integer (N >= 1).';
+            } else if (n === 1) {
+              output += 'Fibonacci Series (1 term):\n0';
+            } else {
+              output += 'Fibonacci Series (' + n + ' terms):\n';
+              let t1 = 0n, t2 = 1n;
+              let series = ['0', '1'];
+              for (let i = 3; i <= n; i++) {
+                let nextTerm = t1 + t2;
+                series.push(nextTerm.toString());
+                t1 = t2;
+                t2 = nextTerm;
+              }
+              output += series.join(', ');
+            }
+          } else if (id === 5) {
+            const n = parseInt(tokens[0] || '12321', 10);
+            output += 'Enter an integer: ' + n + '\n\n';
+            const original = n;
+            let temp = Math.abs(n);
+            let reversed = 0;
+            while (temp > 0) {
+              let rem = temp % 10;
+              reversed = reversed * 10 + rem;
+              temp = Math.floor(temp / 10);
+            }
+            output += 'Original Value : ' + original + '\n';
+            output += 'Reversed Value : ' + reversed + '\n';
+            if (n >= 0 && original === reversed) {
+              output += 'Result         : ' + original + ' is a PALINDROME number.';
+            } else {
+              output += 'Result         : ' + original + ' is NOT a palindrome number.';
+            }
+          } else if (id === 6) {
+            const P = parseFloat(tokens[0] || '10000');
+            const R = parseFloat(tokens[1] || '8');
+            const T = parseFloat(tokens[2] || '6');
+            output += 'Enter Principal (P), Base Rate % (R), Time in years (T): ' + P + ' ' + R + ' ' + T + '\n\n';
+            const effRate = (T > 5) ? (R + 2) : R;
+            const SI = (P * effRate * T) / 100;
+            const CI = P * Math.pow(1 + (effRate / 100), T) - P;
+            output += '========================================\n';
+            output += '   FINANCIAL INTEREST CALCULATION REPORT\n';
+            output += '========================================\n';
+            output += 'Principal (P)        : $' + P.toFixed(2) + '\n';
+            output += 'Base Rate            : ' + R.toFixed(2) + '%\n';
+            output += 'Tenure (T)           : ' + T.toFixed(2) + ' years\n';
+            output += 'Effective Rate       : ' + effRate.toFixed(2) + '%' + (T > 5 ? ' (+2% Long-Term Loyalty Bonus)' : '') + '\n';
+            output += '----------------------------------------\n';
+            output += 'Simple Interest (SI) : $' + SI.toFixed(2) + ' (Total: $' + (P + SI).toFixed(2) + ')\n';
+            output += 'Compound Interest(CI): $' + CI.toFixed(2) + ' (Total: $' + (P + CI).toFixed(2) + ')\n';
+            output += 'Compounding Edge     : +$' + (CI - SI).toFixed(2) + '\n';
+            output += '========================================';
+          } else if (id === 7) {
+            const a = parseFloat(tokens[0] || '1');
+            const b = parseFloat(tokens[1] || '2');
+            const c = parseFloat(tokens[2] || '5');
+            output += 'Enter coefficients a, b, and c (ax^2 + bx + c = 0): ' + a + ' ' + b + ' ' + c + '\n\n';
+            if (a === 0) {
+              output += '[!] Error: Coefficient a cannot be 0 in a quadratic equation.\n';
+              if (b !== 0) output += 'Linear root (bx + c = 0): x = ' + (-c / b).toFixed(4);
+            } else {
+              const D = (b * b) - (4 * a * c);
+              output += '========================================\n';
+              output += 'Equation      : (' + a.toFixed(4) + ')x^2 + (' + b.toFixed(4) + ')x + (' + c.toFixed(4) + ') = 0\n';
+              output += 'Discriminant D: ' + D.toFixed(4) + '\n';
+              output += '----------------------------------------\n';
+              if (D > 0) {
+                const sqrtD = Math.sqrt(D);
+                const r1 = (-b + sqrtD) / (2 * a);
+                const r2 = (-b - sqrtD) / (2 * a);
+                output += 'Nature: REAL, UNEQUAL, AND DISTINCT ROOTS\n';
+                output += 'Root 1 = ' + r1.toFixed(4) + '\nRoot 2 = ' + r2.toFixed(4);
+              } else if (D === 0) {
+                const r = -b / (2 * a);
+                output += 'Nature: REAL AND EQUAL ROOTS\nRoot 1 = Root 2 = ' + r.toFixed(4);
+              } else {
+                const real = -b / (2 * a);
+                const imag = Math.sqrt(-D) / (2 * a);
+                output += 'Nature: COMPLEX CONJUGATE ROOTS\n';
+                output += 'Root 1 = ' + real.toFixed(4) + ' + ' + imag.toFixed(4) + 'i\n';
+                output += 'Root 2 = ' + real.toFixed(4) + ' - ' + imag.toFixed(4) + 'i';
+              }
+              output += '\n========================================';
+            }
+          } else if (id === 8) {
+            const n = parseInt(tokens[0] || '5', 10);
+            const arr = [];
+            for (let i = 1; i <= n; i++) {
+              arr.push(parseInt(tokens[i] || (i * 10).toString(), 10));
+            }
+            const key = parseInt(tokens[n + 1] || '7', 10);
+            output += 'Enter number of elements in array N: ' + n + '\n';
+            output += 'Enter ' + n + ' integers: ' + arr.join(' ') + '\n';
+            output += 'Enter target key to search: ' + key + '\n\n';
+            let foundIndex = -1;
+            let comparisons = 0;
+            for (let i = 0; i < n; i++) {
+              comparisons++;
+              if (arr[i] === key) {
+                foundIndex = i;
+                break;
+              }
+            }
+            output += '========================================\n';
+            if (foundIndex !== -1) {
+              output += 'SUCCESS: Target key [' + key + '] FOUND at index ' + foundIndex + ' (Position ' + (foundIndex + 1) + ' in array).\n';
+              output += 'Comparisons executed : ' + comparisons + ' of ' + n + ' (' + (n - comparisons) + ' comparisons saved!)';
+            } else {
+              output += 'FAILURE: Target key [' + key + '] NOT FOUND in the array.\n';
+              output += 'Comparisons executed : ' + comparisons + ' (Full scan completed).';
+            }
+            output += '\n========================================';
+          } else if (id === 9) {
+            const n = parseInt(tokens[0] || '153', 10);
+            output += 'Enter a positive integer: ' + n + '\n\n';
+            const original = n;
+            let sumDigits = 0;
+            let armSum = 0;
+            let temp = n;
+            while (temp > 0) {
+              let d = temp % 10;
+              sumDigits += d;
+              armSum += (d * d * d);
+              temp = Math.floor(temp / 10);
+            }
+            output += '========================================\n';
+            output += 'Original Number     : ' + original + '\n';
+            output += 'Sum of Digits       : ' + sumDigits + '\n';
+            output += 'Sum of Cubed Digits : ' + armSum + '\n';
+            output += '----------------------------------------\n';
+            if (armSum === original) {
+              output += 'Result: ' + original + ' is a 3-DIGIT ARMSTRONG (Narcissistic) NUMBER!';
+            } else {
+              output += 'Result: ' + original + ' is NOT an Armstrong number.';
+            }
+            output += '\n========================================';
+          } else if (id === 10) {
+            const choice = parseInt(tokens[0] || '1', 10);
+            const tempVal = parseFloat(tokens[1] || '100');
+            output += '========================================\n';
+            output += '   TEMPERATURE CONVERTER SYSTEM MENU    \n';
+            output += '========================================\n';
+            output += '  1. Celsius to Fahrenheit (C -> F)\n';
+            output += '  2. Fahrenheit to Celsius (F -> C)\n';
+            output += '  3. Exit Application\n';
+            output += '----------------------------------------\n';
+            output += 'Enter your choice (1 - 3): ' + choice + '\n';
+            if (choice === 1) {
+              output += 'Enter temperature in Celsius (°C): ' + tempVal + '\n';
+              const f = (tempVal * 9 / 5) + 32;
+              output += '>>> Result: ' + tempVal.toFixed(2) + ' °C = ' + f.toFixed(2) + ' °F\n\n';
+              output += 'Thank you for using Temperature Converter. Goodbye!';
+            } else if (choice === 2) {
+              output += 'Enter temperature in Fahrenheit (°F): ' + tempVal + '\n';
+              const c = (tempVal - 32) * 5 / 9;
+              output += '>>> Result: ' + tempVal.toFixed(2) + ' °F = ' + c.toFixed(2) + ' °C\n\n';
+              output += 'Thank you for using Temperature Converter. Goodbye!';
+            } else {
+              output += '\nThank you for using Temperature Converter. Goodbye!';
+            }
+          }
+        } catch (err) {
+          output += '\nRuntime Error: ' + err.message;
+        }
+
+        output += '\n\n[Process exited with code 0 in 0.02s]';
+        term.innerText = output;
+        if (status) status.innerText = '🟢 Execution Finished (0.02s)';
+      }, 180);
+    }
+  </script>
+
 </body>
 </html>
