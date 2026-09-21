@@ -1,0 +1,44 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "type": "shell",
+      "label": "C/C++: g++.exe build active file",
+      "command": "cmd.exe",
+      "args": [
+        "/c",
+        "set PATH=C:\\MinGW\\bin;%PATH% && g++ -g \"${file}\" -o \"${fileDirname}\\${fileBasenameNoExtension}.exe\""
+      ],
+      "options": {
+        "cwd": "${fileDirname}"
+      },
+      "problemMatcher": [
+        "$gcc"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "detail": "Task generated to build C++ file using MinGW g++"
+    },
+    {
+      "type": "shell",
+      "label": "C/C++: Run active file",
+      "command": "cmd.exe",
+      "args": [
+        "/c",
+        "\"${fileDirname}\\${fileBasenameNoExtension}.exe\""
+      ],
+      "options": {
+        "cwd": "${fileDirname}"
+      },
+      "dependsOn": "C/C++: g++.exe build active file",
+      "problemMatcher": [],
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      },
+      "detail": "Build and run current C++ file in terminal"
+    }
+  ]
+}

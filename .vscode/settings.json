@@ -17,5 +17,19 @@
     "editor.suggestOnTriggerCharacters": true,
     "editor.wordBasedSuggestions": "matchingDocuments",
     "editor.acceptSuggestionOnEnter": "off"
-  }
+  },
+  "terminal.integrated.env.windows": {
+    "PATH": "C:\\MinGW\\bin;${env:PATH}"
+  },
+  "code-runner.runInTerminal": true,
+  "code-runner.saveFileBeforeRun": true,
+  "code-runner.clearPreviousOutput": true,
+  "code-runner.showExecutionMessage": true,
+  "code-runner.ignoreSelection": true,
+  "code-runner.fileDirectoryAsCwd": true,
+  "code-runner.executorMap": {
+    "c": "cd $dir && set PATH=C:\\MinGW\\bin;%PATH% && gcc $fileName -o $fileNameWithoutExt && $dir$fileNameWithoutExt",
+    "cpp": "cd $dir && set PATH=C:\\MinGW\\bin;%PATH% && g++ $fileName -o $fileNameWithoutExt && $dir$fileNameWithoutExt"
+  },
+  "C_Cpp.default.compilerPath": "C:/MinGW/bin/g++.exe"
 }

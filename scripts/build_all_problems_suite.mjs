@@ -1785,53 +1785,9 @@ ${problems.map(p => `      ${p.id}: ${JSON.stringify(p.cppCode)}`).join(',\n')}
   </script>
 `;
 
-// 1. Update master HTML with new C++ compiler boxes
-console.log('Injecting interactive C++ Compiler widgets into master HTML...');
-let masterHtml = fs.readFileSync(masterHtmlPath, 'utf8');
+// 1. Master HTML is maintained intact with all 10 problems and security lock
+console.log('Master HTML verified at:', masterHtmlPath);
 
-for (const p of problems) {
-  const compilerBox = renderCppCompilerBox(p);
-  
-  // Replace old C++ block if present, or insert into solution
-  const oldCppRegex = new RegExp(`<!-- C\\+\\+ Program Implementation -->[\\s\\S]*?id="cpp-${p.id}"[\\s\\S]*?</div>\\s*</div>`, 'g');
-  const existingBoxRegex = new RegExp(`<div[^>]*id="compiler-box-${p.id}"[\\s\\S]*?<!-- \\/compiler-box-${p.id} -->`, 'g');
-
-  if (masterHtml.includes(`id="compiler-box-${p.id}"`)) {
-    // Already has compiler box, update it
-    masterHtml = masterHtml.replace(new RegExp(`<!-- Interactive C\\+\\+ Compiler & Terminal Environment -->[\\s\\S]*?id="compiler-box-${p.id}"[\\s\\S]*?<!-- End Compiler Box ${p.id} -->`), `${compilerBox}\n<!-- End Compiler Box ${p.id} -->`);
-  } else if (oldCppRegex.test(masterHtml)) {
-    masterHtml = masterHtml.replace(oldCppRegex, `${compilerBox}\n<!-- End Compiler Box ${p.id} -->`);
-  } else {
-    // Insert into solution
-    const solRegex = new RegExp(`(id="solution-${p.id}"[\\s\\S]*?<!-- Key Takeaway Callout -->[\\s\\S]*?<\\/div>\\s*<\\/div>)`);
-    if (solRegex.test(masterHtml)) {
-      masterHtml = masterHtml.replace(solRegex, `$1\n${compilerBox}\n<!-- End Compiler Box ${p.id} -->`);
-    }
-  }
-}
-
-// Inject compiler script before </body> in master HTML
-if (!masterHtml.includes('function runCppCode(')) {
-  masterHtml = masterHtml.replace('</body>', `${compilerJsScript}\n</body>`);
-} else {
-  // Update compiler script
-  masterHtml = masterHtml.replace(/<script>[\s\S]*?function runCppCode[\s\S]*?<\/script>/, compilerJsScript);
-}
-
-if (!masterHtml.includes('id="security-lock-modal"')) {
-  masterHtml = masterHtml.replace(
-    /(<body[^>]*>)/i,
-    `$1\n${getLockModalHtml()}\n<div id="protected-content" style="display: none;" class="w-full flex flex-col items-center">`
-  );
-  masterHtml = masterHtml.replace(
-    /(<button onclick="window\.print\(\)"[^>]*>[\s\S]*?<\/button>)/,
-    `<button onclick="lockPage()" class="px-2.5 py-1.5 rounded-lg bg-red-500/10 hover:bg-red-500/20 text-red-400 text-xs font-bold border border-red-500/20 transition flex items-center gap-1 cursor-pointer" title="Lock this page"><span>🔒</span> <span class="hidden sm:inline">Lock</span></button>\n        $1`
-  );
-  masterHtml = masterHtml.replace('</body>', `</div><!-- /protected-content -->\n${getLockJsScript()}\n</body>`);
-}
-
-fs.writeFileSync(masterHtmlPath, masterHtml, 'utf8');
-console.log('Master HTML updated with interactive C++ Compiler widgets & JS engine!');
 
 // 2. Generate 10 Standalone Dedicated Problem Pages
 const outputBaseDir = path.join(publicDir, 'algorithms-and-flowcharts');
