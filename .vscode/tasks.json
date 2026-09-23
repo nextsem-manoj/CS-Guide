@@ -3,6 +3,59 @@
   "tasks": [
     {
       "type": "shell",
+      "label": "C/C++: Smart Build & Run active file",
+      "command": "cmd.exe",
+      "args": [
+        "/c",
+        "set PATH=C:\\MinGW\\bin;%PATH% && if /I \"${fileExtname}\"==\".c\" (gcc -g \"${file}\" -o \"${fileDirname}\\${fileBasenameNoExtension}.exe\") else (g++ -g \"${file}\" -o \"${fileDirname}\\${fileBasenameNoExtension}.exe\") && \"${fileDirname}\\${fileBasenameNoExtension}.exe\""
+      ],
+      "options": {
+        "cwd": "${fileDirname}"
+      },
+      "problemMatcher": [
+        "$gcc"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "detail": "Automatically compiles with MinGW gcc (C) or g++ (C++) and runs executable in terminal"
+    },
+    {
+      "type": "shell",
+      "label": "C: gcc.exe build active file",
+      "command": "cmd.exe",
+      "args": [
+        "/c",
+        "set PATH=C:\\MinGW\\bin;%PATH% && gcc -g \"${file}\" -o \"${fileDirname}\\${fileBasenameNoExtension}.exe\""
+      ],
+      "options": {
+        "cwd": "${fileDirname}"
+      },
+      "problemMatcher": [
+        "$gcc"
+      ],
+      "group": "build",
+      "detail": "Task to build active C file (.c) using MinGW gcc"
+    },
+    {
+      "type": "shell",
+      "label": "C: Run active file",
+      "command": "cmd.exe",
+      "args": [
+        "/c",
+        "\"${fileDirname}\\${fileBasenameNoExtension}.exe\""
+      ],
+      "options": {
+        "cwd": "${fileDirname}"
+      },
+      "dependsOn": "C: gcc.exe build active file",
+      "problemMatcher": [],
+      "group": "test",
+      "detail": "Build and run current C file in terminal"
+    },
+    {
+      "type": "shell",
       "label": "C/C++: g++.exe build active file",
       "command": "cmd.exe",
       "args": [
@@ -15,11 +68,8 @@
       "problemMatcher": [
         "$gcc"
       ],
-      "group": {
-        "kind": "build",
-        "isDefault": true
-      },
-      "detail": "Task generated to build C++ file using MinGW g++"
+      "group": "build",
+      "detail": "Task to build C++ file (.cpp) using MinGW g++"
     },
     {
       "type": "shell",
