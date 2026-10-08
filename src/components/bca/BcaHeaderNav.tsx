@@ -3,9 +3,10 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
-import { Home, ChevronDown, BookOpen, X, Sparkles, GraduationCap, CheckCircle2, Search, Building2 } from 'lucide-react';
+import { Home, ChevronDown, BookOpen, X, Sparkles, GraduationCap, CheckCircle2, Search, Building2, LogIn, LogOut } from 'lucide-react';
 import { bcaSemesters, BcaSemester, BcaSubject } from '@/data/bcaCoursesData';
 import { duCsSemesters, ignouMcaSemesters, UniversitySemester, UniversitySubject } from '@/data/universityCoursesData';
+import { useStudentProgress } from '@/context/StudentProgressContext';
 
 interface BcaHeaderNavProps {
   currentSubjectCode?: string;
@@ -22,6 +23,7 @@ export default function BcaHeaderNav({
   const pathname = usePathname();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [modalUniversityTab, setModalUniversityTab] = useState<'du' | 'ignou' | 'mca'>('du');
+  const { user, signIn, signOut } = useStudentProgress();
 
   return (
     <>
@@ -70,8 +72,38 @@ export default function BcaHeaderNav({
           </button>
         </div>
 
-        {/* Right: University CS Hub Logo Badge Header Link */}
+        {/* Right: Student Auth Status & University CS Hub Logo Badge Header Link */}
         <div className="flex items-center gap-2">
+          {user ? (
+            <div className="flex items-center gap-2 bg-slate-900/90 border border-slate-800 px-2.5 py-1 rounded-xl">
+              {user.photo ? (
+                <img src={user.photo} alt={user.name} className="w-5 h-5 rounded-full object-cover" />
+              ) : (
+                <div className="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold text-[9px]">
+                  {user.name.charAt(0)}
+                </div>
+              )}
+              <span className="text-xs font-bold text-slate-200 hidden md:inline max-w-[80px] truncate">
+                {user.name.split(" ")[0]}
+              </span>
+              <button 
+                onClick={signOut}
+                className="text-slate-400 hover:text-white p-0.5 ml-0.5 transition-colors cursor-pointer"
+                title="Sign Out"
+              >
+                <LogOut size={13} />
+              </button>
+            </div>
+          ) : (
+            <button
+              onClick={signIn}
+              className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white hover:bg-slate-200 text-slate-900 font-black text-xs transition-all active:scale-95 shadow-md cursor-pointer"
+            >
+              <LogIn size={13} />
+              <span>Sign In</span>
+            </button>
+          )}
+
           <Link
             href="/bca"
             className="flex items-center gap-2 px-2.5 py-1 rounded-xl bg-[#0c1328] border border-emerald-500/40 text-white hover:border-emerald-400 text-xs font-black shadow-md transition-all active:scale-95 cursor-pointer"

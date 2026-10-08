@@ -5,6 +5,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { ProgressProvider } from "@/context/ProgressContext";
 import { GamificationProvider } from "@/context/GamificationContext";
+import { StudentProgressProvider } from "@/context/StudentProgressContext";
 import OfflineGuard from "@/components/OfflineGuard";
 import { FontScaleHydrator } from "@/components/FontSizeControl";
 import SplashScreen from "@/components/SplashScreen";
@@ -151,19 +152,21 @@ export default function RootLayout({
         >
           <ProgressProvider>
             <GamificationProvider>
-              <FontScaleHydrator />
-              <OfflineGuard />
-              <SplashScreen />
+              <StudentProgressProvider>
+                <FontScaleHydrator />
+                <OfflineGuard />
+                <SplashScreen />
 
-              {/* Global Sticky Navigation (Search bar + Subject Selector) */}
-              <GlobalNavigationWidget />
+                {/* Global Sticky Navigation (Search bar + Subject Selector) */}
+                <GlobalNavigationWidget />
 
-              <div className="flex-1 w-full pb-20 md:pb-0">
-                {children}
-              </div>
+                <div className="flex-1 w-full pb-20 md:pb-0">
+                  {children}
+                </div>
 
-              <SearchWidget />
-              <BottomNavigation />
+                <SearchWidget />
+                <BottomNavigation />
+              </StudentProgressProvider>
             </GamificationProvider>
           </ProgressProvider>
         </ThemeProvider>
