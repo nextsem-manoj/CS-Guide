@@ -1121,4 +1121,46 @@ Total: 26 features shipped across 2 app versions (v25 → v26) 🎯
   - Added IGNOU BCA Semester 1 BCS-011 Model Examination Q&A Bank (5-mark and 10-mark descriptive answers).
   - Wired routes into `SubjectClient.tsx` (`isConceptInProgrammingLanguage`), `ViewerClient.tsx` (PDF automatic redirect), `bcaCoursesData.ts` (`isInteractive: true`), `sitemap.ts`, and `sitemap/page.tsx`.
   - Added multilingual lesson definition to `src/data/bcaLessonsData.ts`.
-  - Attributed author as **Er. Manoj Kumar** with platform dark theme palette (`#060c18` background, `#0c1328` card surface, gold `#c1a648`, emerald `#04AA6D`, cyan accents).
+  - Attributed author as **Er. Manoj Kumar** with platform dark theme palette (`#060c18` background, `#0c1328` card surface, gold `#c1a648`, emerald `#04AA6D`, cyan accents).
+- **Block 3 Unit 1: Networking and Internet (Pages 5–38) Interactive Study Suite & Diagnostic Lab (2026-10-06)**:
+  - Extracted 100% textbook content line-by-line from `public/BCA_NEW_Books/1st Semester/BCS-011 Computer Basics and PC Software/Block 3 Internet Technologies/UNIT - 1.pdf` across all 34 textbook pages.
+  - Authored comprehensive interactive study suite at `src/app/bca/notes/bcs-011-block-3-unit-1-networking-and-internet/page.tsx`:
+    - **10 Micro-Lessons**:
+      1. Section 1.0 & 1.2: Computer Networks & 5 Core Advantages (Resource sharing, High reliability, Client-Server, Scalability, Communication).
+      2. Section 1.2.3: Data Communication System (5 Parts: Sender, Receiver, Message, Medium, Protocol) & 3 Transmission Modes (Simplex, Half-Duplex, Full-Duplex).
+      3. Section 1.3.1: Guided Media (Twisted pair UTP/STP helical twist reduces crosstalk, Optical Fibre Core/Cladding Total Internal Reflection).
+      4. Section 1.3.2: Unguided Media (Radio waves omnidirectional/cellular handover, Microwaves line-of-sight & satellites, Infrared room confinement).
+      5. Section 1.4: Network Topologies (Bus with terminators, Ring with tokens, Star with central switch/hub fault tolerance).
+      6. Section 1.5: Network Classification (LAN < 2 km, MAN < 50 km, WAN > 50 km and the Internet).
+      7. Section 1.6: The ISO-OSI 7-Layer Reference Model (Physical, Data Link, Network, Transport, Session, Presentation, Application with data units and protocols).
+      8. Section 1.7: Networking Hardware Devices (NIC 48-bit MAC, Modem ADC/DAC, Repeater Layer 1, Bridge, Hub broadcast domain, Switch MAC table, Router IP routing, Gateway protocol converter).
+      9. Section 1.8: TCP/IP Suite & Client-Server Web Architecture (4 layers, TCP reliable vs UDP fast, Web servers Apache/IIS, Web browsers).
+      10. Section 1.9: Internet Addresses (IPv4 32-bit dotted-decimal, Subnet Mask bitwise AND, Classes A-E, Private ranges, DNS hierarchical resolution, and Email formatting).
+    - **Interactive Pill Fill-in-the-Blank Challenge**: Every lesson includes dynamic gaps with initial-letter pills (`💊 [Pill]`) and celebration confetti.
+    - **🪟 Windows 11 Network Diagnostic Terminal Simulator**: Real CLI diagnostic commands simulator (`ipconfig /all`, `ping`, `tracert`, `nslookup`, `getmac`).
+    - **12-Question Master Certification Test**: Automated scoring, answer evaluation, and explanations.
+    - **IGNOU BCA Model Examination Q&A Bank**: 5-mark and 10-mark past exam descriptive questions with university evaluator key points.
+    - **Mode Switcher Ribbon**: Simple English, Exam English, and Hinglish with persistent `localStorage` support.
+    - **Permanent Rule Standards**:
+      - Clickable breadcrumbs: `🏠 Home ❯ BCA Hub ❯ 1st Semester ❯ BCS-011 ❯ Block 3 Unit 1: Networking & Internet`.
+      - Platform dark theme palette (`#060c18` background, `#0c1328` card surface, gold `#c1a648`, emerald `#04AA6D`, cyan accents).
+      - Attributed author as **Er. Manoj Kumar**.
+  - **Sitemap & Routing Integrations**:
+    - `SubjectClient.tsx`: `isNetworkingAndInternetUnit1` maps to `/bca/notes/bcs-011-block-3-unit-1-networking-and-internet`.
+    - `ViewerClient.tsx`: Auto-redirects Block 3 Unit 1 PDF views directly to the interactive notes.
+    - `sitemap.ts` & `sitemap/page.tsx`: Added Block 3 Unit 1 route.
+    - `bcaCoursesData.ts`: Marked Block 3 Unit 1 `isInteractive: true` with `defaultTab: "notes"`.
+    - `bcaLessonsData.ts`: Registered `bcs-111-block3-unit-1` lesson metadata and exercises.
+  - Verified clean TypeScript compilation (`npx tsc --noEmit` exited code 0).
+- **BCA Practical Learning Portal Launch — Phase 1 / Step 1 (2026-10-09)**:
+  - Transitioned platform practical teaching vision into a job-oriented 3-Year / 6-Semester practical training portal.
+  - Authored `src/data/bcaPracticalData.ts`:
+    - 4 Career Specialization Tracks (Web/Full-Stack, Software/Programming, Data/AI, IT/Networking/Cloud).
+    - 3-Year Practical Progression (Semesters 1 to 6).
+    - 90-Day Practical Sprints (Sprint 1: Days 1–30 Web Foundation, Sprint 2: Days 31–60 DOM/Async/APIs, Sprint 3: Days 61–90 Full-Stack Node/MySQL).
+    - Comprehensive full lessons for Days 1–10 with 7-step practical framework.
+  - Built Practical Hub Dashboard (`src/app/bca/practical/page.tsx` + `BcaPracticalHubClient.tsx`).
+  - Built Universal Practical Lesson Template (`src/app/bca/practical/[daySlug]/page.tsx` + `BcaPracticalLessonClient.tsx`) integrating in-browser coding runner (`TaskBasedCodingLab.tsx`), debugging challenges, homework assignments, viva checks, and Git/GitHub commit workflows.
+  - Integrated Practical Portal into `BcaHeaderNav.tsx`, `/bca` hero actions, `sitemap.ts`, and `sitemap/page.tsx`.
+  - Added Antigravity IDE auto-suggestion rule to `AGENTS.md` and `docs/roadmap/task.md`.
+

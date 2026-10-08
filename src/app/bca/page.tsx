@@ -240,11 +240,19 @@ export default function UniversityCoursesDashboard() {
               {activeProgram.description}
             </p>
 
-            {/* Official Syllabus PDF View on Webpage Action Button */}
+            {/* Official Syllabus PDF View on Webpage & Practical Portal Action Buttons */}
             <div className="pt-2 flex flex-wrap items-center gap-3">
               <Link
+                href="/bca/practical"
+                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-black text-xs sm:text-sm shadow-lg shadow-emerald-950/50 transition-all active:scale-95 cursor-pointer border border-emerald-400/50"
+              >
+                <Sparkles size={16} className="text-amber-300 animate-pulse" />
+                <span>Launch Practical Portal ⚡</span>
+              </Link>
+
+              <Link
                 href={`/bca/viewer?url=${encodeURIComponent(activeProgram.officialSyllabusPdf)}&title=${encodeURIComponent(activeProgram.degreeName + " Official Syllabus")}`}
-                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-extrabold text-xs sm:text-sm shadow-lg shadow-emerald-950/50 transition-all active:scale-95 cursor-pointer border border-emerald-400/40"
+                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-700 text-white font-extrabold text-xs sm:text-sm shadow-md transition-all active:scale-95 cursor-pointer"
               >
                 <Eye size={16} />
                 <span>View Official Syllabus PDF</span>

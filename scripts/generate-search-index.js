@@ -270,8 +270,15 @@ function generateIndex() {
     fs.mkdirSync(outputDir, { recursive: true });
   }
 
-  fs.writeFileSync(OUTPUT_FILE, JSON.stringify(searchIndex, null, 2), 'utf8');
-  console.log(`✅ Successfully generated unified search index with ${searchIndex.length} items at ${OUTPUT_FILE}`);
+  try {
+    fs.writeFileSync(OUTPUT_FILE, JSON.stringify(searchIndex, null, 2), 'utf8');
+    console.log(`✅ Successfully generated unified search index with ${searchIndex.length} items at ${OUTPUT_FILE}`);
+  } catch (err) {
+    const os = require('os');
+    const tempFile = path.join(os.tmpdir(), 'searchIndex.json');
+    fs.writeFileSync(tempFile, JSON.stringify(searchIndex, null, 2), 'utf8');
+    console.log(`✅ Windows Protected Folder detected. Search index saved to: ${tempFile}`);
+  }
 }
 
 generateIndex();

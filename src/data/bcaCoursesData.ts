@@ -108,7 +108,7 @@ export const bcaSemesters: BcaSemester[] = [
                 "fileName": "Unit-1.pdf",
                 "displayName": "Networking and Internet",
                 "isInteractive": true,
-                "defaultTab": "home"
+                "defaultTab": "notes"
               },
               {
                 "fileName": "Unit-2.pdf",

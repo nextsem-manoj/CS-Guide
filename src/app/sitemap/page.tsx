@@ -52,6 +52,14 @@ export default function UserSitemap() {
         icon: <Layers size={16} /> 
       },
       { 
+        title: "BCA Practical Learning Portal", 
+        url: "/bca/practical", 
+        category: "bca", 
+        description: "3-Year job-oriented practical training system across 6 Semesters, 4 career tracks, daily 2-hour hands-on coding labs, and GitHub portfolio milestones.", 
+        icon: <Code size={16} />, 
+        tag: "Practical Portal" 
+      },
+      { 
         title: "Semmy AI Chatbot Assistant", 
         url: "/bca/semmy-ai", 
         category: "bca", 
@@ -79,6 +87,14 @@ export default function UserSitemap() {
         url: "/bca/notes/bcs-011-unit-3-programming-languages", 
         category: "bca", 
         description: "Line-by-line notes on Pages 65–67, Grammar Quadruplet L(T,N,P,S), BNF notation, parsing, ambiguity, and master quiz.", 
+        icon: <Sparkles size={16} />, 
+        tag: "Interactive Notes" 
+      },
+      { 
+        title: "Block 3 Unit 1: Networking & Internet (Interactive Study Suite)", 
+        url: "/bca/notes/bcs-011-block-3-unit-1-networking-and-internet", 
+        category: "bca", 
+        description: "Pages 5–38 complete notes, transmission modes, guided/unguided media, topologies, OSI 7 layers, network devices, TCP/IP, IP addressing, DNS, and Windows 11 terminal simulator.", 
         icon: <Sparkles size={16} />, 
         tag: "Interactive Notes" 
       },

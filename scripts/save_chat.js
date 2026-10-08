@@ -123,8 +123,15 @@ async function main() {
     }
   }
 
-  fs.writeFileSync(outputPath, md, 'utf8');
-  console.log(`Chat successfully saved to: ${outputPath}`);
+  try {
+    fs.writeFileSync(outputPath, md, 'utf8');
+    console.log(`Chat successfully saved to: ${outputPath}`);
+  } catch (err) {
+    const os = require('os');
+    const tempChat = path.join(os.tmpdir(), outputFileName);
+    fs.writeFileSync(tempChat, md, 'utf8');
+    console.log(`Windows Protected Folder: Chat saved to temp: ${tempChat}`);
+  }
 }
 
 main().catch(err => {

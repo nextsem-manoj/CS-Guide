@@ -146,6 +146,11 @@ export default function TextbookViewer() {
       (fileUrl.toLowerCase().includes('unit-3.pdf') || fileUrl.toLowerCase().includes('unit 3.pdf') || fileUrl.toLowerCase().includes('unit-3'))
     ) {
       router.replace('/bca/notes/bcs-011-unit-3-programming-languages');
+    } else if (
+      (fileUrl.toLowerCase().includes('block 3') || fileUrl.toLowerCase().includes('block%203')) &&
+      (fileUrl.toLowerCase().includes('unit-1.pdf') || fileUrl.toLowerCase().includes('unit 1.pdf') || fileUrl.toLowerCase().includes('unit - 1.pdf') || fileUrl.toLowerCase().includes('unit%20-%201.pdf'))
+    ) {
+      router.replace('/bca/notes/bcs-011-block-3-unit-1-networking-and-internet');
     }
   }, [fileUrl, router]);
 

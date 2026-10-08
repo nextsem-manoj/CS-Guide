@@ -225,9 +225,10 @@ export default function SubjectSyllabusDashboard({ semester, subject }: { semest
                       const isCompleted = !!completedChapters[progressKey];
                       const pdfPath = `/BCA_NEW_Books/${block.path}/${unit.fileName}`;
                       
-                      // ✅ Any block's Unit 1, Unit 2 (Operating System), or Unit 5 in BCS-111 / BCS-011 gets interactive lesson link
+                      // ✅ Dedicated interactive lesson routes in BCS-111 / BCS-011
                       const isComputerBasicsUnit1 =
                         (subjectCode === "BCS-111" || subjectCode === "BCS-011") &&
+                        block.name.toLowerCase().includes("block 1") &&
                         (unit.fileName.toLowerCase().includes("unit-1") ||
                           unit.fileName.toLowerCase().includes("unit 1") ||
                           (uIdx === 0 && bIdx === 0));
@@ -243,6 +244,10 @@ export default function SubjectSyllabusDashboard({ semester, subject }: { semest
                         (subjectCode === "BCS-111" || subjectCode === "BCS-011") &&
                         (unit.displayName.toLowerCase().includes("concept in programming language") ||
                           (block.name.toLowerCase().includes("block 2") && unit.fileName.toLowerCase().includes("unit-3")));
+                      const isNetworkingAndInternetUnit1 =
+                        (subjectCode === "BCS-111" || subjectCode === "BCS-011") &&
+                        (unit.displayName.toLowerCase().includes("networking and internet") ||
+                          (block.name.toLowerCase().includes("block 3") && (unit.fileName.toLowerCase().includes("unit-1") || unit.fileName.toLowerCase().includes("unit 1"))));
 
 
                       const interactiveLessonUrl = isComputerBasicsUnit1
@@ -253,6 +258,8 @@ export default function SubjectSyllabusDashboard({ semester, subject }: { semest
                         ? "/bca/notes/bcs-011-unit-5"
                         : isConceptInProgrammingLanguage
                         ? "/bca/notes/bcs-011-unit-3-programming-languages"
+                        : isNetworkingAndInternetUnit1
+                        ? "/bca/notes/bcs-011-block-3-unit-1-networking-and-internet"
                         : null;
 
                       const handleUnitClick = () => {

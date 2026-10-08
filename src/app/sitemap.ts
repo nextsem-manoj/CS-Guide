@@ -1,6 +1,7 @@
 import { MetadataRoute } from "next";
 import searchIndex from "../data/searchIndex.json";
 import { htmlLessons } from "../data/htmlLessonsData";
+import { PRACTICAL_LESSONS } from "../data/bcaPracticalData";
 
 export const dynamic = "force-static";
 
@@ -41,6 +42,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/bca/semester-1/bcs-011-computer-basics/unit-2-operating-system",
     "/bca/notes/bcs-011-unit-2-operating-system",
     "/bca/notes/bcs-011-unit-3-programming-languages",
+    "/bca/notes/bcs-011-block-3-unit-1-networking-and-internet",
     "/bca/semester-1/bcs-011-computer-basics/unit-5-introduction-to-personal-computers",
     "/bca/notes/bcs-011-unit-5",
     "/bca/semester-1/bcsl-013-software-lab",
@@ -93,5 +95,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.95,
   }));
 
-  return [...baseRoutes, ...bcaSubjectRoutes, ...algorithmRoutes, ...courseRoutes, ...htmlLessonRoutes];
+  // BCA Practical Learning Portal & Daily Lesson routes
+  const bcaPracticalRoutes = [
+    "/bca/practical",
+    ...PRACTICAL_LESSONS.map((l) => `/bca/practical/${l.slug}`),
+  ].map((route) => ({
+    url: `${baseUrl}${route}`,
+    lastModified: new Date(),
+    changeFrequency: "weekly" as const,
+    priority: 0.98,
+  }));
+
+  return [...baseRoutes, ...bcaSubjectRoutes, ...bcaPracticalRoutes, ...algorithmRoutes, ...courseRoutes, ...htmlLessonRoutes];
 }

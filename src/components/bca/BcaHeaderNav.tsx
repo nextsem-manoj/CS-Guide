@@ -36,6 +36,15 @@ export default function BcaHeaderNav({
             <span className="hidden sm:inline">Home</span>
           </Link>
 
+          <Link
+            href="/bca/practical"
+            className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/30 text-emerald-300 hover:text-emerald-200 font-extrabold text-xs shadow-md transition-all active:scale-95 shrink-0"
+            title="BCA Practical Learning Portal"
+          >
+            <Sparkles size={14} className="text-emerald-400" />
+            <span>Practical Portal</span>
+          </Link>
+
           <button
             onClick={() => window.dispatchEvent(new CustomEvent("open-global-search"))}
             className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-900/80 hover:bg-slate-800 border border-slate-800 text-slate-300 hover:text-white font-bold text-xs shadow-md transition-all active:scale-95 cursor-pointer"
