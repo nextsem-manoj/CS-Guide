@@ -60,7 +60,7 @@ export default function NsSubjectNavBar({ currentUser, onSignIn, onToggleSidebar
   };
 
   return (
-    <header className="sticky top-0 z-40 bg-[#060c18] border-b border-slate-800/80 shadow-md select-none">
+    <header className="sticky top-0 z-40 bg-white/95 dark:bg-black/95 backdrop-blur-md border-b border-slate-200 dark:border-neutral-800 shadow-sm select-none transition-colors">
       {/* ── TOP HEADER BAR ── */}
       <div className="max-w-7xl mx-auto px-3 sm:px-6 h-14 flex items-center justify-between gap-3">
         
@@ -69,7 +69,7 @@ export default function NsSubjectNavBar({ currentUser, onSignIn, onToggleSidebar
           {onToggleSidebar && (
             <button
               onClick={onToggleSidebar}
-              className="p-1.5 rounded-lg bg-slate-900 border border-slate-800 text-slate-300 hover:text-white transition-colors cursor-pointer md:hidden"
+              className="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-neutral-900 dark:hover:bg-neutral-800 border border-slate-200 dark:border-neutral-800 text-slate-700 dark:text-slate-300 hover:text-black dark:hover:text-white transition-colors cursor-pointer md:hidden"
               title="Toggle Menu"
             >
               <Menu size={18} />
@@ -77,12 +77,12 @@ export default function NsSubjectNavBar({ currentUser, onSignIn, onToggleSidebar
           )}
 
           <Link href="/" className="flex items-center gap-2 group">
-            <div className="w-8 h-8 rounded-xl bg-[#09101f] border border-[#04AA6D]/40 flex items-center justify-center text-[#04AA6D] font-black text-xs shadow-md transition-transform group-hover:scale-105">
+            <div className="w-8 h-8 rounded-xl bg-blue-600 flex items-center justify-center text-white font-black text-xs shadow-md transition-transform group-hover:scale-105">
               NS
             </div>
-            <span className="font-extrabold text-base sm:text-lg tracking-tight text-white group-hover:text-[#04AA6D] transition-colors flex items-center gap-1.5">
-              NextSem<span className="text-[#04AA6D]">.online</span>
-              <span className="text-[9px] bg-[#04AA6D]/20 text-[#04AA6D] border border-[#04AA6D]/40 px-1.5 py-0.5 rounded-md font-black">v29</span>
+            <span className="font-extrabold text-base sm:text-lg tracking-tight text-black dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors flex items-center gap-1.5">
+              NextSem<span className="text-blue-600 dark:text-blue-400">.online</span>
+              <span className="text-[9px] bg-blue-50 dark:bg-neutral-900 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-neutral-800 px-1.5 py-0.5 rounded-md font-black">v29</span>
             </span>
           </Link>
         </div>
@@ -96,7 +96,7 @@ export default function NsSubjectNavBar({ currentUser, onSignIn, onToggleSidebar
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search tutorials, HTML tags, CLI..."
-              className="w-full pl-9 pr-4 py-1.5 bg-slate-900/90 border border-slate-800 rounded-full text-xs text-white placeholder-slate-400 focus:outline-none focus:border-[#04AA6D] transition-all"
+              className="w-full pl-9 pr-4 py-1.5 bg-slate-50 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 rounded-full text-xs text-black dark:text-white placeholder-slate-400 focus:outline-none focus:border-blue-600 transition-all"
             />
           </div>
         </form>
@@ -106,23 +106,23 @@ export default function NsSubjectNavBar({ currentUser, onSignIn, onToggleSidebar
           {currentUser ? (
             <Link
               href="/profile"
-              className="flex items-center gap-2 px-3 py-1.5 bg-slate-900 border border-slate-800 rounded-full hover:border-slate-700 transition-all"
+              className="flex items-center gap-2 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-neutral-900 dark:hover:bg-neutral-800 border border-slate-200 dark:border-neutral-800 rounded-full transition-all"
             >
               {currentUser.photo ? (
                 <img src={currentUser.photo} alt="" className="w-5 h-5 rounded-full object-cover" />
               ) : (
-                <div className="w-5 h-5 rounded-full bg-[#04AA6D] text-slate-950 flex items-center justify-center font-black text-[10px]">
+                <div className="w-5 h-5 rounded-full bg-blue-600 text-white flex items-center justify-center font-black text-[10px]">
                   {currentUser.avatar || currentUser.name.charAt(0)}
                 </div>
               )}
-              <span className="text-xs font-bold text-slate-200 hidden sm:inline max-w-[100px] truncate">
+              <span className="text-xs font-bold text-black dark:text-white hidden sm:inline max-w-[100px] truncate">
                 {currentUser.name}
               </span>
             </Link>
           ) : (
             <button
               onClick={onSignIn}
-              className="flex items-center gap-1.5 px-3.5 py-1.5 bg-[#04AA6D] hover:bg-[#039861] text-white rounded-full font-extrabold text-xs transition-all shadow-md cursor-pointer"
+              className="flex items-center gap-1.5 px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-full font-extrabold text-xs transition-all shadow-sm cursor-pointer"
             >
               <LogIn size={13} />
               <span>Sign In</span>
@@ -134,7 +134,7 @@ export default function NsSubjectNavBar({ currentUser, onSignIn, onToggleSidebar
 
       {/* ── SUBJECT TABS NAVIGATION BAR (Horizontal Scrollable - ONLY ON FRONT PAGE) ── */}
       {shouldShowSubjectBar && (
-        <div className="bg-[#09101f] border-t border-slate-850 px-2">
+        <div className="bg-slate-50 dark:bg-neutral-950 border-t border-slate-200 dark:border-neutral-800 px-2">
           <div className="max-w-7xl mx-auto flex items-center gap-1 overflow-x-auto custom-scrollbar py-1 scroll-smooth">
             {SUBJECT_TABS.map((tab) => {
               const isActive = tab.match(pathname);
@@ -144,8 +144,8 @@ export default function NsSubjectNavBar({ currentUser, onSignIn, onToggleSidebar
                   href={tab.href}
                   className={`px-3 py-1.5 text-xs font-black uppercase tracking-wider rounded-md whitespace-nowrap transition-all ${
                     isActive
-                      ? "bg-[#04AA6D] text-white shadow-sm font-bold"
-                      : "text-slate-300 hover:text-white hover:bg-slate-900"
+                      ? "bg-blue-600 text-white shadow-sm font-bold"
+                      : "text-slate-600 dark:text-slate-400 hover:text-black dark:hover:text-white hover:bg-slate-200 dark:hover:bg-neutral-900"
                   }`}
                 >
                   {tab.label}

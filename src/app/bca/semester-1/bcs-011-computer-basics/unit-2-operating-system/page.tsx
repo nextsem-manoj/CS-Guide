@@ -277,7 +277,7 @@ export default function Unit2OperatingSystemLessonPage() {
   const activeCmdText = activeCmd[langMode];
 
   return (
-    <div className="min-h-screen bg-[#060c18] text-slate-100 flex flex-col selection:bg-[#04AA6D] selection:text-black">
+    <div className="min-h-screen bg-white dark:bg-black text-black dark:text-white flex flex-col font-sans transition-colors">
       {/* Top Header */}
       <BcaHeaderNav currentSubjectCode="BCS-111" currentSubjectName="Computer Basics & PC Software" />
 
@@ -285,44 +285,44 @@ export default function Unit2OperatingSystemLessonPage() {
       <main className="flex-1 max-w-5xl w-full mx-auto px-3 sm:px-6 py-6 space-y-6">
 
         {/* Navigation Breadcrumbs */}
-        <nav aria-label="Breadcrumbs" className="flex flex-wrap items-center gap-2 text-xs text-slate-300 font-bold py-1">
-          <Link href="/" className="hover:text-[#04AA6D] transition-colors flex items-center gap-1">
+        <nav aria-label="Breadcrumbs" className="flex flex-wrap items-center gap-2 text-xs text-slate-600 dark:text-slate-400 font-bold py-1">
+          <Link href="/" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors flex items-center gap-1">
             <span>🏠 Home</span>
           </Link>
-          <span className="text-slate-600 font-bold">❯</span>
-          <Link href="/bca" className="hover:text-[#04AA6D] transition-colors">
+          <span className="text-slate-400 dark:text-slate-600 font-bold">❯</span>
+          <Link href="/bca" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
             BCA Hub
           </Link>
-          <span className="text-slate-600 font-bold">❯</span>
-          <Link href="/bca/semester-1" className="hover:text-[#04AA6D] transition-colors">
+          <span className="text-slate-400 dark:text-slate-600 font-bold">❯</span>
+          <Link href="/bca/semester-1" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
             Semester 1
           </Link>
-          <span className="text-slate-600 font-bold">❯</span>
-          <Link href="/bca/semester-1/bcs-011-computer-basics" className="hover:text-[#04AA6D] transition-colors">
+          <span className="text-slate-400 dark:text-slate-600 font-bold">❯</span>
+          <Link href="/bca/semester-1/bcs-011-computer-basics" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
             BCS-111
           </Link>
-          <span className="text-slate-600 font-bold">❯</span>
-          <span className="text-cyan-300 font-extrabold">Unit 2: Operating System</span>
+          <span className="text-slate-400 dark:text-slate-600 font-bold">❯</span>
+          <span className="text-blue-600 dark:text-blue-400 font-extrabold">Unit 2: Operating System</span>
         </nav>
 
         {/* Top Breadcrumb & Hero Banner */}
-        <div className="p-6 sm:p-8 bg-[#0c1328] border border-slate-800 rounded-3xl shadow-2xl space-y-5">
+        <div className="p-6 sm:p-8 bg-slate-50 dark:bg-neutral-950 border border-slate-200 dark:border-neutral-800 rounded-3xl shadow-sm space-y-5">
           <div className="flex items-center justify-between flex-wrap gap-3">
             <div className="flex items-center gap-2 flex-wrap text-xs">
               <Link 
                 href="/bca/semester-1/bcs-011-computer-basics"
-                className="inline-flex items-center gap-1.5 font-bold text-cyan-400 hover:text-cyan-300 transition-colors"
+                className="inline-flex items-center gap-1.5 font-bold text-blue-600 dark:text-blue-400 hover:underline transition-colors"
               >
                 <ArrowLeft className="w-3.5 h-3.5" /> BCS-111 Dashboard
               </Link>
-              <span className="text-slate-600">•</span>
-              <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-bold uppercase tracking-wider text-[11px]">
+              <span className="text-slate-400">•</span>
+              <span className="px-2.5 py-0.5 rounded-full bg-blue-50 dark:bg-neutral-900 border border-blue-200 dark:border-neutral-800 text-blue-600 dark:text-blue-400 font-bold uppercase tracking-wider text-[11px]">
                 Block 2 • Unit 2 (Theory + Lab)
               </span>
             </div>
 
             {/* Quick Language Mode Switcher Badge */}
-            <div className="flex items-center bg-[#060c18] p-1 rounded-2xl border border-slate-800 shadow-inner">
+            <div className="flex items-center bg-white dark:bg-neutral-900 p-1 rounded-2xl border border-slate-200 dark:border-neutral-800 shadow-sm">
               <button
                 onClick={() => handleLanguageChange("simple")}
                 className={`px-3 py-1.5 rounded-xl text-xs font-black transition-all flex items-center gap-1.5 cursor-pointer ${

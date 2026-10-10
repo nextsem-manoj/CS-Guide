@@ -106,10 +106,28 @@ async function main() {
     rawTitle = `chat-${latest.convId.substring(0, 8)}`;
   }
 
-  // Clean filename (replace invalid characters with dashes or strip them)
-  const cleanTitle = rawTitle.replace(/[\\/:*?"<>|]/g, '-').trim();
+  // Year & Month folder structure (e.g. chat-logs/2026/10-October/)
+  const now = new Date();
+  const year = String(now.getFullYear());
+  const monthNames = [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
+  ];
+  const monthFolder = `${String(now.getMonth() + 1).padStart(2, '0')}-${monthNames[now.getMonth()]}`;
+  const targetDir = path.join(outputDir, year, monthFolder);
+  if (!fs.existsSync(targetDir)) {
+    fs.mkdirSync(targetDir, { recursive: true });
+  }
+
+  // Clean filename (replace invalid characters with dashes or strip them and cap length)
+  const cleanTitle = (rawTitle || "chat-log")
+    .replace(/[@\[\]\\/:*?"<>|]/g, '-')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .slice(0, 80)
+    .trim();
   const outputFileName = `${cleanTitle}.md`;
-  const outputPath = path.join(outputDir, outputFileName);
+  const outputPath = path.join(targetDir, outputFileName);
 
   let md = `# ${rawTitle}\n\n`;
   md += `*Saved on: ${new Date().toLocaleString()}*\n`;

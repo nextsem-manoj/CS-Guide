@@ -2,35 +2,32 @@ import type { Metadata } from 'next';
 import HomeClient from './HomeClient';
 
 export const metadata: Metadata = {
-  title: "CS Guide by NextSem | University Computer Science (DU, IGNOU BCA & MCA)",
-  description: "Official Computer Science university curriculum, notes, and interactive simulators for Delhi University (DU B.Sc. Prog CS) and IGNOU (BCA & MCA New) by Er. Manoj Kumar.",
+  title: "CS Guide by NextSem | University Computer Science (BCA & MCA)",
+  description: "Universal Computer Science curriculum, textbook notes, and interactive practical simulators for BCA & MCA students by Er. Manoj Kumar.",
   keywords: [
     "cs guide by nextsem",
-    "delhi university computer science",
-    "du bsc program computer science",
-    "ignou bca",
-    "ignou mca new",
-    "ignou bca free study materials",
-    "ignou bca lessons",
-    "ignou bca notes",
-    "bcs-111 computer basics ignou",
-    "bcs-012 basic mathematics ignou",
-    "bcsl-013 software lab ignou",
-    "computer science university courses",
+    "university computer science",
+    "bca curriculum",
+    "mca curriculum",
+    "bca notes",
+    "mca notes",
+    "bca practical labs",
+    "computer science courses",
+    "web development practicals",
     "nextsem computer science"
   ],
   alternates: { canonical: "https://ignou-study-notes-by-nextsem.web.app" },
   openGraph: {
-    title: "CS Guide by NextSem | University Computer Science (DU, IGNOU BCA & MCA)",
-    description: "Free university computer science study materials, official syllabi PDFs, interactive units, MCQs, and lab simulators.",
+    title: "CS Guide by NextSem | University Computer Science (BCA & MCA)",
+    description: "Free university computer science study materials, syllabi, interactive units, MCQs, and lab simulators.",
     url: "https://ignou-study-notes-by-nextsem.web.app",
     siteName: "CS Guide by NextSem",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "CS Guide by NextSem | University Computer Science (DU, IGNOU BCA & MCA)",
-    description: "University computer science curriculum, official syllabi, lab simulators, and interactive notes.",
+    title: "CS Guide by NextSem | University Computer Science (BCA & MCA)",
+    description: "University computer science curriculum, syllabi, lab simulators, and interactive notes.",
   },
 };
 
@@ -43,7 +40,7 @@ export default function Home() {
         "@id": "https://ignou-study-notes-by-nextsem.web.app/#website",
         "url": "https://ignou-study-notes-by-nextsem.web.app",
         "name": "CS Guide by NextSem",
-        "description": "University Computer Science Courses, Official Syllabi PDFs, Textbook Notes & Practical Simulators",
+        "description": "University Computer Science Courses, Syllabi, Textbook Notes & Practical Simulators",
         "publisher": {
           "@type": "EducationalOrganization",
           "name": "CS Guide • Nextsem Online",
@@ -65,21 +62,21 @@ export default function Home() {
       },
       {
         "@type": "Course",
-        "name": "BCS-111 / BCS-011: Computer Basics and PC Software",
-        "description": "Comprehensive IGNOU BCA 1st Semester Computer Basics, Hardware, OS, CLI Commands & Networking line-by-line textbook lessons.",
+        "name": "BCA: Bachelor of Computer Applications",
+        "description": "Comprehensive 3-year undergraduate Computer Science curriculum covering Computer Basics, Programming, Data Structures, Web Development, and 3-Year Practical Lab (360 Days).",
         "provider": {
           "@type": "EducationalOrganization",
-          "name": "IGNOU BCA Hub",
+          "name": "NextSem Academy CS Guide",
           "url": "https://ignou-study-notes-by-nextsem.web.app"
         }
       },
       {
         "@type": "Course",
-        "name": "BCS-012: Basic Mathematics",
-        "description": "IGNOU BCA Semester 1 Basic Mathematics algebra, calculus, matrices, and problem-solving modules.",
+        "name": "MCA: Master of Computer Applications",
+        "description": "Advanced 2-year postgraduate Computer Science curriculum covering Artificial Intelligence, Machine Learning, Big Data, Cloud Computing, and Capstone Projects.",
         "provider": {
           "@type": "EducationalOrganization",
-          "name": "IGNOU BCA Hub",
+          "name": "NextSem Academy CS Guide",
           "url": "https://ignou-study-notes-by-nextsem.web.app"
         }
       },
@@ -88,26 +85,26 @@ export default function Home() {
         "mainEntity": [
           {
             "@type": "Question",
-            "name": "Where can I get free IGNOU BCA study materials and notes?",
+            "name": "Where can university computer science students access free BCA & MCA study materials?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "You can access 100% free IGNOU BCA study materials, line-by-line textbook unit notes, interactive MCQs, and lab simulators directly on https://ignou-study-notes-by-nextsem.web.app created by Er. Manoj Kumar."
+              "text": "Students can access 100% free university Computer Science study materials, line-by-line textbook notes, interactive MCQs, and 3-Year Practical Lab (360 Days) simulators directly on https://ignou-study-notes-by-nextsem.web.app created by Er. Manoj Kumar."
             }
           },
           {
             "@type": "Question",
-            "name": "Which subjects are covered in IGNOU BCA Semester 1?",
+            "name": "Which programs are supported on the CS Guide platform?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "IGNOU BCA Semester 1 includes BCS-111 / BCS-011 (Computer Basics and PC Software), BCS-012 (Basic Mathematics), BCSL-013 (Software Lab), BEGLA-136 (Workplace English), and BEVAE-181 (Environmental Studies)."
+              "text": "CS Guide supports full undergraduate BCA (6 Semesters) and postgraduate MCA (4 Semesters) computer science degree programs with practical coding labs and solved exercises."
             }
           },
           {
             "@type": "Question",
-            "name": "Does IGNOU BCA Hub support English and Hinglish explanations?",
+            "name": "Does the CS Guide platform include practical coding exercises?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "Yes! All lessons on IGNOU BCA Hub support English, Hinglish, and Hindi language modes with both Kid/Easy and Pro complexity options."
+              "text": "Yes! The platform includes interactive in-browser coding labs, terminal simulators, and GitHub workflows for HTML, CSS, JavaScript, C/C++, and Python."
             }
           }
         ]

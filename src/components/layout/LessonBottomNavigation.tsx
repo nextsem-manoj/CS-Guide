@@ -3,9 +3,11 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useTheme } from "next-themes";
 import { 
   ChevronLeft, ChevronRight, LayoutGrid, BookOpen, 
-  User, Menu, X, LogIn, LogOut, Sliders, Type, Languages, Sparkles, Code, GraduationCap, CheckCircle2
+  User, Menu, X, LogIn, LogOut, Sliders, Type, Languages, Sparkles, Code, GraduationCap, CheckCircle2,
+  Sun, Moon
 } from "lucide-react";
 import { mswordLessons } from "@/data/mswordLessonsData";
 import { cliLessons } from "@/data/cliLessonsData";
@@ -37,6 +39,8 @@ interface UserObj {
 
 export default function LessonBottomNavigation({ pathname }: LessonBottomNavigationProps) {
   const router = useRouter();
+  const { theme, setTheme, resolvedTheme } = useTheme();
+  const currentTheme = resolvedTheme || theme;
   const [currentUser, setCurrentUser] = useState<UserObj | null>(null);
   const [selectedLang, setSelectedLang] = useState<Lang>("hinglish");
   const [selectedLevel, setSelectedLevel] = useState<Level>("kid");
@@ -312,29 +316,28 @@ export default function LessonBottomNavigation({ pathname }: LessonBottomNavigat
     prevHref = "/";
     nextHref = "/";
   }
-
   return (
     <>
       {/* ── SLIDE-UP TOOLS DRAWER ── */}
       {toolsOpen && (
         <>
           <div 
-            className="fixed inset-0 bg-slate-950/70 backdrop-blur-md z-40 transition-opacity animate-in fade-in duration-200"
+            className="fixed inset-0 bg-black/60 dark:bg-black/80 backdrop-blur-md z-40 transition-opacity animate-in fade-in duration-200"
             onClick={() => setToolsOpen(false)}
           />
           <div 
-            className="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-slate-950/95 backdrop-blur-2xl border-t border-x border-blue-900/40 rounded-t-[32px] p-5 pb-24 z-50 animate-in slide-in-from-bottom duration-300 select-none shadow-[0_-12px_40px_rgba(0,0,0,0.8)] text-slate-100 space-y-4"
+            className="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white/95 dark:bg-neutral-950/95 backdrop-blur-2xl border-t border-x border-slate-200 dark:border-neutral-800 rounded-t-[32px] p-5 pb-24 z-50 animate-in slide-in-from-bottom duration-300 select-none shadow-2xl text-black dark:text-white space-y-4"
             style={{ paddingBottom: 'calc(5.5rem + env(safe-area-inset-bottom))' }}
           >
-            <div className="w-12 h-1 bg-slate-700/60 rounded-full mx-auto mb-2" />
-            <div className="flex justify-between items-center pb-3 border-b border-slate-800/80">
-              <h3 className="font-extrabold text-sm uppercase tracking-wider text-white flex items-center gap-2">
-                <Sliders size={16} className="text-amber-400" />
+            <div className="w-12 h-1 bg-slate-300 dark:bg-neutral-700 rounded-full mx-auto mb-2" />
+            <div className="flex justify-between items-center pb-3 border-b border-slate-200 dark:border-neutral-800">
+              <h3 className="font-extrabold text-sm uppercase tracking-wider text-black dark:text-white flex items-center gap-2">
+                <Sliders size={16} className="text-blue-600 dark:text-blue-400" />
                 Lesson Reading Preferences
               </h3>
               <button 
                 onClick={() => setToolsOpen(false)}
-                className="p-1 rounded-full bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white transition-colors"
+                className="p-1 rounded-full bg-slate-100 hover:bg-slate-200 dark:bg-neutral-900 dark:hover:bg-neutral-800 text-slate-500 hover:text-black dark:text-slate-400 dark:hover:text-white transition-colors cursor-pointer"
               >
                 <X size={18} />
               </button>
@@ -342,16 +345,16 @@ export default function LessonBottomNavigation({ pathname }: LessonBottomNavigat
 
             {/* Language Switcher */}
             <div className="space-y-1.5">
-              <label className="text-[11px] font-black uppercase text-blue-400 tracking-wider">Select Language</label>
-              <div className="grid grid-cols-3 bg-slate-900 border border-slate-800 p-1 rounded-xl gap-1">
+              <label className="text-[11px] font-black uppercase text-blue-600 dark:text-blue-400 tracking-wider">Select Language</label>
+              <div className="grid grid-cols-3 bg-slate-50 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 p-1 rounded-xl gap-1">
                 {(["english", "hinglish", "hindi"] as Lang[]).map((lang) => (
                   <button
                     key={lang}
                     onClick={() => handleLangChange(lang)}
                     className={`text-xs font-black uppercase py-2 px-2 rounded-lg transition-all cursor-pointer ${
                       selectedLang === lang
-                        ? "bg-blue-600 text-white shadow-md font-bold"
-                        : "text-slate-400 hover:text-white"
+                        ? "bg-blue-600 text-white shadow-sm font-bold"
+                        : "text-slate-600 hover:text-black dark:text-slate-400 dark:hover:text-white"
                     }`}
                   >
                     {lang === "english" ? "🇬🇧 EN" : lang === "hinglish" ? "🌐 Hinglish" : "🇮🇳 हिंदी"}
@@ -362,16 +365,16 @@ export default function LessonBottomNavigation({ pathname }: LessonBottomNavigat
 
             {/* Kid vs Pro Level Mode */}
             <div className="space-y-1.5">
-              <label className="text-[11px] font-black uppercase text-amber-400 tracking-wider">Content Mode</label>
-              <div className="grid grid-cols-2 bg-slate-900 border border-slate-800 p-1 rounded-xl gap-1">
+              <label className="text-[11px] font-black uppercase text-blue-600 dark:text-blue-400 tracking-wider">Content Mode</label>
+              <div className="grid grid-cols-2 bg-slate-50 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 p-1 rounded-xl gap-1">
                 {(["kid", "pro"] as Level[]).map((level) => (
                   <button
                     key={level}
                     onClick={() => handleLevelChange(level)}
                     className={`text-xs font-black uppercase py-2 px-2 rounded-lg transition-all cursor-pointer ${
                       selectedLevel === level
-                        ? "bg-amber-400 text-slate-950 font-black shadow-md"
-                        : "text-slate-400 hover:text-white"
+                        ? "bg-blue-600 text-white font-black shadow-sm"
+                        : "text-slate-600 hover:text-black dark:text-slate-400 dark:hover:text-white"
                     }`}
                   >
                     {level === "kid" ? "🧒 Beginner Mode" : "💼 Professional"}
@@ -382,18 +385,18 @@ export default function LessonBottomNavigation({ pathname }: LessonBottomNavigat
 
             {/* Font Size Adjuster */}
             <div className="space-y-1.5">
-              <label className="text-[11px] font-black uppercase text-slate-300 tracking-wider">Font Size ({fontSize}px)</label>
-              <div className="flex items-center justify-between bg-slate-900 border border-slate-800 p-2 rounded-xl">
+              <label className="text-[11px] font-black uppercase text-slate-700 dark:text-slate-300 tracking-wider">Font Size ({fontSize}px)</label>
+              <div className="flex items-center justify-between bg-slate-50 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 p-2 rounded-xl">
                 <button
                   onClick={() => handleFontSizeChange(-1)}
-                  className="px-4 py-1.5 bg-slate-800 hover:bg-slate-750 text-white font-black rounded-lg transition-colors cursor-pointer text-xs"
+                  className="px-4 py-1.5 bg-white hover:bg-slate-100 dark:bg-neutral-800 dark:hover:bg-neutral-700 border border-slate-200 dark:border-neutral-700 text-black dark:text-white font-black rounded-lg transition-colors cursor-pointer text-xs"
                 >
                   A- Small
                 </button>
-                <span className="text-xs font-mono font-bold text-amber-400">{fontSize}px</span>
+                <span className="text-xs font-mono font-bold text-blue-600 dark:text-blue-400">{fontSize}px</span>
                 <button
                   onClick={() => handleFontSizeChange(1)}
-                  className="px-4 py-1.5 bg-slate-800 hover:bg-slate-750 text-white font-black rounded-lg transition-colors cursor-pointer text-xs"
+                  className="px-4 py-1.5 bg-white hover:bg-slate-100 dark:bg-neutral-800 dark:hover:bg-neutral-700 border border-slate-200 dark:border-neutral-700 text-black dark:text-white font-black rounded-lg transition-colors cursor-pointer text-xs"
                 >
                   A+ Large
                 </button>
@@ -408,33 +411,33 @@ export default function LessonBottomNavigation({ pathname }: LessonBottomNavigat
       {menuOpen && (
         <>
           <div 
-            className="fixed inset-0 bg-slate-950/70 backdrop-blur-md z-40 transition-opacity animate-in fade-in duration-200"
+            className="fixed inset-0 bg-black/60 dark:bg-black/80 backdrop-blur-md z-40 transition-opacity animate-in fade-in duration-200"
             onClick={() => setMenuOpen(false)}
           />
           
           <div 
-            className="fixed bottom-0 left-0 right-0 max-w-lg mx-auto bg-slate-950/95 backdrop-blur-2xl border-t border-x border-blue-900/40 rounded-t-[32px] p-5 pb-24 z-50 animate-in slide-in-from-bottom duration-300 select-none shadow-[0_-12px_40px_rgba(0,0,0,0.8)] text-slate-100"
+            className="fixed bottom-0 left-0 right-0 max-w-lg mx-auto bg-white/95 dark:bg-neutral-950/95 backdrop-blur-2xl border-t border-x border-slate-200 dark:border-neutral-800 rounded-t-[32px] p-5 pb-24 z-50 animate-in slide-in-from-bottom duration-300 select-none shadow-2xl text-black dark:text-white"
             style={{ paddingBottom: 'calc(5.5rem + env(safe-area-inset-bottom))' }}
           >
             {/* Handle Indicator Bar */}
-            <div className="w-12 h-1 bg-slate-700/60 rounded-full mx-auto mb-4" />
+            <div className="w-12 h-1 bg-slate-300 dark:bg-neutral-700 rounded-full mx-auto mb-4" />
 
             {/* Header */}
-            <div className="flex justify-between items-center mb-4 pb-3 border-b border-slate-800/80">
+            <div className="flex justify-between items-center mb-4 pb-3 border-b border-slate-200 dark:border-neutral-800">
               <div className="flex items-center gap-2.5">
-                <div className="w-7 h-7 rounded-xl bg-amber-500/20 border border-amber-500/30 flex items-center justify-center text-amber-400 font-bold text-xs shadow-inner">
-                  NS
+                <div className="w-7 h-7 rounded-xl bg-blue-600 flex items-center justify-center text-white font-mono font-bold text-xs shadow-sm">
+                  &lt;/&gt;
                 </div>
-                <h3 className="font-extrabold text-sm uppercase tracking-wider text-white flex items-center gap-2">
+                <h3 className="font-extrabold text-sm uppercase tracking-wider text-black dark:text-white flex items-center gap-2">
                   {courseTitle}
-                  <span className="text-[10px] font-bold px-2 py-0.5 bg-amber-500/20 text-amber-300 border border-amber-500/30 rounded-full">
+                  <span className="text-[10px] font-bold px-2 py-0.5 bg-blue-50 dark:bg-neutral-900 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-neutral-800 rounded-full">
                     {progressText || "Menu"}
                   </span>
                 </h3>
               </div>
               <button 
                 onClick={() => setMenuOpen(false)}
-                className="p-1.5 rounded-full bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white transition-colors cursor-pointer"
+                className="p-1.5 rounded-full bg-slate-100 hover:bg-slate-200 dark:bg-neutral-900 dark:hover:bg-neutral-800 text-slate-500 hover:text-black dark:text-slate-400 dark:hover:text-white transition-colors cursor-pointer"
               >
                 <X size={18} />
               </button>
@@ -443,7 +446,7 @@ export default function LessonBottomNavigation({ pathname }: LessonBottomNavigat
             <div className="space-y-4 max-h-[55vh] overflow-y-auto pr-1 custom-scrollbar">
               
               {/* User Auth Banner */}
-              <div className="p-3 bg-slate-900/80 border border-slate-800 rounded-2xl">
+              <div className="p-3 bg-slate-50 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 rounded-2xl">
                 {currentUser ? (
                   <div className="flex items-center justify-between gap-3">
                     <div className="flex items-center gap-2.5 min-w-0">
@@ -451,25 +454,25 @@ export default function LessonBottomNavigation({ pathname }: LessonBottomNavigat
                         <img 
                           src={currentUser.photo} 
                           alt={currentUser.name || "User"} 
-                          className="w-9 h-9 rounded-full object-cover border-2 border-amber-500/30 shrink-0"
+                          className="w-9 h-9 rounded-full object-cover border-2 border-blue-600 shrink-0"
                         />
                       ) : (
-                        <div className="w-9 h-9 rounded-full bg-amber-400 text-slate-950 flex items-center justify-center font-black text-xs shrink-0 shadow-md">
+                        <div className="w-9 h-9 rounded-full bg-blue-600 text-white flex items-center justify-center font-black text-xs shrink-0 shadow-sm">
                           {currentUser.avatar || currentUser.name?.charAt(0) || "U"}
                         </div>
                       )}
                       <div className="min-w-0">
-                        <div className="text-xs font-bold text-white truncate">
+                        <div className="text-xs font-bold text-black dark:text-white truncate">
                           {currentUser.name}
                         </div>
-                        <div className="text-[10px] text-slate-400 truncate mt-0.5">
+                        <div className="text-[10px] text-slate-500 dark:text-slate-400 truncate mt-0.5">
                           {currentUser.email}
                         </div>
                       </div>
                     </div>
                     <button
                       onClick={handleSignOut}
-                      className="p-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl transition-all cursor-pointer"
+                      className="p-2 bg-slate-200 hover:bg-slate-300 dark:bg-neutral-800 dark:hover:bg-neutral-700 text-black dark:text-white rounded-xl transition-all cursor-pointer"
                       title="Sign Out"
                     >
                       <LogOut size={15} />
@@ -478,12 +481,12 @@ export default function LessonBottomNavigation({ pathname }: LessonBottomNavigat
                 ) : (
                   <div className="flex items-center justify-between gap-3">
                     <div>
-                      <div className="text-xs font-bold text-white">Guest Student</div>
-                      <div className="text-[10px] text-slate-400 mt-0.5">Sign in to save certifications & stats</div>
+                      <div className="text-xs font-bold text-black dark:text-white">Guest Student</div>
+                      <div className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">Sign in to save certifications &amp; stats</div>
                     </div>
                     <button
                       onClick={handleSignIn}
-                      className="flex items-center gap-1.5 px-3 py-1.5 bg-amber-400 hover:bg-amber-300 text-slate-950 rounded-xl font-extrabold text-[11px] transition-all cursor-pointer shadow-md shadow-amber-500/20"
+                      className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-extrabold text-[11px] transition-all cursor-pointer shadow-sm"
                     >
                       <LogIn size={13} />
                       <span>Sign In</span>
@@ -495,7 +498,7 @@ export default function LessonBottomNavigation({ pathname }: LessonBottomNavigat
               {/* Module Lessons Menu List */}
               {activeLessonsList.length > 0 && (
                 <div className="space-y-1.5">
-                  <div className="text-[10px] font-black uppercase tracking-wider text-blue-400 px-1">
+                  <div className="text-[10px] font-black uppercase tracking-wider text-blue-600 dark:text-blue-400 px-1">
                     All Course Lessons ({activeLessonsList.length})
                   </div>
                   {activeLessonsList.map((item) => {
@@ -508,19 +511,19 @@ export default function LessonBottomNavigation({ pathname }: LessonBottomNavigat
                         onClick={() => setMenuOpen(false)}
                         className={`flex items-center justify-between gap-2 p-2.5 rounded-xl border text-xs font-semibold transition-all ${
                           isActive
-                            ? "bg-blue-600/20 border-blue-500/70 text-white font-bold"
-                            : "bg-slate-900/50 border-slate-850 text-slate-300 hover:text-white"
+                            ? "bg-blue-50 dark:bg-neutral-900 border-blue-600 text-blue-600 dark:text-blue-400 font-bold"
+                            : "bg-white hover:bg-slate-50 dark:bg-neutral-950 dark:hover:bg-neutral-900 border-slate-200 dark:border-neutral-800 text-black dark:text-white"
                         }`}
                       >
                         <div className="flex items-center gap-2.5 min-w-0">
                           <span className={`w-5 h-5 rounded-lg flex items-center justify-center text-[10px] font-black shrink-0 ${
-                            isActive ? "bg-blue-600 text-white" : itemDone ? "bg-emerald-950 text-emerald-400 border border-emerald-800/60" : "bg-slate-800 text-slate-400"
+                            isActive ? "bg-blue-600 text-white" : itemDone ? "bg-blue-50 dark:bg-neutral-800 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-neutral-700" : "bg-slate-100 dark:bg-neutral-800 text-slate-600 dark:text-slate-400"
                           }`}>
                             {itemDone ? "✓" : item.id}
                           </span>
                           <span className="truncate text-xs">{item.title}</span>
                         </div>
-                        {isActive && <span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse shrink-0" />}
+                        {isActive && <span className="w-2 h-2 rounded-full bg-blue-600 dark:bg-blue-400 animate-pulse shrink-0" />}
                       </Link>
                     );
                   })}
@@ -528,37 +531,37 @@ export default function LessonBottomNavigation({ pathname }: LessonBottomNavigat
               )}
 
               {/* Quick Navigation Links */}
-              <div className="grid grid-cols-2 gap-2 pt-2 border-t border-slate-800/80">
+              <div className="grid grid-cols-2 gap-2 pt-2 border-t border-slate-200 dark:border-neutral-800">
                 <Link
                   href={dashboardHref}
                   onClick={() => setMenuOpen(false)}
-                  className="flex items-center gap-2 p-2.5 bg-slate-900 hover:bg-slate-850 border border-slate-800 rounded-xl text-xs font-bold text-slate-200"
+                  className="flex items-center gap-2 p-2.5 bg-white hover:bg-slate-50 dark:bg-neutral-950 dark:hover:bg-neutral-900 border border-slate-200 dark:border-neutral-800 rounded-xl text-xs font-bold text-black dark:text-white"
                 >
-                  <BookOpen size={15} className="text-blue-400" />
+                  <BookOpen size={15} className="text-blue-600 dark:text-blue-400" />
                   <span>Course Dashboard</span>
                 </Link>
                 <Link
                   href="/profile"
                   onClick={() => setMenuOpen(false)}
-                  className="flex items-center gap-2 p-2.5 bg-slate-900 hover:bg-slate-850 border border-slate-800 rounded-xl text-xs font-bold text-slate-200"
+                  className="flex items-center gap-2 p-2.5 bg-white hover:bg-slate-50 dark:bg-neutral-950 dark:hover:bg-neutral-900 border border-slate-200 dark:border-neutral-800 rounded-xl text-xs font-bold text-black dark:text-white"
                 >
-                  <User size={15} className="text-amber-400" />
+                  <User size={15} className="text-blue-600 dark:text-blue-400" />
                   <span>My Profile</span>
                 </Link>
                 <Link
                   href="/cmd"
                   onClick={() => setMenuOpen(false)}
-                  className="flex items-center gap-2 p-2.5 bg-slate-900 hover:bg-slate-850 border border-slate-800 rounded-xl text-xs font-bold text-slate-200"
+                  className="flex items-center gap-2 p-2.5 bg-white hover:bg-slate-50 dark:bg-neutral-950 dark:hover:bg-neutral-900 border border-slate-200 dark:border-neutral-800 rounded-xl text-xs font-bold text-black dark:text-white"
                 >
-                  <Code size={15} className="text-blue-400" />
+                  <Code size={15} className="text-blue-600 dark:text-blue-400" />
                   <span>CMD Terminal</span>
                 </Link>
                 <Link
                   href="/bca"
                   onClick={() => setMenuOpen(false)}
-                  className="flex items-center gap-2 p-2.5 bg-slate-900 hover:bg-slate-850 border border-slate-800 rounded-xl text-xs font-bold text-slate-200"
+                  className="flex items-center gap-2 p-2.5 bg-white hover:bg-slate-50 dark:bg-neutral-950 dark:hover:bg-neutral-900 border border-slate-200 dark:border-neutral-800 rounded-xl text-xs font-bold text-black dark:text-white"
                 >
-                  <GraduationCap size={15} className="text-amber-400" />
+                  <GraduationCap size={15} className="text-blue-600 dark:text-blue-400" />
                   <span>BCA Syllabus</span>
                 </Link>
               </div>
@@ -574,51 +577,51 @@ export default function LessonBottomNavigation({ pathname }: LessonBottomNavigat
       {subjectDrawerOpen && (
         <>
           <div 
-            className="fixed inset-0 bg-slate-950/70 backdrop-blur-md z-40 transition-opacity animate-in fade-in duration-200"
+            className="fixed inset-0 bg-black/60 dark:bg-black/80 backdrop-blur-md z-40 transition-opacity animate-in fade-in duration-200"
             onClick={() => setSubjectDrawerOpen(false)}
           />
           
           <div 
-            className="fixed bottom-0 left-0 right-0 max-w-lg mx-auto bg-[#090d22]/95 backdrop-blur-2xl border-t border-x border-cyan-500/40 rounded-t-[32px] p-5 pb-24 z-50 animate-in slide-in-from-bottom duration-300 select-none shadow-[0_-12px_40px_rgba(0,0,0,0.8)] text-slate-100"
+            className="fixed bottom-0 left-0 right-0 max-w-lg mx-auto bg-white/95 dark:bg-neutral-950/95 backdrop-blur-2xl border-t border-x border-slate-200 dark:border-neutral-800 rounded-t-[32px] p-5 pb-24 z-50 animate-in slide-in-from-bottom duration-300 select-none shadow-2xl text-black dark:text-white"
             style={{ paddingBottom: 'calc(5.5rem + env(safe-area-inset-bottom))' }}
           >
-            <div className="w-12 h-1 bg-slate-700/60 rounded-full mx-auto mb-4" />
+            <div className="w-12 h-1 bg-slate-300 dark:bg-neutral-700 rounded-full mx-auto mb-4" />
 
-            <div className="flex flex-col items-center text-center mb-4 pb-3 border-b border-slate-800/80 relative">
+            <div className="flex flex-col items-center text-center mb-4 pb-3 border-b border-slate-200 dark:border-neutral-800 relative">
               <div className="flex items-center justify-center gap-2 mb-1">
-                <BookOpen size={18} className="text-cyan-400" />
-                <h3 className="font-extrabold text-sm uppercase tracking-wider text-cyan-300 text-center">
+                <BookOpen size={18} className="text-blue-600 dark:text-blue-400" />
+                <h3 className="font-extrabold text-sm uppercase tracking-wider text-black dark:text-white text-center">
                   Switch Subject or Unit
                 </h3>
               </div>
-              <p className="text-xs text-slate-400 text-center font-medium">
-                Official IGNOU BCA 1st Semester Curriculum Sequence
+              <p className="text-xs text-slate-500 dark:text-slate-400 text-center font-medium">
+                BCA Degree Curriculum Sequence
               </p>
               <button 
                 onClick={() => setSubjectDrawerOpen(false)}
-                className="absolute right-0 top-0 p-1.5 rounded-full bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white transition-colors cursor-pointer"
+                className="absolute right-0 top-0 p-1.5 rounded-full bg-slate-100 hover:bg-slate-200 dark:bg-neutral-900 dark:hover:bg-neutral-800 text-slate-500 hover:text-black dark:text-slate-400 dark:hover:text-white transition-colors cursor-pointer"
               >
                 <X size={18} />
               </button>
             </div>
 
             <div className="space-y-4 max-h-[60vh] overflow-y-auto pr-1 custom-scrollbar text-center">
-              {/* 1. SABSE UPAR: 50 Micro-Lessons Fast Switcher Grid */}
+              {/* 1. Micro-Lessons Fast Switcher Grid */}
               <div className="space-y-2 pb-2">
                 <div className="flex items-center justify-between px-1">
-                  <span className="text-[10px] font-black uppercase tracking-wider text-cyan-400">
+                  <span className="text-[10px] font-black uppercase tracking-wider text-blue-600 dark:text-blue-400">
                     BCS-111 Unit 1 Micro-Lessons (50)
                   </span>
                   <Link
                     href="/bca/semester-1/bcs-011-computer-basics/unit-1/lessons"
                     onClick={() => setSubjectDrawerOpen(false)}
-                    className="text-[10px] font-bold text-amber-400 hover:underline"
+                    className="text-[10px] font-bold text-blue-600 dark:text-blue-400 hover:underline"
                   >
                     View All Hub
                   </Link>
                 </div>
 
-                <div className="grid grid-cols-5 gap-1.5 p-2.5 bg-[#060b1e]/90 rounded-2xl border border-cyan-500/30 shadow-inner">
+                <div className="grid grid-cols-5 gap-1.5 p-2.5 bg-slate-50 dark:bg-neutral-900 rounded-2xl border border-slate-200 dark:border-neutral-800 shadow-inner">
                   {unit1Lessons.map((l) => {
                     const isCurrentLesson = pathname.includes(`/lessons/${l.id}`) || (l.lessonNumber === 1 && (pathname.endsWith('/unit-1') || pathname.endsWith('/unit-1/lessons')));
 
@@ -631,8 +634,8 @@ export default function LessonBottomNavigation({ pathname }: LessonBottomNavigat
                         }}
                         className={`p-2 rounded-xl text-[11px] font-black text-center transition-all cursor-pointer ${
                           isCurrentLesson
-                            ? "bg-gradient-to-r from-emerald-500 to-cyan-500 text-white border-2 border-amber-400 shadow-lg shadow-cyan-500/30 scale-105"
-                            : "bg-slate-900/90 hover:bg-cyan-600 hover:text-white border border-slate-800 text-slate-300"
+                            ? "bg-blue-600 text-white border border-blue-600 shadow-md scale-105"
+                            : "bg-white hover:bg-slate-100 dark:bg-neutral-950 dark:hover:bg-neutral-800 border border-slate-200 dark:border-neutral-800 text-slate-700 dark:text-slate-300"
                         }`}
                         title={`#${l.lessonNumber}: ${l.title}`}
                       >
@@ -643,33 +646,30 @@ export default function LessonBottomNavigation({ pathname }: LessonBottomNavigat
                 </div>
               </div>
 
-              {/* 2. Active Reading Position Card: Current Lesson -> Unit -> Block */}
-              <div className="p-4 rounded-2xl bg-gradient-to-br from-cyan-950/80 via-slate-900 to-amber-950/60 border border-cyan-500/40 text-center space-y-1.5 shadow-xl">
-                <div className="text-[10px] font-black uppercase tracking-widest text-amber-400">
+              {/* 2. Active Reading Position Card */}
+              <div className="p-4 rounded-2xl bg-slate-50 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 text-center space-y-1.5 shadow-sm">
+                <div className="text-[10px] font-black uppercase tracking-widest text-blue-600 dark:text-blue-400">
                   📍 Active Reading Position
                 </div>
 
-                {/* Current Lesson (Top) */}
-                <div className="text-sm sm:text-base font-black text-cyan-200">
+                <div className="text-sm sm:text-base font-black text-black dark:text-white">
                   {currentLessonDisplay || "Lesson #1: What is a Computer?"}
                 </div>
 
-                {/* Current Unit (Middle) */}
-                <div className="text-xs font-bold text-slate-300 flex items-center justify-center gap-1.5">
-                  <BookOpen size={13} className="text-cyan-400 shrink-0" />
+                <div className="text-xs font-bold text-slate-600 dark:text-slate-300 flex items-center justify-center gap-1.5">
+                  <BookOpen size={13} className="text-blue-600 dark:text-blue-400 shrink-0" />
                   <span>{currentUnitDisplay || "Unit 1: Computer their Origin and Applications"}</span>
                 </div>
 
-                {/* Current Block (Bottom) */}
-                <div className="text-[11px] font-semibold text-slate-400 flex items-center justify-center gap-1.5">
+                <div className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 flex items-center justify-center gap-1.5">
                   <span>📦 {currentBlockDisplay || "Block 1: Basics of Computer Hardware (BCS-111)"}</span>
                 </div>
               </div>
 
-              {/* 3. Official IGNOU PDF Subject Order */}
-              <div className="space-y-2.5 pt-2 border-t border-slate-800/80">
-                <div className="text-[11px] font-black uppercase tracking-widest text-amber-400 text-center">
-                  📚 Official IGNOU PDF Subject Order
+              {/* 3. Subject Order */}
+              <div className="space-y-2.5 pt-2 border-t border-slate-200 dark:border-neutral-800">
+                <div className="text-[11px] font-black uppercase tracking-widest text-blue-600 dark:text-blue-400 text-center">
+                  📚 BCA Subject Order
                 </div>
                 
                 {bcaSemesters[0]?.subjects.map((sub) => {
@@ -688,26 +688,26 @@ export default function LessonBottomNavigation({ pathname }: LessonBottomNavigat
                         }}
                         className={`w-full text-center p-3 rounded-2xl border transition-all flex items-center justify-between gap-3 group cursor-pointer ${
                           isCurrent
-                            ? "bg-cyan-500/20 border-cyan-400 text-cyan-200 shadow-md"
-                            : "bg-slate-900/90 hover:bg-slate-800 border-slate-800 hover:border-cyan-500/40 text-slate-200"
+                            ? "bg-blue-50 dark:bg-neutral-900 border-blue-600 text-blue-600 dark:text-blue-400 shadow-sm"
+                            : "bg-white hover:bg-slate-50 dark:bg-neutral-950 dark:hover:bg-neutral-900 border-slate-200 dark:border-neutral-800 text-black dark:text-white"
                         }`}
                       >
                         <div className="flex items-center gap-2.5 min-w-0 mx-auto">
-                          <span className="px-2.5 py-0.5 rounded-md bg-amber-500/20 text-amber-300 text-[10px] font-black border border-amber-500/30 shrink-0">
+                          <span className="px-2.5 py-0.5 rounded-md bg-blue-50 dark:bg-neutral-900 text-blue-600 dark:text-blue-400 text-[10px] font-black border border-blue-200 dark:border-neutral-800 shrink-0">
                             {sub.code}
                           </span>
-                          <span className="text-xs font-bold truncate group-hover:text-white">
+                          <span className="text-xs font-bold truncate">
                             {sub.name}
                           </span>
                         </div>
-                        {isCurrent && <CheckCircle2 size={15} className="text-cyan-400 shrink-0" />}
+                        {isCurrent && <CheckCircle2 size={15} className="text-blue-600 dark:text-blue-400 shrink-0" />}
                       </button>
 
                       {/* Display Units for this Subject */}
                       <div className="grid grid-cols-1 gap-1 pl-2 pr-2">
                         {sub.blocks.map((block) => (
                           <div key={block.name} className="space-y-1 my-1">
-                            <div className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider text-center">
+                            <div className="text-[10px] font-extrabold text-slate-500 uppercase tracking-wider text-center">
                               {block.name}
                             </div>
                             {block.units.map((unit, uIdx) => (
@@ -718,7 +718,7 @@ export default function LessonBottomNavigation({ pathname }: LessonBottomNavigat
                                   const unitSlug = unit.displayName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
                                   router.push(`/bca/semester-1/${sub.code.toLowerCase()}/unit-${uIdx + 1}-${unitSlug}`);
                                 }}
-                                className="w-full py-1.5 px-3 rounded-xl bg-slate-950/60 hover:bg-slate-900 border border-slate-850 text-[11px] font-medium text-slate-300 hover:text-cyan-300 text-center transition-all cursor-pointer truncate"
+                                className="w-full py-1.5 px-3 rounded-xl bg-slate-50 hover:bg-slate-100 dark:bg-neutral-900 dark:hover:bg-neutral-850 border border-slate-200 dark:border-neutral-800 text-[11px] font-medium text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 text-center transition-all cursor-pointer truncate"
                               >
                                 Unit {uIdx + 1}: {unit.displayName}
                               </button>
@@ -732,9 +732,9 @@ export default function LessonBottomNavigation({ pathname }: LessonBottomNavigat
               </div>
 
               {/* Semester Switcher Tabs */}
-              <div className="space-y-2 pt-3 border-t border-slate-800/80">
-                <div className="text-[10px] font-black uppercase tracking-wider text-slate-400 text-center">
-                  IGNOU BCA Semesters (1 to 6)
+              <div className="space-y-2 pt-3 border-t border-slate-200 dark:border-neutral-800">
+                <div className="text-[10px] font-black uppercase tracking-wider text-slate-500 text-center">
+                  BCA Semesters (1 to 6)
                 </div>
                 <div className="grid grid-cols-3 gap-2">
                   {[1, 2, 3, 4, 5, 6].map((semNum) => (
@@ -742,7 +742,7 @@ export default function LessonBottomNavigation({ pathname }: LessonBottomNavigat
                       key={semNum}
                       href={`/bca/semester-${semNum}`}
                       onClick={() => setSubjectDrawerOpen(false)}
-                      className="p-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-center text-xs font-extrabold text-slate-300 hover:text-white transition-all"
+                      className="p-2.5 rounded-xl bg-slate-50 hover:bg-slate-100 dark:bg-neutral-900 dark:hover:bg-neutral-800 border border-slate-200 dark:border-neutral-800 text-center text-xs font-extrabold text-black dark:text-white transition-all"
                     >
                       Semester {semNum}
                     </Link>
@@ -755,9 +755,9 @@ export default function LessonBottomNavigation({ pathname }: LessonBottomNavigat
         </>
       )}
 
-      {/* ── FULL-WIDTH PINNED EDGE-TO-EDGE TAB BAR ── */}
+      {/* ── FULL-WIDTH PINNED EDGE-TO-EDGE TAB BAR (Strict Blue, Black & White) ── */}
       <nav 
-        className={`fixed left-0 right-0 bottom-0 w-full z-[999] select-none bg-[#090d22]/95 backdrop-blur-2xl border-t border-slate-800/80 shadow-[0_-8px_25px_rgba(0,0,0,0.5)] text-slate-200 transition-transform duration-300 ${
+        className={`fixed left-0 right-0 bottom-0 w-full z-[999] select-none bg-white/95 dark:bg-black/95 backdrop-blur-2xl border-t border-slate-200 dark:border-neutral-800 shadow-[0_-8px_25px_rgba(0,0,0,0.1)] text-black dark:text-white transition-transform duration-300 ${
           navVisible ? 'translate-y-0' : 'translate-y-full'
         }`}
         style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
@@ -767,10 +767,10 @@ export default function LessonBottomNavigation({ pathname }: LessonBottomNavigat
           {/* TAB 1: HOME */}
           <Link
             href="/"
-            className="relative flex flex-col items-center justify-center py-1 px-3 rounded-xl transition-all duration-200 active:scale-90 text-slate-300 hover:text-white"
+            className="relative flex flex-col items-center justify-center py-1 px-3 rounded-xl transition-all duration-200 active:scale-90 text-slate-700 hover:text-black dark:text-slate-300 dark:hover:text-white"
           >
-            <div className="w-5 h-5 rounded bg-[#09101f] border border-[#04AA6D]/40 flex items-center justify-center text-[#04AA6D] font-black text-[9px] shadow-xs">
-              NS
+            <div className="w-5 h-5 rounded bg-blue-600 flex items-center justify-center text-white font-mono font-bold text-[9px] shadow-sm">
+              &lt;&gt;
             </div>
             <span className="text-[10px] font-bold tracking-tight mt-0.5">Home</span>
           </Link>
@@ -779,19 +779,51 @@ export default function LessonBottomNavigation({ pathname }: LessonBottomNavigat
           {prevHref ? (
             <Link
               href={prevHref}
-              className="relative flex flex-col items-center justify-center py-1 px-3 rounded-xl transition-all duration-200 active:scale-90 text-amber-400 hover:text-amber-300 font-bold"
+              className="relative flex flex-col items-center justify-center py-1 px-3 rounded-xl transition-all duration-200 active:scale-90 text-blue-600 dark:text-blue-400 font-bold"
             >
-              <ChevronLeft size={18} className="stroke-[2.5] text-amber-400" />
+              <ChevronLeft size={18} className="stroke-[2.5]" />
               <span className="text-[10px] font-bold tracking-tight mt-0.5">Prev</span>
             </Link>
           ) : (
-            <div className="relative flex flex-col items-center justify-center py-1 px-3 rounded-xl opacity-30 text-slate-500 cursor-not-allowed">
+            <div className="relative flex flex-col items-center justify-center py-1 px-3 rounded-xl opacity-30 text-slate-400 dark:text-slate-600 cursor-not-allowed">
               <ChevronLeft size={18} className="stroke-[1.5]" />
               <span className="text-[10px] font-bold tracking-tight mt-0.5">Prev</span>
             </div>
           )}
 
-          {/* TAB 3: UNIT / SUBJECT SWITCHER (Integrated BcaHeaderNav Dropdown) */}
+          {/* TAB 3: THEME TOGGLE (Sun / Moon) */}
+          <button
+            onClick={() => setTheme(currentTheme === 'dark' ? 'light' : 'dark')}
+            className="relative flex flex-col items-center justify-center py-1 px-3 rounded-xl transition-all duration-200 active:scale-90 text-slate-700 hover:text-black dark:text-slate-300 dark:hover:text-white cursor-pointer"
+            title={`Switch to ${currentTheme === 'dark' ? 'Light' : 'Dark'} Mode`}
+          >
+            {currentTheme === 'dark' ? (
+              <Sun size={18} className="stroke-[2] text-blue-400" />
+            ) : (
+              <Moon size={18} className="stroke-[2] text-blue-600" />
+            )}
+            <span className="text-[10px] font-bold tracking-tight mt-0.5">
+              {currentTheme === 'dark' ? 'Light' : 'Dark'}
+            </span>
+          </button>
+
+          {/* TAB 4: NEXT */}
+          {nextHref ? (
+            <Link
+              href={nextHref}
+              className="relative flex flex-col items-center justify-center py-1 px-3 rounded-xl transition-all duration-200 active:scale-90 text-blue-600 dark:text-blue-400 font-bold"
+            >
+              <ChevronRight size={18} className="stroke-[2.5]" />
+              <span className="text-[10px] font-black tracking-tight mt-0.5">Next</span>
+            </Link>
+          ) : (
+            <div className="relative flex flex-col items-center justify-center py-1 px-3 rounded-xl opacity-30 text-slate-400 dark:text-slate-600 cursor-not-allowed">
+              <ChevronRight size={18} className="stroke-[1.5]" />
+              <span className="text-[10px] font-black tracking-tight mt-0.5">Next</span>
+            </div>
+          )}
+
+          {/* TAB 5: UNIT / SUBJECT SWITCHER */}
           <button
             onClick={() => {
               setSubjectDrawerOpen(!subjectDrawerOpen);
@@ -800,54 +832,14 @@ export default function LessonBottomNavigation({ pathname }: LessonBottomNavigat
             }}
             className={`relative flex flex-col items-center justify-center py-1 px-3 rounded-xl transition-all duration-200 active:scale-90 cursor-pointer ${
               subjectDrawerOpen 
-                ? 'text-cyan-300 bg-cyan-500/20 border border-cyan-500/30 font-bold' 
-                : 'text-cyan-400 hover:text-cyan-200 font-bold'
+                ? 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-neutral-900 border border-blue-200 dark:border-neutral-800 font-bold' 
+                : 'text-slate-700 hover:text-black dark:text-slate-300 dark:hover:text-white font-bold'
             }`}
           >
-            <BookOpen size={18} className="stroke-[2] text-cyan-400" />
+            <BookOpen size={18} className="stroke-[2]" />
             <span className="text-[10px] font-bold tracking-tight mt-0.5">Unit ▾</span>
             {subjectDrawerOpen && (
-              <span className="absolute -top-0.5 w-1.5 h-1.5 bg-cyan-400 rounded-full" />
-            )}
-          </button>
-
-          {/* TAB 4: NEXT */}
-          {nextHref ? (
-            <Link
-              href={nextHref}
-              className="relative flex flex-col items-center justify-center py-1 px-3 rounded-xl transition-all duration-200 active:scale-90 text-amber-400 hover:text-amber-300 font-bold"
-            >
-              <ChevronRight size={18} className="stroke-[2.5] text-amber-400" />
-              <span className="text-[10px] font-black tracking-tight mt-0.5">Next</span>
-            </Link>
-          ) : (
-            <div className="relative flex flex-col items-center justify-center py-1 px-3 rounded-xl opacity-30 text-slate-500 cursor-not-allowed">
-              <ChevronRight size={18} className="stroke-[1.5]" />
-              <span className="text-[10px] font-black tracking-tight mt-0.5">Next</span>
-            </div>
-          )}
-
-          {/* TAB 5: USER ACCOUNT / MENU */}
-          <button
-            onClick={() => {
-              setMenuOpen(!menuOpen);
-              setToolsOpen(false);
-              setSubjectDrawerOpen(false);
-            }}
-            className={`relative flex flex-col items-center justify-center py-1 px-3 rounded-xl transition-all duration-200 active:scale-90 cursor-pointer ${
-              menuOpen 
-                ? 'text-amber-400 bg-amber-500/10 border border-amber-500/20 font-bold' 
-                : 'text-slate-300 hover:text-white'
-            }`}
-          >
-            {currentUser?.photo ? (
-              <img src={currentUser.photo} alt="" className="w-5 h-5 rounded-full object-cover border border-amber-400" />
-            ) : (
-              <User size={18} className={menuOpen ? "stroke-[2.5]" : "stroke-[1.75]"} />
-            )}
-            <span className="text-[10px] font-bold tracking-tight mt-0.5">Account</span>
-            {menuOpen && (
-              <span className="absolute -top-0.5 w-1.5 h-1.5 bg-amber-400 rounded-full" />
+              <span className="absolute -top-0.5 w-1.5 h-1.5 bg-blue-600 rounded-full" />
             )}
           </button>
 

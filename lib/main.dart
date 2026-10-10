@@ -3,12 +3,28 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'models/models.dart';
 import 'services/firestore_service.dart';
+import 'services/admob_service.dart';
+import 'services/update_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  
+  // Safe Firebase initialization
+  try {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+  } catch (e) {
+    debugPrint('[Startup] Firebase initialization note: $e');
+  }
+
+  // Safe AdMob initialization
+  try {
+    await AdMobService().initialize();
+  } catch (e) {
+    debugPrint('[Startup] AdMob initialization note: $e');
+  }
+
   runApp(const IgnouNextsemApp());
 }
 
@@ -59,6 +75,10 @@ class _MainPortalScreenState extends State<MainPortalScreen> {
   void initState() {
     super.initState();
     _firestoreService.seedInitialData();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      UpdateService().checkGooglePlayUpdate(context);
+      UpdateService().checkFirestoreUpdate(context);
+    });
   }
 
   @override

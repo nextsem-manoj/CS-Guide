@@ -1,91 +1,49 @@
 "use client";
 
-import React, { useEffect, useState } from 'react';
-import { auth, signInWithGoogle, db } from '../../lib/firebase';
-import { signOut, onAuthStateChanged } from 'firebase/auth';
-import { doc, getDoc } from 'firebase/firestore';
-import { useProgress } from '../../context/ProgressContext';
-import { CheckCircle2, Circle, ArrowLeft, LogOut, BookOpen, ArrowRight, Terminal, Download, User } from 'lucide-react';
+import React, { useEffect, useState, useMemo } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import searchIndex from '../../data/searchIndex.json';
-import { usePWA } from '../../hooks/usePWA';
-import { getChapterUrl } from '../../lib/htmlLessonsHelper';
-
-interface UserProfile {
-  name: string;
-  email: string;
-  avatar: string;
-  photo: string | null;
-}
+import { useTheme } from 'next-themes';
+import { 
+  CheckCircle2, ArrowLeft, LogOut, LogIn, 
+  ArrowRight, ChevronRight, Download, User, ShieldCheck, Sun, Moon, 
+  Sparkles, ExternalLink, GitBranch, Play, Code, Calendar, HelpCircle
+} from 'lucide-react';
+import { useStudentProgress } from '@/context/StudentProgressContext';
+import { usePWA } from '@/hooks/usePWA';
+import { CAREER_TRACKS, PRACTICAL_LESSONS } from '@/data/bcaPracticalData';
+import StudentSocialIntegrationsCard from '@/components/profile/StudentSocialIntegrationsCard';
+import PracticalProcessGuideModal from '@/components/profile/PracticalProcessGuideModal';
+import CbtScoreCard from '@/components/profile/CbtScoreCard';
 
 export default function ProfileClient() {
   const router = useRouter();
-  const [user, setUser] = useState<UserProfile | null>(null);
-  const [loading, setLoading] = useState(true);
-  const { completedChapters, totalCompleted } = useProgress();
+  const { theme, setTheme, resolvedTheme } = useTheme();
+  const currentTheme = resolvedTheme || theme;
+  const [mounted, setMounted] = useState(false);
+  const [showProcessGuide, setShowProcessGuide] = useState(false);
+
+  const {
+    user,
+    completedDays,
+    githubRepoUrls,
+    githubUsername,
+    selectedTrack,
+    setSelectedTrack,
+    isCloudSynced,
+    signIn,
+    signOut
+  } = useStudentProgress();
+
   const { isInstallable, installApp } = usePWA();
-  const [terminalStep, setTerminalStep] = useState(0);
-  const [terminalCertified, setTerminalCertified] = useState(false);
+  const [lessonFilter, setLessonFilter] = useState<'all' | 'completed' | 'pending'>('all');
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
-      if (firebaseUser) {
-        const initials = firebaseUser.displayName
-          ? firebaseUser.displayName.split(" ").map(n => n[0]).join("").substring(0, 2)
-          : "NS";
-        setUser({
-          name: firebaseUser.displayName || "Nextsem Student",
-          email: firebaseUser.email || "",
-          avatar: initials.toUpperCase(),
-          photo: firebaseUser.photoURL
-        });
-
-        const email = firebaseUser.email || "";
-        const localStep = parseInt(localStorage.getItem(`nextsem_terminal_step_${email}`) || "0", 10);
-        const localCertified = localStorage.getItem(`nextsem_terminal_certified_${email}`) === "true";
-        setTerminalStep(localStep);
-        setTerminalCertified(localCertified);
-
-        try {
-          const userDocRef = doc(db, "users_progress", firebaseUser.uid);
-          const docSnap = await getDoc(userDocRef);
-          if (docSnap.exists()) {
-            const dbData = docSnap.data();
-            const dbStep = dbData.stepIdx || 0;
-            const dbCertified = dbData.courseCertified || false;
-            if (dbStep > localStep || (dbStep === localStep && dbCertified)) {
-              setTerminalStep(dbStep);
-              setTerminalCertified(dbCertified);
-              localStorage.setItem(`nextsem_terminal_step_${email}`, dbStep.toString());
-              localStorage.setItem(`nextsem_terminal_certified_${email}`, dbCertified.toString());
-            }
-          }
-        } catch (e) {
-          console.error("Error loading terminal progress in profile:", e);
-        }
-      } else {
-        setUser(null);
-      }
-      setLoading(false);
-    });
-    return () => unsubscribe();
+    setMounted(true);
   }, []);
 
-  const handleGoogleSignIn = async () => {
-    try {
-      await signInWithGoogle();
-    } catch (err) {
-      console.error("Sign-In Error: ", err);
-    }
-  };
-
-  const handleSignOut = async () => {
-    try {
-      await signOut(auth);
-    } catch (err) {
-      console.error("Sign-Out Error: ", err);
-    }
+  const toggleTheme = () => {
+    setTheme(currentTheme === 'dark' ? 'light' : 'dark');
   };
 
   const handleDeleteAccount = async () => {
@@ -94,259 +52,536 @@ export default function ProfileClient() {
     );
     if (!confirmed) return;
     try {
-      const firebaseUser = auth.currentUser;
-      if (firebaseUser) {
-        await firebaseUser.delete();
-        localStorage.removeItem('nextsem_user');
-        localStorage.removeItem('nextsem_premium_badge');
-        localStorage.removeItem('completed_chapters');
-        window.dispatchEvent(new Event('nextsem_auth_changed'));
-        router.push('/');
-      }
-    } catch (err: unknown) {
-      const error = err as { code?: string };
-      if (error.code === 'auth/requires-recent-login') {
-        alert("For security, please sign out, sign in again, and then retry account deletion.");
-      } else {
-        alert("Failed to delete account. Please check your connection and try again.");
-      }
+      localStorage.removeItem('nextsem_user');
+      localStorage.removeItem('completed_chapters');
+      signOut();
+      router.push('/');
+    } catch (err) {
+      alert("Failed to delete account. Please try again.");
     }
   };
 
-  const totalChapters = searchIndex.length;
-  const progressPercent = totalChapters > 0 ? Math.round((totalCompleted / totalChapters) * 100) : 0;
-  const terminalPercent = terminalCertified ? 100 : Math.round((terminalStep / 10) * 100);
+  const sem1TotalDays = 60;
+  const sem1CompletedCount = completedDays.filter(d => d <= 60).length;
+  const sem1Percent = Math.min(100, Math.round((sem1CompletedCount / sem1TotalDays) * 100));
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
-        <div className="w-6 h-6 rounded-full border-2 border-slate-600 border-t-slate-300 animate-spin" />
-      </div>
-    );
-  }
+  const nextDayToStudy = Array.from({ length: 60 }, (_, i) => i + 1).find(d => !completedDays.includes(d)) || 1;
+  const nextLessonObj = PRACTICAL_LESSONS.find(l => l.day === nextDayToStudy);
+
+  const filteredPracticalLessons = useMemo(() => {
+    return PRACTICAL_LESSONS.filter(l => {
+      if (lessonFilter === 'completed') return completedDays.includes(l.day);
+      if (lessonFilter === 'pending') return !completedDays.includes(l.day);
+      return true;
+    });
+  }, [lessonFilter, completedDays]);
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white">
-
-      {/* Top bar */}
-      <div className="sticky top-0 z-40 h-14 bg-slate-950/90 backdrop-blur border-b border-slate-800 flex items-center justify-between px-4 md:px-8">
-        <Link href="/" className="flex items-center gap-2 text-sm text-slate-400 hover:text-white transition-colors">
-          <ArrowLeft size={15} />
-          Home
+    <div className="min-h-screen bg-white dark:bg-black text-black dark:text-white transition-colors duration-200 pb-28 font-sans selection:bg-blue-600/30">
+      
+      {/* ── Top Bar ── */}
+      <header className="sticky top-0 z-40 h-16 bg-white/95 dark:bg-black/95 backdrop-blur-xl border-b border-slate-200 dark:border-neutral-800 flex items-center justify-between px-4 sm:px-8 select-none shadow-xs">
+        <Link 
+          href="/" 
+          className="flex items-center gap-2 text-xs sm:text-sm font-bold text-slate-700 hover:text-black dark:text-slate-300 dark:hover:text-white bg-slate-100 hover:bg-slate-200 dark:bg-neutral-900 dark:hover:bg-neutral-800 border border-slate-200 dark:border-neutral-800 px-3 py-1.5 rounded-xl transition-all active:scale-95"
+        >
+          <ArrowLeft size={15} className="text-blue-600 dark:text-blue-400" />
+          <span>Home</span>
         </Link>
-        <span className="text-sm font-semibold text-slate-300">My Profile</span>
-        {user && (
-          <button onClick={handleSignOut} className="flex items-center gap-1.5 text-sm text-slate-500 hover:text-rose-400 transition-colors cursor-pointer">
-            <LogOut size={14} />
-            Sign out
-          </button>
-        )}
-      </div>
 
-      <div className="max-w-3xl mx-auto px-4 py-10 space-y-6">
+        <div className="flex items-center gap-2">
+          <span className="text-xs sm:text-sm font-black text-black dark:text-white uppercase tracking-wider">
+            Student Profile &amp; Dashboard
+          </span>
+        </div>
 
-        {user ? (
-          <>
-            {/* ── Profile card ── */}
-            <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 flex items-center gap-5">
-              {user.photo ? (
-                <img src={user.photo} alt={user.name} className="w-14 h-14 rounded-full border border-slate-700 shrink-0 object-cover" />
+        <div className="flex items-center gap-2">
+          {mounted && (
+            <button
+              onClick={toggleTheme}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-neutral-900 dark:hover:bg-neutral-800 border border-slate-200 dark:border-neutral-800 text-xs font-bold text-slate-800 dark:text-slate-200 transition-all cursor-pointer"
+              title={`Switch to ${currentTheme === 'dark' ? 'Light' : 'Dark'} Mode`}
+            >
+              {currentTheme === 'dark' ? (
+                <>
+                  <Sun size={14} className="text-blue-400" />
+                  <span className="hidden sm:inline">Light</span>
+                </>
               ) : (
-                <div className="w-14 h-14 rounded-full bg-slate-700 text-white flex items-center justify-center font-bold text-lg shrink-0">
-                  {user.avatar}
-                </div>
+                <>
+                  <Moon size={14} className="text-blue-600" />
+                  <span className="hidden sm:inline">Dark</span>
+                </>
               )}
-              <div className="min-w-0">
-                <h1 className="text-lg font-bold text-white truncate">{user.name}</h1>
-                <p className="text-sm text-slate-400 truncate">{user.email}</p>
-                <span className="inline-block mt-1.5 text-xs text-slate-500 bg-slate-800 border border-slate-700 px-2 py-0.5 rounded">
-                  Student
-                </span>
-              </div>
-            </div>
+            </button>
+          )}
 
-            {/* ── Overall course progress ── */}
-            <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-3">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <BookOpen size={15} className="text-slate-400" />
-                  <span className="text-sm font-semibold text-slate-200">Course Progress</span>
-                </div>
-                <span className="text-sm font-semibold text-emerald-400">{progressPercent}%</span>
-              </div>
-              <div className="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
-                <div
-                  className="bg-emerald-500 h-full rounded-full transition-all duration-500"
-                  style={{ width: `${progressPercent}%` }}
-                />
-              </div>
-              <p className="text-xs text-slate-500">
-                {totalCompleted} of {totalChapters} modules completed
-              </p>
-            </div>
+          {user && (
+            <button 
+              onClick={signOut} 
+              className="flex items-center gap-1.5 text-xs font-bold text-slate-600 hover:text-rose-600 dark:text-slate-400 dark:hover:text-rose-400 bg-slate-100 hover:bg-slate-200 dark:bg-neutral-900 dark:hover:bg-neutral-800 border border-slate-200 dark:border-neutral-800 px-3 py-1.5 rounded-xl transition-all cursor-pointer"
+            >
+              <LogOut size={13} />
+              <span className="hidden sm:inline">{user.isGuest ? "Exit Guest" : "Sign Out"}</span>
+            </button>
+          )}
+        </div>
+      </header>
 
-            {/* ── Terminal CMD progress ── */}
-            <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-3">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Terminal size={15} className="text-slate-400" />
-                  <span className="text-sm font-semibold text-slate-200">Windows CMD Simulator</span>
-                </div>
-                <span className="text-sm font-semibold text-violet-400">{terminalPercent}%</span>
-              </div>
-              <div className="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
-                <div
-                  className="bg-violet-500 h-full rounded-full transition-all duration-500"
-                  style={{ width: `${terminalPercent}%` }}
-                />
-              </div>
-              <div className="flex items-center justify-between">
-                <p className="text-xs text-slate-500">
-                  {terminalCertified ? "Completed" : `Step ${terminalStep + 1} of 10`}
-                </p>
-                <Link href="/cmd" className="flex items-center gap-1 text-xs text-violet-400 hover:text-violet-300 transition-colors">
-                  Open Simulator <ArrowRight size={12} />
-                </Link>
-              </div>
-            </div>
+      {/* ── Main Dashboard Body ── */}
+      <main className="max-w-4xl mx-auto px-4 sm:px-6 py-8 space-y-6">
 
-            {/* ── PWA install ── */}
-            {isInstallable && (
-              <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 flex items-center justify-between gap-4">
-                <div>
-                  <p className="text-sm font-semibold text-slate-200">Install as App</p>
-                  <p className="text-xs text-slate-500 mt-0.5">Add Nextsem to your home screen for quick access and offline learning.</p>
-                </div>
-                <button
-                  onClick={installApp}
-                  className="flex items-center gap-2 px-4 py-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-white rounded-xl text-sm font-medium transition-all cursor-pointer shrink-0"
-                >
-                  <Download size={14} />
-                  Install
-                </button>
+        {/* 1. Student Identity Hero Card */}
+        <div className="rounded-3xl bg-slate-50 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 p-5 sm:p-7 flex flex-col sm:flex-row sm:items-center justify-between gap-5 shadow-xs">
+          <div className="flex items-center gap-4">
+            {user?.photo ? (
+              <img 
+                src={user.photo} 
+                alt={user.name} 
+                loading="eager"
+                decoding="async"
+                className="w-16 h-16 rounded-2xl border-2 border-blue-600 object-cover shadow-sm shrink-0" 
+              />
+            ) : (
+              <div className="w-16 h-16 rounded-2xl bg-blue-600 text-white font-black text-2xl flex items-center justify-center shadow-sm shrink-0">
+                {user?.isGuest ? "G" : (user?.name?.charAt(0) || "S")}
               </div>
             )}
 
-            {/* ── Syllabus checklist ── */}
-            <div className="space-y-3">
-              <div className="flex items-center gap-2 px-1">
-                <BookOpen size={14} className="text-slate-500" />
-                <span className="text-sm font-semibold text-slate-300">Syllabus Checklist</span>
-                <span className="text-xs text-slate-600 ml-auto">{totalCompleted}/{totalChapters} done</span>
+            <div>
+              <div className="flex items-center gap-2 flex-wrap">
+                <h1 className="text-lg sm:text-xl font-black text-black dark:text-white">
+                  {user?.name || "Guest Student"}
+                </h1>
+                {user?.isGuest ? (
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-200 dark:bg-neutral-800 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-neutral-700">
+                    Guest Mode
+                  </span>
+                ) : (
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-neutral-800 flex items-center gap-1">
+                    <ShieldCheck size={11} />
+                    Verified Google Account
+                  </span>
+                )}
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                {searchIndex.map((chapter) => {
-                  const isDone = completedChapters[chapter.id];
-                  return (
-                    <Link
-                      key={chapter.id}
-                      href={getChapterUrl(chapter.id)}
-                      className={`p-3.5 border rounded-xl flex items-center gap-3 transition-all group hover:bg-slate-900 ${
-                        isDone ? "border-emerald-800/60 bg-emerald-950/20" : "border-slate-800 bg-slate-900/40"
-                      }`}
-                    >
-                      {isDone ? (
-                        <CheckCircle2 size={15} className="text-emerald-500 shrink-0" />
-                      ) : (
-                        <Circle size={15} className="text-slate-700 group-hover:text-slate-500 shrink-0 transition-colors" />
-                      )}
-                      <div className="min-w-0 flex-1">
-                        <span className="block text-sm text-slate-300 group-hover:text-white truncate transition-colors">{chapter.title}</span>
-                        <span className="block text-xs text-slate-600 mt-0.5">{chapter.phase} · {chapter.duration}</span>
-                      </div>
-                      <ArrowRight size={13} className="text-slate-700 group-hover:text-slate-400 shrink-0 transition-colors" />
-                    </Link>
-                  );
-                })}
-              </div>
-            </div>
 
-            {/* ── Danger zone ── */}
-            <div className="border border-slate-800 rounded-2xl p-6">
-              <p className="text-sm font-semibold text-slate-300 mb-1">Delete account</p>
-              <p className="text-xs text-slate-500 mb-4">
-                Permanently removes your progress, saved data, and account. This cannot be undone.
+              <p className="text-xs text-slate-500 dark:text-slate-400 font-mono mt-0.5">
+                {user?.email || "guest@nextsem.local"}
               </p>
-              <button
-                onClick={handleDeleteAccount}
-                className="px-4 py-2 text-sm text-rose-400 border border-rose-900 rounded-xl hover:bg-rose-950 transition-colors cursor-pointer"
+
+              <div className="flex flex-wrap items-center gap-2 mt-2 text-xs font-bold">
+                {isCloudSynced ? (
+                  <span className="text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5" title="Your progress is backed up to Google Cloud and accessible across devices">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                    ☁️ Synced to Cloud (Safe & Backed Up)
+                  </span>
+                ) : (
+                  <span className="text-slate-500 dark:text-slate-400 flex items-center gap-1.5" title="Your progress is saved directly in this browser's memory for 0ms instant loading and offline practice">
+                    <span className="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+                    💾 Saved Locally on Device (Offline-Ready • Instant)
+                  </span>
+                )}
+
+                <button
+                  onClick={() => setShowProcessGuide(true)}
+                  className="inline-flex items-center gap-1 text-xs text-blue-600 dark:text-blue-400 hover:underline font-bold transition-colors cursor-pointer"
+                  title="Click to understand how local storage, cloud sync, and the 360-day practical roadmap works"
+                >
+                  <HelpCircle size={13} />
+                  <span>How it works?</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Connect Google or Sign In Button if Guest */}
+          {user?.isGuest && (
+            <button
+              onClick={signIn}
+              className="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-sm flex items-center justify-center gap-2 transition-all active:scale-95 cursor-pointer shrink-0"
+              title="Sign in with Google to enable cloud backup"
+            >
+              <LogIn size={14} />
+              <span>Connect Google Account</span>
+            </button>
+          )}
+        </div>
+
+        {/* Degree Architecture Explainer Pill */}
+        <div className="px-4 py-3 rounded-2xl bg-blue-50/80 dark:bg-neutral-900 border border-blue-200 dark:border-neutral-800 text-xs text-slate-700 dark:text-slate-300 flex items-start gap-3">
+          <span className="w-5 h-5 rounded-lg bg-blue-600 text-white flex items-center justify-center font-black text-[10px] shrink-0 mt-0.5">
+            ℹ️
+          </span>
+          <div className="leading-relaxed">
+            <span className="font-black text-black dark:text-white">3-Year BCA Degree Practical Structure:</span>{" "}
+            A 3-year degree has <strong>6 Semesters</strong>. Each semester has <strong>60 practical lab days</strong> (15 weeks × 4 lab classes/week).{" "}
+            <strong>6 Semesters × 60 Days = 360 Total Practical Coding Days</strong> across your entire 3-year degree.
+          </div>
+        </div>
+
+        {/* 2. Degree Practical Progress Metric Cards */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <div className="p-4 rounded-2xl bg-slate-50 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 shadow-xs">
+            <div className="text-[10px] font-black uppercase text-blue-600 dark:text-blue-400 tracking-wider flex items-center justify-between">
+              <span>Sem 1 Practical</span>
+              <span className="text-[9px] font-bold text-slate-400">Active</span>
+            </div>
+            <div className="text-2xl font-black text-black dark:text-white mt-1">
+              {sem1CompletedCount} <span className="text-xs text-slate-400 font-normal">/ 60 Days</span>
+            </div>
+            <div className="text-[10px] text-slate-500 dark:text-slate-400 mt-1 truncate">
+              3-Yr Total: {completedDays.length} / 360 Labs
+            </div>
+          </div>
+
+          <div className="p-4 rounded-2xl bg-slate-50 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 shadow-xs">
+            <div className="text-[10px] font-black uppercase text-blue-600 dark:text-blue-400 tracking-wider">Sem 1 Sprints</div>
+            <div className="text-2xl font-black text-blue-600 dark:text-blue-400 mt-1">
+              {sem1Percent}% <span className="text-xs text-slate-400 font-normal">done</span>
+            </div>
+            <div className="text-[10px] text-slate-500 dark:text-slate-400 mt-1 truncate">
+              Sprint 1 (Days 1–30)
+            </div>
+          </div>
+
+          <div className="p-4 rounded-2xl bg-slate-50 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 shadow-xs">
+            <div className="text-[10px] font-black uppercase text-slate-500 dark:text-slate-400 tracking-wider">GitHub Repos</div>
+            <div className="text-2xl font-black text-black dark:text-white mt-1">
+              {Object.keys(githubRepoUrls).length} <span className="text-xs text-slate-400 font-normal">verified</span>
+            </div>
+            <div className="text-[10px] text-slate-500 dark:text-slate-400 mt-1 truncate">
+              Portfolio Pushes
+            </div>
+          </div>
+
+          <div className="p-4 rounded-2xl bg-slate-50 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 shadow-xs">
+            <div className="text-[10px] font-black uppercase text-slate-500 dark:text-slate-400 tracking-wider">Active Day</div>
+            <div className="text-2xl font-black text-black dark:text-white mt-1">
+              Day {nextDayToStudy}
+            </div>
+            <div className="text-[10px] text-blue-600 dark:text-blue-400 mt-1 font-bold truncate">
+              Current Target
+            </div>
+          </div>
+        </div>
+
+        {/* 3. Semester 1 Practical Progress Bar */}
+        <div className="p-5 rounded-2xl bg-slate-50 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 shadow-xs space-y-3">
+          <div className="flex items-center justify-between text-xs font-bold">
+            <span className="text-black dark:text-white">Semester 1 Practical Progress (Days 1–60)</span>
+            <span className="text-blue-600 dark:text-blue-400 font-mono">{sem1CompletedCount} of {sem1TotalDays} Days ({sem1Percent}%)</span>
+          </div>
+          <div className="w-full h-3 rounded-full bg-slate-200 dark:bg-neutral-800 overflow-hidden">
+            <div 
+              className="h-full bg-blue-600 rounded-full transition-all duration-500" 
+              style={{ width: `${Math.max(5, sem1Percent)}%` }} 
+            />
+          </div>
+          {nextLessonObj && (
+            <div className="flex items-center justify-between gap-3 pt-2 border-t border-slate-200 dark:border-neutral-800">
+              <span className="text-xs text-slate-600 dark:text-slate-400 truncate">
+                Next Up: <strong className="text-black dark:text-white">Day {nextLessonObj.day}: {nextLessonObj.title}</strong>
+              </span>
+              <Link
+                href={`/bca/practical/${nextLessonObj.slug}`}
+                className="px-3.5 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shrink-0 inline-flex items-center gap-1.5 transition-all active:scale-95 shadow-sm"
               >
-                Delete my account
-              </button>
+                <span>Continue</span>
+                <ChevronRight size={13} />
+              </Link>
             </div>
-          </>
-        ) : (
-          /* ── Guest state: show progress from localStorage ── */
-          <div className="space-y-6">
-            {/* Guest profile card */}
-            <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 flex items-center gap-5">
-              <div className="w-14 h-14 rounded-full bg-gradient-to-br from-slate-700 to-slate-800 border border-slate-600 text-white flex items-center justify-center font-bold text-2xl shrink-0">
-                👤
-              </div>
-              <div className="min-w-0 flex-1">
-                <h1 className="text-lg font-bold text-white">Guest Learner</h1>
-                <p className="text-sm text-slate-400">Progress saved locally on this device</p>
-                <span className="inline-block mt-1.5 text-xs text-amber-400/80 bg-amber-950/30 border border-amber-800/30 px-2 py-0.5 rounded">
-                  🔓 No login required
-                </span>
-              </div>
-            </div>
+          )}
+        </div>
 
-            {/* Progress stats */}
-            <div className="grid grid-cols-2 gap-4">
-              <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 text-center">
-                <p className="text-3xl font-black text-white">{totalCompleted}</p>
-                <p className="text-xs text-slate-500 mt-1">Lessons Completed</p>
-              </div>
-              <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 text-center">
-                <p className="text-3xl font-black text-emerald-400">{progressPercent}%</p>
-                <p className="text-xs text-slate-500 mt-1">Overall Progress</p>
-              </div>
-            </div>
+        {/* 4. Computer Competency 100-MCQ Assessment Scorecard */}
+        <CbtScoreCard />
 
-            {/* Progress bar */}
-            <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-3">
-              <div className="flex justify-between text-xs text-slate-400">
-                <span className="font-semibold">Course Progress</span>
-                <span>{totalCompleted} / {totalChapters} chapters</span>
-              </div>
-              <div className="h-2 bg-slate-800 rounded-full overflow-hidden">
-                <div
-                  className="h-full bg-gradient-to-r from-emerald-600 to-teal-500 rounded-full transition-all duration-500"
-                  style={{ width: `${progressPercent}%` }}
-                />
-              </div>
-            </div>
-
-            {/* Soft sign-in upsell — not a gate */}
-            <div className="bg-gradient-to-br from-blue-950/40 to-indigo-950/40 border border-blue-800/40 rounded-2xl p-6 text-center space-y-4">
-              <div className="w-12 h-12 mx-auto rounded-xl bg-blue-900/30 border border-blue-700/30 flex items-center justify-center text-2xl">
-                ☁️
+        {/* 5. Practical Days Lesson Updates (No Theory Clutter) */}
+        <div className="p-5 rounded-2xl bg-slate-50 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 shadow-xs space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div className="flex items-center gap-2">
+              <div className="w-7 h-7 rounded-lg bg-blue-600 text-white flex items-center justify-center font-bold text-xs shrink-0">
+                ⚡
               </div>
               <div>
-                <p className="text-sm font-bold text-white">Want cloud sync?</p>
-                <p className="text-xs text-slate-400 mt-1 leading-relaxed">
-                  Sign in with Google to backup your progress to the cloud and access it from any device.
-                  <br />
-                  <span className="text-slate-500 italic">Coming after AdSense approval.</span>
-                </p>
+                <h2 className="text-sm font-black text-black dark:text-white uppercase tracking-wider flex items-center gap-2">
+                  <span>Practical Lesson Updates</span>
+                  <span className="text-[9px] font-black px-2 py-0.5 rounded-full bg-blue-50 dark:bg-blue-950/70 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-neutral-800">
+                    Coding Labs Only
+                  </span>
+                </h2>
               </div>
+            </div>
+
+            {/* Filter Pills */}
+            <div className="flex items-center gap-1 self-start sm:self-auto bg-slate-200 dark:bg-neutral-800 p-0.5 rounded-xl text-[11px] font-bold">
               <button
-                onClick={handleGoogleSignIn}
-                className="w-full flex items-center justify-center gap-3 px-6 py-3 bg-white text-slate-900 border border-slate-200 rounded-xl font-semibold text-sm shadow-sm hover:bg-slate-50 transition-all cursor-pointer"
+                onClick={() => setLessonFilter('all')}
+                className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer ${
+                  lessonFilter === 'all'
+                    ? 'bg-white dark:bg-black text-blue-600 dark:text-blue-400 font-black shadow-xs'
+                    : 'text-slate-600 dark:text-slate-400 hover:text-black dark:hover:text-white'
+                }`}
               >
-                <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24">
-                  <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
-                  <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
-                  <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" />
-                  <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" />
-                </svg>
-                Sign in with Google (optional)
+                All ({PRACTICAL_LESSONS.length})
+              </button>
+              <button
+                onClick={() => setLessonFilter('completed')}
+                className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer ${
+                  lessonFilter === 'completed'
+                    ? 'bg-white dark:bg-black text-blue-600 dark:text-blue-400 font-black shadow-xs'
+                    : 'text-slate-600 dark:text-slate-400 hover:text-black dark:hover:text-white'
+                }`}
+              >
+                Done ({completedDays.length})
+              </button>
+              <button
+                onClick={() => setLessonFilter('pending')}
+                className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer ${
+                  lessonFilter === 'pending'
+                    ? 'bg-white dark:bg-black text-blue-600 dark:text-blue-400 font-black shadow-xs'
+                    : 'text-slate-600 dark:text-slate-400 hover:text-black dark:hover:text-white'
+                }`}
+              >
+                To Do ({Math.max(0, PRACTICAL_LESSONS.length - completedDays.length)})
               </button>
             </div>
           </div>
+
+          {/* Sprints Release Status Overview */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+            <div className="p-3 rounded-xl bg-white dark:bg-neutral-950 border border-blue-200 dark:border-blue-900/40 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0" />
+                <span className="font-bold text-black dark:text-white text-xs">Sprint 1 (Days 1–10): HTML5 &amp; Resume</span>
+              </div>
+              <span className="text-[10px] font-black uppercase text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/60 px-2 py-0.5 rounded">
+                Live Now
+              </span>
+            </div>
+
+            <div className="p-3 rounded-xl bg-white dark:bg-neutral-950 border border-slate-200 dark:border-neutral-800 flex items-center justify-between opacity-80">
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-amber-500 shrink-0" />
+                <span className="font-bold text-black dark:text-white text-xs">Sprint 2 (Days 11–20): CSS3 &amp; Flexbox</span>
+              </div>
+              <span className="text-[10px] font-bold text-slate-500 bg-slate-100 dark:bg-neutral-800 px-2 py-0.5 rounded">
+                Next Sprint
+              </span>
+            </div>
+          </div>
+
+          {/* Practical Lesson Updates Cards Feed */}
+          <div className="space-y-2 max-h-72 overflow-y-auto pr-1">
+            {filteredPracticalLessons.map((lesson) => {
+              const isDone = completedDays.includes(lesson.day);
+              const repoUrl = githubRepoUrls[lesson.day.toString()];
+
+              return (
+                <div
+                  key={lesson.id}
+                  className={`p-3 rounded-xl border transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 ${
+                    isDone
+                      ? 'bg-white dark:bg-neutral-950 border-emerald-500/30'
+                      : 'bg-white dark:bg-neutral-950 border-slate-200 dark:border-neutral-800 hover:border-blue-500/50'
+                  }`}
+                >
+                  <div className="flex items-start sm:items-center gap-2.5 min-w-0">
+                    <div className={`px-2 py-1 rounded-lg font-mono text-xs font-black shrink-0 ${
+                      isDone
+                        ? 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 border border-emerald-300 dark:border-emerald-800'
+                        : 'bg-blue-50 dark:bg-neutral-800 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-neutral-700'
+                    }`}>
+                      Day {lesson.day}
+                    </div>
+
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className="text-xs font-black text-black dark:text-white truncate">
+                          {lesson.title}
+                        </span>
+                        {lesson.day === 10 && (
+                          <span className="text-[9px] font-black uppercase px-1.5 py-0.2 rounded bg-amber-500 text-black">
+                            🏆 Portfolio Project
+                          </span>
+                        )}
+                      </div>
+                      <div className="text-[10px] text-slate-500 dark:text-slate-400 flex items-center gap-2 mt-0.5">
+                        <span>{lesson.category}</span>
+                        <span>•</span>
+                        <span>{lesson.estimatedTime}</span>
+                        <span>•</span>
+                        <span>{lesson.practicalLab.tasks.length} Coding Tasks</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2 shrink-0 self-end sm:self-center">
+                    {isDone ? (
+                      <>
+                        <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
+                          <CheckCircle2 size={13} />
+                          <span>Passed</span>
+                        </span>
+
+                        {repoUrl && (
+                          <a
+                            href={repoUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-neutral-800 dark:hover:bg-neutral-700 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                            title="View Verified GitHub Repository"
+                          >
+                            <GitBranch size={13} />
+                          </a>
+                        )}
+
+                        <Link
+                          href={`/bca/practical/${lesson.slug}`}
+                          className="px-3 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-neutral-800 dark:hover:bg-neutral-700 text-black dark:text-white font-bold text-xs transition-all"
+                        >
+                          Review
+                        </Link>
+                      </>
+                    ) : (
+                      <Link
+                        href={`/bca/practical/${lesson.slug}`}
+                        className="px-3.5 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs flex items-center gap-1.5 shadow-sm transition-all active:scale-95"
+                      >
+                        <Play size={12} />
+                        <span>Start Lab</span>
+                      </Link>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* 5. Career Specialization Track Switcher */}
+        <div className="space-y-3">
+          <div className="text-xs font-black uppercase tracking-wider text-slate-500 dark:text-slate-400">
+            Selected Career Track:
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {CAREER_TRACKS.map(track => {
+              const isSelected = track.id === selectedTrack;
+              return (
+                <button
+                  key={track.id}
+                  onClick={() => setSelectedTrack(track.id)}
+                  className={`p-3.5 rounded-2xl border text-left transition-all cursor-pointer ${
+                    isSelected
+                      ? "bg-blue-50 dark:bg-neutral-900 border-blue-600 text-black dark:text-white shadow-xs"
+                      : "bg-slate-50 dark:bg-neutral-900/40 border-slate-200 dark:border-neutral-800 text-slate-700 dark:text-slate-300 hover:border-slate-300 dark:hover:border-neutral-700"
+                  }`}
+                >
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-xs font-bold flex items-center gap-2">
+                      <span className="text-base">{track.icon}</span>
+                      <span>{track.title.split("—")[1] || track.title}</span>
+                    </span>
+                    {isSelected && (
+                      <span className="text-[9px] font-black uppercase px-2 py-0.5 rounded-full bg-blue-600 text-white">
+                        Active
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400 line-clamp-1">
+                    {track.targetRoles.join(", ")}
+                  </p>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* 6. Verified GitHub Project Repositories */}
+        <div className="p-5 rounded-2xl bg-slate-50 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 shadow-xs space-y-3">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-black uppercase tracking-wider text-slate-500 dark:text-slate-400">
+              Verified GitHub Repositories:
+            </span>
+            <span className="text-xs font-mono text-slate-500">
+              {Object.keys(githubRepoUrls).length} Pushed
+            </span>
+          </div>
+
+          {Object.keys(githubRepoUrls).length === 0 ? (
+            <div className="p-4 rounded-xl bg-white dark:bg-neutral-950 border border-dashed border-slate-300 dark:border-neutral-800 text-center text-xs text-slate-500">
+              No practical projects submitted yet. Complete any practical day and submit your GitHub repository link to build your developer portfolio!
+            </div>
+          ) : (
+            <div className="space-y-2 max-h-40 overflow-y-auto pr-1">
+              {Object.entries(githubRepoUrls).map(([dayNum, url]) => (
+                <div 
+                  key={dayNum}
+                  className="flex items-center justify-between gap-3 p-3 rounded-xl bg-white dark:bg-neutral-950 border border-slate-200 dark:border-neutral-800 text-xs"
+                >
+                  <div className="flex items-center gap-2.5 truncate">
+                    <span className="px-2 py-0.5 rounded bg-blue-50 dark:bg-neutral-800 text-blue-600 dark:text-blue-400 font-mono text-[11px] font-bold shrink-0">
+                      Day {dayNum}
+                    </span>
+                    <span className="font-mono text-xs text-slate-700 dark:text-slate-300 truncate">
+                      {url.replace(/^https?:\/\/github\.com\//, "")}
+                    </span>
+                  </div>
+                  <a
+                    href={url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-1.5 rounded-lg text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors shrink-0"
+                    title="View on GitHub"
+                  >
+                    <ExternalLink size={15} />
+                  </a>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* 7. Professional & Social Integrations (LinkedIn, Instagram, WhatsApp) */}
+        <StudentSocialIntegrationsCard />
+
+        {/* 8. PWA Install */}
+        {isInstallable && (
+          <div className="p-5 rounded-2xl bg-slate-50 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <p className="text-xs font-bold text-black dark:text-white">Install as Progressive Web App</p>
+              <p className="text-[11px] text-slate-500 mt-0.5">Add NextSem to your home screen for quick offline access and fullscreen mode.</p>
+            </div>
+            <button
+              onClick={installApp}
+              className="flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition-all cursor-pointer shrink-0 shadow-sm"
+            >
+              <Download size={14} />
+              <span>Install App</span>
+            </button>
+          </div>
         )}
-      </div>
+
+        {/* 10. Danger Zone: Delete Account */}
+        <div className="p-5 rounded-2xl border border-rose-200 dark:border-rose-950/60 bg-rose-50/30 dark:bg-rose-950/10 space-y-2">
+          <p className="text-xs font-bold text-rose-700 dark:text-rose-400">Account Reset / Data Removal</p>
+          <p className="text-[11px] text-slate-600 dark:text-slate-400 leading-normal">
+            Permanently clear your local storage progress, completed badges, and sign out from this device.
+          </p>
+          <button
+            onClick={handleDeleteAccount}
+            className="px-3.5 py-1.5 text-xs font-bold text-rose-600 hover:text-white hover:bg-rose-600 dark:text-rose-400 dark:hover:bg-rose-900 border border-rose-300 dark:border-rose-900/60 rounded-xl transition-all cursor-pointer"
+          >
+            Clear Account Data
+          </button>
+        </div>
+
+      </main>
+
+      <PracticalProcessGuideModal 
+        isOpen={showProcessGuide} 
+        onClose={() => setShowProcessGuide(false)} 
+      />
     </div>
   );
 }

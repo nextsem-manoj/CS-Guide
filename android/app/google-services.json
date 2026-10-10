@@ -9,6 +9,25 @@
       "client_info": {
         "mobilesdk_app_id": "1:498697546118:android:e1be7944afea568f83a407",
         "android_client_info": {
+          "package_name": "online.nextsem.csguide"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB0J3rRJ7nambOydYGfxt2Drqha7WktYf4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:498697546118:android:e1be7944afea568f83a407",
+        "android_client_info": {
           "package_name": "online.nextsem.ignou_nextsem_online"
         }
       },

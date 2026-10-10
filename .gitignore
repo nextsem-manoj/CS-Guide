@@ -47,5 +47,19 @@ firebase-debug.log*
 # Gradle cache
 .gradle_user_home/
 
-# Binaries
+# Binaries & Bundles
 *.exe
+*.aab
+*.aab.bak
+
+# Flutter & Android builds
+.dart_tool/
+.flutter-plugins*
+android/build/
+android/app/build/
+
+# External cloned repos & scratch
+Must-Know-about-computing-/
+Test-Templates/
+WindowsPowerShell/
+test_auth_check*.json

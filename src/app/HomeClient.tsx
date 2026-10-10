@@ -1,249 +1,146 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { useProgress } from '@/context/ProgressContext';
-import { auth, signInWithGoogle } from '@/lib/firebase';
-import { signOut } from 'firebase/auth';
-import searchIndex from '@/data/searchIndex.json';
-import { getChapterSimulator } from '@/data/chapterSimulators';
+import { useTheme } from 'next-themes';
+import { useStudentProgress } from '@/context/StudentProgressContext';
+import { PRACTICAL_LESSONS, PRACTICAL_SPRINTS } from '@/data/bcaPracticalData';
 import { 
-  Layers, Code, BookOpen, ChevronRight, Zap, 
-  LogIn, LogOut, Terminal, Star, Search, X, 
-  Sparkles, Compass, ArrowRight, GitBranch, Bot, 
-  GraduationCap, FileText, Building2
+  Play, CheckCircle2, Lock, ArrowRight, Laptop, 
+  Terminal, Sparkles, BookOpen, ChevronRight, 
+  Search, LogIn, LogOut, Code, GitBranch, Award,
+  Clock, ShieldCheck, ChevronDown, ChevronUp, Sun, Moon,
+  Calendar, Layers
 } from 'lucide-react';
-
-interface UserProfile {
-  name: string;
-  email: string;
-  avatar: string;
-  photo?: string;
-}
-
-interface SearchItem {
-  id: string;
-  title: string;
-  content: string;
-  phase: string;
-  duration: string;
-  color: string;
-  icon: string;
-  url?: string;
-  category?: string;
-}
-
-const POPULAR_SEARCH_CHIPS = [
-  { label: 'BCS-111 Computer Basics', query: 'BCS-111' },
-  { label: 'Windows CMD', query: 'CMD' },
-  { label: 'BCS-012 Math', query: 'BCS-012' },
-  { label: 'HTML5 Tags', query: 'HTML' },
-  { label: 'MS Word 2021', query: 'Word' },
-  { label: 'Flexbox & CSS', query: 'Flexbox' },
-];
 
 export default function HomeClient() {
   const router = useRouter();
-  const { completedChapters } = useProgress();
-  const [currentUser, setCurrentUser] = useState<UserProfile | null>(null);
+  const { theme, setTheme, resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+  const { 
+    user, 
+    completedDays, 
+    isDayCompleted, 
+    isDayUnlocked, 
+    signIn, 
+    signOut 
+  } = useStudentProgress();
 
-  // Search states
-  const [searchQuery, setSearchQuery] = useState('');
-  const [searchResults, setSearchResults] = useState<SearchItem[]>([]);
-  const searchRef = useRef<HTMLDivElement>(null);
+  // Active semester & sprint filter tabs
+  const [selectedSemester, setSelectedSemester] = useState<number>(1);
+  const [activeSprint, setActiveSprint] = useState<number>(1);
+  const [showTheorySection, setShowTheorySection] = useState<boolean>(false);
 
-  // Close search dropdown on click outside
   useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
-        setSearchResults([]);
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    setMounted(true);
   }, []);
 
-  // Search filtering logic
-  useEffect(() => {
-    if (!searchQuery.trim()) {
-      setSearchResults([]);
-      return;
-    }
-    const cleanQuery = searchQuery.toLowerCase();
-    const matches = (searchIndex as SearchItem[]).filter((item: SearchItem) => 
-      item.title.toLowerCase().includes(cleanQuery) || 
-      item.content.toLowerCase().includes(cleanQuery) ||
-      (item.category && item.category.toLowerCase().includes(cleanQuery))
-    ).slice(0, 6);
-    setSearchResults(matches);
-  }, [searchQuery]);
+  const completedCount = completedDays.length;
 
-  // Auth state synchronization
-  useEffect(() => {
-    const handleAuthChange = () => {
-      const saved = localStorage.getItem('nextsem_user');
-      if (saved) {
-        try {
-          setCurrentUser(JSON.parse(saved));
-        } catch (e) {
-          setCurrentUser(null);
-        }
-      } else {
-        setCurrentUser(null);
-      }
-    };
-    handleAuthChange();
-    window.addEventListener("nextsem_auth_changed", handleAuthChange);
-    return () => window.removeEventListener("nextsem_auth_changed", handleAuthChange);
-  }, []);
-
-  const handleSignIn = async () => {
-    try {
-      await signInWithGoogle();
-    } catch (err) {
-      console.error("Sign-In Error: ", err);
-    }
-  };
-
-  const handleSignOut = async () => {
-    try {
-      await signOut(auth);
-      localStorage.removeItem("nextsem_user");
-      window.dispatchEvent(new Event("nextsem_auth_changed"));
-    } catch (e) {
-      console.error("Logout failed:", e);
-    }
-  };
-
-  const handleLaunchItem = (itemOrId: string | SearchItem) => {
-    let url = "";
-    if (typeof itemOrId === "object" && itemOrId.url) {
-      url = itemOrId.url;
-    } else {
-      const path = typeof itemOrId === "string" ? itemOrId : itemOrId.id;
-      const matched = (searchIndex as SearchItem[]).find(s => s.id === path);
-      if (matched?.url) {
-        url = matched.url;
-      } else if (path.startsWith("cli/") || path.startsWith("html/") || path.startsWith("msword/")) {
-        url = `/${path}`;
-      } else if (path === "cmd") {
-        url = "/cmd";
-      } else if (path === "p0-4-git") {
-        url = "/git";
-      } else {
-        url = `/book/${path}`;
-      }
-    }
-
-    const pathKey = typeof itemOrId === "string" ? itemOrId : itemOrId.id;
-    const hasCode = pathKey === "cmd" || pathKey === "p0-4-git" || !!getChapterSimulator(pathKey);
-
-    if (hasCode) {
-      window.open(url, '_blank');
-    } else {
-      router.push(url);
-    }
-  };
-
-  const handleSearchSubmit = (e?: React.FormEvent) => {
-    if (e) e.preventDefault();
-    if (searchQuery.trim()) {
-      window.dispatchEvent(new CustomEvent("open-global-search", { 
-        detail: { query: searchQuery.trim() } 
-      }));
-      setSearchResults([]);
-    }
+  const currentTheme = resolvedTheme || theme;
+  const toggleTheme = () => {
+    setTheme(currentTheme === 'dark' ? 'light' : 'dark');
   };
 
   return (
-    <div className="min-h-screen bg-[#060c18] text-slate-100 flex flex-col font-sans selection:bg-[#c1a648]/30">
+    <div className="min-h-screen bg-white dark:bg-black text-black dark:text-white flex flex-col justify-between font-sans transition-colors duration-150 selection:bg-blue-600 selection:text-white">
       
-      {/* ── TOP NAVIGATION BAR ── */}
-      <header className="sticky top-0 z-50 bg-[#060c18]/90 backdrop-blur-md border-b border-slate-800 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
+      {/* ── TOP HEADER (Clean Blue, Black & White) ── */}
+      <header className="sticky top-0 z-50 bg-white/95 dark:bg-black/95 backdrop-blur-md border-b border-slate-200 dark:border-neutral-800 py-3.5 px-4 sm:px-8">
+        <div className="max-w-6xl mx-auto flex items-center justify-between">
           
-          {/* Logo & Brand */}
-          <div className="flex items-center gap-6">
-            <Link href="/" className="flex items-center gap-2.5 group">
-              <div className="w-8 h-8 rounded-xl bg-[#0c1328] border border-emerald-500/40 flex items-center justify-center overflow-hidden shadow-md group-hover:scale-105 transition-transform p-0.5">
-                <img src="/code-icon.png" alt="CS Guide Logo" className="w-full h-full object-contain rounded-lg" />
-              </div>
-              <div className="flex flex-col leading-none">
-                <span className="font-black text-base tracking-tight text-white uppercase group-hover:text-emerald-400 transition-colors">
-                  CS Guide
-                </span>
-                <span className="text-[10px] font-mono text-[#04AA6D] font-bold tracking-tight">
-                  by NextSem
-                </span>
-              </div>
-            </Link>
+          {/* Logo */}
+          <Link href="/" className="flex items-center gap-2.5 group">
+            <div className="w-9 h-9 rounded-xl bg-blue-600 flex items-center justify-center font-mono font-black text-white text-base shadow-sm group-hover:scale-105 transition-transform">
+              &lt;/&gt;
+            </div>
+            <div className="flex flex-col leading-none">
+              <span className="font-extrabold text-lg tracking-tight text-black dark:text-white group-hover:text-blue-600 transition-colors">
+                BCA Practical Lab
+              </span>
+              <span className="text-[10px] font-mono text-blue-600 dark:text-blue-400 font-bold tracking-wider">
+                by NextSem
+              </span>
+            </div>
+          </Link>
 
-            {/* Nav Links */}
-            <nav className="hidden md:flex items-center gap-1 text-xs font-bold text-slate-300">
-              <Link href="/du" className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg hover:bg-slate-800/80 hover:text-white transition-all">
-                <Building2 size={14} className="text-blue-400" />
-                <span>DU CS (NEP)</span>
-              </Link>
-              <Link href="/bca" className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg hover:bg-slate-800/80 hover:text-white transition-all">
-                <GraduationCap size={14} className="text-emerald-400" />
-                <span>IGNOU BCA</span>
-              </Link>
-              <Link href="/mca" className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg hover:bg-slate-800/80 hover:text-white transition-all">
-                <Sparkles size={14} className="text-amber-400" />
-                <span>IGNOU MCA</span>
-              </Link>
-              <Link href="/cmd" target="_blank" className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg hover:bg-slate-800/80 hover:text-white transition-all">
-                <Terminal size={14} className="text-cyan-400" />
-                <span>Windows CMD</span>
-              </Link>
-              <Link href="/curriculum" className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg hover:bg-slate-800/80 hover:text-white transition-all">
-                <Compass size={14} className="text-purple-400" />
-                <span>Curriculum</span>
-              </Link>
-            </nav>
-          </div>
+          {/* Header Controls: Author + Theme Toggle + Search + Auth */}
+          <div className="flex items-center gap-2.5">
+            <div className="hidden md:flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 text-xs font-semibold text-slate-700 dark:text-slate-300">
+              <span className="w-1.5 h-1.5 rounded-full bg-blue-600" />
+              <span>By <strong className="text-black dark:text-white">Er. Manoj Kumar</strong></span>
+            </div>
 
-          {/* Quick Search Trigger & Auth */}
-          <div className="flex items-center gap-3">
+            {/* Dedicated Light / Dark Mode Toggle Button */}
+            {mounted && (
+              <button
+                onClick={toggleTheme}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-neutral-900 dark:hover:bg-neutral-800 border border-slate-200 dark:border-neutral-800 text-xs font-bold text-slate-800 dark:text-slate-200 transition-all cursor-pointer"
+                title={`Switch to ${currentTheme === 'dark' ? 'Light' : 'Dark'} Mode`}
+              >
+                {currentTheme === 'dark' ? (
+                  <>
+                    <Sun size={14} className="text-blue-400" />
+                    <span className="hidden sm:inline">Light</span>
+                  </>
+                ) : (
+                  <>
+                    <Moon size={14} className="text-blue-600" />
+                    <span className="hidden sm:inline">Dark</span>
+                  </>
+                )}
+              </button>
+            )}
+
+            {/* Secondary Theory & Syllabus Link */}
             <button
-              onClick={() => window.dispatchEvent(new CustomEvent("open-global-search"))}
-              className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-750 hover:border-emerald-500/50 text-slate-400 hover:text-white transition-all text-xs cursor-pointer"
-              title="Search all lessons (Ctrl+K)"
+              onClick={() => {
+                setShowTheorySection(true);
+                const el = document.getElementById('theory-reference-section');
+                if (el) el.scrollIntoView({ behavior: 'smooth' });
+              }}
+              className="hidden sm:flex items-center gap-1 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-neutral-900 dark:hover:bg-neutral-800 border border-slate-200 dark:border-neutral-800 text-xs font-semibold text-slate-700 dark:text-slate-300 transition-all cursor-pointer"
             >
-              <Search size={14} className="text-emerald-400" />
-              <span className="hidden sm:inline">Search...</span>
-              <kbd className="hidden lg:inline-block text-[9px] bg-slate-800 border border-slate-700 px-1 py-0.5 rounded text-slate-400 font-mono">
-                Ctrl+K
-              </kbd>
+              <BookOpen size={13} className="text-blue-600 dark:text-blue-400" />
+              <span>Theory Reference</span>
             </button>
 
-            {currentUser ? (
+            <Link
+              href="/cmd"
+              target="_blank"
+              className="hidden lg:flex items-center gap-1 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-neutral-900 dark:hover:bg-neutral-800 border border-slate-200 dark:border-neutral-800 text-xs font-semibold text-slate-700 dark:text-slate-300 transition-all"
+            >
+              <Terminal size={13} className="text-blue-600 dark:text-blue-400" />
+              <span>CMD</span>
+            </Link>
+
+            {user ? (
               <div className="flex items-center gap-2">
-                <div className="flex items-center gap-2 bg-slate-900 border border-slate-800 px-2.5 py-1 rounded-xl">
-                  {currentUser.photo ? (
-                    <img src={currentUser.photo} alt="" className="w-5 h-5 rounded-full object-cover" />
+                <div className="flex items-center gap-2 bg-slate-100 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 px-2.5 py-1 rounded-xl">
+                  {user.photo ? (
+                    <img src={user.photo} alt="" className="w-5 h-5 rounded-full object-cover" />
                   ) : (
-                    <div className="w-5 h-5 rounded-full bg-[#04AA6D] text-white flex items-center justify-center font-black text-[9px]">
-                      {currentUser.name.charAt(0)}
+                    <div className="w-5 h-5 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-[10px]">
+                      {user.name.charAt(0)}
                     </div>
                   )}
-                  <span className="text-xs font-bold text-slate-200 hidden sm:inline max-w-[80px] truncate">
-                    {currentUser.name.split(" ")[0]}
+                  <span className="text-xs font-bold text-slate-900 dark:text-slate-100 hidden sm:inline max-w-[80px] truncate">
+                    {user.name.split(" ")[0]}
                   </span>
                 </div>
                 <button 
-                  onClick={handleSignOut}
-                  className="p-1.5 text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition-colors cursor-pointer"
+                  onClick={signOut}
+                  className="p-1.5 text-slate-500 hover:text-black dark:text-slate-400 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-neutral-800 rounded-lg transition-colors cursor-pointer"
                   title="Sign Out"
                 >
-                  <LogOut size={16} />
+                  <LogOut size={15} />
                 </button>
               </div>
             ) : (
               <button 
-                onClick={handleSignIn}
-                className="flex items-center gap-1.5 bg-[#04AA6D] hover:bg-[#039861] text-white px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all shadow-md shadow-[#04AA6D]/20 cursor-pointer"
+                onClick={signIn}
+                className="flex items-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-white px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all shadow-sm cursor-pointer"
               >
                 <LogIn size={13} />
                 <span>Sign In</span>
@@ -254,358 +151,363 @@ export default function HomeClient() {
         </div>
       </header>
 
-      {/* ── HERO SECTION: COMPLETE IGNOU BCA LESSONS (THEORY + PRACTICAL) ── */}
-      <main className="relative py-10 sm:py-14 md:py-16 px-4 sm:px-6 flex flex-col items-center text-center overflow-hidden w-full max-w-5xl mx-auto">
-        {/* Background glow effects */}
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[500px] h-[220px] bg-emerald-500/10 blur-[90px] rounded-full pointer-events-none" />
-        <div className="absolute top-0 left-0 w-full h-full opacity-5 pointer-events-none bg-[radial-gradient(#04AA6D_1px,transparent_1px)] [background-size:20px_20px]" />
-
-        <div className="w-full max-w-3xl mx-auto relative z-10 space-y-4 sm:space-y-5">
-          
-          {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-emerald-950/60 border border-emerald-500/30 text-emerald-400 text-[11px] sm:text-xs font-black uppercase tracking-wider shadow-lg">
-            <Sparkles size={13} className="text-[#c1a648]" />
-            <span>100% Free University CS Hub • Author: Er. Manoj Kumar</span>
+      {/* ── HERO BANNER: 100% PRACTICAL WORKS DAY-WISE ── */}
+      <main className="flex-1 max-w-6xl mx-auto w-full px-4 sm:px-6 py-8 sm:py-12 space-y-8">
+        
+        {/* Hero Title & Direct Call to Action */}
+        <div className="text-center space-y-3.5 max-w-3xl mx-auto">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800/50 text-blue-700 dark:text-blue-400 text-xs font-bold tracking-wide">
+            <Sparkles size={13} />
+            <span>3-Year University Degree Curriculum • 6 Semesters • 360 Practical Days</span>
           </div>
 
-          {/* 1. Complete CS Degree Lessons Headline */}
-          <div className="space-y-1">
-            <h1 className="text-2xl sm:text-4xl md:text-5xl font-black uppercase tracking-tight text-white leading-tight">
-              COMPUTER SCIENCE UNIVERSITY COURSES
-            </h1>
-            <h2 className="text-lg sm:text-2xl md:text-3xl font-extrabold uppercase tracking-wide bg-gradient-to-r from-blue-400 via-emerald-300 to-amber-300 bg-clip-text text-transparent">
-              DELHI UNIVERSITY (DU) & IGNOU (BCA / MCA)
-            </h2>
-            <p className="text-slate-300 text-xs sm:text-sm font-medium max-w-xl mx-auto pt-0.5">
-              Official UGCF & NEP Syllabi, Downloadable PDFs, Line-by-Line Textbook Notes & Interactive Simulators.
-            </p>
-          </div>
+          <h1 className="text-3xl sm:text-5xl font-black text-black dark:text-white tracking-tight leading-tight">
+            BCA Practical Coding Lab
+          </h1>
 
-          {/* 2. Search Bar */}
-          <div ref={searchRef} className="pt-0.5 max-w-2xl mx-auto relative">
-            <form onSubmit={handleSearchSubmit} className="relative group">
-              <div className="relative flex items-center bg-[#0c1328]/95 backdrop-blur-xl border-2 border-emerald-500/50 hover:border-emerald-400 focus-within:border-emerald-400 focus-within:ring-4 focus-within:ring-emerald-500/20 rounded-2xl shadow-2xl transition-all p-1.5 sm:p-2">
-                <Search size={20} className="text-emerald-400 ml-3 shrink-0 group-focus-within:scale-110 transition-transform" />
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search 500+ topics (e.g. BCS-111, Windows CMD, HTML5, Flexbox, Math)..."
-                  className="w-full bg-transparent px-3 py-1.5 sm:py-2 text-xs sm:text-sm text-white placeholder-slate-400 font-medium focus:outline-none"
-                />
-                {searchQuery && (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setSearchQuery('');
-                      setSearchResults([]);
-                    }}
-                    className="p-1.5 text-slate-400 hover:text-white rounded-lg transition-colors mr-1 cursor-pointer"
-                    title="Clear"
-                  >
-                    <X size={15} />
-                  </button>
-                )}
-                <button
-                  type="submit"
-                  className="px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl bg-gradient-to-r from-[#04AA6D] to-emerald-600 hover:from-emerald-500 hover:to-emerald-400 text-white font-black text-xs tracking-wide shadow-lg shadow-emerald-950/40 hover:scale-[1.02] active:scale-95 transition-all flex items-center gap-1.5 shrink-0 cursor-pointer"
-                >
-                  <span>Search</span>
-                  <kbd className="hidden sm:inline-block text-[10px] bg-emerald-900/60 border border-emerald-700/50 px-1.5 py-0.5 rounded font-mono text-emerald-200">
-                    ↵
-                  </kbd>
-                </button>
-              </div>
-            </form>
+          <p className="text-sm sm:text-base text-slate-700 dark:text-slate-300 font-medium leading-relaxed max-w-2xl mx-auto">
+            Universal 3-year practical curriculum designed for all BCA students. Solve daily hands-on coding tasks, debug broken programs, pass technical viva checks, push code to GitHub, and build your developer portfolio across all 6 semesters.
+          </p>
 
-            {/* Instant Search Autocomplete Dropdown */}
-            {(searchResults.length > 0 || (searchQuery.trim() && searchResults.length === 0)) && (
-              <div className="absolute top-full left-0 right-0 mt-2 bg-[#0c1328] border border-slate-750 rounded-2xl shadow-2xl overflow-hidden z-50 text-left p-2 divide-y divide-slate-800/80 animate-in fade-in slide-in-from-top-2 duration-150 max-h-[380px] overflow-y-auto">
-                {searchResults.length > 0 ? (
-                  <>
-                    <div className="px-3 py-1.5 text-[11px] font-black uppercase tracking-wider text-emerald-400 flex items-center justify-between">
-                      <span>Quick Matches ({searchResults.length})</span>
-                      <span className="text-[10px] text-slate-400 font-normal">Press Enter for full modal</span>
-                    </div>
-                    {searchResults.map((result) => (
-                      <button
-                        key={result.id}
-                        type="button"
-                        onClick={() => {
-                          handleLaunchItem(result);
-                          setSearchQuery('');
-                          setSearchResults([]);
-                        }}
-                        className="w-full p-2.5 hover:bg-[#101c38] rounded-xl text-left transition-colors flex items-start gap-3 group cursor-pointer"
-                      >
-                        <div className={`w-8 h-8 rounded-xl ${result.color || 'bg-emerald-500/20 text-emerald-400'} flex items-center justify-center font-bold text-sm shrink-0 border border-white/10 group-hover:scale-105 transition-transform`}>
-                          {result.icon || '📄'}
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-2">
-                            <span className="text-xs sm:text-sm font-black text-white group-hover:text-emerald-400 transition-colors truncate">
-                              {result.title}
-                            </span>
-                            {result.category && (
-                              <span className="text-[9px] font-mono font-bold bg-slate-900 border border-slate-700 px-1.5 py-0.5 rounded text-slate-300 shrink-0">
-                                {result.category}
-                              </span>
-                            )}
-                          </div>
-                          <p className="text-[11px] text-slate-300 line-clamp-1 mt-0.5">
-                            {result.content.substring(0, 90)}...
-                          </p>
-                        </div>
-                        <ChevronRight size={15} className="text-slate-500 group-hover:text-emerald-400 group-hover:translate-x-0.5 transition-all self-center shrink-0" />
-                      </button>
-                    ))}
-                  </>
-                ) : (
-                  <div className="p-4 text-center">
-                    <p className="text-xs text-slate-300 font-medium">
-                      No direct local matches for &ldquo;{searchQuery}&rdquo;
-                    </p>
-                    <button
-                      type="button"
-                      onClick={() => handleSearchSubmit()}
-                      className="mt-2 text-xs font-bold text-emerald-400 hover:text-emerald-300 inline-flex items-center gap-1 cursor-pointer"
-                    >
-                      <Sparkles size={13} />
-                      <span>Open Universal Search & AI Overview »</span>
-                    </button>
-                  </div>
-                )}
+          {/* Quick Stats Pill (Blue, Black, White) */}
+          <div className="pt-2 flex flex-wrap items-center justify-center gap-3 text-xs font-bold text-slate-700 dark:text-slate-300">
+            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800">
+              <Laptop size={14} className="text-blue-600 dark:text-blue-400" />
+              <span>360 Daily Coding Labs</span>
+            </div>
+            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800">
+              <Calendar size={14} className="text-blue-600 dark:text-blue-400" />
+              <span>3 Years • 6 Semesters</span>
+            </div>
+            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800">
+              <GitBranch size={14} className="text-blue-600 dark:text-blue-400" />
+              <span>Daily GitHub Push Workflow</span>
+            </div>
+            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800">
+              <Award size={14} className="text-blue-600 dark:text-blue-400" />
+              <span>Viva Voce Defense Checks</span>
+            </div>
+            {completedCount > 0 && (
+              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-100 dark:bg-blue-950/60 border border-blue-300 dark:border-blue-700 text-blue-700 dark:text-blue-300">
+                <CheckCircle2 size={14} />
+                <span>{completedCount} Days Completed</span>
               </div>
             )}
-
-            {/* Popular Search Chips */}
-            <div className="mt-2.5 flex flex-wrap items-center justify-center gap-1.5 text-xs">
-              <span className="text-slate-400 text-[10px] sm:text-[11px] font-bold uppercase tracking-wider flex items-center gap-1">
-                <Sparkles size={11} className="text-[#c1a648]" /> Popular:
-              </span>
-              {POPULAR_SEARCH_CHIPS.map((chip, idx) => (
-                <button
-                  key={idx}
-                  type="button"
-                  onClick={() => setSearchQuery(chip.query)}
-                  className="px-2.5 py-1 rounded-full bg-slate-900/90 hover:bg-slate-800 border border-slate-750 hover:border-emerald-500/50 text-slate-300 hover:text-white font-medium text-[11px] transition-all cursor-pointer shadow-sm"
-                >
-                  {chip.label}
-                </button>
-              ))}
-            </div>
           </div>
 
-          {/* 3. Action Buttons: Degree Gateways */}
-          <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
+          {/* Primary Action Button */}
+          <div className="pt-3 flex flex-wrap items-center justify-center gap-3">
             <Link
-              href="/du"
-              className="inline-flex items-center gap-2 px-4 sm:px-5 py-3 rounded-2xl bg-[#0c1328] hover:bg-[#101b38] text-white font-extrabold text-xs sm:text-sm border border-blue-500/50 hover:border-blue-400 shadow-xl shadow-blue-950/30 transition-all transform active:scale-95 cursor-pointer group"
+              href="/bca/practical/day-1-html-setup-first-webpage"
+              className="inline-flex items-center gap-2 px-6 sm:px-8 py-3.5 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-black text-sm sm:text-base shadow-xl shadow-blue-600/25 transition-all hover:scale-[1.02] active:scale-95"
             >
-              <Building2 size={16} className="text-blue-400 group-hover:scale-110 transition-transform" />
-              <span className="bg-gradient-to-r from-white via-blue-200 to-cyan-300 bg-clip-text text-transparent">
-                Delhi University (DU CS)
-              </span>
-              <ChevronRight size={16} className="text-blue-400 group-hover:translate-x-1 transition-transform" />
+              <Play size={16} className="fill-current" />
+              <span>Start Day 1 Practical »</span>
             </Link>
 
             <Link
-              href="/bca"
-              className="inline-flex items-center gap-2 px-4 sm:px-5 py-3 rounded-2xl bg-[#0c1328] hover:bg-[#101b38] text-white font-extrabold text-xs sm:text-sm border border-[#04AA6D]/50 hover:border-[#04AA6D] shadow-xl shadow-emerald-950/30 transition-all transform active:scale-95 cursor-pointer group"
+              href="/bca/practical"
+              className="inline-flex items-center gap-2 px-5 sm:px-6 py-3.5 rounded-2xl bg-slate-100 hover:bg-slate-200 dark:bg-neutral-900 dark:hover:bg-neutral-800 border border-slate-200 dark:border-neutral-800 text-black dark:text-white font-bold text-sm sm:text-base transition-all active:scale-95"
             >
-              <GraduationCap size={16} className="text-[#04AA6D] group-hover:scale-110 transition-transform" />
-              <span className="bg-gradient-to-r from-white via-emerald-200 to-teal-300 bg-clip-text text-transparent">
-                IGNOU BCA (UG)
-              </span>
-              <ChevronRight size={16} className="text-[#04AA6D] group-hover:translate-x-1 transition-transform" />
-            </Link>
-
-            <Link
-              href="/mca"
-              className="inline-flex items-center gap-2 px-4 sm:px-5 py-3 rounded-2xl bg-slate-900 hover:bg-slate-800 text-slate-200 hover:text-white font-extrabold text-xs sm:text-sm border border-amber-500/40 hover:border-amber-400 shadow-lg transition-all transform active:scale-95 cursor-pointer group"
-            >
-              <Sparkles size={15} className="text-amber-400 group-hover:scale-110 transition-transform" />
-              <span>IGNOU MCA (PG) »</span>
+              <span>Explore All 6 Semesters</span>
+              <ArrowRight size={16} />
             </Link>
           </div>
-
-          {/* Compact Feature Highlights (Eliminates dead space elegantly) */}
-          <div className="pt-3 flex flex-wrap items-center justify-center gap-2 text-[11px] sm:text-xs text-slate-400 font-medium">
-            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900/60 border border-slate-800">
-              <span className="text-blue-400">🏛️</span>
-              <span>DU, BCA & MCA Syllabi</span>
-            </div>
-            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900/60 border border-slate-800">
-              <span className="text-amber-400">⚡</span>
-              <span>Windows CMD & Code Simulators</span>
-            </div>
-            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900/60 border border-slate-800">
-              <span className="text-emerald-400">📄</span>
-              <span>Official Syllabi PDFs</span>
-            </div>
-            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900/60 border border-slate-800">
-              <span className="text-cyan-400">🎓</span>
-              <span>100% Free & Open Access</span>
-            </div>
-          </div>
-
         </div>
+
+        {/* ── SPRINT TABS ── */}
+        <div className="border-t border-slate-200 dark:border-neutral-800 pt-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+            <div>
+              <h2 className="text-xl sm:text-2xl font-black text-black dark:text-white">
+                3-Year Day-by-Day Practical Roadmap
+              </h2>
+              <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400">
+                Structured across all 6 semesters (360 Days). Follow sequentially and push verified code to GitHub.
+              </p>
+            </div>
+
+            {/* 6-Semester Switcher */}
+            <div className="flex items-center gap-1.5 overflow-x-auto pb-1 max-w-full">
+              {Array.from({ length: 6 }).map((_, idx) => {
+                const sem = idx + 1;
+                const isSelected = selectedSemester === sem;
+                const year = Math.ceil(sem / 2);
+                return (
+                  <button
+                    key={sem}
+                    type="button"
+                    onClick={() => {
+                      setSelectedSemester(sem);
+                      setActiveSprint((sem - 1) * 2 + 1);
+                    }}
+                    className={`px-3 py-1.5 rounded-xl text-xs font-black transition-all cursor-pointer whitespace-nowrap ${
+                      isSelected
+                        ? 'bg-blue-600 text-white shadow-sm'
+                        : 'bg-slate-100 hover:bg-slate-200 dark:bg-neutral-900 dark:hover:bg-neutral-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-neutral-800'
+                    }`}
+                  >
+                    Sem {sem} (Yr {year})
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Sprints Switcher Buttons for Active Semester */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
+            {PRACTICAL_SPRINTS.filter(s => s.semester === selectedSemester).map((sprint) => {
+              const isActive = activeSprint === sprint.sprintNumber;
+              return (
+                <button
+                  key={sprint.sprintNumber}
+                  type="button"
+                  onClick={() => setActiveSprint(sprint.sprintNumber)}
+                  className={`p-4 rounded-2xl border text-left transition-all cursor-pointer ${
+                    isActive 
+                      ? 'bg-blue-50 dark:bg-neutral-900 border-blue-600 ring-2 ring-blue-600/20 shadow-md' 
+                      : 'bg-white dark:bg-neutral-950 border-slate-200 dark:border-neutral-800 hover:border-slate-400 dark:hover:border-neutral-700'
+                  }`}
+                >
+                  <div className="flex items-center justify-between mb-1.5">
+                    <span className={`text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full ${
+                      isActive ? 'bg-blue-600 text-white' : 'bg-slate-100 dark:bg-neutral-800 text-slate-600 dark:text-slate-400'
+                    }`}>
+                      {sprint.daysRange}
+                    </span>
+                    <span className="text-xs font-mono text-slate-500 font-bold">
+                      Sprint {sprint.sprintNumber}
+                    </span>
+                  </div>
+                  <h3 className="text-sm font-black text-black dark:text-white line-clamp-1 mb-1">
+                    {sprint.title.replace(/^Sprint \d+: /, '')}
+                  </h3>
+                  <p className="text-[11px] text-slate-600 dark:text-slate-400 line-clamp-1">
+                    {sprint.milestoneProject}
+                  </p>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* ── DAY-WISE PRACTICAL CARDS GRID (Blue, Black & White) ── */}
+          {activeSprint === 1 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {PRACTICAL_LESSONS.map((lesson) => {
+                const completed = isDayCompleted(lesson.day);
+                const unlocked = isDayUnlocked(lesson.day);
+
+                return (
+                  <Link
+                    key={lesson.id}
+                    href={`/bca/practical/${lesson.slug}`}
+                    className={`rounded-2xl p-5 bg-white dark:bg-neutral-950 border transition-all flex flex-col justify-between group hover:shadow-xl hover:-translate-y-1 ${
+                      completed
+                        ? 'border-blue-600/70 dark:border-blue-500/70 ring-1 ring-blue-600/30'
+                        : unlocked
+                        ? 'border-slate-200 dark:border-neutral-800 hover:border-blue-600 dark:hover:border-blue-500'
+                        : 'border-slate-200 dark:border-neutral-900 opacity-75 hover:opacity-100'
+                    }`}
+                  >
+                    <div>
+                      {/* Day Header Badge */}
+                      <div className="flex items-center justify-between mb-3">
+                        <span className="px-2.5 py-0.5 rounded-lg bg-slate-100 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 text-xs font-mono font-black text-blue-600 dark:text-blue-400">
+                          Day {lesson.day < 10 ? `0${lesson.day}` : lesson.day}
+                        </span>
+
+                        {completed ? (
+                          <span className="flex items-center gap-1 text-[11px] font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/60 px-2 py-0.5 rounded-full border border-blue-200 dark:border-blue-800">
+                            <CheckCircle2 size={12} />
+                            <span>Done</span>
+                          </span>
+                        ) : unlocked ? (
+                          <span className="flex items-center gap-1 text-[11px] font-bold text-black dark:text-white bg-slate-100 dark:bg-neutral-900 px-2 py-0.5 rounded-full border border-slate-300 dark:border-neutral-700">
+                            <Play size={11} className="fill-current" />
+                            <span>Ready</span>
+                          </span>
+                        ) : (
+                          <span className="flex items-center gap-1 text-[11px] font-bold text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-neutral-900 px-2 py-0.5 rounded-full border border-slate-200 dark:border-neutral-800">
+                            <Lock size={11} />
+                            <span>Locked</span>
+                          </span>
+                        )}
+                      </div>
+
+                      {/* Lesson Title */}
+                      <h4 className="text-base font-black text-black dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors mb-1.5">
+                        {lesson.title}
+                      </h4>
+
+                      {/* Lesson Overview */}
+                      <p className="text-xs text-slate-600 dark:text-slate-400 line-clamp-2 leading-relaxed mb-4">
+                        {lesson.concept.overview}
+                      </p>
+
+                      {/* Feature Tags */}
+                      <div className="flex flex-wrap gap-1.5 mb-4 text-[10px] font-semibold text-slate-600 dark:text-slate-400">
+                        <span className="bg-slate-100 dark:bg-neutral-900 px-2 py-0.5 rounded border border-slate-200 dark:border-neutral-800">
+                          💻 {lesson.practicalLab.tasks.length} Coding Tasks
+                        </span>
+                        <span className="bg-slate-100 dark:bg-neutral-900 px-2 py-0.5 rounded border border-slate-200 dark:border-neutral-800">
+                          🐛 Spot the Bug
+                        </span>
+                        <span className="bg-slate-100 dark:bg-neutral-900 px-2 py-0.5 rounded border border-slate-200 dark:border-neutral-800">
+                          🎓 Viva MCQ
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Launch Action */}
+                    <div className="pt-3 border-t border-slate-200 dark:border-neutral-800 flex items-center justify-between text-xs font-bold">
+                      <span className="text-slate-500 text-[11px]">
+                        ⏱️ {lesson.estimatedTime}
+                      </span>
+                      <span className="text-blue-600 dark:text-blue-400 group-hover:translate-x-1 transition-transform flex items-center gap-1">
+                        <span>Launch Lab</span>
+                        <ChevronRight size={14} />
+                      </span>
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          ) : (
+            <div className="rounded-3xl bg-white dark:bg-neutral-950 border border-slate-200 dark:border-neutral-800 p-8 text-center space-y-4">
+              <div className="w-12 h-12 rounded-2xl bg-blue-100 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center mx-auto text-xl font-black">
+                {activeSprint === 2 ? 'JS' : 'FS'}
+              </div>
+              <h4 className="text-lg font-black text-black dark:text-white">
+                Sprint {activeSprint}: {PRACTICAL_SPRINTS[activeSprint - 1]?.title}
+              </h4>
+              <p className="text-sm text-slate-600 dark:text-slate-400 max-w-lg mx-auto">
+                {PRACTICAL_SPRINTS[activeSprint - 1]?.description}
+              </p>
+              <div className="inline-block text-xs font-bold text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-950/40 px-3 py-1 rounded-full border border-blue-200 dark:border-blue-800">
+                Milestone Project: {PRACTICAL_SPRINTS[activeSprint - 1]?.milestoneProject}
+              </div>
+              <div>
+                <Link
+                  href="/bca/practical/day-1-html-setup-first-webpage"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs"
+                >
+                  <span>Complete Days 1–10 to Unlock Sprint {activeSprint}</span>
+                  <ArrowRight size={14} />
+                </Link>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* ── THEORETICAL PART (Secondary Reference Section) ── */}
+        <section id="theory-reference-section" className="border-t border-slate-200 dark:border-neutral-800 pt-8">
+          <div className="rounded-3xl bg-white dark:bg-neutral-950 border border-slate-200 dark:border-neutral-800 p-6 sm:p-8">
+            <button
+              onClick={() => setShowTheorySection(!showTheorySection)}
+              className="w-full flex items-center justify-between text-left cursor-pointer group"
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-blue-50 dark:bg-neutral-900 border border-blue-200 dark:border-neutral-800 text-blue-600 dark:text-blue-400 flex items-center justify-center">
+                  <BookOpen size={20} />
+                </div>
+                <div>
+                  <span className="text-[10px] font-black uppercase tracking-wider text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-neutral-900 px-2 py-0.5 rounded-full border border-blue-200 dark:border-neutral-800">
+                    Secondary Reference
+                  </span>
+                  <h3 className="text-lg sm:text-xl font-black text-black dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors mt-0.5">
+                    Theory, Textbook Notes &amp; Degree Syllabi
+                  </h3>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2 text-xs font-bold text-slate-500 dark:text-slate-400 group-hover:text-black dark:group-hover:text-white transition-colors">
+                <span>{showTheorySection ? 'Hide Reference' : 'Expand Reference'}</span>
+                {showTheorySection ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+              </div>
+            </button>
+
+            {showTheorySection && (
+              <div className="mt-6 pt-6 border-t border-slate-200 dark:border-neutral-800 grid grid-cols-1 sm:grid-cols-3 gap-4 animate-in fade-in duration-200">
+                
+                {/* 1. BCA Semester 1 Theory */}
+                <div className="p-4 rounded-2xl bg-slate-50 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 space-y-2">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400">
+                    BCA Semester 1 Theory
+                  </span>
+                  <h4 className="text-sm font-black text-black dark:text-white">
+                    Textbook Units &amp; Subject Notes
+                  </h4>
+                  <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                    BCS-111 (Computer Basics), BCS-012 (Mathematics), BEGLA-136, and BEVAE-181.
+                  </p>
+                  <Link 
+                    href="/bca/semester-1" 
+                    className="inline-flex items-center gap-1 text-xs font-bold text-blue-600 dark:text-blue-400 hover:underline pt-1"
+                  >
+                    <span>Open Semester 1 Theory Hub »</span>
+                  </Link>
+                </div>
+
+                {/* 2. All 6 BCA Semesters Syllabus */}
+                <div className="p-4 rounded-2xl bg-slate-50 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 space-y-2">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400">
+                    University Degree
+                  </span>
+                  <h4 className="text-sm font-black text-black dark:text-white">
+                    Complete 6-Semester BCA Syllabus
+                  </h4>
+                  <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                    Course outlines, credit distribution, and theory exam patterns across all 6 semesters.
+                  </p>
+                  <Link 
+                    href="/bca" 
+                    className="inline-flex items-center gap-1 text-xs font-bold text-blue-600 dark:text-blue-400 hover:underline pt-1"
+                  >
+                    <span>View All 6 Semesters »</span>
+                  </Link>
+                </div>
+
+                {/* 3. MCA Master Degree Reference */}
+                <div className="p-4 rounded-2xl bg-slate-50 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 space-y-2">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400">
+                    Postgraduate Reference
+                  </span>
+                  <h4 className="text-sm font-black text-black dark:text-white">
+                    MCA Master Curriculum
+                  </h4>
+                  <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                    AI/ML, Cloud Computing, Big Data, and Major Dissertation guides for MCA students.
+                  </p>
+                  <Link 
+                    href="/mca" 
+                    className="inline-flex items-center gap-1 text-xs font-bold text-blue-600 dark:text-blue-400 hover:underline pt-1"
+                  >
+                    <span>Open MCA Reference Hub »</span>
+                  </Link>
+                </div>
+
+              </div>
+            )}
+          </div>
+        </section>
+
       </main>
 
-      {/* ── FOOTER WITH CLEAN CRISP ICONS (Sits directly beneath content with zero dead space) ── */}
-      <footer className="bg-[#060c18] text-white border-t border-slate-800">
-        
-        {/* IGNOU Subject & Labs Quick Links Ribbon */}
-        <div className="bg-[#091020]/95 border-b border-slate-800/80 py-3 px-4 backdrop-blur-sm">
-          <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-center gap-2 sm:gap-2.5 text-xs font-semibold">
-            
-            {/* Semester 1 Course Chips */}
-            <div className="flex flex-wrap items-center justify-center gap-1.5 text-slate-400">
-              <span className="text-[11px] font-extrabold uppercase tracking-wider text-slate-500 mr-1 hidden sm:inline">
-                Semester 1:
-              </span>
-              <Link 
-                href="/bca/semester-1/bcs-011-computer-basics" 
-                className="px-2.5 py-1 rounded-lg bg-slate-900/90 hover:bg-slate-800 border border-slate-800 hover:border-emerald-500/40 text-slate-300 hover:text-white font-bold transition-all shadow-sm hover:scale-105 active:scale-95"
-              >
-                BCS-111
-              </Link>
-              <Link 
-                href="/bca/semester-1/bcs-012-basic-mathematics" 
-                className="px-2.5 py-1 rounded-lg bg-slate-900/90 hover:bg-slate-800 border border-slate-800 hover:border-emerald-500/40 text-slate-300 hover:text-white font-bold transition-all shadow-sm hover:scale-105 active:scale-95"
-              >
-                BCS-012
-              </Link>
-              <Link 
-                href="/bca/semester-1/bcsl-013-software-lab" 
-                className="px-2.5 py-1 rounded-lg bg-slate-900/90 hover:bg-slate-800 border border-slate-800 hover:border-emerald-500/40 text-slate-300 hover:text-white font-bold transition-all shadow-sm hover:scale-105 active:scale-95"
-              >
-                BCSL-013
-              </Link>
-              <Link 
-                href="/bca/semester-1/begla-136-english" 
-                className="px-2.5 py-1 rounded-lg bg-slate-900/90 hover:bg-slate-800 border border-slate-800 hover:border-emerald-500/40 text-slate-300 hover:text-white font-bold transition-all shadow-sm hover:scale-105 active:scale-95"
-              >
-                BEGLA-136
-              </Link>
-              <Link 
-                href="/bca/semester-1/bevae-181-environmental-studies" 
-                className="px-2.5 py-1 rounded-lg bg-slate-900/90 hover:bg-slate-800 border border-slate-800 hover:border-emerald-500/40 text-slate-300 hover:text-white font-bold transition-all shadow-sm hover:scale-105 active:scale-95"
-              >
-                BEVAE-181
-              </Link>
-            </div>
-
-            <div className="hidden md:block w-px h-4 bg-slate-800 mx-1" />
-
-            {/* Interactive Practical Labs & Simulators */}
-            <div className="flex flex-wrap items-center justify-center gap-1.5">
-              <Link 
-                href="/cmd" 
-                target="_blank" 
-                className="px-2.5 py-1 rounded-lg bg-slate-900/90 hover:bg-slate-800 border border-slate-800 hover:border-amber-500/40 text-slate-300 hover:text-amber-300 font-bold transition-all flex items-center gap-1.5 shadow-sm hover:scale-105 active:scale-95"
-              >
-                <Terminal size={13} className="text-amber-400" />
-                <span>Windows CMD</span>
-              </Link>
-              <Link 
-                href="/html" 
-                className="px-2.5 py-1 rounded-lg bg-slate-900/90 hover:bg-slate-800 border border-slate-800 hover:border-cyan-500/40 text-slate-300 hover:text-cyan-300 font-bold transition-all flex items-center gap-1.5 shadow-sm hover:scale-105 active:scale-95"
-              >
-                <Code size={13} className="text-cyan-400" />
-                <span>HTML5 Lessons</span>
-              </Link>
-              <Link 
-                href="/curriculum" 
-                className="px-2.5 py-1 rounded-lg bg-[#0c1328] hover:bg-[#101c38] border border-[#c1a648]/40 hover:border-[#c1a648] text-[#c1a648] hover:text-amber-300 font-bold transition-all flex items-center gap-1.5 shadow-sm hover:scale-105 active:scale-95"
-              >
-                <Compass size={13} />
-                <span>BCA Roadmap</span>
-              </Link>
-            </div>
-
-          </div>
-        </div>
-
-        {/* Footer Navigation Columns */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10 grid grid-cols-2 md:grid-cols-4 gap-8 text-xs text-slate-400">
-          
-          <div className="space-y-2.5">
-            <h5 className="font-black uppercase text-white tracking-wider">University CS Hub</h5>
-            <ul className="space-y-1.5 font-medium">
-              <li><Link href="/du" className="hover:text-white">Delhi University B.Sc. CS</Link></li>
-              <li><Link href="/bca" className="hover:text-white">IGNOU BCA (6 Semesters)</Link></li>
-              <li><Link href="/mca" className="hover:text-white">IGNOU MCA (New 2-Year)</Link></li>
-              <li><Link href="/bca/semester-1" className="hover:text-white">BCA 1st Sem Hub</Link></li>
-              <li>
-                <Link href="/bca" className="text-emerald-400 font-bold hover:underline flex items-center gap-1">
-                  <GraduationCap size={13} />
-                  <span>All Degree Papers</span>
-                </Link>
-              </li>
-            </ul>
+      {/* ── FOOTER ── */}
+      <footer className="bg-slate-100 dark:bg-neutral-950 border-t border-slate-200 dark:border-neutral-800 py-5 px-4 text-center">
+        <div className="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-600 dark:text-slate-400">
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-blue-600" />
+            <span>Curriculum &amp; Practical Systems Authored by <strong className="text-black dark:text-white">Er. Manoj Kumar</strong></span>
           </div>
 
-          <div className="space-y-2.5">
-            <h5 className="font-black uppercase text-white tracking-wider">Lab Simulators</h5>
-            <ul className="space-y-1.5 font-medium">
-              <li>
-                <Link href="/cmd" target="_blank" className="hover:text-white flex items-center gap-1.5">
-                  <Terminal size={13} className="text-emerald-400" />
-                  <span>Windows CMD Simulator</span>
-                </Link>
-              </li>
-              <li>
-                <Link href="/git" target="_blank" className="hover:text-white flex items-center gap-1.5">
-                  <GitBranch size={13} className="text-emerald-400" />
-                  <span>Git & Terminal Lab</span>
-                </Link>
-              </li>
-              <li>
-                <Link href="/html" className="hover:text-white flex items-center gap-1.5">
-                  <Code size={13} className="text-amber-400" />
-                  <span>HTML5 Interactive Lab</span>
-                </Link>
-              </li>
-              <li>
-                <Link href="/bca/semmy-ai" className="hover:text-white flex items-center gap-1.5">
-                  <Bot size={13} className="text-cyan-400" />
-                  <span>Semmy AI Tutor</span>
-                </Link>
-              </li>
-            </ul>
+          <div className="flex items-center gap-4 text-slate-600 dark:text-slate-400 font-medium">
+            <Link href="/bca/practical" className="hover:text-blue-600 transition-colors">3-Year Practical (360 Days)</Link>
+            <Link href="/bca/semester-1" className="hover:text-blue-600 transition-colors">Theory Notes</Link>
+            <Link href="/cmd" target="_blank" className="hover:text-blue-600 transition-colors">Windows CMD</Link>
+            <Link href="/about" className="hover:text-blue-600 transition-colors">About</Link>
+            <Link href="/contact" className="hover:text-blue-600 transition-colors">Support</Link>
           </div>
-
-          <div className="space-y-2.5">
-            <h5 className="font-black uppercase text-white tracking-wider">Official Syllabi</h5>
-            <ul className="space-y-1.5 font-medium">
-              <li><Link href={`/bca/viewer?url=${encodeURIComponent('/syllabus/DU_BSc_Prog_CS_Sem1_Programming_using_C++.pdf')}&title=${encodeURIComponent('DU B.Sc. CS NEP 2024 Syllabus')}`} className="hover:text-white">DU B.Sc. CS NEP PDF</Link></li>
-              <li><Link href={`/bca/viewer?url=${encodeURIComponent('/syllabus/IGNOU_BCA_Programme_Guide_Syllabus.pdf')}&title=${encodeURIComponent('IGNOU BCA Programme Guide')}`} className="hover:text-white">IGNOU BCA Syllabus PDF</Link></li>
-              <li><Link href={`/bca/viewer?url=${encodeURIComponent('/syllabus/IGNOU_MCA_Programme_Guide_Syllabus.pdf')}&title=${encodeURIComponent('IGNOU MCA Programme Guide')}`} className="hover:text-white">IGNOU MCA Syllabus PDF</Link></li>
-              <li><Link href="/curriculum" className="hover:text-white">Curriculum Roadmap</Link></li>
-            </ul>
-          </div>
-
-          <div className="space-y-2.5">
-            <h5 className="font-black uppercase text-white tracking-wider">About & Legal</h5>
-            <ul className="space-y-1.5 font-medium">
-              <li><Link href="/about" className="hover:text-white">About CS Guide</Link></li>
-              <li><Link href="/privacy" className="hover:text-white">Privacy Policy</Link></li>
-              <li><Link href="/terms" className="hover:text-white">Terms of Service</Link></li>
-              <li><Link href="/contact" className="hover:text-white">Contact Support</Link></li>
-            </ul>
-          </div>
-
-        </div>
-
-        {/* Copyright & Author Attribution */}
-        <div className="bg-[#050914] text-[11px] text-slate-400 py-6 px-4 border-t border-slate-800/60 text-center space-y-2">
-          <p className="max-w-2xl mx-auto leading-relaxed">
-            CS Guide by NextSem is optimized for university computer science students across Delhi University (DU) and IGNOU (BCA & MCA).
-          </p>
-          <p className="text-[#c1a648] font-bold uppercase tracking-wider">
-            © 2026 CS GUIDE BY NEXTSEM • NEXTSEM.ONLINE • AUTHOR: ER. MANOJ KUMAR
-          </p>
         </div>
       </footer>
 

@@ -1,7 +1,13 @@
 (function() {
   try {
-    document.documentElement.classList.add('dark');
-    localStorage.setItem('theme', 'dark');
+    var stored = localStorage.getItem('theme');
+    if (stored === 'light') {
+      document.documentElement.classList.remove('dark');
+      document.documentElement.classList.add('light');
+    } else {
+      document.documentElement.classList.add('dark');
+      document.documentElement.classList.remove('light');
+    }
   } catch (e) {}
 })();
 window.addEventListener('error', function(e) {

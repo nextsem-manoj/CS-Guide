@@ -47,8 +47,6 @@ export default function PrivacyPage() {
 
         <hr className="border-slate-850" />
 
-        <AdSenseBanner />
-
         <div className="space-y-4 text-xs md:text-sm text-slate-300 leading-relaxed font-medium">
           <p>
             At Nextsem Academy, accessible from https://nextsem.online, one of our main priorities is the privacy of our visitors. This Privacy Policy document contains types of information that is collected and recorded by Nextsem Academy and how we use it.

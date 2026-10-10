@@ -1,5 +1,14 @@
 import { initializeApp, getApps, getApp } from "firebase/app";
-import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithCredential } from "firebase/auth";
+import { 
+  getAuth, 
+  GoogleAuthProvider, 
+  signInWithRedirect, 
+  getRedirectResult,
+  signInWithCredential,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  updateProfile
+} from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { Capacitor } from "@capacitor/core";
 
@@ -16,8 +25,12 @@ const firebaseConfig = {
 const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
 const auth = getAuth(app);
 const googleProvider = new GoogleAuthProvider();
+googleProvider.setCustomParameters({
+  prompt: 'select_account'
+});
 const db = getFirestore(app);
 
+// In-app Google Authentication without opening popup windows
 async function signInWithGoogle() {
   if (Capacitor.isNativePlatform()) {
     const { GoogleAuth } = await import("@codetrix-studio/capacitor-google-auth");
@@ -32,8 +45,19 @@ async function signInWithGoogle() {
     const credential = GoogleAuthProvider.credential(googleUser.authentication.idToken);
     return signInWithCredential(auth, credential);
   } else {
-    return signInWithPopup(auth, googleProvider);
+    // In-page redirect prevents popup windows and popup-blocker issues
+    return signInWithRedirect(auth, googleProvider);
   }
 }
 
-export { app, auth, googleProvider, db, signInWithGoogle };
+export { 
+  app, 
+  auth, 
+  googleProvider, 
+  db, 
+  signInWithGoogle,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  updateProfile,
+  getRedirectResult
+};

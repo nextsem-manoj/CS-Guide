@@ -40,8 +40,8 @@ const outfit = Outfit({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://ignou-study-notes-by-nextsem.web.app"),
-  title: "IGNOU BCA 1st Semester Hub | Er. Manoj Kumar | Nextsem Online",
-  description: "Official IGNOU BCA 1st Semester learning dashboard featuring line-by-line textbook units, bilingual English & Hinglish lessons, MCQs, and practical lab simulators by Er. Manoj Kumar.",
+  title: "CS Guide by NextSem | University Computer Science (BCA & MCA) | Er. Manoj Kumar",
+  description: "Universal University Computer Science curriculum, line-by-line textbook units, practical coding labs, and interactive simulators for all CS students by Er. Manoj Kumar.",
   manifest: "/manifest.json",
   keywords: [
     "ignou",
@@ -72,8 +72,8 @@ export const metadata: Metadata = {
     telephone: false,
   },
   openGraph: {
-    title: "IGNOU BCA 1st Semester Hub | Er. Manoj Kumar",
-    description: "Line-by-line IGNOU BCA Semester 1 curriculum with interactive units, bilingual support, and exam preparation by Er. Manoj Kumar.",
+    title: "CS Guide by NextSem | University Computer Science (BCA & MCA)",
+    description: "Universal University Computer Science curriculum, textbook units, practical labs, and interactive simulators by Er. Manoj Kumar.",
     url: "https://ignou-study-notes-by-nextsem.web.app",
     siteName: "Nextsem Academy",
     images: [
@@ -113,8 +113,8 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#060c18" },
-    { media: "(prefers-color-scheme: dark)", color: "#060c18" },
+    { media: "(prefers-color-scheme: light)", color: "#1d2a35" },
+    { media: "(prefers-color-scheme: dark)", color: "#1d2a35" },
   ],
   width: "device-width",
   initialScale: 1,
@@ -134,6 +134,14 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
       suppressHydrationWarning
     >
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link 
+          href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300..900;1,300..900&family=Source+Code+Pro:wght@400;500;600;700&display=swap" 
+          rel="stylesheet" 
+        />
+      </head>
       <body className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} ${lora.variable} ${outfit.variable} min-h-full flex flex-col bg-background text-foreground transition-colors`}>
         {/* Anti-Crash Stylesheet recovery & Theme Auto-Initializer script */}
         <Script
@@ -144,10 +152,9 @@ export default function RootLayout({
 
         <ThemeProvider
           attribute="class"
-          themes={["dark"]}
           defaultTheme="dark"
-          forcedTheme="dark"
           enableSystem={false}
+          storageKey="theme"
           disableTransitionOnChange
         >
           <ProgressProvider>

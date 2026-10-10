@@ -162,10 +162,10 @@ function HtmlLayoutContent({ children }: { children: React.ReactNode }) {
   }, []);
 
   return (
-    <div ref={lessonContainerRef} className="min-h-screen flex flex-col bg-[#060c18] text-foreground font-sans selection:bg-[#c1a648]/30 transition-colors duration-300">
+    <div ref={lessonContainerRef} className="min-h-screen flex flex-col bg-white dark:bg-black text-black dark:text-white font-sans selection:bg-blue-600/30 transition-colors duration-300">
       <NsSubjectNavBar currentUser={currentUser} onSignIn={handleSignIn} onToggleSidebar={() => setSidebarOpen(prev => !prev)} />
       <div
-        className="flex-1 flex flex-col md:flex-row w-full min-w-0 bg-[#060c18]"
+        className="flex-1 flex flex-col md:flex-row w-full min-w-0 bg-white dark:bg-black"
         style={mounted && !isMobile ? { paddingLeft: `calc(5vw + ${effectiveSidebarWidth}px)`, paddingRight: '5vw' } : undefined}
       >
         <BookSidebar
@@ -177,7 +177,7 @@ function HtmlLayoutContent({ children }: { children: React.ReactNode }) {
           onCollapsedChange={setSidebarCollapsed}
         />
 
-        <main className="flex-1 p-3 md:p-6 w-full flex flex-col relative min-w-0 bg-[#060c18]">
+        <main className="flex-1 p-3 md:p-6 w-full flex flex-col relative min-w-0 bg-white dark:bg-black">
           {/* Main Reading Container */}
           <div
             ref={scrollContainerRef}

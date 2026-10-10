@@ -230,34 +230,34 @@ export default function BcaLessonClient({ lesson }: BcaLessonClientProps) {
   };
 
   return (
-    <div className="min-h-screen bg-[#060c18] text-slate-100 font-sans pb-32 selection:bg-cyan-500/30 selection:text-cyan-200">
-      {/* ── Top Header Bar with Subject Switcher Dropdown (Matching image-20.png) ── */}
+    <div className="min-h-screen bg-white dark:bg-black text-black dark:text-white font-sans pb-32 selection:bg-blue-600/30 transition-colors">
+      {/* ── Top Header Bar with Subject Switcher Dropdown ── */}
       <BcaHeaderNav
         currentSubjectCode={lesson.subjectCode}
         currentSubjectName={lesson.title.split(':')[0] || lesson.title}
       />
 
       {/* Language & Complexity Bar */}
-      <div className="bg-[#0c1328]/80 border-b border-slate-800/80 px-4 py-2.5 shadow-md">
+      <div className="bg-slate-50 dark:bg-neutral-950 border-b border-slate-200 dark:border-neutral-800 px-4 py-2.5 shadow-sm">
         <div className="max-w-5xl mx-auto flex flex-wrap items-center justify-between gap-3">
           <Link
             href="/bca/semester-1"
-            className="flex items-center gap-2 text-xs font-semibold text-slate-400 hover:text-white transition-colors bg-slate-900/60 hover:bg-slate-800/80 px-3 py-1.5 rounded-lg border border-slate-800"
+            className="flex items-center gap-2 text-xs font-semibold text-slate-600 dark:text-slate-400 hover:text-black dark:hover:text-white transition-colors bg-white dark:bg-neutral-900 hover:bg-slate-100 dark:hover:bg-neutral-800 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-neutral-800"
           >
-            <ArrowLeft className="w-4 h-4 text-cyan-400" />
+            <ArrowLeft className="w-4 h-4 text-blue-600 dark:text-blue-400" />
             <span className="hidden sm:inline">IGNOU BCA 1st Sem</span>
             <span className="sm:hidden">Back</span>
           </Link>
 
           <div className="flex items-center gap-2">
             {/* Language Pill Selector */}
-            <div className="flex bg-slate-900/90 p-1 rounded-xl border border-slate-800 text-xs">
+            <div className="flex bg-white dark:bg-neutral-900 p-1 rounded-xl border border-slate-200 dark:border-neutral-800 text-xs">
               <button
                 onClick={() => handleLangChange("english")}
                 className={`px-3 py-1 rounded-lg font-semibold transition-all ${
                   selectedLang === "english"
-                    ? "bg-cyan-600 text-white shadow-md shadow-cyan-600/30"
-                    : "text-slate-400 hover:text-white"
+                    ? "bg-blue-600 text-white shadow-sm"
+                    : "text-slate-600 dark:text-slate-400 hover:text-black dark:hover:text-white"
                 }`}
               >
                 English
@@ -266,8 +266,8 @@ export default function BcaLessonClient({ lesson }: BcaLessonClientProps) {
                 onClick={() => handleLangChange("hinglish")}
                 className={`px-3 py-1 rounded-lg font-semibold transition-all ${
                   selectedLang === "hinglish"
-                    ? "bg-cyan-600 text-white shadow-md shadow-cyan-600/30"
-                    : "text-slate-400 hover:text-white"
+                    ? "bg-blue-600 text-white shadow-sm"
+                    : "text-slate-600 dark:text-slate-400 hover:text-black dark:hover:text-white"
                 }`}
               >
                 Hinglish
@@ -275,27 +275,27 @@ export default function BcaLessonClient({ lesson }: BcaLessonClientProps) {
             </div>
 
             {/* Complexity Pill Selector */}
-            <div className="flex bg-slate-900/90 p-1 rounded-xl border border-slate-800 text-xs">
+            <div className="flex bg-white dark:bg-neutral-900 p-1 rounded-xl border border-slate-200 dark:border-neutral-800 text-xs">
               <button
                 onClick={() => handleComplexityChange("easy")}
                 className={`px-3 py-1 rounded-lg font-semibold transition-all flex items-center gap-1.5 ${
                   selectedComplexity === "easy"
-                    ? "bg-emerald-600 text-white shadow-md shadow-emerald-600/30"
-                    : "text-slate-400 hover:text-white"
+                    ? "bg-blue-600 text-white shadow-sm"
+                    : "text-slate-600 dark:text-slate-400 hover:text-black dark:hover:text-white"
                 }`}
               >
-                <span className="w-2 h-2 rounded-full bg-emerald-300 animate-pulse" />
+                <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
                 <span>Easy</span>
               </button>
               <button
                 onClick={() => handleComplexityChange("normal")}
                 className={`px-3 py-1 rounded-lg font-semibold transition-all flex items-center gap-1.5 ${
                   selectedComplexity === "normal"
-                    ? "bg-amber-600 text-white shadow-md shadow-amber-600/30"
-                    : "text-slate-400 hover:text-white"
+                    ? "bg-black text-white dark:bg-white dark:text-black shadow-sm"
+                    : "text-slate-600 dark:text-slate-400 hover:text-black dark:hover:text-white"
                 }`}
               >
-                <span className="w-2 h-2 rounded-full bg-amber-300" />
+                <span className="w-2 h-2 rounded-full bg-blue-400" />
                 <span>Normal</span>
               </button>
             </div>
@@ -305,8 +305,8 @@ export default function BcaLessonClient({ lesson }: BcaLessonClientProps) {
               onClick={() => setIsBookmarked(!isBookmarked)}
               className={`p-2 rounded-xl border transition-all ${
                 isBookmarked
-                  ? "bg-amber-500/20 border-amber-500/50 text-amber-400"
-                  : "bg-slate-900/60 border-slate-800 text-slate-400 hover:text-white"
+                  ? "bg-blue-50 dark:bg-neutral-900 border-blue-600 text-blue-600 dark:text-blue-400"
+                  : "bg-white dark:bg-neutral-900 border-slate-200 dark:border-neutral-800 text-slate-500 hover:text-black dark:hover:text-white"
               }`}
             >
               <Bookmark className="w-4 h-4" />
@@ -318,62 +318,59 @@ export default function BcaLessonClient({ lesson }: BcaLessonClientProps) {
       {/* Main Content Area */}
       <main className="max-w-4xl mx-auto px-4 pt-4 space-y-6">
         {/* Navigation Breadcrumbs */}
-        <nav aria-label="Breadcrumbs" className="flex flex-wrap items-center gap-2 text-xs text-slate-300 font-bold py-1">
-          <Link href="/" className="hover:text-[#04AA6D] transition-colors flex items-center gap-1">
+        <nav aria-label="Breadcrumbs" className="flex flex-wrap items-center gap-2 text-xs text-slate-600 dark:text-slate-400 font-bold py-1">
+          <Link href="/" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors flex items-center gap-1">
             <span>🏠 Home</span>
           </Link>
-          <span className="text-slate-600 font-bold">❯</span>
-          <Link href="/bca" className="hover:text-[#04AA6D] transition-colors">
+          <span className="text-slate-400 dark:text-slate-600 font-bold">❯</span>
+          <Link href="/bca" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
             BCA Hub
           </Link>
-          <span className="text-slate-600 font-bold">❯</span>
-          <Link href="/bca/semester-1" className="hover:text-[#04AA6D] transition-colors">
+          <span className="text-slate-400 dark:text-slate-600 font-bold">❯</span>
+          <Link href="/bca/semester-1" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
             Semester 1
           </Link>
-          <span className="text-slate-600 font-bold">❯</span>
-          <Link href={`/bca/semester-1/${lesson.subjectSlug}`} className="hover:text-[#04AA6D] transition-colors">
+          <span className="text-slate-400 dark:text-slate-600 font-bold">❯</span>
+          <Link href={`/bca/semester-1/${lesson.subjectSlug}`} className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
             {lesson.subjectCode}
           </Link>
-          <span className="text-slate-600 font-bold">❯</span>
-          <span className="text-cyan-300 font-extrabold truncate max-w-[200px] sm:max-w-none">
+          <span className="text-slate-400 dark:text-slate-600 font-bold">❯</span>
+          <span className="text-blue-600 dark:text-blue-400 font-extrabold truncate max-w-[200px] sm:max-w-none">
             Unit {lesson.unitNumber}
           </span>
         </nav>
 
         {/* Course Banner Hero Card */}
-        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-[#0c162d] to-[#0a1122] border border-slate-800/90 p-6 sm:p-8 shadow-2xl shadow-cyan-950/20">
-          <div className="absolute top-0 right-0 -mt-10 -mr-10 w-48 h-48 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute bottom-0 left-0 -mb-10 -ml-10 w-48 h-48 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
-
+        <div className="relative overflow-hidden rounded-3xl bg-slate-50 dark:bg-neutral-950 border border-slate-200 dark:border-neutral-800 p-6 sm:p-8 shadow-sm">
           <div className="relative z-10 space-y-4">
             <div className="flex flex-wrap items-center justify-between gap-2 text-xs">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 font-semibold tracking-wide uppercase">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 dark:bg-neutral-900 border border-blue-200 dark:border-neutral-800 text-blue-600 dark:text-blue-400 font-semibold tracking-wide uppercase">
                 <Cpu className="w-3.5 h-3.5" />
                 {lesson.subjectCode} • Block {lesson.blockNumber} Unit {lesson.unitNumber}
               </span>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300 font-semibold tracking-wide">
-                ✍️ Author: Nextsem
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 text-black dark:text-white font-semibold tracking-wide">
+                ✍️ Author: Er. Manoj Kumar
               </span>
             </div>
 
-            <h1 className="text-2xl sm:text-4xl font-extrabold text-white tracking-tight leading-tight">
+            <h1 className="text-2xl sm:text-4xl font-extrabold text-black dark:text-white tracking-tight leading-tight">
               {activeVariant.title}
             </h1>
 
-            <p className="text-sm sm:text-base text-slate-300 leading-relaxed font-normal">
+            <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400 leading-relaxed font-normal">
               {activeVariant.summary}
             </p>
 
-            <div className="pt-4 flex flex-wrap items-center justify-between gap-4 border-t border-slate-800/80">
-              <div className="flex items-center gap-2 text-xs text-slate-400">
-                <BookOpen className="w-4 h-4 text-amber-400" />
-                <span>Mode: <strong className="text-cyan-300">{selectedLang.toUpperCase()}</strong> ({selectedComplexity.toUpperCase()} Level)</span>
+            <div className="pt-4 flex flex-wrap items-center justify-between gap-4 border-t border-slate-200 dark:border-neutral-800">
+              <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
+                <BookOpen className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                <span>Mode: <strong className="text-blue-600 dark:text-blue-400">{selectedLang.toUpperCase()}</strong> ({selectedComplexity.toUpperCase()} Level)</span>
               </div>
 
               <button
                 onClick={handleDownloadPdf}
                 disabled={isDownloadingPdf}
-                className="inline-flex items-center gap-2 px-4 py-2 text-xs font-bold bg-gradient-to-r from-cyan-600 to-indigo-600 hover:from-cyan-500 hover:to-indigo-500 text-white rounded-xl transition-all shadow-lg shadow-cyan-600/20 active:scale-95"
+                className="inline-flex items-center gap-2 px-4 py-2 text-xs font-bold bg-blue-600 hover:bg-blue-700 text-white rounded-xl transition-all shadow-sm active:scale-95 cursor-pointer"
               >
                 <Download className="w-4 h-4" />
                 <span>{isDownloadingPdf ? "Generating PDF..." : "Download Lesson PDF"}</span>
@@ -389,49 +386,49 @@ export default function BcaLessonClient({ lesson }: BcaLessonClientProps) {
           {activeVariant.sections.map((section, idx) => (
             <article
               key={idx}
-              className="group rounded-3xl bg-[#0c1328]/80 border border-slate-800/80 p-6 sm:p-8 space-y-4 hover:border-slate-700/80 transition-all shadow-lg shadow-black/40"
+              className="group rounded-3xl bg-white dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 p-6 sm:p-8 space-y-4 hover:border-blue-600/60 transition-all shadow-sm"
             >
-              <h2 className="text-xl sm:text-2xl font-bold text-white flex items-center gap-3 tracking-tight border-b border-slate-800/60 pb-3">
-                <span className="p-2 rounded-xl bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+              <h2 className="text-xl sm:text-2xl font-bold text-black dark:text-white flex items-center gap-3 tracking-tight border-b border-slate-200 dark:border-neutral-800 pb-3">
+                <span className="p-2 rounded-xl bg-blue-50 dark:bg-neutral-800 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-neutral-700">
                   <Layers className="w-5 h-5" />
                 </span>
                 <span>{section.heading}</span>
               </h2>
 
-              <div className="text-sm sm:text-base text-slate-300 leading-relaxed space-y-3 font-normal">
+              <div className="text-sm sm:text-base text-slate-700 dark:text-slate-300 leading-relaxed space-y-3 font-normal">
                 {renderFormattedText(section.content)}
               </div>
 
               {/* Code Snippet Box */}
               {section.codeSnippet && (
-                <div className="relative mt-4 rounded-2xl bg-[#030712] border border-slate-800 p-4 font-mono text-xs text-emerald-400 overflow-x-auto shadow-inner">
-                  <div className="flex items-center justify-between text-slate-500 pb-2 border-b border-slate-800/60 text-[11px] font-semibold">
+                <div className="relative mt-4 rounded-2xl bg-slate-950 border border-slate-800 p-4 font-mono text-xs text-white overflow-x-auto shadow-inner">
+                  <div className="flex items-center justify-between text-slate-400 pb-2 border-b border-slate-800 text-[11px] font-semibold">
                     <span className="flex items-center gap-1.5">
-                      <Terminal className="w-3.5 h-3.5 text-cyan-400" /> C++ Architecture Code Sample
+                      <Terminal className="w-3.5 h-3.5 text-blue-400" /> C++ Architecture Code Sample
                     </span>
                     <button
                       onClick={() => handleCopySnippet(section.codeSnippet!, idx)}
-                      className="flex items-center gap-1 text-slate-400 hover:text-white transition-colors"
+                      className="flex items-center gap-1 text-slate-400 hover:text-white transition-colors cursor-pointer"
                     >
                       <Copy className="w-3.5 h-3.5" />
                       <span>{copiedIndex === idx ? "Copied!" : "Copy"}</span>
                     </button>
                   </div>
-                  <pre className="pt-3 leading-relaxed">{section.codeSnippet}</pre>
+                  <pre className="pt-3 leading-relaxed text-blue-200">{section.codeSnippet}</pre>
                 </div>
               )}
 
               {/* Key Takeaways Card */}
               {section.keyTakeaways && section.keyTakeaways.length > 0 && (
-                <div className="mt-5 p-5 rounded-2xl bg-gradient-to-r from-emerald-950/30 to-slate-900/50 border border-emerald-500/30 space-y-3">
-                  <div className="text-xs font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-2">
-                    <Sparkles className="w-4 h-4 text-emerald-400" />
+                <div className="mt-5 p-5 rounded-2xl bg-slate-50 dark:bg-neutral-950 border border-slate-200 dark:border-neutral-800 space-y-3">
+                  <div className="text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400 flex items-center gap-2">
+                    <Sparkles className="w-4 h-4" />
                     <span>Developer Key Takeaways</span>
                   </div>
-                  <ul className="space-y-2 text-xs sm:text-sm text-slate-300">
+                  <ul className="space-y-2 text-xs sm:text-sm text-slate-700 dark:text-slate-300">
                     {section.keyTakeaways.map((item, itemIdx) => (
                       <li key={itemIdx} className="flex items-start gap-2.5">
-                        <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                        <CheckCircle2 className="w-4 h-4 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5" />
                         <span>{parseInlineStyles(item)}</span>
                       </li>
                     ))}
@@ -445,14 +442,14 @@ export default function BcaLessonClient({ lesson }: BcaLessonClientProps) {
         {/* Interactive Bitwise & Number System Tool */}
         <section className="rounded-3xl bg-gradient-to-br from-indigo-950/40 via-[#0a1226] to-[#060c18] border border-indigo-500/40 p-6 sm:p-8 space-y-5 shadow-xl shadow-indigo-950/20">
           <div className="flex items-center gap-3">
-            <span className="p-2.5 rounded-2xl bg-indigo-500/20 text-indigo-400 border border-indigo-500/30">
+            <span className="p-2.5 rounded-2xl bg-blue-50 dark:bg-neutral-800 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-neutral-700">
               <Calculator className="w-6 h-6" />
             </span>
             <div>
-              <h3 className="text-lg sm:text-xl font-bold text-white tracking-tight">
+              <h3 className="text-lg sm:text-xl font-bold text-black dark:text-white tracking-tight">
                 Interactive Computer Architecture Tool: Base Converter
               </h3>
-              <p className="text-xs sm:text-sm text-slate-400">
+              <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400">
                 Type any integer below to see how the CPU represents it across Binary, Octal, and Hexadecimal registers.
               </p>
             </div>
@@ -460,25 +457,25 @@ export default function BcaLessonClient({ lesson }: BcaLessonClientProps) {
 
           <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 pt-2">
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-slate-300">Decimal (Base 10)</label>
+              <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">Decimal (Base 10)</label>
               <input
                 type="number"
                 value={inputVal}
                 onChange={(e) => setInputVal(parseInt(e.target.value) || 0)}
-                className="w-full px-4 py-3 text-sm font-semibold rounded-xl bg-slate-900 border border-slate-700 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-4 py-3 text-sm font-semibold rounded-xl bg-slate-50 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-600"
               />
             </div>
-            <div className="space-y-1.5 p-4 rounded-xl bg-[#030712] border border-slate-800">
-              <div className="text-[10px] uppercase tracking-wider text-slate-400 font-bold">Binary (Base 2)</div>
-              <div className="font-mono text-base font-extrabold text-emerald-400 break-all">{inputVal.toString(2)}</div>
+            <div className="space-y-1.5 p-4 rounded-xl bg-white dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800">
+              <div className="text-[10px] uppercase tracking-wider text-slate-500 dark:text-slate-400 font-bold">Binary (Base 2)</div>
+              <div className="font-mono text-base font-extrabold text-blue-600 dark:text-blue-400 break-all">{inputVal.toString(2)}</div>
             </div>
-            <div className="space-y-1.5 p-4 rounded-xl bg-[#030712] border border-slate-800">
-              <div className="text-[10px] uppercase tracking-wider text-slate-400 font-bold">Octal (Base 8)</div>
-              <div className="font-mono text-base font-extrabold text-cyan-400 break-all">{inputVal.toString(8)}</div>
+            <div className="space-y-1.5 p-4 rounded-xl bg-white dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800">
+              <div className="text-[10px] uppercase tracking-wider text-slate-500 dark:text-slate-400 font-bold">Octal (Base 8)</div>
+              <div className="font-mono text-base font-extrabold text-black dark:text-white break-all">{inputVal.toString(8)}</div>
             </div>
-            <div className="space-y-1.5 p-4 rounded-xl bg-[#030712] border border-slate-800">
-              <div className="text-[10px] uppercase tracking-wider text-slate-400 font-bold">Hexadecimal (Base 16)</div>
-              <div className="font-mono text-base font-extrabold text-amber-400 break-all">0x{inputVal.toString(16).toUpperCase()}</div>
+            <div className="space-y-1.5 p-4 rounded-xl bg-white dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800">
+              <div className="text-[10px] uppercase tracking-wider text-slate-500 dark:text-slate-400 font-bold">Hexadecimal (Base 16)</div>
+              <div className="font-mono text-base font-extrabold text-blue-600 dark:text-blue-400 break-all">0x{inputVal.toString(16).toUpperCase()}</div>
             </div>
           </div>
         </section>
@@ -515,24 +512,24 @@ export default function BcaLessonClient({ lesson }: BcaLessonClientProps) {
         />
 
         {/* Multilingual Interactive Mastery Quiz */}
-        <section className="rounded-3xl bg-[#0c1328]/90 border border-slate-800 p-6 sm:p-8 space-y-6 shadow-xl">
-          <div className="flex items-center gap-3 border-b border-slate-800/80 pb-4">
-            <span className="p-2.5 rounded-2xl bg-amber-500/20 text-amber-400 border border-amber-500/30">
+        <section className="rounded-3xl bg-white dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 p-6 sm:p-8 space-y-6 shadow-sm">
+          <div className="flex items-center gap-3 border-b border-slate-200 dark:border-neutral-800 pb-4">
+            <span className="p-2.5 rounded-2xl bg-blue-50 dark:bg-neutral-800 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-neutral-700">
               <Award className="w-6 h-6" />
             </span>
             <div>
-              <h3 className="text-lg sm:text-xl font-bold text-white tracking-tight">
+              <h3 className="text-lg sm:text-xl font-bold text-black dark:text-white tracking-tight">
                 Unit Mastery Quiz
               </h3>
-              <p className="text-xs sm:text-sm text-slate-400">
+              <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
                 Test your understanding in <strong>{selectedLang.toUpperCase()}</strong>.
               </p>
             </div>
           </div>
 
           {/* Multiple Choice Question */}
-          <div className="space-y-4 p-5 rounded-2xl bg-slate-900/60 border border-slate-800">
-            <div className="text-sm sm:text-base font-semibold text-white">
+          <div className="space-y-4 p-5 rounded-2xl bg-slate-50 dark:bg-neutral-950 border border-slate-200 dark:border-neutral-800">
+            <div className="text-sm sm:text-base font-semibold text-black dark:text-white">
               Q1. {activeExercise.mcq.question}
             </div>
 
@@ -541,17 +538,17 @@ export default function BcaLessonClient({ lesson }: BcaLessonClientProps) {
                 const isSelected = selectedOption === optIdx;
                 const isCorrect = optIdx === activeExercise.mcq.correctAnswer;
                 
-                let btnStyle = "bg-[#060c18] border-slate-800 text-slate-300 hover:border-slate-700 hover:text-white";
+                let btnStyle = "bg-white dark:bg-neutral-900 border-slate-200 dark:border-neutral-800 text-black dark:text-white hover:border-blue-600";
                 if (showExplanation) {
-                  if (isCorrect) btnStyle = "bg-emerald-950/80 border-emerald-500 text-emerald-200 font-semibold shadow-lg shadow-emerald-950/40";
-                  else if (isSelected) btnStyle = "bg-red-950/80 border-red-500 text-red-200";
+                  if (isCorrect) btnStyle = "bg-blue-600 text-white border-blue-600 font-bold shadow-sm";
+                  else if (isSelected) btnStyle = "bg-black text-white dark:bg-white dark:text-black border-black dark:border-white font-bold";
                 }
 
                 return (
                   <button
                     key={optIdx}
                     onClick={(e) => handleOptionSelect(optIdx, e)}
-                    className={`p-4 rounded-xl border text-left text-xs sm:text-sm transition-all ${btnStyle}`}
+                    className={`p-4 rounded-xl border text-left text-xs sm:text-sm transition-all cursor-pointer ${btnStyle}`}
                   >
                     {option}
                   </button>
@@ -560,19 +557,19 @@ export default function BcaLessonClient({ lesson }: BcaLessonClientProps) {
             </div>
 
             {showExplanation && (
-              <div className="p-4 rounded-xl bg-cyan-950/40 border border-cyan-500/30 text-xs sm:text-sm text-slate-200 space-y-1.5 animate-in fade-in duration-300">
-                <div className="font-bold text-cyan-400 flex items-center gap-1.5">
+              <div className="p-4 rounded-xl bg-blue-50 dark:bg-neutral-900 border border-blue-200 dark:border-neutral-800 text-xs sm:text-sm text-slate-800 dark:text-slate-200 space-y-1.5 animate-in fade-in duration-300">
+                <div className="font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
                   <CheckCircle2 className="w-4 h-4" />
                   <span>Answer Explanation</span>
                 </div>
-                <p className="text-slate-300">{activeExercise.mcq.explanation}</p>
+                <p className="text-slate-700 dark:text-slate-300">{activeExercise.mcq.explanation}</p>
               </div>
             )}
           </div>
 
           {/* Fill-in-the-blank Question with Interactive Answer Option Pills */}
-          <div className="space-y-4 p-5 rounded-2xl bg-slate-900/60 border border-slate-800">
-            <div className="text-sm sm:text-base font-semibold text-white">
+          <div className="space-y-4 p-5 rounded-2xl bg-slate-50 dark:bg-neutral-950 border border-slate-200 dark:border-neutral-800">
+            <div className="text-sm sm:text-base font-semibold text-black dark:text-white">
               Q2. Fill in the blank: {activeExercise.blank.question}
             </div>
 
@@ -582,11 +579,11 @@ export default function BcaLessonClient({ lesson }: BcaLessonClientProps) {
                 value={userBlankInput}
                 onChange={(e) => setUserBlankInput(e.target.value)}
                 placeholder="Type or click a pill option below..."
-                className="flex-1 px-4 py-2.5 text-xs sm:text-sm rounded-xl bg-[#060c18] border border-slate-700 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                className="flex-1 px-4 py-2.5 text-xs sm:text-sm rounded-xl bg-white dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-600"
               />
               <button
                 onClick={() => setBlankSubmitted(true)}
-                className="px-5 py-2.5 text-xs sm:text-sm font-bold bg-cyan-600 text-white rounded-xl hover:bg-cyan-500 transition-colors shadow-lg shadow-cyan-600/20"
+                className="px-5 py-2.5 text-xs sm:text-sm font-bold bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors shadow-sm cursor-pointer"
               >
                 Submit
               </button>
@@ -594,7 +591,7 @@ export default function BcaLessonClient({ lesson }: BcaLessonClientProps) {
 
             {/* Interactive Pill-Form Options Below Input */}
             <div className="space-y-1.5 pt-1">
-              <div className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
+              <div className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                 Select Option Pill:
               </div>
               <div className="flex flex-wrap gap-2">
@@ -613,10 +610,10 @@ export default function BcaLessonClient({ lesson }: BcaLessonClientProps) {
                         triggerCelebration(e);
                       }
                     }}
-                    className={`px-3 py-1.5 rounded-full border text-xs font-semibold transition-all ${
+                    className={`px-3 py-1.5 rounded-full border text-xs font-semibold transition-all cursor-pointer ${
                       userBlankInput === pillText
-                        ? "bg-cyan-500/20 border-cyan-400 text-cyan-300 shadow-md shadow-cyan-500/20"
-                        : "bg-slate-950/80 border-slate-800 text-slate-400 hover:text-white hover:border-slate-700"
+                        ? "bg-blue-600 text-white border-blue-600 shadow-sm"
+                        : "bg-white dark:bg-neutral-900 border-slate-200 dark:border-neutral-800 text-black dark:text-white hover:border-blue-600"
                     }`}
                   >
                     {pillText}
@@ -628,11 +625,11 @@ export default function BcaLessonClient({ lesson }: BcaLessonClientProps) {
             {blankSubmitted && (
               <div className="text-xs sm:text-sm pt-2">
                 {userBlankInput.trim().toLowerCase() === activeExercise.blank.answer.toLowerCase() ? (
-                  <p className="text-emerald-400 font-semibold flex items-center gap-1.5">
+                  <p className="text-blue-600 dark:text-blue-400 font-semibold flex items-center gap-1.5">
                     <CheckCircle2 className="w-4 h-4" /> Excellent! The correct answer is "{activeExercise.blank.answer}".
                   </p>
                 ) : (
-                  <p className="text-red-400 flex items-center gap-1.5">
+                  <p className="text-red-500 font-semibold flex items-center gap-1.5">
                     <AlertCircle className="w-4 h-4" /> Not quite. Correct answer: "{activeExercise.blank.answer}".
                   </p>
                 )}
@@ -642,15 +639,15 @@ export default function BcaLessonClient({ lesson }: BcaLessonClientProps) {
             <div className="flex items-center justify-between pt-1">
               <button
                 onClick={() => setShowBlankHint(!showBlankHint)}
-                className="text-xs text-slate-400 hover:text-white flex items-center gap-1.5 transition-colors"
+                className="text-xs text-slate-500 dark:text-slate-400 hover:text-black dark:hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer"
               >
-                <HelpCircle className="w-3.5 h-3.5 text-amber-400" />
+                <HelpCircle className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
                 <span>{showBlankHint ? "Hide Hint" : "Show Hint"}</span>
               </button>
             </div>
 
             {showBlankHint && (
-              <p className="text-xs text-amber-300 italic bg-amber-950/40 p-3 rounded-xl border border-amber-500/30">
+              <p className="text-xs text-blue-700 dark:text-blue-300 italic bg-blue-50 dark:bg-neutral-900 p-3 rounded-xl border border-blue-200 dark:border-neutral-800">
                 Hint: {activeExercise.blank.hint}
               </p>
             )}
@@ -658,10 +655,10 @@ export default function BcaLessonClient({ lesson }: BcaLessonClientProps) {
         </section>
 
         {/* Reference Links & External Deep-Dives */}
-        <section className="rounded-3xl bg-slate-900/60 border border-slate-800 p-6 sm:p-8 space-y-4">
-          <div className="flex items-center gap-2 text-sm font-bold text-slate-300">
-            <BookOpen className="w-4 h-4 text-cyan-400" />
-            <span>Official IGNOU & Developer Reference Links</span>
+        <section className="rounded-3xl bg-white dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 p-6 sm:p-8 space-y-4 shadow-sm">
+          <div className="flex items-center gap-2 text-sm font-bold text-black dark:text-white">
+            <BookOpen className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+            <span>Official IGNOU &amp; Developer Reference Links</span>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
@@ -669,29 +666,29 @@ export default function BcaLessonClient({ lesson }: BcaLessonClientProps) {
               href="https://egyankosh.ac.in/"
               target="_blank"
               rel="noopener noreferrer"
-              className="p-3 rounded-xl bg-slate-950 border border-slate-800 text-slate-300 hover:text-cyan-300 hover:border-cyan-500/40 transition-all flex items-center justify-between group"
+              className="p-3 rounded-xl bg-slate-50 dark:bg-neutral-950 border border-slate-200 dark:border-neutral-800 text-black dark:text-white hover:text-blue-600 dark:hover:text-blue-400 hover:border-blue-600 transition-all flex items-center justify-between group"
             >
               <span>eGyanKosh Official IGNOU Portal</span>
-              <Share2 className="w-3.5 h-3.5 text-slate-500 group-hover:text-cyan-400" />
+              <Share2 className="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-600" />
             </a>
             <Link
               href="/bca/semester-1"
-              className="p-3 rounded-xl bg-slate-950 border border-slate-800 text-slate-300 hover:text-cyan-300 hover:border-cyan-500/40 transition-all flex items-center justify-between group"
+              className="p-3 rounded-xl bg-slate-50 dark:bg-neutral-950 border border-slate-200 dark:border-neutral-800 text-black dark:text-white hover:text-blue-600 dark:hover:text-blue-400 hover:border-blue-600 transition-all flex items-center justify-between group"
             >
               <span>IGNOU BCA 1st Semester Hub</span>
-              <BookOpen className="w-3.5 h-3.5 text-amber-400 group-hover:scale-110 transition-transform" />
+              <BookOpen className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400 group-hover:scale-110 transition-transform" />
             </Link>
           </div>
         </section>
 
         {/* Bottom Navigation Buttons: Home • Prev • Subject • Next */}
-        <nav className="pt-6 border-t border-slate-800/80 grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3">
+        <nav className="pt-6 border-t border-slate-200 dark:border-neutral-800 grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3">
           {/* 1. Home */}
           <Link
             href="/"
-            className="p-3 rounded-2xl bg-slate-900/90 border border-slate-800 hover:border-cyan-500/40 text-slate-300 hover:text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-all shadow-md group cursor-pointer"
+            className="p-3 rounded-2xl bg-white dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 hover:border-blue-600 text-black dark:text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-all shadow-sm group cursor-pointer"
           >
-            <Home className="w-4 h-4 text-cyan-400 group-hover:scale-110 transition-transform shrink-0" />
+            <Home className="w-4 h-4 text-blue-600 dark:text-blue-400 group-hover:scale-110 transition-transform shrink-0" />
             <span>Home</span>
           </Link>
 
@@ -699,16 +696,16 @@ export default function BcaLessonClient({ lesson }: BcaLessonClientProps) {
           {prevLesson ? (
             <Link
               href={`/bca/semester-1/${prevLesson.subjectSlug}/${prevLesson.slug}`}
-              className="p-3 rounded-2xl bg-slate-900/90 border border-slate-800 hover:border-slate-700 text-slate-300 hover:text-white font-bold text-xs flex items-center justify-center gap-1 transition-all shadow-md group cursor-pointer truncate"
+              className="p-3 rounded-2xl bg-white dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 hover:border-slate-300 dark:hover:border-neutral-700 text-black dark:text-white font-bold text-xs flex items-center justify-center gap-1 transition-all shadow-sm group cursor-pointer truncate"
               title={`Previous: Unit ${prevLesson.unitNumber}`}
             >
-              <ChevronLeft className="w-4 h-4 text-cyan-400 group-hover:-translate-x-0.5 transition-transform shrink-0" />
+              <ChevronLeft className="w-4 h-4 text-blue-600 dark:text-blue-400 group-hover:-translate-x-0.5 transition-transform shrink-0" />
               <span className="truncate">Prev (Unit {prevLesson.unitNumber})</span>
             </Link>
           ) : (
             <button
               disabled
-              className="p-3 rounded-2xl bg-slate-950/40 border border-slate-900 text-slate-600 font-bold text-xs flex items-center justify-center gap-1 cursor-not-allowed opacity-50"
+              className="p-3 rounded-2xl bg-slate-100 dark:bg-neutral-950 border border-slate-200 dark:border-neutral-800 text-slate-400 font-bold text-xs flex items-center justify-center gap-1 cursor-not-allowed opacity-50"
             >
               <ChevronLeft className="w-4 h-4 shrink-0" />
               <span>Prev</span>
@@ -718,9 +715,9 @@ export default function BcaLessonClient({ lesson }: BcaLessonClientProps) {
           {/* 3. Subject Hub */}
           <Link
             href={`/bca/semester-1/${lesson.subjectSlug}`}
-            className="p-3 rounded-2xl bg-slate-900/90 border border-amber-500/30 hover:border-amber-500/60 text-amber-300 hover:text-amber-200 font-bold text-xs flex items-center justify-center gap-1.5 transition-all shadow-md group cursor-pointer truncate"
+            className="p-3 rounded-2xl bg-white dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 hover:border-blue-600 text-black dark:text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-all shadow-sm group cursor-pointer truncate"
           >
-            <BookOpen className="w-4 h-4 text-amber-400 group-hover:scale-110 transition-transform shrink-0" />
+            <BookOpen className="w-4 h-4 text-blue-600 dark:text-blue-400 group-hover:scale-110 transition-transform shrink-0" />
             <span className="truncate">Subject</span>
           </Link>
 
@@ -728,7 +725,7 @@ export default function BcaLessonClient({ lesson }: BcaLessonClientProps) {
           {nextLesson ? (
             <Link
               href={`/bca/semester-1/${nextLesson.subjectSlug}/${nextLesson.slug}`}
-              className="p-3 rounded-2xl bg-gradient-to-r from-emerald-600 to-cyan-600 hover:from-emerald-500 hover:to-cyan-500 text-white font-extrabold text-xs flex items-center justify-center gap-1 transition-all shadow-lg shadow-cyan-600/20 active:scale-95 group cursor-pointer truncate"
+              className="p-3 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs flex items-center justify-center gap-1 transition-all shadow-md active:scale-95 group cursor-pointer truncate"
               title={`Next: Unit ${nextLesson.unitNumber}`}
             >
               <span className="truncate">Next (Unit {nextLesson.unitNumber})</span>
@@ -737,7 +734,7 @@ export default function BcaLessonClient({ lesson }: BcaLessonClientProps) {
           ) : (
             <Link
               href={`/bca/semester-1/${lesson.subjectSlug}`}
-              className="p-3 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-xs flex items-center justify-center gap-1 transition-all shadow-lg truncate"
+              className="p-3 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs flex items-center justify-center gap-1 transition-all shadow-md truncate"
             >
               <span className="truncate">Done 🎉</span>
               <ChevronRight className="w-4 h-4 text-white shrink-0" />

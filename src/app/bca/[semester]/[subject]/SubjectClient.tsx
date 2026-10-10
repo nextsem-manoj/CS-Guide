@@ -67,7 +67,7 @@ export default function SubjectSyllabusDashboard({ semester, subject }: { semest
 
   if (!currentSemester || !currentSubject) {
     return (
-      <div className="w-full min-h-screen bg-[#060c18] text-white flex flex-col items-center justify-center p-6 text-center">
+      <div className="w-full min-h-screen bg-white dark:bg-black text-black dark:text-white flex flex-col items-center justify-center p-6 text-center">
         <DuduBubuWipWidget
           title="Arre Arre! Yahan tak to aa gaye 🐾"
           subtitle="par yahan se aage ka content Dudu aur Bubu milkar bana rahe hain! Thoda wait karo 🐻❤️🐻"
@@ -130,11 +130,11 @@ export default function SubjectSyllabusDashboard({ semester, subject }: { semest
   };
 
   return (
-    <div className="w-full min-h-screen bg-[#060c18] text-white flex flex-col justify-between font-sans selection:bg-[#c1a648]/30 relative pb-24">
-      {/* Background radial glow */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-96 rounded-full bg-cyan-950/20 blur-[120px] pointer-events-none" />
+    <div className="w-full min-h-screen bg-white dark:bg-black text-black dark:text-white flex flex-col justify-between font-sans selection:bg-blue-600/30 relative pb-24 transition-colors">
+      {/* Background ambient glow */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-96 rounded-full bg-blue-600/5 dark:bg-blue-600/10 blur-[120px] pointer-events-none" />
 
-      {/* ── Top Header Bar with Subject Switcher Dropdown (Matching image-20.png) ── */}
+      {/* ── Top Header Bar with Subject Switcher Dropdown ── */}
       <BcaHeaderNav
         currentSubjectCode={currentSubject.code}
         currentSubjectName={currentSubject.name}
@@ -145,50 +145,50 @@ export default function SubjectSyllabusDashboard({ semester, subject }: { semest
       <main className="flex-1 w-full max-w-5xl mx-auto px-4 md:px-8 py-6 space-y-6">
         
         {/* Navigation Breadcrumbs */}
-        <nav aria-label="Breadcrumbs" className="flex flex-wrap items-center gap-2 text-xs text-slate-300 font-bold py-1">
-          <Link href="/" className="hover:text-[#04AA6D] transition-colors flex items-center gap-1">
+        <nav aria-label="Breadcrumbs" className="flex flex-wrap items-center gap-2 text-xs text-slate-500 dark:text-slate-400 font-bold py-1">
+          <Link href="/" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors flex items-center gap-1">
             <span>🏠 Home</span>
           </Link>
-          <span className="text-slate-600 font-bold">❯</span>
-          <Link href="/bca" className="hover:text-[#04AA6D] transition-colors">
+          <span className="text-slate-400 dark:text-neutral-700 font-bold">❯</span>
+          <Link href="/bca" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
             BCA Hub
           </Link>
-          <span className="text-slate-600 font-bold">❯</span>
-          <Link href={`/bca/semester-${currentSemester.id}`} className="hover:text-[#04AA6D] transition-colors">
+          <span className="text-slate-400 dark:text-neutral-700 font-bold">❯</span>
+          <Link href={`/bca/semester-${currentSemester.id}`} className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
             {currentSemester.name}
           </Link>
-          <span className="text-slate-600 font-bold">❯</span>
-          <span className="text-cyan-300 font-extrabold">{currentSubject.code}</span>
+          <span className="text-slate-400 dark:text-neutral-700 font-bold">❯</span>
+          <span className="text-blue-600 dark:text-blue-400 font-extrabold">{currentSubject.code}</span>
         </nav>
 
-        {/* Title Hero Section (Theme Compliant #0c1328) */}
-        <section className="p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-[#0c1328] via-[#090f20] to-[#060c18] border border-cyan-500/30 shadow-2xl space-y-4 md:flex md:items-center md:justify-between gap-6">
+        {/* Title Hero Section */}
+        <section className="p-6 sm:p-8 rounded-3xl bg-slate-50 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 shadow-sm space-y-4 md:flex md:items-center md:justify-between gap-6">
           <div>
             <div className="flex items-center gap-2 mb-2">
               <span className={`text-[10px] font-black uppercase tracking-widest px-2.5 py-0.5 rounded-full ${
-                currentSubject.isLab ? 'bg-teal-500/10 text-teal-300 border border-teal-500/30' : 'bg-blue-500/10 text-blue-300 border border-blue-500/30'
+                currentSubject.isLab ? 'bg-slate-100 dark:bg-neutral-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-neutral-700' : 'bg-blue-50 dark:bg-neutral-800 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-neutral-700'
               }`}>
                 {currentSubject.isLab ? 'Lab Module' : 'Theory Course'}
               </span>
-              <span className="text-[10px] font-black text-amber-400 uppercase">{currentSubject.code}</span>
+              <span className="text-[10px] font-black text-blue-600 dark:text-blue-400 uppercase">{currentSubject.code}</span>
             </div>
-            <h1 className="text-2xl sm:text-4xl font-black text-white tracking-tight leading-tight">
+            <h1 className="text-2xl sm:text-4xl font-black text-black dark:text-white tracking-tight leading-tight">
               {currentSubject.name}
             </h1>
-            <p className="text-slate-300 text-xs sm:text-sm leading-relaxed mt-1 font-medium">
+            <p className="text-slate-600 dark:text-slate-300 text-xs sm:text-sm leading-relaxed mt-1 font-medium">
               Syllabus Blocks &amp; Interactive Textbooks. Complete all unit lessons to earn course XP.
             </p>
           </div>
 
-          <div className="mt-4 md:mt-0 flex items-center gap-4 bg-slate-950/80 border border-slate-800 p-4 rounded-2xl shrink-0 shadow-inner">
+          <div className="mt-4 md:mt-0 flex items-center gap-4 bg-white dark:bg-neutral-950 border border-slate-200 dark:border-neutral-800 p-4 rounded-2xl shrink-0 shadow-sm">
             <div className="text-center">
-              <span className="block text-emerald-400 font-black text-2xl">{subProg.pct}%</span>
-              <span className="block text-[9px] text-slate-400 font-black uppercase tracking-wider">Completed</span>
+              <span className="block text-blue-600 dark:text-blue-400 font-black text-2xl">{subProg.pct}%</span>
+              <span className="block text-[9px] text-slate-500 dark:text-slate-400 font-black uppercase tracking-wider">Completed</span>
             </div>
-            <div className="h-8 w-px bg-slate-800" />
+            <div className="h-8 w-px bg-slate-200 dark:bg-neutral-800" />
             <div className="text-center">
-              <span className="block text-white font-black text-2xl">{subProg.read}/{subProg.total}</span>
-              <span className="block text-[9px] text-slate-400 font-black uppercase tracking-wider">Units Read</span>
+              <span className="block text-black dark:text-white font-black text-2xl">{subProg.read}/{subProg.total}</span>
+              <span className="block text-[9px] text-slate-500 dark:text-slate-400 font-black uppercase tracking-wider">Units Read</span>
             </div>
           </div>
         </section>
@@ -202,16 +202,16 @@ export default function SubjectSyllabusDashboard({ semester, subject }: { semest
           {currentSubject.blocks.map((block, bIdx) => {
             const bp = getBlockProgress(block.name);
             return (
-              <div key={block.name} className="bg-gradient-to-br from-[#0c1328] via-[#090f20] to-[#060c18] border border-slate-800 rounded-3xl overflow-hidden p-5 sm:p-6 shadow-xl space-y-4">
+              <div key={block.name} className="bg-slate-50 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 rounded-3xl overflow-hidden p-5 sm:p-6 shadow-sm space-y-4">
                 {/* Block header */}
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-3">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200 dark:border-neutral-800 pb-3">
                   <div className="text-left">
-                    <span className="text-[10px] text-amber-400 font-black uppercase tracking-wider">Block {bIdx + 1}</span>
-                    <h2 className="text-base sm:text-lg font-black text-cyan-300 leading-tight mt-0.5">{block.name}</h2>
+                    <span className="text-[10px] text-blue-600 dark:text-blue-400 font-black uppercase tracking-wider">Block {bIdx + 1}</span>
+                    <h2 className="text-base sm:text-lg font-black text-black dark:text-white leading-tight mt-0.5">{block.name}</h2>
                   </div>
                   <div className="flex items-center gap-2 shrink-0">
-                    <span className="text-[10px] text-slate-400 font-bold">{bp.read} of {bp.total} read</span>
-                    <span className="text-[10px] font-black text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-md">{bp.pct}%</span>
+                    <span className="text-[10px] text-slate-500 dark:text-slate-400 font-bold">{bp.read} of {bp.total} read</span>
+                    <span className="text-[10px] font-black text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-neutral-800 border border-blue-200 dark:border-neutral-700 px-2 py-0.5 rounded-md">{bp.pct}%</span>
                   </div>
                 </div>
 
@@ -274,26 +274,26 @@ export default function SubjectSyllabusDashboard({ semester, subject }: { semest
                         <div key={unit.fileName} className="space-y-2.5">
                           <div
                             onClick={handleUnitClick}
-                            className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-slate-950/80 hover:bg-slate-900/90 border border-slate-800/80 hover:border-cyan-500/40 rounded-2xl cursor-pointer transition-all duration-200 group shadow-sm"
+                            className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-white dark:bg-neutral-950 hover:bg-slate-50 dark:hover:bg-neutral-900 border border-slate-200 hover:border-blue-600 dark:border-neutral-800 dark:hover:border-blue-500 rounded-2xl cursor-pointer transition-all duration-200 group shadow-sm"
                           >
                             <div className="flex items-start gap-3.5 min-w-0 pr-2">
                               <div className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 text-xs font-black ${
                                 isCompleted 
-                                  ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30' 
-                                  : 'bg-slate-900 text-cyan-300 border border-slate-800'
+                                  ? 'bg-blue-600 text-white' 
+                                  : 'bg-blue-50 dark:bg-neutral-800 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-neutral-700'
                               }`}>
                                 {isCompleted ? '✓' : uIdx + 1}
                               </div>
                               <div className="min-w-0 text-left">
-                                <h4 className="text-xs sm:text-sm font-extrabold text-white truncate leading-snug group-hover:text-cyan-300 transition-colors flex items-center gap-1.5">
+                                <h4 className="text-xs sm:text-sm font-extrabold text-black dark:text-white truncate leading-snug group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors flex items-center gap-1.5">
                                   <span>{unit.displayName}</span>
                                   {interactiveLessonUrl && (
-                                    <span className="text-[9px] font-black uppercase px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                                    <span className="text-[9px] font-black uppercase px-2 py-0.5 rounded bg-blue-50 dark:bg-neutral-800 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-neutral-700">
                                       Interactive Lesson
                                     </span>
                                   )}
                                 </h4>
-                                <p className="text-[9px] text-slate-500 font-mono mt-0.5">{unit.fileName}</p>
+                                <p className="text-[9px] text-slate-400 dark:text-slate-500 font-mono mt-0.5">{unit.fileName}</p>
                               </div>
                             </div>
 
@@ -304,7 +304,7 @@ export default function SubjectSyllabusDashboard({ semester, subject }: { semest
                                     e.stopPropagation();
                                     router.push(interactiveLessonUrl);
                                   }}
-                                  className="px-3.5 py-1.5 bg-gradient-to-r from-emerald-600 to-cyan-600 hover:from-emerald-500 hover:to-cyan-500 text-white rounded-xl text-[10px] font-extrabold uppercase tracking-wider transition-all cursor-pointer flex items-center gap-1.5 shadow-md"
+                                  className="px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-[10px] font-extrabold uppercase tracking-wider transition-all cursor-pointer flex items-center gap-1.5 shadow-sm"
                                 >
                                   <Play size={11} className="fill-white" />
                                   <span>Start Lesson</span>
@@ -318,9 +318,9 @@ export default function SubjectSyllabusDashboard({ semester, subject }: { semest
                                     e.stopPropagation();
                                     handleOpenInteractive(unit.fileName, unit.defaultTab);
                                   }}
-                                  className="px-3 py-1.5 bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 rounded-xl text-[10px] font-black uppercase text-cyan-300 tracking-wider transition-all cursor-pointer flex items-center gap-1"
+                                  className="px-3 py-1.5 bg-blue-50 hover:bg-blue-100 dark:bg-neutral-800 dark:hover:bg-neutral-700 border border-blue-200 dark:border-neutral-700 rounded-xl text-[10px] font-black uppercase text-blue-600 dark:text-blue-400 tracking-wider transition-all cursor-pointer flex items-center gap-1"
                                 >
-                                  <Sparkles size={11} className="text-cyan-400" />
+                                  <Sparkles size={11} className="text-blue-600 dark:text-blue-400" />
                                   <span>Lab Simulation</span>
                                 </button>
                               )}
@@ -330,7 +330,7 @@ export default function SubjectSyllabusDashboard({ semester, subject }: { semest
                                   e.stopPropagation();
                                   router.push(`/bca/viewer?file=${encodeURIComponent(pdfPath)}&title=${encodeURIComponent(unit.displayName)}`);
                                 }}
-                                className="px-3 py-1.5 bg-slate-900 border border-slate-800 hover:bg-slate-800 text-[10px] font-bold text-slate-300 rounded-xl transition-all shrink-0 cursor-pointer flex items-center gap-1.5"
+                                className="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-neutral-800 dark:hover:bg-neutral-700 border border-slate-200 dark:border-neutral-700 text-[10px] font-bold text-black dark:text-white rounded-xl transition-all shrink-0 cursor-pointer flex items-center gap-1.5"
                               >
                                 <FileText size={11} />
                                 <span>PDF Notes</span>
@@ -340,13 +340,13 @@ export default function SubjectSyllabusDashboard({ semester, subject }: { semest
 
                           {/* Dedicated Practice Link & Question Section directly below Unit 3 */}
                           {isConceptInProgrammingLanguage && (
-                            <div className="p-4 bg-[#080d1a] border border-cyan-500/30 rounded-2xl space-y-3 ml-0 sm:ml-4 shadow-lg">
-                              <div className="flex flex-wrap items-center justify-between gap-2 pb-2.5 border-b border-slate-800">
+                            <div className="p-4 bg-white dark:bg-neutral-950 border border-blue-200 dark:border-blue-900/40 rounded-2xl space-y-3 ml-0 sm:ml-4 shadow-sm">
+                              <div className="flex flex-wrap items-center justify-between gap-2 pb-2.5 border-b border-slate-200 dark:border-neutral-800">
                                 <div className="flex items-center gap-2">
-                                  <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[10px] font-black uppercase tracking-wider">
+                                  <span className="px-2 py-0.5 rounded-full bg-blue-50 dark:bg-neutral-800 text-blue-600 dark:text-blue-400 text-[10px] font-black uppercase tracking-wider border border-blue-200 dark:border-neutral-700">
                                     Practice Problem 7
                                   </span>
-                                  <h5 className="text-xs sm:text-sm font-extrabold text-white">
+                                  <h5 className="text-xs sm:text-sm font-extrabold text-black dark:text-white">
                                     Roots of Quadratic Equation (Algorithm &amp; Flowchart)
                                   </h5>
                                 </div>
@@ -355,7 +355,7 @@ export default function SubjectSyllabusDashboard({ semester, subject }: { semest
                                   target="_blank"
                                   rel="noopener noreferrer"
                                   onClick={(e) => e.stopPropagation()}
-                                  className="px-3.5 py-1.5 bg-gradient-to-r from-emerald-600 to-cyan-600 hover:from-emerald-500 hover:to-cyan-500 text-white rounded-xl text-[10px] font-extrabold uppercase tracking-wider transition-all flex items-center gap-1.5 shrink-0"
+                                  className="px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-[10px] font-extrabold uppercase tracking-wider transition-all flex items-center gap-1.5 shrink-0"
                                 >
                                   <span>Open Dedicated Page ↗</span>
                                   <ExternalLink size={11} />
@@ -363,10 +363,10 @@ export default function SubjectSyllabusDashboard({ semester, subject }: { semest
                               </div>
 
                               {/* Question / Problem Statement */}
-                              <div className="p-3 bg-slate-900/80 rounded-xl border border-slate-800 text-xs text-slate-200">
-                                <span className="text-[10px] font-bold uppercase text-slate-400 block mb-1">Question / Problem Statement:</span>
+                              <div className="p-3 bg-slate-50 dark:bg-neutral-900 rounded-xl border border-slate-200 dark:border-neutral-800 text-xs text-slate-700 dark:text-slate-300">
+                                <span className="text-[10px] font-bold uppercase text-slate-500 dark:text-slate-400 block mb-1">Question / Problem Statement:</span>
                                 <p className="leading-relaxed">
-                                  Given coefficients <strong className="text-white">a</strong>, <strong className="text-white">b</strong>, and <strong className="text-white">c</strong> of <strong className="text-emerald-400">ax² + bx + c = 0</strong>, formulate a step-by-step algorithm and draw an ANSI flowchart to determine both real and complex roots across all three cases: <span className="text-cyan-300 font-mono">D &gt; 0</span>, <span className="text-cyan-300 font-mono">D = 0</span>, and <span className="text-cyan-300 font-mono">D &lt; 0</span>.
+                                  Given coefficients <strong className="text-black dark:text-white">a</strong>, <strong className="text-black dark:text-white">b</strong>, and <strong className="text-black dark:text-white">c</strong> of <strong className="text-blue-600 dark:text-blue-400">ax² + bx + c = 0</strong>, formulate a step-by-step algorithm and draw an ANSI flowchart to determine both real and complex roots across all three cases: <span className="text-blue-600 dark:text-blue-400 font-mono">D &gt; 0</span>, <span className="text-blue-600 dark:text-blue-400 font-mono">D = 0</span>, and <span className="text-blue-600 dark:text-blue-400 font-mono">D &lt; 0</span>.
                                 </p>
                               </div>
 
@@ -378,19 +378,19 @@ export default function SubjectSyllabusDashboard({ semester, subject }: { semest
                                     e.stopPropagation();
                                     setShowProblem7Answer(!showProblem7Answer);
                                   }}
-                                  className="px-3.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-cyan-300 text-xs font-bold border border-slate-700 transition flex items-center gap-2 cursor-pointer"
+                                  className="px-3.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-neutral-900 dark:hover:bg-neutral-800 text-black dark:text-white text-xs font-bold border border-slate-200 dark:border-neutral-800 transition flex items-center gap-2 cursor-pointer"
                                 >
                                   {showProblem7Answer ? "🙈 Hide Answer to Question" : "👁️ View Answer to Question & C++ Program"}
                                 </button>
 
                                 {/* Answer Content - Hidden by default */}
                                 {showProblem7Answer && (
-                                  <div className="mt-3 p-3.5 bg-slate-950 border border-slate-800 rounded-xl space-y-3 text-xs">
+                                  <div className="mt-3 p-3.5 bg-white dark:bg-neutral-950 border border-slate-200 dark:border-neutral-800 rounded-xl space-y-3 text-xs">
                                     <div className="flex items-center justify-between">
-                                      <span className="text-emerald-400 font-bold uppercase tracking-wider text-[10px]">Algorithm Solution (Steps 1 to 8):</span>
+                                      <span className="text-blue-600 dark:text-blue-400 font-bold uppercase tracking-wider text-[10px]">Algorithm Solution (Steps 1 to 8):</span>
                                       <span className="text-slate-500 text-[10px]">Discriminant D = b² - 4ac</span>
                                     </div>
-                                    <pre className="bg-[#090b10] border border-slate-800/80 rounded-lg p-3 text-[11px] font-mono text-slate-200 overflow-x-auto leading-relaxed whitespace-pre-wrap">
+                                    <pre className="bg-slate-900 border border-slate-800 rounded-lg p-3 text-[11px] font-mono text-slate-200 overflow-x-auto leading-relaxed whitespace-pre-wrap">
 {`Step 1: Start.
 Step 2: Read coefficients a, b, c.
 Step 3: If a == 0, Print 'Not quadratic (Linear equation)' and Stop.
@@ -410,12 +410,12 @@ Step 8: Stop.`}
                                     </pre>
 
                                     {/* C++ Code Snippet */}
-                                    <div className="pt-2 border-t border-slate-900 space-y-1.5">
+                                    <div className="pt-2 border-t border-slate-200 dark:border-neutral-800 space-y-1.5">
                                       <div className="flex items-center justify-between">
-                                        <span className="text-cyan-400 font-bold uppercase tracking-wider text-[10px]">C++ 17/20 Implementation:</span>
+                                        <span className="text-blue-600 dark:text-blue-400 font-bold uppercase tracking-wider text-[10px]">C++ 17/20 Implementation:</span>
                                         <span className="text-slate-500 text-[10px] font-mono">#include &lt;cmath&gt;</span>
                                       </div>
-                                      <pre className="bg-[#090b10] border border-slate-800/80 rounded-lg p-3 text-[11px] font-mono text-cyan-300 overflow-x-auto leading-relaxed whitespace-pre-wrap">
+                                      <pre className="bg-slate-900 border border-slate-800 rounded-lg p-3 text-[11px] font-mono text-cyan-300 overflow-x-auto leading-relaxed whitespace-pre-wrap">
 {`#include <iostream>
 #include <cmath>
 #include <iomanip>
@@ -442,12 +442,12 @@ int main() {
                                       </pre>
                                     </div>
 
-                                    <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-900">
+                                    <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-200 dark:border-neutral-800">
                                       <a
                                         href="/algorithms-and-flowcharts/problem-7-quadratic-equation-roots/"
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="text-[#04AA6D] hover:underline font-bold text-xs flex items-center gap-1"
+                                        className="text-blue-600 dark:text-blue-400 hover:underline font-bold text-xs flex items-center gap-1"
                                       >
                                         <span>Open Dedicated Problem 7 Page (Interactive Studio) →</span>
                                       </a>
@@ -455,7 +455,7 @@ int main() {
                                         href="/algorithms-and-flowcharts-10-master-problems.html#problem-7"
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="text-slate-400 hover:text-white font-medium text-xs"
+                                        className="text-slate-500 hover:text-black dark:hover:text-white font-medium text-xs"
                                       >
                                         View on Master Hub (#problem-7)
                                       </a>
@@ -476,20 +476,20 @@ int main() {
         </section>
 
         {/* ── Prominent "Back to Semester List" Navigation Button at Bottom ── */}
-        <div className="pt-4 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-slate-800">
+        <div className="pt-4 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-slate-200 dark:border-neutral-800">
           <Link
             href={`/bca/semester-${currentSemester.id}`}
-            className="w-full sm:w-auto px-6 py-3.5 rounded-2xl bg-[#0c1328] hover:bg-[#101b38] text-white font-extrabold text-xs sm:text-sm border border-[#04AA6D]/50 hover:border-[#04AA6D] shadow-xl shadow-cyan-950/40 transition-all transform active:scale-95 cursor-pointer flex items-center justify-center gap-2 group"
+            className="w-full sm:w-auto px-6 py-3.5 rounded-2xl bg-white hover:bg-slate-50 dark:bg-neutral-900 dark:hover:bg-neutral-800 text-black dark:text-white font-extrabold text-xs sm:text-sm border border-slate-200 hover:border-blue-600 dark:border-neutral-800 dark:hover:border-blue-500 shadow-sm transition-all active:scale-95 cursor-pointer flex items-center justify-center gap-2 group"
           >
-            <ArrowLeft className="w-4 h-4 text-cyan-400 group-hover:-translate-x-1 transition-transform" />
-            <span>Return to IGNOU BCA {currentSemester.name} Hub</span>
+            <ArrowLeft className="w-4 h-4 text-blue-600 dark:text-blue-400 group-hover:-translate-x-1 transition-transform" />
+            <span>Return to {currentSemester.name} Hub</span>
           </Link>
 
           <Link
             href="/bca"
-            className="w-full sm:w-auto px-6 py-3.5 rounded-2xl bg-gradient-to-r from-cyan-600 to-indigo-600 hover:from-cyan-500 hover:to-indigo-500 text-white font-extrabold text-xs sm:text-sm shadow-xl shadow-cyan-600/20 border border-cyan-400/30 transition-all active:scale-95 cursor-pointer flex items-center justify-center gap-2"
+            className="w-full sm:w-auto px-6 py-3.5 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs sm:text-sm shadow-sm transition-all active:scale-95 cursor-pointer flex items-center justify-center gap-2"
           >
-            <BookOpen className="w-4 h-4 text-cyan-300" />
+            <BookOpen className="w-4 h-4" />
             <span>View All Semesters List</span>
           </Link>
         </div>
@@ -504,7 +504,7 @@ int main() {
         />
       )}
 
-      <footer className="w-full py-6 text-center text-[10px] text-slate-500 border-t border-slate-800/80 mt-auto">
+      <footer className="w-full py-6 text-center text-[10px] text-slate-500 dark:text-slate-400 border-t border-slate-200 dark:border-neutral-800 mt-auto">
         © 2026 Nextsem Academy · IGNOU BCA Revised Syllabus Companion
       </footer>
     </div>
