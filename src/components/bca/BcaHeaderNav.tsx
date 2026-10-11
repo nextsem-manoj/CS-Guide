@@ -43,7 +43,8 @@ export default function BcaHeaderNav({
     signIn, 
     signInAsGuest, 
     signOut, 
-    openProfileDashboard 
+    openProfileDashboard,
+    openAuthModal 
   } = useStudentProgress();
 
   useEffect(() => {
@@ -180,7 +181,7 @@ export default function BcaHeaderNav({
                 <span>Guest</span>
               </button>
               <button
-                onClick={signIn}
+                onClick={openAuthModal}
                 className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-black text-xs transition-all active:scale-95 shadow-sm cursor-pointer"
               >
                 <LogIn size={13} />

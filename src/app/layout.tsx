@@ -12,6 +12,7 @@ import SplashScreen from "@/components/SplashScreen";
 import GlobalNavigationWidget from "@/components/layout/GlobalNavigationWidget";
 import BottomNavigation from "@/components/layout/BottomNavigation";
 import SearchWidget from "@/components/SearchWidget";
+import GoogleOneTapPrompt from "@/components/auth/GoogleOneTapPrompt";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -173,6 +174,7 @@ export default function RootLayout({
 
                 <SearchWidget />
                 <BottomNavigation />
+                <GoogleOneTapPrompt />
               </StudentProgressProvider>
             </GamificationProvider>
           </ProgressProvider>

@@ -116,8 +116,11 @@ export default function InAppAuthModal({ isOpen, onClose, defaultTab = "login" }
     setIsSubmitting(true);
     try {
       await signIn();
+      onClose();
     } catch (err: any) {
-      setErrorMsg("Google Sign-In failed: " + (err?.message || err));
+      if (err?.code !== "auth/popup-closed-by-user") {
+        setErrorMsg("Google Sign-In failed: " + (err?.message || err));
+      }
       setIsSubmitting(false);
     }
   };

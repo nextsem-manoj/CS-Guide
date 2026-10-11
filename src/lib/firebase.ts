@@ -2,6 +2,7 @@ import { initializeApp, getApps, getApp } from "firebase/app";
 import { 
   getAuth, 
   GoogleAuthProvider, 
+  signInWithPopup,
   signInWithRedirect, 
   getRedirectResult,
   signInWithCredential,
@@ -30,13 +31,12 @@ googleProvider.setCustomParameters({
 });
 const db = getFirestore(app);
 
-// In-app Google Authentication without opening popup windows
+// In-app Google Authentication with seamless popup & redirect fallback
 async function signInWithGoogle() {
   if (Capacitor.isNativePlatform()) {
     const { GoogleAuth } = await import("@codetrix-studio/capacitor-google-auth");
     
     GoogleAuth.initialize({
-      clientId: '498697546118-web.apps.googleusercontent.com',
       scopes: ['profile', 'email'],
       grantOfflineAccess: true,
     });
@@ -45,8 +45,17 @@ async function signInWithGoogle() {
     const credential = GoogleAuthProvider.credential(googleUser.authentication.idToken);
     return signInWithCredential(auth, credential);
   } else {
-    // In-page redirect prevents popup windows and popup-blocker issues
-    return signInWithRedirect(auth, googleProvider);
+    // Try signInWithPopup first (fast, avoids cross-origin storage partitioning issues on modern browsers)
+    try {
+      return await signInWithPopup(auth, googleProvider);
+    } catch (popupErr: any) {
+      // If popup was explicitly blocked by the browser, fallback to redirect
+      if (popupErr?.code === "auth/popup-blocked" || popupErr?.code === "auth/cancelled-popup-request") {
+        console.warn("Popup blocked by browser, falling back to signInWithRedirect");
+        return await signInWithRedirect(auth, googleProvider);
+      }
+      throw popupErr;
+    }
   }
 }
 
@@ -54,8 +63,12 @@ export {
   app, 
   auth, 
   googleProvider, 
+  GoogleAuthProvider,
   db, 
   signInWithGoogle,
+  signInWithPopup,
+  signInWithRedirect,
+  signInWithCredential,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   updateProfile,
