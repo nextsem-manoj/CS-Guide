@@ -11,7 +11,6 @@ import {
   Mail, User
 } from "lucide-react";
 import BcaHeaderNav from "@/components/bca/BcaHeaderNav";
-import TaskBasedCodingLab from "@/components/TaskBasedCodingLab";
 import { PracticalLesson, PRACTICAL_LESSONS } from "@/data/bcaPracticalData";
 import { useStudentProgress } from "@/context/StudentProgressContext";
 import { verifyStudentGitHubCode, GitHubCodeCheckResult, parseGitHubUrl } from "@/lib/githubCodeVerifier";
@@ -52,9 +51,11 @@ export default function BcaPracticalLessonClient({ lesson }: Props) {
   const [copiedGit, setCopiedGit] = useState<boolean>(false);
   const [showBugSolution, setShowBugSolution] = useState<boolean>(false);
 
-  // Task Lab Completion State
-  const [codingLabPassed, setCodingLabPassed] = useState<boolean>(false);
-  const [codingLabCompletedCount, setCodingLabCompletedCount] = useState<number>(0);
+  // Local VS Code Checklist & Copy States
+  const [vsCodeTasksChecked, setVsCodeTasksChecked] = useState<Record<string, boolean>>({});
+  const [copiedStarterCode, setCopiedStarterCode] = useState<boolean>(false);
+  const [copiedVsCodeCmd, setCopiedVsCodeCmd] = useState<boolean>(false);
+  const [copiedSnippetId, setCopiedSnippetId] = useState<string | null>(null);
 
   // Viva check state
   const [selectedVivaOption, setSelectedVivaOption] = useState<number | null>(null);
@@ -78,47 +79,63 @@ export default function BcaPracticalLessonClient({ lesson }: Props) {
   const prevLesson = PRACTICAL_LESSONS.find(l => l.day === lesson.day - 1);
   const nextLesson = PRACTICAL_LESSONS.find(l => l.day === lesson.day + 1);
 
-  // Initialize saved coding lab & existing repo state
+  // Initialize saved existing repo state
   useEffect(() => {
     if (existingGhUrl) {
       setGithubUrlInput(existingGhUrl);
     }
   }, [existingGhUrl]);
 
+  // Load saved VS Code task checkboxes for student local tracking
   useEffect(() => {
     if (typeof window !== "undefined") {
       try {
-        const savedDone = localStorage.getItem(`nextsem_task_lab_done_bca_practical_day_${lesson.day}`);
-        if (savedDone) {
-          const parsed: string[] = JSON.parse(savedDone);
-          setCodingLabCompletedCount(parsed.length);
-          setCodingLabPassed(parsed.length === lesson.practicalLab.tasks.length && lesson.practicalLab.tasks.length > 0);
+        const savedTasks = localStorage.getItem(`nextsem_vscode_tasks_bca_practical_day_${lesson.day}`);
+        if (savedTasks) {
+          setVsCodeTasksChecked(JSON.parse(savedTasks));
         }
       } catch (e) {
-        console.error("Failed to check saved lab progress", e);
+        console.error("Failed to check saved vs code tasks", e);
       }
     }
-  }, [lesson.day, lesson.practicalLab.tasks.length]);
+  }, [lesson.day]);
+
+  const toggleVsCodeTask = (taskId: string) => {
+    setVsCodeTasksChecked(prev => {
+      const next = { ...prev, [taskId]: !prev[taskId] };
+      try {
+        localStorage.setItem(`nextsem_vscode_tasks_bca_practical_day_${lesson.day}`, JSON.stringify(next));
+      } catch (e) {}
+      return next;
+    });
+  };
 
   // If already completed in the past, auto-grant step checks
   useEffect(() => {
     if (isCompleted) {
       setVivaPassed(true);
       setIsVivaSubmitted(true);
-      setCodingLabPassed(true);
-      setCodingLabCompletedCount(lesson.practicalLab.tasks.length);
     }
-  }, [isCompleted, lesson.practicalLab.tasks.length]);
+  }, [isCompleted]);
 
-  const handleCopyCode = (text: string, type: "demo" | "git") => {
+  const handleCopyCode = (text: string, type: "demo" | "git" | "starter" | "cmd" | "snippet", snippetId?: string) => {
     if (navigator.clipboard) {
       navigator.clipboard.writeText(text);
       if (type === "demo") {
         setCopiedCode(true);
         setTimeout(() => setCopiedCode(false), 2000);
-      } else {
+      } else if (type === "git") {
         setCopiedGit(true);
         setTimeout(() => setCopiedGit(false), 2000);
+      } else if (type === "starter") {
+        setCopiedStarterCode(true);
+        setTimeout(() => setCopiedStarterCode(false), 2000);
+      } else if (type === "cmd") {
+        setCopiedVsCodeCmd(true);
+        setTimeout(() => setCopiedVsCodeCmd(false), 2000);
+      } else if (type === "snippet" && snippetId) {
+        setCopiedSnippetId(snippetId);
+        setTimeout(() => setCopiedSnippetId(null), 2000);
       }
     }
   };
@@ -134,7 +151,7 @@ export default function BcaPracticalLessonClient({ lesson }: Props) {
     return parseGitHubUrl(url).isValid;
   };
 
-  const isAllStepsCompleted = Boolean(user && codingLabPassed && vivaPassed && isGitHubUrlValid(githubUrlInput));
+  const isAllStepsCompleted = Boolean(user && vivaPassed && isGitHubUrlValid(githubUrlInput));
 
   const handleGitHubVerifyAndComplete = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
@@ -150,16 +167,7 @@ export default function BcaPracticalLessonClient({ lesson }: Props) {
       return;
     }
 
-    // Step 2: Coding Lab check
-    if (!codingLabPassed) {
-      setGithubFeedback({
-        status: "error",
-        message: `Incomplete Steps: You must complete and pass all tasks in Step 4: Task-Based Coding Lab (${codingLabCompletedCount}/${lesson.practicalLab.tasks.length} passed).`
-      });
-      return;
-    }
-
-    // Step 3: Viva Check
+    // Step 2: Viva Check
     if (!vivaPassed) {
       setGithubFeedback({
         status: "error",
@@ -515,13 +523,18 @@ export default function BcaPracticalLessonClient({ lesson }: Props) {
                   {/* Google Sign-In */}
                   <button
                     type="button"
-                    onClick={() => {
+                    onClick={async () => {
                       setGateError(null);
                       setGateSubmitting(true);
-                      setTimeout(() => {
-                        signInDirectlyAsStudent("bca2026", "bca2026.nextsem@gmail.com");
+                      try {
+                        await signIn();
+                      } catch (err: any) {
+                        if (err?.code !== "auth/popup-closed-by-user") {
+                          setGateError("Google sign-in could not be completed. Please try again.");
+                        }
+                      } finally {
                         setGateSubmitting(false);
-                      }, 400);
+                      }
                     }}
                     disabled={gateSubmitting}
                     className="flex-1 sm:flex-none px-3.5 py-2 rounded-xl bg-white dark:bg-neutral-950 hover:bg-slate-100 dark:hover:bg-neutral-800 border border-slate-200 dark:border-neutral-800 text-black dark:text-white font-bold text-xs flex items-center justify-center gap-2 transition-all cursor-pointer active:scale-95 disabled:opacity-60"
@@ -641,6 +654,17 @@ export default function BcaPracticalLessonClient({ lesson }: Props) {
     );
   }
 
+  const padDay = lesson.day < 10 ? `0${lesson.day}` : `${lesson.day}`;
+  const targetFolder = `bca-day-${padDay}`;
+  const primaryFile = lesson.practicalLab.language === "html" 
+    ? "index.html" 
+    : lesson.practicalLab.language === "css" 
+    ? "style.css" 
+    : lesson.practicalLab.language === "c" 
+    ? "main.c" 
+    : "script.js";
+  const vsCodeTerminalCommand = `mkdir ${targetFolder}\ncd ${targetFolder}\ncode .`;
+
   return (
     <div className="min-h-screen bg-white dark:bg-black text-black dark:text-white flex flex-col font-sans pb-24 transition-colors">
       {/* Top Header */}
@@ -752,7 +776,7 @@ export default function BcaPracticalLessonClient({ lesson }: Props) {
             <span>2. Demo Code</span>
           </div>
           <div className="p-2 rounded-xl bg-slate-50 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 text-black dark:text-white">
-            <span>3. Code Lab</span>
+            <span>3. VS Code Lab</span>
           </div>
           <div className="p-2 rounded-xl bg-slate-50 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 text-black dark:text-white">
             <span>4. Debugging</span>
@@ -839,41 +863,196 @@ export default function BcaPracticalLessonClient({ lesson }: Props) {
           </div>
         </section>
 
-        {/* STEP 4: In-Browser Student Coding Lab */}
-        <section id="coding-lab" className="mb-8 scroll-mt-20">
-          <div className="mb-3">
-            <div className="flex items-center justify-between gap-2 mb-1">
-              <h2 className="text-base font-black text-black dark:text-white flex items-center gap-2">
-                <span className="text-blue-600 dark:text-blue-400">💻</span>
-                <span>4. Student Practical Coding Lab (Write &amp; Run Code)</span>
-              </h2>
-              {codingLabPassed ? (
-                <span className="px-2.5 py-0.5 rounded-full bg-blue-50 dark:bg-neutral-900 border border-blue-200 dark:border-neutral-800 text-blue-600 dark:text-blue-400 text-[11px] font-black flex items-center gap-1">
-                  <CheckCircle2 size={12} /> All Tasks Passed
+        {/* STEP 4: Hands-On VS Code Practical Lab */}
+        <section id="vscode-lab" className="rounded-2xl bg-white dark:bg-neutral-950 border border-slate-200 dark:border-neutral-800 p-5 sm:p-7 mb-8 shadow-sm scroll-mt-20">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5 border-b border-slate-200 dark:border-neutral-800 pb-4">
+            <div>
+              <div className="flex items-center gap-2 mb-1">
+                <span className="p-2 rounded-xl bg-blue-50 dark:bg-neutral-900 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-neutral-800">
+                  <Code2 size={18} />
                 </span>
-              ) : (
-                <span className="px-2.5 py-0.5 rounded-full bg-slate-100 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 text-slate-500 text-[11px] font-bold">
-                  {codingLabCompletedCount} of {lesson.practicalLab.tasks.length} Tasks Passed
-                </span>
-              )}
+                <h2 className="text-base sm:text-lg font-black text-black dark:text-white">
+                  4. Hands-On Practical Lab: Follow Instructions in VS Code
+                </h2>
+              </div>
+              <p className="text-xs text-slate-600 dark:text-slate-400">
+                Code like a professional software engineer! Follow the step-by-step instructions below in <strong className="text-black dark:text-white font-bold">Visual Studio Code (VS Code)</strong> on your PC, test your output locally, and push to GitHub.
+              </p>
             </div>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-              Code your solution directly in the browser editor below and click <strong className="text-black dark:text-white">Run &amp; Verify Tasks</strong>. All tasks must pass to complete this day.
-            </p>
+
+            <div className="flex items-center gap-2 shrink-0">
+              <span className="px-3 py-1 rounded-xl bg-blue-50 dark:bg-neutral-900 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-neutral-800 text-xs font-black">
+                {lesson.practicalLab.tasks.length} Coding Tasks
+              </span>
+            </div>
           </div>
 
-          <TaskBasedCodingLab
-            labId={`bca_practical_day_${lesson.day}`}
-            labTitle={lesson.practicalLab.labTitle}
-            labDescription={lesson.practicalLab.labDescription}
-            language={lesson.practicalLab.language}
-            initialCode={lesson.practicalLab.initialCode}
-            tasks={lesson.practicalLab.tasks}
-            onTasksCompletedChange={(completedIds, allPassed) => {
-              setCodingLabCompletedCount(completedIds.length);
-              setCodingLabPassed(allPassed);
-            }}
-          />
+          <div className="space-y-6">
+            {/* Guide Step 1: Open VS Code */}
+            <div className="rounded-xl border border-slate-200 dark:border-neutral-800 bg-slate-50 dark:bg-neutral-900/60 p-4">
+              <div className="flex items-center justify-between gap-2 mb-2">
+                <div className="flex items-center gap-2 font-bold text-xs sm:text-sm text-black dark:text-white">
+                  <span className="w-5 h-5 rounded-full bg-blue-600 text-white text-[11px] font-black flex items-center justify-center shrink-0">1</span>
+                  <span>Create Project Folder &amp; Open in VS Code</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => handleCopyCode(vsCodeTerminalCommand, "cmd")}
+                  className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white dark:bg-black hover:bg-slate-100 dark:hover:bg-neutral-800 border border-slate-200 dark:border-neutral-800 text-[11px] font-bold text-slate-700 dark:text-slate-300 transition-all cursor-pointer"
+                >
+                  {copiedVsCodeCmd ? <Check size={12} className="text-blue-600 dark:text-blue-400" /> : <Copy size={12} />}
+                  <span>{copiedVsCodeCmd ? "Copied!" : "Copy Command"}</span>
+                </button>
+              </div>
+              <p className="text-xs text-slate-600 dark:text-slate-400 mb-2">
+                Open <strong className="text-black dark:text-white">⊞ Windows Terminal</strong> or Command Prompt on your PC and run:
+              </p>
+              <div className="rounded-lg bg-neutral-950 p-3 font-mono text-xs text-blue-400 overflow-x-auto border border-neutral-800">
+                <code>{vsCodeTerminalCommand}</code>
+              </div>
+              <p className="text-[11px] text-slate-500 mt-1.5">
+                💡 Tip: The command <code className="text-blue-600 dark:text-blue-400 bg-white dark:bg-black px-1.5 py-0.5 rounded border border-slate-200 dark:border-neutral-800">code .</code> immediately opens the new project folder inside Visual Studio Code.
+              </p>
+            </div>
+
+            {/* Guide Step 2: Create Solution File & Starter Template */}
+            <div className="rounded-xl border border-slate-200 dark:border-neutral-800 bg-slate-50 dark:bg-neutral-900/60 p-4">
+              <div className="flex items-center justify-between gap-2 mb-2">
+                <div className="flex items-center gap-2 font-bold text-xs sm:text-sm text-black dark:text-white">
+                  <span className="w-5 h-5 rounded-full bg-blue-600 text-white text-[11px] font-black flex items-center justify-center shrink-0">2</span>
+                  <span>Create <code className="text-blue-600 dark:text-blue-400 font-mono">{primaryFile}</code> &amp; Paste Starter Template</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => handleCopyCode(lesson.practicalLab.initialCode, "starter")}
+                  className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white dark:bg-black hover:bg-slate-100 dark:hover:bg-neutral-800 border border-slate-200 dark:border-neutral-800 text-[11px] font-bold text-slate-700 dark:text-slate-300 transition-all cursor-pointer"
+                >
+                  {copiedStarterCode ? <Check size={12} className="text-blue-600 dark:text-blue-400" /> : <Copy size={12} />}
+                  <span>{copiedStarterCode ? "Copied!" : "Copy Starter Code"}</span>
+                </button>
+              </div>
+              <p className="text-xs text-slate-600 dark:text-slate-400 mb-2">
+                In VS Code Explorer (<code className="text-slate-700 dark:text-slate-300">Ctrl + Shift + E</code>), click <strong>New File</strong>, name it <code className="text-blue-600 dark:text-blue-400 font-mono font-bold">{primaryFile}</code>, and paste this base template:
+              </p>
+              <div className="rounded-xl overflow-hidden border border-slate-200 dark:border-neutral-800 bg-neutral-900">
+                <div className="flex items-center justify-between px-3 py-1.5 bg-neutral-950 border-b border-neutral-800 text-[11px] font-mono text-slate-400">
+                  <span className="text-white font-bold">{primaryFile}</span>
+                  <span className="uppercase text-blue-400 font-bold">{lesson.practicalLab.language}</span>
+                </div>
+                <pre className="p-3.5 overflow-x-auto text-xs font-mono text-white leading-relaxed">
+                  <code>{lesson.practicalLab.initialCode}</code>
+                </pre>
+              </div>
+            </div>
+
+            {/* Guide Step 3: Implement Tasks Specifications (Checklist) */}
+            <div>
+              <div className="flex items-center justify-between gap-2 mb-3">
+                <div className="flex items-center gap-2 font-bold text-xs sm:text-sm text-black dark:text-white">
+                  <span className="w-5 h-5 rounded-full bg-blue-600 text-white text-[11px] font-black flex items-center justify-center shrink-0">3</span>
+                  <span>Implement Practical Tasks in VS Code (Checklist)</span>
+                </div>
+                <span className="text-[11px] text-slate-500 font-mono">
+                  {Object.values(vsCodeTasksChecked).filter(Boolean).length} / {lesson.practicalLab.tasks.length} Checked
+                </span>
+              </div>
+
+              <div className="space-y-3">
+                {lesson.practicalLab.tasks.map((task, idx) => {
+                  const isChecked = Boolean(vsCodeTasksChecked[task.id]);
+                  return (
+                    <div 
+                      key={task.id}
+                      className={`p-4 rounded-xl border transition-all ${
+                        isChecked
+                          ? "bg-blue-50/50 dark:bg-neutral-900 border-blue-600/40"
+                          : "bg-white dark:bg-neutral-950 border-slate-200 dark:border-neutral-800"
+                      }`}
+                    >
+                      <div className="flex items-start gap-3">
+                        <button
+                          type="button"
+                          onClick={() => toggleVsCodeTask(task.id)}
+                          className="mt-0.5 text-blue-600 dark:text-blue-400 cursor-pointer shrink-0 hover:scale-110 transition-transform"
+                          title={isChecked ? "Mark incomplete" : "Mark done in VS Code"}
+                        >
+                          {isChecked ? <CheckCircle2 size={18} className="fill-blue-600 text-white dark:text-black" /> : <Circle size={18} />}
+                        </button>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex flex-wrap items-center gap-2 mb-1">
+                            <span className="px-2 py-0.5 rounded text-[10px] font-black bg-blue-50 dark:bg-neutral-900 border border-blue-200 dark:border-neutral-800 text-blue-600 dark:text-blue-400 uppercase">
+                              Task {idx + 1}
+                            </span>
+                            <h4 className={`text-xs sm:text-sm font-black text-black dark:text-white ${isChecked ? "line-through text-slate-500 dark:text-slate-400" : ""}`}>
+                              {task.title}
+                            </h4>
+                          </div>
+                          <p className="text-xs text-slate-700 dark:text-slate-300 mb-2 leading-relaxed">
+                            {task.instruction}
+                          </p>
+
+                          {task.hint && (
+                            <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 text-[11px] text-slate-700 dark:text-slate-300 flex items-start justify-between gap-2">
+                              <div className="flex items-start gap-1.5">
+                                <Lightbulb size={13} className="text-blue-600 dark:text-blue-400 shrink-0 mt-0.5" />
+                                <div>
+                                  <strong className="text-black dark:text-white">Syntax / Hint: </strong>
+                                  <code className="font-mono text-blue-600 dark:text-blue-400">{task.hint}</code>
+                                </div>
+                              </div>
+                              <button
+                                type="button"
+                                onClick={() => handleCopyCode(task.hint, "snippet", task.id)}
+                                className="text-slate-500 hover:text-blue-600 text-[10px] font-bold shrink-0 flex items-center gap-1 cursor-pointer"
+                                title="Copy hint snippet"
+                              >
+                                {copiedSnippetId === task.id ? <Check size={11} className="text-blue-600" /> : <Copy size={11} />}
+                                <span>{copiedSnippetId === task.id ? "Copied" : "Copy"}</span>
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Guide Step 4: Preview & Local Testing */}
+            <div className="rounded-xl border border-slate-200 dark:border-neutral-800 bg-slate-50 dark:bg-neutral-900/60 p-4">
+              <div className="flex items-center gap-2 font-bold text-xs sm:text-sm text-black dark:text-white mb-2">
+                <span className="w-5 h-5 rounded-full bg-blue-600 text-white text-[11px] font-black flex items-center justify-center shrink-0">4</span>
+                <span>Test &amp; Preview Locally on Your PC</span>
+              </div>
+              <ul className="space-y-1.5 text-xs text-slate-700 dark:text-slate-300 list-disc list-inside">
+                {lesson.practicalLab.language === "html" || lesson.practicalLab.language === "css" || lesson.practicalLab.language === "javascript" ? (
+                  <>
+                    <li>Right-click <code className="text-blue-600 dark:text-blue-400 font-mono font-bold">{primaryFile}</code> in VS Code and select <strong className="text-black dark:text-white">"Open with Live Server"</strong>.</li>
+                    <li>Alternatively, open File Explorer, navigate to <code className="text-slate-600 dark:text-slate-400">{targetFolder}</code>, and double-click <code className="text-blue-600 dark:text-blue-400 font-mono font-bold">{primaryFile}</code> to view in Google Chrome or Edge.</li>
+                    <li>Verify all elements and styles look correct in the browser before pushing!</li>
+                  </>
+                ) : (
+                  <>
+                    <li>In VS Code, press <code className="text-slate-700 dark:text-slate-300 font-bold">Ctrl + ~</code> to open the integrated terminal.</li>
+                    <li>Compile your code with gcc: <code className="text-blue-600 dark:text-blue-400 font-mono font-bold">gcc {primaryFile} -o app</code></li>
+                    <li>Run the binary: <code className="text-blue-600 dark:text-blue-400 font-mono font-bold">./app</code> (or <code className="text-blue-600 dark:text-blue-400 font-mono font-bold">app.exe</code> on Windows) to verify output.</li>
+                  </>
+                )}
+              </ul>
+            </div>
+
+            {/* Guide Step 5: Ready to push bridge */}
+            <div className="p-4 rounded-xl bg-blue-50 dark:bg-neutral-900 border border-blue-200 dark:border-neutral-800 flex items-start gap-3">
+              <Sparkles size={18} className="text-blue-600 dark:text-blue-400 shrink-0 mt-0.5" />
+              <div className="text-xs text-slate-700 dark:text-slate-300">
+                <strong className="text-black dark:text-white block mb-0.5">Code Complete in VS Code? Next Step:</strong>
+                <span>
+                  After implementing and verifying your code in VS Code, proceed to <strong className="text-black dark:text-white">Step 7 (Viva Check)</strong> and then execute the Git commands in <strong className="text-black dark:text-white">Step 8</strong> to push your project to GitHub. Once pushed, enter your repo link for automated live evaluation!
+                </span>
+              </div>
+            </div>
+          </div>
         </section>
 
         {/* STEP 5: Debugging Challenge */}
@@ -1074,21 +1253,15 @@ export default function BcaPracticalLessonClient({ lesson }: Props) {
                   </span>
                 </div>
 
-                {/* 2. Coding Lab Tasks */}
+                {/* 2. VS Code Practical Tasks */}
                 <div className="p-2.5 rounded-xl bg-white dark:bg-black border border-slate-200 dark:border-neutral-800 flex items-center justify-between">
                   <div className="flex items-center gap-2 min-w-0">
-                    <Code2 size={14} className={codingLabPassed ? "text-blue-600 dark:text-blue-400 shrink-0" : "text-slate-400 shrink-0"} />
-                    <span className="truncate">Step 4 Coding Lab</span>
+                    <Code2 size={14} className="text-blue-600 dark:text-blue-400 shrink-0" />
+                    <span className="truncate">VS Code Implementation</span>
                   </div>
-                  {codingLabPassed ? (
-                    <span className="text-[11px] font-bold text-blue-600 dark:text-blue-400 shrink-0">
-                      ✔ All Tasks Passed
-                    </span>
-                  ) : (
-                    <a href="#coding-lab" className="text-[11px] font-bold text-slate-500 hover:text-blue-600 underline shrink-0">
-                      {codingLabCompletedCount}/{lesson.practicalLab.tasks.length} Done (Fix)
-                    </a>
-                  )}
+                  <a href="#vscode-lab" className="text-[11px] font-bold text-blue-600 dark:text-blue-400 hover:underline shrink-0">
+                    ✔ Ready in VS Code
+                  </a>
                 </div>
 
                 {/* 3. Viva Check */}
@@ -1151,9 +1324,7 @@ export default function BcaPracticalLessonClient({ lesson }: Props) {
                     disabled={githubSubmitting || !isAllStepsCompleted}
                     className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-40 text-white font-black text-xs transition-all active:scale-95 shadow-md cursor-pointer shrink-0 flex items-center justify-center gap-2 disabled:cursor-not-allowed"
                     title={
-                      !codingLabPassed
-                        ? "Complete all Coding Lab tasks first"
-                        : !vivaPassed
+                      !vivaPassed
                         ? "Pass the Viva Check question first"
                         : !isGitHubUrlValid(githubUrlInput)
                         ? "Enter your own GitHub repository URL"
@@ -1163,12 +1334,12 @@ export default function BcaPracticalLessonClient({ lesson }: Props) {
                     <GitBranch size={14} />
                     <span>
                       {githubSubmitting
-                        ? "Verifying..."
+                        ? "Verifying on GitHub..."
                         : isCompleted
                         ? "Update GitHub Link"
                         : isAllStepsCompleted
                         ? "Verify & Unlock Next Lesson 🚀"
-                        : "Complete All Steps to Unlock 🔒"}
+                        : "Pass Viva & Add Repo to Unlock 🔒"}
                     </span>
                   </button>
                 </div>

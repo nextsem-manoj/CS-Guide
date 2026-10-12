@@ -224,9 +224,9 @@ export default function PracticalHowItWorksPage() {
 
             <div className="p-4 rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900/50 space-y-2">
               <div className="w-7 h-7 rounded-full bg-blue-600 text-white font-black text-xs flex items-center justify-center">2</div>
-              <h3 className="font-bold text-sm">Task-Based Coding Lab</h3>
+              <h3 className="font-bold text-sm">Real VS Code Implementation</h3>
               <p className="text-xs text-slate-600 dark:text-slate-400">
-                You must type code directly into the in-app interactive compiler and satisfy all test assertions (<code>codingLabPassed === true</code>).
+                Follow guided specifications in Visual Studio Code on your PC (<code>code .</code>), test locally, and build production-grade code.
               </p>
             </div>
 

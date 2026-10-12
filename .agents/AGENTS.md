@@ -39,10 +39,10 @@
 - **BCA Practical Mandatory Google Login & GitHub Completion Enforcement Standard (PERMANENT RULE)**:
   1. **Google Login Mandatory for Access**: Students CANNOT access, view, or practice daily practical lessons (`/bca/practical/[daySlug]`) without signing in via Google authentication. If unauthenticated, render a dedicated Google Sign-In Gate with clickable breadcrumbs (`🏠 Home ❯ BCA Hub ❯ Practical Portal ❯ Day X`), clear explanation of why login is mandatory, and a direct Google Sign-In button.
   2. **Strict Lesson Completion Prerequisites**: A practical day lesson CANNOT be marked complete or unlock subsequent days unless all four conditions are met:
-     - User is authenticated with Google.
-     - 100% of Task-Based Coding Lab interactive tasks are verified and passed (`codingLabPassed === true`).
+     - User is authenticated with Google (or Student profile).
+     - The student implements code in Visual Studio Code (`code .`) following guided specifications on their PC, verified live from their pushed personal GitHub repository.
      - The Technical Viva Check is answered correctly (`vivaPassed === true`).
-     - The student submits a valid, non-placeholder personal GitHub repository URL (`https://github.com/<username>/<repo>`) where their real code is pushed. Reject generic placeholders (`your-username`, `example`, `octocat`, etc.).
+     - The student submits a valid, non-placeholder personal GitHub repository URL (`https://github.com/<username>/<repo>`) where their real code is pushed and verified to unlock the next lesson. Reject generic placeholders (`your-username`, `example`, `octocat`, etc.).
   3. **Strict Blue, Black & White Theme Standard**: All practical portal pages, lessons, gates, checklists, and modals must strictly use the Blue, Black, and White color palette (`#2563eb`, `#000000`, `#ffffff`) with dual Light Mode and Dark Mode support.
   4. **Attribution**: Always attribute curriculum and practical systems to **Er. Manoj Kumar**.
 - **Zero-Lag Instant Auth Hydration & 60fps Smooth Modal Standard (PERMANENT RULE)**:

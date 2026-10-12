@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useState, useCallback } from "react";
-import { X, CheckCircle2 } from "lucide-react";
+import React, { useState } from "react";
+import { usePathname } from "next/navigation";
+import { X, AlertCircle } from "lucide-react";
 import { useStudentProgress } from "@/context/StudentProgressContext";
 
 interface GoogleOneTapPromptProps {
@@ -12,47 +13,38 @@ interface GoogleOneTapPromptProps {
 }
 
 export default function GoogleOneTapPrompt({ embedded = false, onComplete }: GoogleOneTapPromptProps) {
+  const pathname = usePathname();
   const { 
     user, 
-    signInDirectlyAsStudent 
+    signIn 
   } = useStudentProgress();
 
   const [dismissed, setDismissed] = useState(false);
   const [isVerifying, setIsVerifying] = useState(false);
-  const [userEmail, setUserEmail] = useState(() => {
-    if (typeof window !== "undefined") {
-      try {
-        const saved = localStorage.getItem("nextsem_user");
-        if (saved) {
-          const parsed = JSON.parse(saved);
-          if (parsed?.email) return parsed.email;
-        }
-      } catch {}
-    }
-    return "nextsemorg@gmail.com";
-  });
-
-  // 100% In-Page 1-Click Login — ZERO POPUP WINDOWS & ZERO 401 ERRORS
-  const handleContinueWithGoogle = useCallback(() => {
-    setIsVerifying(true);
-
-    const email = userEmail.trim().toLowerCase() || "nextsemorg@gmail.com";
-    const name = email.split("@")[0] || "Student";
-
-    // Smooth in-page verification transition matching Google One Tap animation
-    setTimeout(() => {
-      signInDirectlyAsStudent(name, email);
-      if (onComplete) onComplete();
-      setIsVerifying(false);
-    }, 500);
-  }, [userEmail, signInDirectlyAsStudent, onComplete]);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   // If already authenticated or dismissed
-  if (user || (dismissed && !embedded)) return null;
+  // Also suppress the floating prompt on /bca/practical to avoid showing 2 duplicate prompts on the gate page
+  if (user) return null;
+  if (!embedded && (dismissed || pathname?.startsWith("/bca/practical"))) return null;
 
-  const emailInitial = (userEmail.trim().charAt(0) || "n").toLowerCase();
+  const handleContinueWithGoogle = async () => {
+    try {
+      setIsVerifying(true);
+      setErrorMessage(null);
+      await signIn();
+      if (onComplete) onComplete();
+    } catch (err: any) {
+      console.warn("Google sign-in status:", err);
+      if (err?.code !== "auth/popup-closed-by-user") {
+        setErrorMessage("Google sign-in could not be completed. Please try again.");
+      }
+    } finally {
+      setIsVerifying(false);
+    }
+  };
 
-  // The Exact Google One Tap Prompt Box
+  // The Clean Google Prompt Box (Only Continue with Google, no hardcoded emails)
   const promptContent = (
     <div 
       className={`rounded-2xl bg-[#1e1e1e] border border-[#333333] shadow-2xl p-5 text-white select-none transition-all duration-200 overflow-hidden ${
@@ -75,7 +67,7 @@ export default function GoogleOneTapPrompt({ embedded = false, onComplete }: Goo
 
           {isVerifying ? (
             <span className="text-sm font-medium text-white tracking-tight animate-pulse">
-              Verifying...
+              Connecting to Google...
             </span>
           ) : (
             <span className="text-xs sm:text-[13px] font-medium text-slate-200 truncate">
@@ -104,59 +96,37 @@ export default function GoogleOneTapPrompt({ embedded = false, onComplete }: Goo
         <div className="w-full h-px bg-[#2d2d2d] -mx-5 px-5 my-0.5" />
       )}
 
-      {/* State 1: Verifying (Matches Screenshot 2) */}
-      {isVerifying ? (
-        <div className="py-4 flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-[#1a73e8] text-white flex items-center justify-center font-bold text-base shadow-sm shrink-0">
-            {emailInitial}
+      {/* Action Body: Clean 'Continue with Google' */}
+      <div className="pt-3.5 space-y-3.5">
+        {errorMessage && (
+          <div className="p-2.5 rounded-xl bg-rose-950/60 border border-rose-800/60 text-rose-300 text-xs flex items-center gap-2">
+            <AlertCircle size={14} className="shrink-0" />
+            <span>{errorMessage}</span>
           </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-sm font-bold text-white truncate leading-tight">
-              {userEmail.split("@")[0]}
-            </p>
-            <p className="text-xs text-slate-400 truncate mt-0.5">
-              {userEmail}
-            </p>
-          </div>
-        </div>
-      ) : (
-        /* State 2: Ready to Continue (Matches Screenshot 1 with universal Google sign in) */
-        <div className="pt-3.5 space-y-3.5">
-          {/* Account Pill */}
-          <div className="flex items-center gap-3 py-1">
-            <div className="w-10 h-10 rounded-full bg-[#1a73e8] text-white flex items-center justify-center font-bold text-base shadow-sm shrink-0">
-              {emailInitial}
-            </div>
-            <div className="flex-1 min-w-0">
-              <input
-                type="email"
-                value={userEmail}
-                onChange={(e) => setUserEmail(e.target.value)}
-                placeholder="your-google-email@gmail.com"
-                className="w-full bg-transparent border-0 text-sm font-bold text-white focus:outline-none focus:ring-0 p-0 leading-tight"
-                title="Your Google Account Email"
-              />
-              <p className="text-xs text-slate-400 truncate mt-0.5">
-                Google Student Account
-              </p>
-            </div>
-          </div>
+        )}
 
-          {/* Big Blue Sign in with Google Button */}
-          <button
-            type="button"
-            onClick={handleContinueWithGoogle}
-            className="w-full py-2.5 px-4 rounded-full bg-[#1a73e8] hover:bg-[#1557b0] text-white font-medium text-xs sm:text-sm tracking-wide transition-all shadow-md active:scale-98 cursor-pointer flex items-center justify-center gap-2.5"
-          >
+        {/* Big Blue Sign in with Google Button */}
+        <button
+          type="button"
+          onClick={handleContinueWithGoogle}
+          disabled={isVerifying}
+          className="w-full py-2.5 px-4 rounded-full bg-[#1a73e8] hover:bg-[#1557b0] text-white font-medium text-xs sm:text-sm tracking-wide transition-all shadow-md active:scale-98 cursor-pointer flex items-center justify-center gap-2.5 disabled:opacity-60"
+        >
+          {isVerifying ? (
+            <>
+              <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+              <span>Connecting to Google...</span>
+            </>
+          ) : (
             <span>Continue with Google</span>
-          </button>
+          )}
+        </button>
 
-          {/* Google Disclaimer */}
-          <p className="text-[11px] text-slate-400 leading-normal">
-            To continue, google.com will share your name, email address and profile picture with this site. See this site&apos;s <a href="/privacy" className="text-blue-400 hover:underline">privacy policy</a>.
-          </p>
-        </div>
-      )}
+        {/* Google Disclaimer */}
+        <p className="text-[11px] text-slate-400 leading-normal">
+          To continue, google.com will share your name, email address and profile picture with this site. See this site&apos;s <a href="/privacy" className="text-blue-400 hover:underline">privacy policy</a>.
+        </p>
+      </div>
     </div>
   );
 
@@ -165,7 +135,7 @@ export default function GoogleOneTapPrompt({ embedded = false, onComplete }: Goo
     return <div className="w-full">{promptContent}</div>;
   }
 
-  // Floating One Tap prompt (fixed in top right corner just like GeeksforGeeks)
+  // Floating One Tap prompt (fixed in top right corner)
   return (
     <aside 
       aria-label="Google Sign-In Prompt"
