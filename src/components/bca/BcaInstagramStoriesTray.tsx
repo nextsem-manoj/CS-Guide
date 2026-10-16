@@ -154,9 +154,9 @@ export default function BcaInstagramStoriesTray() {
         <div className="flex items-center gap-2">
           <span className="w-2.5 h-2.5 rounded-full bg-rose-500 animate-pulse" />
           <h2 className="text-xs sm:text-sm font-extrabold uppercase tracking-wider text-black dark:text-white flex items-center gap-1.5">
-            <span>BCA Live Status & Stories</span>
-            <span className="text-[10px] font-bold px-1.5 py-0.2 rounded-full bg-rose-50 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400 border border-rose-200 dark:border-rose-900">
-              Instagram Style
+            <span>BCA Student Stories & Updates</span>
+            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-rose-50 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400 border border-rose-200 dark:border-rose-900">
+              Live
             </span>
           </h2>
         </div>

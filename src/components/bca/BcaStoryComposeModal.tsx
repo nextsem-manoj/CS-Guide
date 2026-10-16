@@ -69,7 +69,7 @@ export default function BcaStoryComposeModal({
                 Share Coding Status
               </h3>
               <p className="text-xs text-slate-500 dark:text-slate-400">
-                Post an Instagram-style story to the BCA Community
+                Share your practical milestone with the BCA Community
               </p>
             </div>
           </div>
