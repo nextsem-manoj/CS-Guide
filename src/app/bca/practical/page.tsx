@@ -17,13 +17,20 @@ export const metadata: Metadata = {
     "du bca practicals"
   ],
   alternates: {
-    canonical: "https://ignou-study-notes-by-nextsem.web.app/bca/practical"
+    canonical: "https://ignou-study-notes-by-nextsem.web.app/bca/practical/"
   },
   openGraph: {
     title: "BCA Practical Learning Portal | NextSem Academy",
     description: "Hands-on, job-oriented practical coding portal for BCA students. Foundation ➔ Specialization ➔ Projects ➔ GitHub ➔ Portfolio.",
-    url: "https://ignou-study-notes-by-nextsem.web.app/bca/practical",
+    url: "https://ignou-study-notes-by-nextsem.web.app/bca/practical/",
     type: "website"
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "BCA Practical Learning Portal | 3-Year Job-Oriented Training",
+    description: "Hands-on, job-oriented practical coding portal for BCA students. Foundation ➔ Specialization ➔ Projects ➔ GitHub ➔ Portfolio.",
+    images: ["https://nextsem.online/og-image.png"],
+    creator: "@nextsemacademy"
   }
 };
 

@@ -34,12 +34,13 @@ export default function BcaPracticalHubClient() {
 
   const [selectedSemester, setSelectedSemester] = useState<number>(1);
   const [sprintViewFilter, setSprintViewFilter] = useState<number | "all">(1);
-  const [dayFilter, setDayFilter] = useState<"all" | "1-5" | "6-10">("all");
+  const [dayFilter, setDayFilter] = useState<"all" | "1-10" | "11-20" | "21-30">("all");
   const [lockedModalDay, setLockedModalDay] = useState<number | null>(null);
 
   const filteredLessons = PRACTICAL_LESSONS.filter((lesson) => {
-    if (dayFilter === "1-5") return lesson.day <= 5;
-    if (dayFilter === "6-10") return lesson.day > 5 && lesson.day <= 10;
+    if (dayFilter === "1-10") return lesson.day <= 10;
+    if (dayFilter === "11-20") return lesson.day > 10 && lesson.day <= 20;
+    if (dayFilter === "21-30") return lesson.day > 20 && lesson.day <= 30;
     return true;
   });
 
@@ -94,7 +95,7 @@ export default function BcaPracticalHubClient() {
                     {user.name}
                   </button>
                   {isCloudSynced ? (
-                    <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-900">
+                    <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-50 dark:bg-neutral-900 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-neutral-800">
                       ☁️ Cloud Synced
                     </span>
                   ) : (
@@ -460,24 +461,30 @@ export default function BcaPracticalHubClient() {
             </div>
 
             {/* Filter Tabs */}
-            <div className="inline-flex rounded-xl bg-slate-100 dark:bg-neutral-900 p-1 border border-slate-200 dark:border-neutral-800 text-xs font-bold self-start sm:self-auto">
+            <div className="inline-flex flex-wrap rounded-xl bg-slate-100 dark:bg-neutral-900 p-1 border border-slate-200 dark:border-neutral-800 text-xs font-bold gap-1 self-start sm:self-auto">
               <button 
                 onClick={() => setDayFilter("all")}
                 className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${dayFilter === "all" ? "bg-white dark:bg-black text-black dark:text-white border border-slate-200 dark:border-neutral-700 shadow-sm" : "text-slate-600 dark:text-slate-400 hover:text-black dark:hover:text-white"}`}
               >
-                All Days (1–10)
+                All 30 Days
               </button>
               <button 
-                onClick={() => setDayFilter("1-5")}
-                className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${dayFilter === "1-5" ? "bg-white dark:bg-black text-black dark:text-white border border-slate-200 dark:border-neutral-700 shadow-sm" : "text-slate-600 dark:text-slate-400 hover:text-black dark:hover:text-white"}`}
+                onClick={() => setDayFilter("1-10")}
+                className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${dayFilter === "1-10" ? "bg-white dark:bg-black text-black dark:text-white border border-slate-200 dark:border-neutral-700 shadow-sm" : "text-slate-600 dark:text-slate-400 hover:text-black dark:hover:text-white"}`}
               >
-                Days 1–5
+                Days 1–10 (HTML)
               </button>
               <button 
-                onClick={() => setDayFilter("6-10")}
-                className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${dayFilter === "6-10" ? "bg-white dark:bg-black text-black dark:text-white border border-slate-200 dark:border-neutral-700 shadow-sm" : "text-slate-600 dark:text-slate-400 hover:text-black dark:hover:text-white"}`}
+                onClick={() => setDayFilter("11-20")}
+                className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${dayFilter === "11-20" ? "bg-white dark:bg-black text-black dark:text-white border border-slate-200 dark:border-neutral-700 shadow-sm" : "text-slate-600 dark:text-slate-400 hover:text-black dark:hover:text-white"}`}
               >
-                Days 6–10
+                Days 11–20 (CSS &amp; Grid)
+              </button>
+              <button 
+                onClick={() => setDayFilter("21-30")}
+                className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${dayFilter === "21-30" ? "bg-white dark:bg-black text-black dark:text-white border border-slate-200 dark:border-neutral-700 shadow-sm" : "text-slate-600 dark:text-slate-400 hover:text-black dark:hover:text-white"}`}
+              >
+                Days 21–30 (JavaScript)
               </button>
             </div>
           </div>

@@ -64,24 +64,26 @@ export default function BcaHeaderNav({
 
   return (
     <>
-      <header className="h-16 border-b border-slate-200 dark:border-neutral-800 bg-white/95 dark:bg-black/95 backdrop-blur-xl sticky top-0 z-40 flex items-center justify-between px-4 sm:px-6 select-none shadow-sm gap-2">
-        {/* Left: Always Visible Home Link & Practical Portal */}
-        <div className="flex items-center gap-2">
+      <header className="h-16 border-b border-slate-200 dark:border-neutral-800 bg-white/95 dark:bg-black/95 backdrop-blur-xl sticky top-0 z-40 flex items-center justify-between px-2.5 sm:px-6 select-none shadow-sm gap-1.5 sm:gap-3">
+        {/* Left: Home & Practical Portal Navigation */}
+        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
           <Link
             href="/"
-            className="flex items-center gap-2 text-slate-700 hover:text-black dark:text-slate-300 dark:hover:text-white font-black text-xs sm:text-sm bg-slate-100 hover:bg-slate-200 dark:bg-neutral-900 dark:hover:bg-neutral-800 border border-slate-200 dark:border-neutral-800 px-3.5 py-2 rounded-xl transition-all active:scale-95 shrink-0"
+            className="flex items-center justify-center gap-2 text-slate-700 hover:text-black dark:text-slate-300 dark:hover:text-white font-black text-xs sm:text-sm bg-slate-100 hover:bg-slate-200 dark:bg-neutral-900 dark:hover:bg-neutral-800 border border-slate-200 dark:border-neutral-800 w-9 h-9 sm:w-auto p-2 sm:px-3 sm:py-2 rounded-xl transition-all active:scale-95 shrink-0"
+            title="Home"
           >
-            <Home size={15} className="text-blue-600 dark:text-blue-400" />
+            <Home size={16} className="text-blue-600 dark:text-blue-400" />
             <span className="hidden sm:inline">Home</span>
           </Link>
 
           <Link
             href="/bca/practical"
-            className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs shadow-sm transition-all active:scale-95 shrink-0"
+            className="flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs shadow-sm transition-all active:scale-95 shrink-0"
             title="BCA Practical Learning Portal"
           >
-            <Sparkles size={14} />
-            <span>Practical Portal</span>
+            <Sparkles size={14} className="shrink-0" />
+            <span className="hidden sm:inline">Practical Portal</span>
+            <span className="sm:hidden text-[11px] font-black">Portal</span>
           </Link>
 
           <button
@@ -95,58 +97,70 @@ export default function BcaHeaderNav({
           </button>
         </div>
 
-        {/* Center: Subject Switcher Dropdown */}
-        <div className="relative">
+        {/* Center: Responsive Subject & Day Switcher */}
+        <div className="flex-1 min-w-0 max-w-[200px] xs:max-w-[250px] sm:max-w-xs md:max-w-sm lg:max-w-md mx-1 sm:mx-2">
           <button
             onClick={() => setDropdownOpen(!dropdownOpen)}
-            className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-neutral-900 dark:hover:bg-neutral-800 border border-slate-200 dark:border-neutral-800 text-black dark:text-white font-extrabold text-xs sm:text-sm shadow-sm transition-all active:scale-95 max-w-[220px] sm:max-w-xs truncate cursor-pointer"
+            className="flex items-center justify-between gap-1.5 px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-neutral-900 dark:hover:bg-neutral-800 border border-slate-200 dark:border-neutral-800 text-black dark:text-white text-xs sm:text-sm font-extrabold shadow-sm transition-all active:scale-95 w-full cursor-pointer"
+            title={`${currentSubjectCode}: ${currentSubjectName}`}
           >
-            <BookOpen size={15} className="text-blue-600 dark:text-blue-400 shrink-0" />
-            <span className="truncate">
-              {currentSubjectCode}: {currentSubjectName}
-            </span>
-            <ChevronDown size={14} className={`text-slate-500 shrink-0 transition-transform ${dropdownOpen ? 'rotate-180' : ''}`} />
+            <div className="flex items-center gap-1.5 min-w-0 truncate">
+              <BookOpen size={14} className="text-blue-600 dark:text-blue-400 shrink-0" />
+              <span className="truncate flex items-center gap-1">
+                {currentSubjectCode && (
+                  <span className="text-blue-600 dark:text-blue-400 font-black shrink-0">
+                    {currentSubjectCode}
+                  </span>
+                )}
+                {currentSubjectCode && currentSubjectName && (
+                  <span className="text-slate-400 dark:text-slate-600 shrink-0 hidden xs:inline">:</span>
+                )}
+                <span className="font-bold truncate">{currentSubjectName}</span>
+              </span>
+            </div>
+            <ChevronDown size={13} className={`text-slate-500 shrink-0 transition-transform ${dropdownOpen ? 'rotate-180' : ''}`} />
           </button>
         </div>
 
         {/* Right: Theme Toggle + Auth Status + Logo Badge */}
-        <div className="flex items-center gap-2">
-          {/* Light / Dark Mode Toggle */}
+        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+          {/* Light / Dark Mode Toggle Button */}
           {mounted && (
             <button
               onClick={toggleTheme}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-neutral-900 dark:hover:bg-neutral-800 border border-slate-200 dark:border-neutral-800 text-xs font-bold text-slate-800 dark:text-slate-200 transition-all cursor-pointer"
+              className="flex items-center justify-center gap-1.5 w-9 h-9 sm:w-auto sm:px-3 sm:py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-neutral-900 dark:hover:bg-neutral-800 border border-slate-200 dark:border-neutral-800 text-xs font-bold text-slate-800 dark:text-slate-200 transition-all cursor-pointer shrink-0"
               title={`Switch to ${currentTheme === 'dark' ? 'Light' : 'Dark'} Mode`}
             >
               {currentTheme === 'dark' ? (
                 <>
-                  <Sun size={14} className="text-blue-400" />
+                  <Sun size={15} className="text-blue-400" />
                   <span className="hidden sm:inline">Light</span>
                 </>
               ) : (
                 <>
-                  <Moon size={14} className="text-blue-600" />
+                  <Moon size={15} className="text-blue-600" />
                   <span className="hidden sm:inline">Dark</span>
                 </>
               )}
             </button>
           )}
 
+          {/* User Profile / Auth Button */}
           {user ? (
-            <div className="flex items-center gap-1.5 bg-slate-100 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 p-1 pl-1.5 rounded-xl">
+            <div className="flex items-center gap-1 sm:gap-1.5 bg-slate-100 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 p-1 sm:pl-1.5 rounded-xl shrink-0">
               <button
                 onClick={openProfileDashboard}
-                className="flex items-center gap-2 hover:opacity-85 transition-all cursor-pointer group text-left"
+                className="flex items-center gap-1.5 sm:gap-2 hover:opacity-85 transition-all cursor-pointer group text-left"
                 title="Click photo to open your Student Learning Dashboard"
               >
                 {user.isGuest ? (
-                  <div className="w-6 h-6 rounded-lg bg-slate-500 text-white flex items-center justify-center font-black text-[10px] shadow-sm">
+                  <div className="w-7 h-7 rounded-lg bg-slate-600 text-white flex items-center justify-center font-black text-[10px] shadow-sm">
                     G
                   </div>
                 ) : user.photo ? (
-                  <img src={user.photo} alt={user.name} loading="eager" decoding="async" className="w-6 h-6 rounded-lg object-cover border border-blue-500/50 shadow-sm" />
+                  <img src={user.photo} alt={user.name} loading="eager" decoding="async" className="w-7 h-7 rounded-lg object-cover border border-blue-500/50 shadow-sm" />
                 ) : (
-                  <div className="w-6 h-6 rounded-lg bg-blue-600 text-white flex items-center justify-center font-bold text-[10px] shadow-sm">
+                  <div className="w-7 h-7 rounded-lg bg-blue-600 text-white flex items-center justify-center font-bold text-[10px] shadow-sm">
                     {user.name.charAt(0)}
                   </div>
                 )}
@@ -157,7 +171,7 @@ export default function BcaHeaderNav({
 
               <button
                 onClick={openProfileDashboard}
-                className="p-1 rounded-lg text-blue-600 dark:text-blue-400 hover:bg-white dark:hover:bg-black transition-all cursor-pointer"
+                className="p-1 rounded-lg text-blue-600 dark:text-blue-400 hover:bg-white dark:hover:bg-black transition-all cursor-pointer hidden sm:flex items-center justify-center"
                 title="Open Student Dashboard"
               >
                 <Sparkles size={13} />
@@ -165,7 +179,7 @@ export default function BcaHeaderNav({
 
               <button 
                 onClick={signOut}
-                className="text-slate-400 hover:text-black dark:text-slate-400 dark:hover:text-white p-1 rounded-lg hover:bg-white dark:hover:bg-black transition-colors cursor-pointer"
+                className="text-slate-400 hover:text-black dark:text-slate-400 dark:hover:text-white p-1 rounded-lg hover:bg-white dark:hover:bg-black transition-colors cursor-pointer hidden sm:flex items-center justify-center"
                 title={user.isGuest ? "Exit Guest Mode" : "Sign Out"}
               >
                 <LogOut size={13} />
@@ -175,29 +189,30 @@ export default function BcaHeaderNav({
             <div className="flex items-center gap-1.5">
               <button
                 onClick={() => signInAsGuest()}
-                className="hidden sm:flex items-center px-2.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-neutral-900 dark:hover:bg-neutral-800 border border-slate-200 dark:border-neutral-800 text-black dark:text-white font-bold text-xs transition-all active:scale-95 cursor-pointer"
+                className="hidden md:flex items-center px-2.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-neutral-900 dark:hover:bg-neutral-800 border border-slate-200 dark:border-neutral-800 text-black dark:text-white font-bold text-xs transition-all active:scale-95 cursor-pointer"
                 title="Practice as Guest without sign-in"
               >
                 <span>Guest</span>
               </button>
               <button
                 onClick={openAuthModal}
-                className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-black text-xs transition-all active:scale-95 shadow-sm cursor-pointer"
+                className="flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-black text-xs transition-all active:scale-95 shadow-sm cursor-pointer"
               >
                 <LogIn size={13} />
-                <span>Sign In</span>
+                <span className="hidden xs:inline">Sign In</span>
               </button>
             </div>
           )}
 
+          {/* BCA Lab Brand Badge (Shown on large screens) */}
           <Link
             href="/"
-            className="flex items-center gap-2 px-2.5 py-1 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-neutral-900 dark:hover:bg-neutral-800 border border-slate-200 dark:border-neutral-800 text-black dark:text-white text-xs font-black shadow-sm transition-all active:scale-95 cursor-pointer"
+            className="hidden lg:flex items-center gap-2 px-2.5 py-1 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-neutral-900 dark:hover:bg-neutral-800 border border-slate-200 dark:border-neutral-800 text-black dark:text-white text-xs font-black shadow-sm transition-all active:scale-95 cursor-pointer"
           >
             <div className="w-6 h-6 rounded-lg bg-blue-600 flex items-center justify-center font-mono font-black text-white text-xs shrink-0">
               &lt;/&gt;
             </div>
-            <div className="flex flex-col leading-none text-left hidden sm:flex">
+            <div className="flex flex-col leading-none text-left">
               <span className="font-black text-xs tracking-tight text-black dark:text-white uppercase">
                 BCA Lab
               </span>
@@ -300,7 +315,7 @@ export default function BcaHeaderNav({
                         <span>3-Year / 360-Day Practical Coding Roadmap</span>
                       </div>
                       <p className="text-[11px] text-slate-600 dark:text-slate-400 mt-0.5">
-                        {completedDays.length} of 10 Days Completed • Job-Oriented Training
+                        {completedDays.length} of {PRACTICAL_LESSONS.length} Days Completed • Job-Oriented Training
                       </p>
                     </div>
                     <Link
@@ -313,12 +328,12 @@ export default function BcaHeaderNav({
                     </Link>
                   </div>
 
-                  {/* Sprint 1: Days 1–10 Active Lessons */}
+                  {/* Sprint 1: Days 1–30 Active Lessons */}
                   <div className="space-y-2">
                     <div className="text-[10px] font-black uppercase tracking-widest text-blue-600 dark:text-blue-400 flex items-center justify-between">
                       <span>YEAR 1 • SPRINT 1 (DAYS 1–30 • HTML &amp; CSS)</span>
-                      <span className="text-[9px] font-mono text-emerald-600 dark:text-emerald-400 font-bold bg-emerald-50 dark:bg-emerald-950/40 px-2 py-0.5 rounded-full border border-emerald-200 dark:border-emerald-800">
-                        10 Active Lessons
+                      <span className="text-[9px] font-mono text-blue-600 dark:text-blue-400 font-bold bg-blue-50 dark:bg-neutral-900 px-2 py-0.5 rounded-full border border-blue-200 dark:border-neutral-800">
+                        {PRACTICAL_LESSONS.length} Active Lessons
                       </span>
                     </div>
 
@@ -347,7 +362,7 @@ export default function BcaHeaderNav({
                                 isCurrent
                                   ? "bg-blue-600 text-white"
                                   : isCompleted
-                                  ? "bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-400 border border-emerald-300 dark:border-emerald-800"
+                                  ? "bg-blue-50 dark:bg-neutral-900 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-neutral-800"
                                   : "bg-slate-100 dark:bg-neutral-900 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-neutral-800"
                               }`}>
                                 Day {pLesson.day}
@@ -366,7 +381,7 @@ export default function BcaHeaderNav({
                                   <CheckCircle2 size={11} /> Current
                                 </span>
                               ) : isCompleted ? (
-                                <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 px-2 py-0.5 rounded-full border border-emerald-200 dark:border-emerald-800 flex items-center gap-1">
+                                <span className="text-[10px] font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-neutral-900 px-2 py-0.5 rounded-full border border-blue-200 dark:border-neutral-800 flex items-center gap-1">
                                   <CheckCircle2 size={11} /> Done
                                 </span>
                               ) : isUnlocked ? (
