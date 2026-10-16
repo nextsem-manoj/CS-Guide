@@ -62,165 +62,116 @@ export default function BcaHeaderNav({
     setTheme(currentTheme === 'dark' ? 'light' : 'dark');
   };
 
+  const isPracticalPage = Boolean(
+    pathname?.includes('/practical') || 
+    currentSubjectCode?.toLowerCase().includes('practical') || 
+    currentSubjectCode?.toLowerCase().includes('day')
+  );
+
   return (
     <>
-      <header className="h-16 border-b border-slate-200 dark:border-neutral-800 bg-white/95 dark:bg-black/95 backdrop-blur-xl sticky top-0 z-40 flex items-center justify-between px-2.5 sm:px-6 select-none shadow-sm gap-1.5 sm:gap-3">
-        {/* Left: Home & Practical Portal Navigation */}
-        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+      <header className="h-14 sm:h-16 border-b border-slate-200 dark:border-neutral-800 bg-white/95 dark:bg-black/95 backdrop-blur-xl sticky top-0 z-40 flex items-center justify-between px-3 sm:px-6 select-none shadow-sm gap-2 sm:gap-4 w-full">
+        {/* Left: Home Navigation */}
+        <div className="flex items-center gap-2 shrink-0">
           <Link
             href="/"
-            className="flex items-center justify-center gap-2 text-slate-700 hover:text-black dark:text-slate-300 dark:hover:text-white font-black text-xs sm:text-sm bg-slate-100 hover:bg-slate-200 dark:bg-neutral-900 dark:hover:bg-neutral-800 border border-slate-200 dark:border-neutral-800 w-9 h-9 sm:w-auto p-2 sm:px-3 sm:py-2 rounded-xl transition-all active:scale-95 shrink-0"
+            className="flex items-center justify-center gap-1.5 text-slate-700 hover:text-black dark:text-slate-300 dark:hover:text-white font-extrabold text-xs sm:text-sm bg-slate-100 hover:bg-slate-200 dark:bg-neutral-900 dark:hover:bg-neutral-800 border border-slate-200 dark:border-neutral-800 h-9 px-2.5 sm:px-3 rounded-xl transition-all active:scale-95 shrink-0"
             title="Home"
           >
-            <Home size={16} className="text-blue-600 dark:text-blue-400" />
+            <Home size={15} className="text-blue-600 dark:text-blue-400" />
             <span className="hidden sm:inline">Home</span>
           </Link>
 
-          <Link
-            href="/bca/practical"
-            className="flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs shadow-sm transition-all active:scale-95 shrink-0"
-            title="BCA Practical Learning Portal"
-          >
-            <Sparkles size={14} className="shrink-0" />
-            <span className="hidden sm:inline">Practical Portal</span>
-            <span className="sm:hidden text-[11px] font-black">Portal</span>
-          </Link>
-
-          <button
-            onClick={() => window.dispatchEvent(new CustomEvent("open-global-search"))}
-            className="hidden md:flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-neutral-900 dark:hover:bg-neutral-800 border border-slate-200 dark:border-neutral-800 text-slate-700 hover:text-black dark:text-slate-300 dark:hover:text-white font-bold text-xs shadow-sm transition-all active:scale-95 cursor-pointer"
-            title="Universal Search (Ctrl+K)"
-          >
-            <Search size={14} className="text-blue-600 dark:text-blue-400" />
-            <span>Search</span>
-            <kbd className="hidden lg:inline text-[9px] bg-slate-200 dark:bg-neutral-800 px-1 py-0.5 rounded border border-slate-300 dark:border-neutral-700 text-slate-600 dark:text-slate-400">Ctrl K</kbd>
-          </button>
+          {/* Practical Portal shortcut: Only rendered on academic courses, hidden when already on Practical */}
+          {!isPracticalPage && (
+            <Link
+              href="/bca/practical"
+              className="hidden md:flex items-center gap-1.5 px-3 h-9 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs shadow-sm transition-all active:scale-95 shrink-0"
+              title="BCA Practical Learning Portal"
+            >
+              <Sparkles size={13} className="shrink-0" />
+              <span>Practical Portal</span>
+            </Link>
+          )}
         </div>
 
         {/* Center: Responsive Subject & Day Switcher */}
-        <div className="flex-1 min-w-0 max-w-[200px] xs:max-w-[250px] sm:max-w-xs md:max-w-sm lg:max-w-md mx-1 sm:mx-2">
+        <div className="flex-1 min-w-0 max-w-sm sm:max-w-md mx-1 sm:mx-3 flex justify-center">
           <button
             onClick={() => setDropdownOpen(!dropdownOpen)}
-            className="flex items-center justify-between gap-1.5 px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-neutral-900 dark:hover:bg-neutral-800 border border-slate-200 dark:border-neutral-800 text-black dark:text-white text-xs sm:text-sm font-extrabold shadow-sm transition-all active:scale-95 w-full cursor-pointer"
+            className="flex items-center justify-between gap-2 px-3 py-1.5 sm:py-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-neutral-900 dark:hover:bg-neutral-800 border border-slate-200 dark:border-neutral-800 text-black dark:text-white text-xs sm:text-sm font-extrabold shadow-sm transition-all active:scale-95 w-full cursor-pointer max-w-full"
             title={`${currentSubjectCode}: ${currentSubjectName}`}
           >
             <div className="flex items-center gap-1.5 min-w-0 truncate">
               <BookOpen size={14} className="text-blue-600 dark:text-blue-400 shrink-0" />
-              <span className="truncate flex items-center gap-1">
+              <span className="truncate flex items-center gap-1.5">
                 {currentSubjectCode && (
                   <span className="text-blue-600 dark:text-blue-400 font-black shrink-0">
                     {currentSubjectCode}
                   </span>
                 )}
-                {currentSubjectCode && currentSubjectName && (
+                {currentSubjectCode && currentSubjectName && currentSubjectCode !== "BCA Practical" && (
                   <span className="text-slate-400 dark:text-slate-600 shrink-0 hidden xs:inline">:</span>
                 )}
-                <span className="font-bold truncate">{currentSubjectName}</span>
+                {currentSubjectName && currentSubjectCode !== "BCA Practical" ? (
+                  <span className="font-bold truncate text-slate-700 dark:text-slate-300">{currentSubjectName}</span>
+                ) : (
+                  <span className="font-bold truncate text-slate-700 dark:text-slate-300">Portal</span>
+                )}
               </span>
             </div>
             <ChevronDown size={13} className={`text-slate-500 shrink-0 transition-transform ${dropdownOpen ? 'rotate-180' : ''}`} />
           </button>
         </div>
 
-        {/* Right: Theme Toggle + Auth Status + Logo Badge */}
+        {/* Right: Theme Toggle & Profile */}
         <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
           {/* Light / Dark Mode Toggle Button */}
           {mounted && (
             <button
               onClick={toggleTheme}
-              className="flex items-center justify-center gap-1.5 w-9 h-9 sm:w-auto sm:px-3 sm:py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-neutral-900 dark:hover:bg-neutral-800 border border-slate-200 dark:border-neutral-800 text-xs font-bold text-slate-800 dark:text-slate-200 transition-all cursor-pointer shrink-0"
+              className="w-9 h-9 flex items-center justify-center rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-neutral-900 dark:hover:bg-neutral-800 border border-slate-200 dark:border-neutral-800 text-slate-800 dark:text-slate-200 transition-all cursor-pointer shrink-0 active:scale-95 shadow-sm"
               title={`Switch to ${currentTheme === 'dark' ? 'Light' : 'Dark'} Mode`}
             >
               {currentTheme === 'dark' ? (
-                <>
-                  <Sun size={15} className="text-blue-400" />
-                  <span className="hidden sm:inline">Light</span>
-                </>
+                <Sun size={15} className="text-amber-400" />
               ) : (
-                <>
-                  <Moon size={15} className="text-blue-600" />
-                  <span className="hidden sm:inline">Dark</span>
-                </>
+                <Moon size={15} className="text-blue-600" />
               )}
             </button>
           )}
 
           {/* User Profile / Auth Button */}
           {user ? (
-            <div className="flex items-center gap-1 sm:gap-1.5 bg-slate-100 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 p-1 sm:pl-1.5 rounded-xl shrink-0">
-              <button
-                onClick={openProfileDashboard}
-                className="flex items-center gap-1.5 sm:gap-2 hover:opacity-85 transition-all cursor-pointer group text-left"
-                title="Click photo to open your Student Learning Dashboard"
-              >
-                {user.isGuest ? (
-                  <div className="w-7 h-7 rounded-lg bg-slate-600 text-white flex items-center justify-center font-black text-[10px] shadow-sm">
-                    G
-                  </div>
-                ) : user.photo ? (
-                  <img src={user.photo} alt={user.name} loading="eager" decoding="async" className="w-7 h-7 rounded-lg object-cover border border-blue-500/50 shadow-sm" />
-                ) : (
-                  <div className="w-7 h-7 rounded-lg bg-blue-600 text-white flex items-center justify-center font-bold text-[10px] shadow-sm">
-                    {user.name.charAt(0)}
-                  </div>
-                )}
-                <span className="text-xs font-black text-black dark:text-white hidden md:inline max-w-[85px] truncate">
-                  {user.isGuest ? "Guest" : user.name.split(" ")[0]}
-                </span>
-              </button>
-
-              <button
-                onClick={openProfileDashboard}
-                className="p-1 rounded-lg text-blue-600 dark:text-blue-400 hover:bg-white dark:hover:bg-black transition-all cursor-pointer hidden sm:flex items-center justify-center"
-                title="Open Student Dashboard"
-              >
-                <Sparkles size={13} />
-              </button>
-
-              <button 
-                onClick={signOut}
-                className="text-slate-400 hover:text-black dark:text-slate-400 dark:hover:text-white p-1 rounded-lg hover:bg-white dark:hover:bg-black transition-colors cursor-pointer hidden sm:flex items-center justify-center"
-                title={user.isGuest ? "Exit Guest Mode" : "Sign Out"}
-              >
-                <LogOut size={13} />
-              </button>
-            </div>
+            <button
+              onClick={openProfileDashboard}
+              className="flex items-center gap-2 p-1 sm:pr-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-neutral-900 dark:hover:bg-neutral-800 border border-slate-200 dark:border-neutral-800 transition-all cursor-pointer group shrink-0 active:scale-95 shadow-sm"
+              title="Open Student Profile Dashboard"
+            >
+              {user.isGuest ? (
+                <div className="w-7 h-7 rounded-lg bg-slate-600 text-white flex items-center justify-center font-black text-[10px] shadow-sm">
+                  G
+                </div>
+              ) : user.photo ? (
+                <img src={user.photo} alt={user.name} loading="eager" decoding="async" className="w-7 h-7 rounded-lg object-cover border border-blue-500/50 shadow-sm" />
+              ) : (
+                <div className="w-7 h-7 rounded-lg bg-blue-600 text-white flex items-center justify-center font-bold text-[10px] shadow-sm">
+                  {user.name.charAt(0)}
+                </div>
+              )}
+              <span className="text-xs font-bold text-black dark:text-white hidden sm:inline max-w-[90px] truncate">
+                {user.isGuest ? "Guest" : user.name.split(" ")[0]}
+              </span>
+            </button>
           ) : (
-            <div className="flex items-center gap-1.5">
-              <button
-                onClick={() => signInAsGuest()}
-                className="hidden md:flex items-center px-2.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-neutral-900 dark:hover:bg-neutral-800 border border-slate-200 dark:border-neutral-800 text-black dark:text-white font-bold text-xs transition-all active:scale-95 cursor-pointer"
-                title="Practice as Guest without sign-in"
-              >
-                <span>Guest</span>
-              </button>
-              <button
-                onClick={openAuthModal}
-                className="flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-black text-xs transition-all active:scale-95 shadow-sm cursor-pointer"
-              >
-                <LogIn size={13} />
-                <span className="hidden xs:inline">Sign In</span>
-              </button>
-            </div>
+            <button
+              onClick={openAuthModal}
+              className="flex items-center gap-1.5 px-3 h-9 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs transition-all active:scale-95 shadow-sm cursor-pointer shrink-0"
+            >
+              <LogIn size={13} />
+              <span className="hidden xs:inline">Sign In</span>
+            </button>
           )}
-
-          {/* BCA Lab Brand Badge (Shown on large screens) */}
-          <Link
-            href="/"
-            className="hidden lg:flex items-center gap-2 px-2.5 py-1 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-neutral-900 dark:hover:bg-neutral-800 border border-slate-200 dark:border-neutral-800 text-black dark:text-white text-xs font-black shadow-sm transition-all active:scale-95 cursor-pointer"
-          >
-            <div className="w-6 h-6 rounded-lg bg-blue-600 flex items-center justify-center font-mono font-black text-white text-xs shrink-0">
-              &lt;/&gt;
-            </div>
-            <div className="flex flex-col leading-none text-left">
-              <span className="font-black text-xs tracking-tight text-black dark:text-white uppercase">
-                BCA Lab
-              </span>
-              <span className="text-[8px] font-mono text-blue-600 dark:text-blue-400 font-bold tracking-tight">
-                by NextSem
-              </span>
-            </div>
-          </Link>
         </div>
       </header>
 
