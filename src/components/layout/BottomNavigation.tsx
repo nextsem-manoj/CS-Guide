@@ -156,7 +156,20 @@ const BottomNavigation = () => {
       icon: Home,
       isActive: pathname === '/' && !menuOpen
     },
-    getSecondTab(),
+    {
+      id: 'bca',
+      label: activeSemNum ? `Sem ${activeSemNum}` : 'BCA Hub',
+      path: activeSemNum ? `/bca/semester-${activeSemNum}` : '/bca',
+      icon: GraduationCap,
+      isActive: (pathname === '/bca' || pathname?.startsWith('/bca/semester-') || pathname?.startsWith('/bca/notes/')) && !pathname.includes('/practical') && !menuOpen
+    },
+    {
+      id: 'practical',
+      label: 'Stories & Lab',
+      path: '/bca/practical',
+      icon: Sparkles,
+      isActive: (pathname === '/bca/practical' || pathname?.startsWith('/bca/practical/')) && !menuOpen
+    },
     {
       id: 'theme',
       label: currentTheme === 'dark' ? 'Light' : 'Dark',
@@ -168,22 +181,13 @@ const BottomNavigation = () => {
     },
     {
       id: 'profile',
-      label: currentUser ? (currentUser.name?.split(' ')[0] || 'Profile') : 'Sign In',
+      label: currentUser ? (currentUser.name?.split(' ')[0] || 'Profile') : 'Profile',
       path: currentUser ? '/profile' : '#',
       isButton: !currentUser,
       onClick: !currentUser ? handleSignIn : undefined,
       icon: User,
       photoUrl: currentUser?.photo || null,
       isActive: pathname === '/profile' && !menuOpen
-    },
-    {
-      id: 'menu',
-      label: 'Menu',
-      path: '#',
-      icon: Menu,
-      isButton: true,
-      onClick: () => setMenuOpen(!menuOpen),
-      isActive: menuOpen
     }
   ];
 
@@ -433,6 +437,28 @@ const BottomNavigation = () => {
           {navTabs.map((tab) => {
             const Icon = tab.icon;
             const active = tab.isActive;
+
+            if (tab.id === 'practical') {
+              return (
+                <Link
+                  key={tab.id}
+                  href={tab.path}
+                  className="relative flex flex-col items-center justify-center -translate-y-2.5 transition-transform duration-200 active:scale-95 group focus:outline-none"
+                >
+                  <div className="p-[2.5px] rounded-2xl bg-gradient-to-tr from-[#f9ce34] via-[#ee2a7b] to-[#6228d7] shadow-[0_4px_16px_rgba(238,42,123,0.35)]">
+                    <div className="w-10 h-10 rounded-[13px] bg-white dark:bg-black flex items-center justify-center text-blue-600 dark:text-blue-400 group-hover:scale-105 transition-transform">
+                      <Sparkles size={18} className="text-amber-400 fill-amber-400" />
+                    </div>
+                  </div>
+                  <span className="text-[10px] font-black tracking-tight mt-0.5 text-black dark:text-white">
+                    {tab.label}
+                  </span>
+                  {active && (
+                    <span className="absolute -bottom-1 w-1 h-1 bg-rose-500 rounded-full shadow-[0_0_6px_#f43f5e]" />
+                  )}
+                </Link>
+              );
+            }
 
             if (tab.isButton) {
               return (

@@ -1,0 +1,65 @@
+1:"$Sreact.fragment"
+2:I[66964,["/_next/static/chunks/445g0h224aa86.js","/_next/static/chunks/2bz3m16x089ul.js","/_next/static/chunks/3mhx1li201gbi.js","/_next/static/chunks/14mrh2-p_w84d.js","/_next/static/chunks/2fy0eciax9-g2.js","/_next/static/chunks/09h1vm1uhh9om.js","/_next/static/chunks/0j3820_af8gox.js","/_next/static/chunks/3cjlxsqvsuzoc.js","/_next/static/chunks/0_eeqo-eonkbb.js","/_next/static/chunks/0nnqei23wsaxj.js","/_next/static/chunks/0-dgafsx32-go.js","/_next/static/chunks/44q9j6uy0h1j9.js","/_next/static/chunks/0ib5gxklfu201.js"],"default"]
+8:I[97367,["/_next/static/chunks/445g0h224aa86.js","/_next/static/chunks/2bz3m16x089ul.js","/_next/static/chunks/3mhx1li201gbi.js","/_next/static/chunks/14mrh2-p_w84d.js","/_next/static/chunks/2fy0eciax9-g2.js","/_next/static/chunks/09h1vm1uhh9om.js","/_next/static/chunks/0j3820_af8gox.js","/_next/static/chunks/3cjlxsqvsuzoc.js","/_next/static/chunks/0_eeqo-eonkbb.js","/_next/static/chunks/0nnqei23wsaxj.js"],"OutletBoundary"]
+9:"$Sreact.suspense"
+3:T5e9,<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Aarav Patel | BCA Student Developer</title>
+</head>
+<body>
+  <header>
+    <h1>Aarav Patel</h1>
+    <p>Aspiring Full-Stack Software Developer • BCA 1st Year</p>
+    <nav>
+      <a href="#about">About</a> | 
+      <a href="#skills">Skills</a> | 
+      <a href="#education">Education</a> | 
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <main>
+    <section id="about">
+      <h2>About Me</h2>
+      <p>I am a BCA student passionate about <strong>practical software development</strong>.</p>
+    </section>
+
+    <section id="skills">
+      <h2>Technical Skills</h2>
+      <ul>
+        <li>HTML5 & Semantic Markup</li>
+        <li>Windows 11 Command Prompt</li>
+        <li>Git & GitHub Version Control</li>
+      </ul>
+    </section>
+
+    <section id="education">
+      <h2>Academic Records</h2>
+      <table border="1">
+        <tr><th>Year</th><th>Degree</th><th>Institution</th></tr>
+        <tr><td>2026</td><td>BCA (Sem 1)</td><td>NextSem Academy</td></tr>
+      </table>
+    </section>
+
+    <section id="contact">
+      <h2>Get In Touch</h2>
+      <form action="/contact" method="POST">
+        <label for="msg">Message:</label><br>
+        <textarea id="msg" name="message" required></textarea><br>
+        <button type="submit">Send Message</button>
+      </form>
+    </section>
+  </main>
+
+  <footer>
+    <p>Built with pure HTML5 • Connect on <a href="https://github.com">GitHub</a></p>
+  </footer>
+</body>
+</html>0:{"rsc":["$","$1","c",{"children":[["$","$L2",null,{"lesson":{"id":"day-7","day":7,"year":1,"semester":1,"specialization":"foundation","title":"HTML Mini Project — Student Developer Profile Website","slug":"day-7-html-mini-project-student-profile-website","category":"HTML Foundation","estimatedTime":"2.5 Hours Practical","difficulty":"Intermediate","objectives":["Synthesize Days 1–6 into a complete, standalone portfolio webpage.","Combine headings, paragraphs, lists, tables, images, links, forms, and semantic elements.","Deploy the project on GitHub with a professional README.md file.","Verify 100% HTML5 validation compliance."],"concept":{"overview":"Projects convert isolated syntax lessons into engineering competence. In Day 7, you create your very first portfolio asset: an authentic, multi-section developer profile webpage.","keyPoints":["A portfolio proves practical capability to evaluators and prospective employers.","Pure HTML structure must be readable and organized even before CSS styles are applied.","Every project must have a clear `README.md` file explaining what was built.","Host the project on GitHub so anyone can review your source code."],"analogy":"This is your developer identity card. When someone asks \"What have you built?\", this is your first real answer."},"teacherDemo":{"title":"Blueprint: Complete Student Profile Structure","explanation":"A full-page architecture incorporating all learned elements cleanly.","language":"html","code":"$3"},"practicalLab":{"labTitle":"Day 7 Coding Lab: Assemble Your Profile Showcase","labDescription":"Assemble the core sections of your profile: Header with name, About section, Skills list, and Contact form.","language":"html","initialCode":"<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>Developer Profile</title>\n</head>\n<body>\n  <!-- Build complete profile here -->\n</body>\n</html>","tasks":[{"id":"d7-t1","title":"Header with Profile Info & Navigation","instruction":"Add `<header>` containing `<h1>`, `<p>`, and a `<nav>` with at least two links.","hint":"<header><h1>Name</h1><p>Bio</p><nav><a href=\"#about\">About</a> <a href=\"#contact\">Contact</a></nav></header>","validatorKeywords":["<header>","<h1>","</h1>","<nav>","</a>","</header>"],"validatorRegex":"<header>[\\s\\S]*?<h1>[\\s\\S]+?<\\/h1>[\\s\\S]*?<nav>[\\s\\S]*?<a[^>]*>[\\s\\S]+?<\\/a>[\\s\\S]*?<\\/nav>[\\s\\S]*?<\\/header>"},{"id":"d7-t2","title":"Skills List & Contact Form","instruction":"Inside `<main>`, add an `<ul>` list of skills and a `<form>` containing a submit button.","hint":"<main><section><ul><li>HTML5</li></ul></section><section><form><button type=\"submit\">Send</button></form></section></main>","validatorKeywords":["<main>","<ul>","<li>","</li>","</ul>","<form>","<button type=\"submit\">","</form>","</main>"],"validatorRegex":"<main>[\\s\\S]*?<ul>[\\s\\S]*?<li>[\\s\\S]+?<\\/li>[\\s\\S]*?<\\/ul>[\\s\\S]*?<form>[\\s\\S]*?<button[^>]*type=['\"]submit['\"][^>]*>[\\s\\S]+?<\\/button>[\\s\\S]*?<\\/form>[\\s\\S]*?<\\/main>"}]},"debuggingChallenge":{"title":"Spot the Bug: Broken Bookmark Anchor Jumps","buggyCode":"<a href=\"about\">Jump to About</a>\n...\n<section name=\"about\">\n  <h2>About Section</h2>\n</section>","bugExplanation":"For internal anchor jumps, the href MUST begin with a hash symbol (`href=\"#about\"`), and the target element must use `id=\"about\"` instead of deprecated `name` attributes.","fixedCode":"<a href=\"#about\">Jump to About</a>\n...\n<section id=\"about\">\n  <h2>About Section</h2>\n</section>"},"assignment":{"title":"Mini Project Milestone: Deploy to GitHub Repository","instructions":["Create a new GitHub repository named `student-profile-html`.","Place `index.html` and your profile image in the repository.","Add a `README.md` file featuring: Project Title, Live Preview link, Built With (HTML5), and Author info.","Enable GitHub Pages in your repository settings under Settings > Pages > Deploy from Branch.","Test your live URL on your mobile phone."],"submissionCriteria":"Submit your live GitHub Pages link and repository URL."},"githubWorkflow":{"repoName":"student-profile-html","commitMessage":"Day 07: Complete HTML5 student developer profile project","commands":["git init","git add .","git commit -m \"Day 07: Complete HTML5 student developer profile project\"","git branch -M main","git remote add origin https://github.com/YOUR_USERNAME/student-profile-html.git","git push -u origin main"],"tips":"Congratulations! This is your first official GitHub project repository. Keep it clean and documented."},"vivaCheck":{"question":"What is the purpose of the `README.md` file in a GitHub project repository?","options":["It executes backend database migration scripts.","It documents what the project does, how to run it locally, and highlights author credentials for visitors and interviewers.","It hides private API keys from the public.","It automatically compiles TypeScript to JavaScript."],"correctAnswer":1,"explanation":"A professional README.md acts as the welcome documentation of a repository, explaining project purpose, installation steps, and showcase links."}}}],["$L4","$L5","$L6"],"$L7"]}],"isPartial":false,"staleTime":300,"varyParams":null,"buildId":"OcmRkKRYBWFb4DMV1FnHk"}
+4:["$","script","script-0",{"src":"/_next/static/chunks/0-dgafsx32-go.js","async":true}]
+5:["$","script","script-1",{"src":"/_next/static/chunks/44q9j6uy0h1j9.js","async":true}]
+6:["$","script","script-2",{"src":"/_next/static/chunks/0ib5gxklfu201.js","async":true}]
+7:["$","$L8",null,{"children":["$","$9",null,{"name":"Next.MetadataOutlet","children":"$@a"}]}]
+a:null

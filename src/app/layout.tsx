@@ -13,6 +13,7 @@ import GlobalNavigationWidget from "@/components/layout/GlobalNavigationWidget";
 import BottomNavigation from "@/components/layout/BottomNavigation";
 import SearchWidget from "@/components/SearchWidget";
 import GoogleOneTapPrompt from "@/components/auth/GoogleOneTapPrompt";
+import AndroidBackButtonHandler from "@/components/AndroidBackButtonHandler";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -114,14 +115,15 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#1d2a35" },
-    { media: "(prefers-color-scheme: dark)", color: "#1d2a35" },
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#000000" },
   ],
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
-  minimumScale: 0.5,
+  minimumScale: 1,
   userScalable: true,
+  viewportFit: "cover",
 };
 
 export default function RootLayout({
@@ -164,6 +166,7 @@ export default function RootLayout({
                 <FontScaleHydrator />
                 <OfflineGuard />
                 <SplashScreen />
+                <AndroidBackButtonHandler />
 
                 {/* Global Sticky Navigation (Search bar + Subject Selector) */}
                 <GlobalNavigationWidget />

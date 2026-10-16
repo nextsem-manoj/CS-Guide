@@ -1,0 +1,5 @@
+User-Agent: *
+Allow: /
+Disallow: /profile
+
+Sitemap: https://ignou-study-notes-by-nextsem.web.app/sitemap.xml

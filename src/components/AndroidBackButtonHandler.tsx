@@ -13,14 +13,25 @@ export default function AndroidBackButtonHandler() {
     if (!Capacitor.isNativePlatform()) return;
 
     const backButtonListener = App.addListener('backButton', () => {
-      // Custom routing logic for Android hardware back button to navigate to the previous menu
-      if (pathname?.startsWith('/book/')) {
+      // 1. Check if any active modal is open (Story viewer, search, or profile dashboard)
+      const storyModalOpen = document.querySelector('[role="dialog"], .animate-story-float, [aria-label="Modal"]');
+      if (storyModalOpen) {
+        window.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+        return;
+      }
+
+      // 2. Custom routing logic for Android hardware back button
+      if (pathname?.startsWith('/bca/practical/day-')) {
+        router.push('/bca/practical');
+      } else if (pathname === '/bca/practical') {
+        router.push('/bca');
+      } else if (pathname?.startsWith('/bca/semester-') || pathname?.startsWith('/bca/notes/')) {
+        router.push('/bca');
+      } else if (pathname === '/bca') {
         router.push('/');
-      } else if (pathname === '/cmd') {
+      } else if (pathname?.startsWith('/book/')) {
         router.push('/');
-      } else if (pathname === '/profile') {
-        router.push('/');
-      } else if (pathname === '/course') {
+      } else if (pathname === '/cmd' || pathname === '/profile' || pathname === '/course') {
         router.push('/');
       } else if (pathname === '/') {
         // If they are on the landing page and click back, exit the app
