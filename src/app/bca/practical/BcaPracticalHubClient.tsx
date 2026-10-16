@@ -9,6 +9,7 @@ import {
   Lock, LogIn, LogOut, UserCheck
 } from "lucide-react";
 import BcaHeaderNav from "@/components/bca/BcaHeaderNav";
+import BcaInstagramStoriesTray from "@/components/bca/BcaInstagramStoriesTray";
 import { 
   CAREER_TRACKS, PRACTICAL_SEMESTERS, PRACTICAL_SPRINTS, 
   PRACTICAL_LESSONS, CareerTrack, PracticalSemester, PracticalLesson 
@@ -66,6 +67,9 @@ export default function BcaPracticalHubClient() {
             ⚡ Practical Learning Portal
           </span>
         </nav>
+
+        {/* ── INSTAGRAM-STYLE BCA STORIES TRAY ── */}
+        <BcaInstagramStoriesTray />
 
         {/* ── GOOGLE SIGN-IN & STUDENT STATUS BAR ── */}
         <div className="rounded-2xl bg-slate-50 dark:bg-neutral-950 border border-slate-200 dark:border-neutral-800 p-4 sm:p-5 mb-8 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">

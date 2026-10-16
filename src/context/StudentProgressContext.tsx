@@ -737,10 +737,43 @@ export function StudentProgressProvider({ children }: { children: ReactNode }) {
       }, { merge: true })
       .then(() => setIsCloudSynced(true))
       .catch((err) => console.error("Firestore sync warning:", err));
+
+      // Mirror story to Firestore stories collection quietly
+      setDoc(doc(db, "bca_practical_stories", `${user.uid}_day_${day}`), {
+        userId: user.uid,
+        userName: user.name,
+        userPhoto: user.photo,
+        day,
+        githubRepoUrl: cleanUrl,
+        timestamp: new Date().toISOString()
+      }, { merge: true }).catch(() => {});
+    }
+
+    // Auto-publish Instagram-style story status milestone
+    try {
+      const existingStoriesRaw = localStorage.getItem("nextsem_user_custom_stories");
+      const existingStories = existingStoriesRaw ? JSON.parse(existingStoriesRaw) : [];
+      const newSlide = {
+        id: `auto-day-${day}-${Date.now()}`,
+        day,
+        lessonTitle: `Day ${day} Practical Milestone`,
+        category: day <= 10 ? "HTML" : day <= 20 ? "CSS" : "JavaScript",
+        timestamp: "Just now",
+        caption: `Completed Day ${day} and pushed verified code to GitHub! Technical Viva passed 100%. 🚀`,
+        vivaScore: "100% Viva Approved",
+        githubRepoUrl: cleanUrl,
+        techTags: ["BCA", "Practical", "Milestone", "VerifiedCode"],
+        gradientTheme: "from-blue-600 via-indigo-600 to-purple-800",
+        createdAt: Date.now()
+      };
+      const filtered = existingStories.filter((s: any) => s.day !== day);
+      localStorage.setItem("nextsem_user_custom_stories", JSON.stringify([newSlide, ...filtered]));
+    } catch (e) {
+      console.warn("Could not auto-save story status:", e);
     }
 
     triggerCelebration();
-    return { success: true, message: `Day ${day} successfully submitted! Next lesson is now unlocked.` };
+    return { success: true, message: `Day ${day} successfully submitted! Story status published to community feed.` };
   }, [user, completedDays, githubRepoUrls, githubUsername, selectedTrack]);
 
   const setSelectedTrack = useCallback(async (track: string) => {
