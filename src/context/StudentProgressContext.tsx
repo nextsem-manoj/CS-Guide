@@ -17,6 +17,7 @@ import { doc, getDoc, setDoc } from "firebase/firestore";
 import { triggerCelebration } from "@/lib/celebration";
 import StudentProfileDashboardModal from "@/components/StudentProfileDashboardModal";
 import InAppAuthModal from "@/components/auth/InAppAuthModal";
+import { getLessonTitleByDay } from "@/data/bcaStoriesData";
 
 export interface StudentProfile {
   uid: string;
@@ -739,17 +740,21 @@ export function StudentProgressProvider({ children }: { children: ReactNode }) {
       .catch((err) => console.error("Firestore sync warning:", err));
 
       // Mirror story to Firestore stories collection quietly
+      const dayLessonTitle = getLessonTitleByDay(day);
       setDoc(doc(db, "bca_practical_stories", `${user.uid}_day_${day}`), {
         userId: user.uid,
         userName: user.name,
         userPhoto: user.photo,
         day,
+        lessonTitle: dayLessonTitle,
+        caption: `Completed Day ${day}: ${dayLessonTitle} and pushed verified code to GitHub! 🚀 Technical Viva passed 100%.`,
         githubRepoUrl: cleanUrl,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
+        createdAt: Date.now()
       }, { merge: true }).catch(() => {});
     }
 
-    // Auto-publish Instagram-style story status milestone
+    // Auto-publish daily story status milestone
     try {
       const existingStoriesRaw = localStorage.getItem("nextsem_user_custom_stories");
       const existingStories = existingStoriesRaw ? JSON.parse(existingStoriesRaw) : [];

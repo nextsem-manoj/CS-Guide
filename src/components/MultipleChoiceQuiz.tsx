@@ -23,6 +23,7 @@ export default function MultipleChoiceQuiz({
   const [selected, setSelected] = useState<string | null>(null);
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
   const [shake, setShake] = useState(false);
+  const [shuffledOptions, setShuffledOptions] = useState<string[]>([]);
 
   let safeOptions: string[] = [];
   if (Array.isArray(options)) {
@@ -43,6 +44,22 @@ export default function MultipleChoiceQuiz({
     }
   }
 
+  // Fisher-Yates unbiased shuffle
+  const shuffleList = (arr: string[]) => {
+    const copy = [...arr];
+    for (let i = copy.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [copy[i], copy[j]] = [copy[j], copy[i]];
+    }
+    return copy;
+  };
+
+  React.useEffect(() => {
+    if (safeOptions.length > 0) {
+      setShuffledOptions(shuffleList(safeOptions));
+    }
+  }, [options]);
+
   const handleSelect = (option: string) => {
     if (isCorrect) return; // Prevent clicking after correct answer
     setSelected(option);
@@ -58,7 +75,13 @@ export default function MultipleChoiceQuiz({
   const handleReset = () => {
     setSelected(null);
     setIsCorrect(null);
+    if (safeOptions.length > 0) {
+      setShuffledOptions(shuffleList(safeOptions));
+    }
   };
+
+  const displayOptions = shuffledOptions.length > 0 ? shuffledOptions : safeOptions;
+  const optionLetters = ['A', 'B', 'C', 'D', 'E', 'F'];
 
   return (
     <div 
@@ -82,17 +105,18 @@ export default function MultipleChoiceQuiz({
 
       {/* Options Stack */}
       <div className="space-y-2.5">
-        {safeOptions.map((opt) => {
+        {displayOptions.map((opt, idx) => {
           const isSelected = selected === opt;
           const isWrong = isSelected && isCorrect === false;
           const isRight = opt === correctOption && isCorrect === true;
+          const letter = optionLetters[idx] || `${idx + 1}`;
 
           return (
             <button
-              key={opt}
+              key={`${opt}-${idx}`}
               disabled={isCorrect === true}
               onClick={() => handleSelect(opt)}
-              className={`w-full text-left p-4 rounded-xl border text-xs md:text-sm transition-all flex justify-between items-center ${
+              className={`w-full text-left p-4 rounded-xl border text-xs md:text-sm transition-all flex items-center justify-between gap-3 ${
                 isRight
                   ? 'border-emerald-500 bg-emerald-500/10 text-emerald-400 font-bold scale-[1.01]'
                   : isWrong
@@ -102,7 +126,18 @@ export default function MultipleChoiceQuiz({
                   : 'border-slate-850 bg-slate-950/40 text-slate-300 hover:border-slate-700 hover:bg-slate-950/60'
               }`}
             >
-              <span>{opt}</span>
+              <div className="flex items-center gap-3 min-w-0">
+                <span className={`w-6 h-6 rounded-lg text-[11px] font-black flex items-center justify-center shrink-0 border ${
+                  isRight
+                    ? 'bg-emerald-500 text-slate-950 border-emerald-400'
+                    : isWrong
+                    ? 'bg-rose-500 text-white border-rose-400'
+                    : 'bg-slate-800 text-slate-300 border-slate-700'
+                }`}>
+                  {letter}
+                </span>
+                <span className="break-words leading-relaxed">{opt}</span>
+              </div>
               {isRight && <CheckCircle2 size={16} className="text-emerald-400 shrink-0 ml-2" />}
               {isWrong && <XCircle size={16} className="text-rose-400 shrink-0 ml-2" />}
             </button>

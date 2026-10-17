@@ -8,7 +8,7 @@ import {
   Terminal, Sparkles, Copy, Check, Bug, Lightbulb, GitBranch, 
   BookOpen, HelpCircle, AlertCircle, Share2, Award, Clock, Lock,
   ExternalLink, LogIn, UserCheck, ShieldCheck, Code2, UserPlus,
-  Mail, User
+  Mail, User, Globe, Eye, FileCode
 } from "lucide-react";
 import BcaHeaderNav from "@/components/bca/BcaHeaderNav";
 import { PracticalLesson, PRACTICAL_LESSONS } from "@/data/bcaPracticalData";
@@ -16,6 +16,9 @@ import { useStudentProgress } from "@/context/StudentProgressContext";
 import { verifyStudentGitHubCode, GitHubCodeCheckResult, parseGitHubUrl } from "@/lib/githubCodeVerifier";
 import ExpectedRepoStructureCard from "@/components/bca/ExpectedRepoStructureCard";
 import GoogleOneTapPrompt from "@/components/auth/GoogleOneTapPrompt";
+import BugDetectiveLab from "@/components/bca/BugDetectiveLab";
+import TerminalCommandBox from "@/components/bca/TerminalCommandBox";
+import PracticalLessonExplainer from "@/components/bca/PracticalLessonExplainer";
 
 interface Props {
   lesson: PracticalLesson;
@@ -45,11 +48,13 @@ export default function BcaPracticalLessonClient({ lesson }: Props) {
   const [gateError, setGateError] = useState<string | null>(null);
   const [gateSuccess, setGateSuccess] = useState<string | null>(null);
 
-  // Internal Step Tracker within the lesson
-  const [currentStep, setCurrentStep] = useState<number>(1);
+  // Internal Step Tracker within the lesson (1 to 5 or 'all')
+  const [currentStep, setCurrentStep] = useState<number | "all">(1);
+  const [labTab, setLabTab] = useState<"guide" | "preview">("guide");
   const [copiedCode, setCopiedCode] = useState<boolean>(false);
   const [copiedGit, setCopiedGit] = useState<boolean>(false);
   const [showBugSolution, setShowBugSolution] = useState<boolean>(false);
+  const [showAssignmentBlueprint, setShowAssignmentBlueprint] = useState<boolean>(false);
 
   // Local VS Code Checklist & Copy States
   const [vsCodeTasksChecked, setVsCodeTasksChecked] = useState<Record<string, boolean>>({});
@@ -58,6 +63,7 @@ export default function BcaPracticalLessonClient({ lesson }: Props) {
   const [copiedSnippetId, setCopiedSnippetId] = useState<string | null>(null);
 
   // Viva check state
+  const [shuffledVivaOptions, setShuffledVivaOptions] = useState<Array<{ text: string; originalIndex: number }>>([]);
   const [selectedVivaOption, setSelectedVivaOption] = useState<number | null>(null);
   const [isVivaSubmitted, setIsVivaSubmitted] = useState<boolean>(false);
   const [vivaPassed, setVivaPassed] = useState<boolean>(false);
@@ -118,6 +124,27 @@ export default function BcaPracticalLessonClient({ lesson }: Props) {
     }
   }, [isCompleted]);
 
+  // Dynamically randomize/shuffle Viva options on lesson load
+  useEffect(() => {
+    if (lesson?.vivaCheck?.options) {
+      const items = lesson.vivaCheck.options.map((text, originalIndex) => ({
+        text,
+        originalIndex
+      }));
+      // Fisher-Yates unbiased shuffle
+      for (let i = items.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [items[i], items[j]] = [items[j], items[i]];
+      }
+      setShuffledVivaOptions(items);
+      setSelectedVivaOption(null);
+      if (!isCompleted) {
+        setIsVivaSubmitted(false);
+        setVivaPassed(false);
+      }
+    }
+  }, [lesson?.slug, lesson?.day, isCompleted]);
+
   const handleCopyCode = (text: string, type: "demo" | "git" | "starter" | "cmd" | "snippet", snippetId?: string) => {
     if (navigator.clipboard) {
       navigator.clipboard.writeText(text);
@@ -141,8 +168,10 @@ export default function BcaPracticalLessonClient({ lesson }: Props) {
   };
 
   const handleVivaSubmit = () => {
+    if (selectedVivaOption === null) return;
     setIsVivaSubmitted(true);
-    const passed = selectedVivaOption === lesson.vivaCheck.correctAnswer;
+    const selectedItem = shuffledVivaOptions[selectedVivaOption];
+    const passed = selectedItem ? selectedItem.originalIndex === lesson.vivaCheck.correctAnswer : false;
     setVivaPassed(passed);
   };
 
@@ -767,683 +796,1084 @@ export default function BcaPracticalLessonClient({ lesson }: Props) {
           </p>
         </header>
 
-        {/* Lesson Step Progress Pills */}
-        <div className="grid grid-cols-3 sm:grid-cols-6 gap-1.5 mb-8 text-[11px] font-bold text-center">
-          <div className="p-2 rounded-xl bg-slate-50 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 text-black dark:text-white">
-            <span>1. Objectives</span>
+        {/* Interactive Step Stepper & View Mode Switcher */}
+        <div className="mb-8">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3">
+            <div>
+              <span className="text-[11px] font-black uppercase tracking-wider text-blue-600 dark:text-blue-400">
+                Interactive Learning Roadmap
+              </span>
+              <h2 className="text-sm sm:text-base font-black text-black dark:text-white">
+                Day {lesson.day} Step-by-Step Practical Flow
+              </h2>
+            </div>
+
+            <div className="flex items-center gap-1.5 self-start sm:self-auto">
+              <button
+                type="button"
+                onClick={() => setCurrentStep(1)}
+                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                  currentStep !== "all"
+                    ? "bg-blue-600 text-white shadow-sm"
+                    : "bg-slate-100 dark:bg-neutral-900 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-neutral-800 hover:text-black dark:hover:text-white"
+                }`}
+              >
+                📑 Step-by-Step
+              </button>
+              <button
+                type="button"
+                onClick={() => setCurrentStep("all")}
+                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                  currentStep === "all"
+                    ? "bg-blue-600 text-white shadow-sm"
+                    : "bg-slate-100 dark:bg-neutral-900 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-neutral-800 hover:text-black dark:hover:text-white"
+                }`}
+              >
+                📖 View All
+              </button>
+            </div>
           </div>
-          <div className="p-2 rounded-xl bg-slate-50 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 text-black dark:text-white">
-            <span>2. Demo Code</span>
-          </div>
-          <div className="p-2 rounded-xl bg-slate-50 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 text-black dark:text-white">
-            <span>3. VS Code Lab</span>
-          </div>
-          <div className="p-2 rounded-xl bg-slate-50 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 text-black dark:text-white">
-            <span>4. Debugging</span>
-          </div>
-          <div className="p-2 rounded-xl bg-slate-50 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 text-black dark:text-white">
-            <span>5. Viva Check</span>
-          </div>
-          <div className={`p-2 rounded-xl border ${isCompleted ? "bg-blue-50 dark:bg-neutral-900 border-blue-600 text-blue-600 dark:text-blue-400 font-black" : "bg-slate-50 dark:bg-neutral-900 border-slate-200 dark:border-neutral-800 text-slate-600 dark:text-slate-400"}`}>
-            <span>6. GitHub Push</span>
+
+          <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 text-xs font-bold">
+            <button
+              type="button"
+              onClick={() => {
+                setCurrentStep(1);
+                window.scrollTo({ top: 220, behavior: "smooth" });
+              }}
+              className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer flex items-center justify-between gap-1.5 ${
+                currentStep === 1
+                  ? "bg-blue-600 text-white border-blue-600 shadow-sm"
+                  : "bg-white dark:bg-neutral-950 text-black dark:text-white border-slate-200 dark:border-neutral-800 hover:border-blue-400"
+              }`}
+            >
+              <div className="flex items-center gap-1.5 truncate">
+                <span>🎯</span>
+                <span className="truncate">1. Concept & Demo</span>
+              </div>
+              <span className="text-[10px] opacity-80 shrink-0">Step 1</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                setCurrentStep(2);
+                window.scrollTo({ top: 220, behavior: "smooth" });
+              }}
+              className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer flex items-center justify-between gap-1.5 ${
+                currentStep === 2
+                  ? "bg-blue-600 text-white border-blue-600 shadow-sm"
+                  : "bg-white dark:bg-neutral-950 text-black dark:text-white border-slate-200 dark:border-neutral-800 hover:border-blue-400"
+              }`}
+            >
+              <div className="flex items-center gap-1.5 truncate">
+                <span>💻</span>
+                <span className="truncate">2. VS Code Lab</span>
+              </div>
+              {Object.values(vsCodeTasksChecked).filter(Boolean).length === lesson.practicalLab.tasks.length && lesson.practicalLab.tasks.length > 0 ? (
+                <span className="text-[10px] font-black text-emerald-400">✔</span>
+              ) : (
+                <span className="text-[10px] opacity-80 shrink-0">Step 2</span>
+              )}
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                setCurrentStep(3);
+                window.scrollTo({ top: 220, behavior: "smooth" });
+              }}
+              className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer flex items-center justify-between gap-1.5 ${
+                currentStep === 3
+                  ? "bg-blue-600 text-white border-blue-600 shadow-sm"
+                  : "bg-white dark:bg-neutral-950 text-black dark:text-white border-slate-200 dark:border-neutral-800 hover:border-blue-400"
+              }`}
+            >
+              <div className="flex items-center gap-1.5 truncate">
+                <span>🐛</span>
+                <span className="truncate">3. Bug Hunt</span>
+              </div>
+              <span className="text-[10px] opacity-80 shrink-0">Step 3</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                setCurrentStep(4);
+                window.scrollTo({ top: 220, behavior: "smooth" });
+              }}
+              className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer flex items-center justify-between gap-1.5 ${
+                currentStep === 4
+                  ? "bg-blue-600 text-white border-blue-600 shadow-sm"
+                  : "bg-white dark:bg-neutral-950 text-black dark:text-white border-slate-200 dark:border-neutral-800 hover:border-blue-400"
+              }`}
+            >
+              <div className="flex items-center gap-1.5 truncate">
+                <span>🎓</span>
+                <span className="truncate">4. Viva Check</span>
+              </div>
+              {vivaPassed ? (
+                <span className="text-[10px] font-black text-emerald-400">✔</span>
+              ) : (
+                <span className="text-[10px] opacity-80 shrink-0">Step 4</span>
+              )}
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                setCurrentStep(5);
+                window.scrollTo({ top: 220, behavior: "smooth" });
+              }}
+              className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer col-span-2 sm:col-span-1 flex items-center justify-between gap-1.5 ${
+                currentStep === 5
+                  ? "bg-blue-600 text-white border-blue-600 shadow-sm"
+                  : isCompleted
+                  ? "bg-blue-50 dark:bg-neutral-900 text-blue-600 dark:text-blue-400 border-blue-400 font-black"
+                  : "bg-white dark:bg-neutral-950 text-black dark:text-white border-slate-200 dark:border-neutral-800 hover:border-blue-400"
+              }`}
+            >
+              <div className="flex items-center gap-1.5 truncate">
+                <span>🚀</span>
+                <span className="truncate">5. GitHub Push</span>
+              </div>
+              {isCompleted ? (
+                <span className="text-[10px] font-black text-blue-400">Done</span>
+              ) : (
+                <span className="text-[10px] opacity-80 shrink-0">Step 5</span>
+              )}
+            </button>
           </div>
         </div>
 
-        {/* STEP 1: Learning Objectives */}
-        <section className="rounded-2xl bg-white dark:bg-neutral-950 border border-slate-200 dark:border-neutral-800 p-5 sm:p-6 mb-8 shadow-sm">
-          <h2 className="text-base font-black text-black dark:text-white flex items-center gap-2 mb-3">
-            <span className="text-blue-600 dark:text-blue-400">🎯</span>
-            <span>1. What You Will Learn Today</span>
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-            {lesson.objectives.map((obj, idx) => (
-              <div key={idx} className="flex items-start gap-2 bg-slate-50 dark:bg-neutral-900 p-3 rounded-xl border border-slate-200 dark:border-neutral-800 text-xs text-slate-800 dark:text-slate-200">
-                <span className="text-blue-600 dark:text-blue-400 font-bold shrink-0 mt-0.5">✔</span>
-                <span>{obj}</span>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* STEP 2: Core Concept Breakdown */}
-        <section className="rounded-2xl bg-white dark:bg-neutral-950 border border-slate-200 dark:border-neutral-800 p-5 sm:p-6 mb-8 shadow-sm">
-          <h2 className="text-base font-black text-black dark:text-white flex items-center gap-2 mb-3">
-            <span className="text-blue-600 dark:text-blue-400">💡</span>
-            <span>2. Concept Explanation</span>
-          </h2>
-
-          <div className="space-y-2 mb-4">
-            {lesson.concept.keyPoints.map((point, idx) => (
-              <div key={idx} className="flex items-start gap-2 text-xs sm:text-sm text-slate-800 dark:text-slate-200 leading-relaxed">
-                <span className="text-blue-600 dark:text-blue-400 font-extrabold">•</span>
-                <span>{point}</span>
-              </div>
-            ))}
-          </div>
-
-          {lesson.concept.analogy && (
-            <div className="p-3.5 rounded-xl bg-blue-50 dark:bg-neutral-900 border border-blue-200 dark:border-neutral-800 text-xs text-slate-800 dark:text-slate-200 flex items-start gap-2.5">
-              <Lightbulb size={16} className="text-blue-600 dark:text-blue-400 shrink-0 mt-0.5" />
-              <div>
-                <strong className="text-black dark:text-white block mb-0.5">Real-World Mental Model:</strong>
-                <span>{lesson.concept.analogy}</span>
-              </div>
-            </div>
-          )}
-        </section>
-
-        {/* STEP 3: Teacher Demonstration Code */}
-        <section className="rounded-2xl bg-white dark:bg-neutral-950 border border-slate-200 dark:border-neutral-800 p-5 sm:p-6 mb-8 shadow-sm">
-          <div className="flex items-center justify-between gap-2 mb-3">
-            <div>
-              <h2 className="text-base font-black text-black dark:text-white flex items-center gap-2">
-                <span className="text-blue-600 dark:text-blue-400">👨‍🏫</span>
-                <span>3. Teacher Demonstration Code</span>
+        {/* ── STAGE 1: Concepts & Demonstration ── */}
+        {(currentStep === 1 || currentStep === "all") && (
+          <div>
+            {/* STEP 1: Learning Objectives */}
+            <section className="rounded-2xl bg-white dark:bg-neutral-950 border border-slate-200 dark:border-neutral-800 p-5 sm:p-6 mb-8 shadow-sm">
+              <h2 className="text-base font-black text-black dark:text-white flex items-center gap-2 mb-3">
+                <span className="text-blue-600 dark:text-blue-400">🎯</span>
+                <span>1. What You Will Learn Today</span>
               </h2>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{lesson.teacherDemo.explanation}</p>
-            </div>
-
-            <button
-              onClick={() => handleCopyCode(lesson.teacherDemo.code, "demo")}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-neutral-900 dark:hover:bg-neutral-800 border border-slate-200 dark:border-neutral-800 text-xs font-bold text-slate-700 dark:text-slate-300 transition-all active:scale-95 cursor-pointer"
-            >
-              {copiedCode ? <Check size={13} className="text-blue-600 dark:text-blue-400" /> : <Copy size={13} />}
-              <span>{copiedCode ? "Copied!" : "Copy Code"}</span>
-            </button>
-          </div>
-
-          <div className="relative rounded-xl overflow-hidden border border-slate-200 dark:border-neutral-800 bg-neutral-900">
-            <div className="flex items-center justify-between px-4 py-2 bg-neutral-950 border-b border-neutral-800 text-[11px] font-mono text-slate-400">
-              <span className="text-white font-bold">{lesson.teacherDemo.title}</span>
-              <span className="uppercase text-blue-400 font-bold">{lesson.teacherDemo.language}</span>
-            </div>
-            <pre className="p-4 overflow-x-auto text-xs font-mono text-white leading-relaxed">
-              <code>{lesson.teacherDemo.code}</code>
-            </pre>
-          </div>
-        </section>
-
-        {/* STEP 4: Hands-On VS Code Practical Lab */}
-        <section id="vscode-lab" className="rounded-2xl bg-white dark:bg-neutral-950 border border-slate-200 dark:border-neutral-800 p-5 sm:p-7 mb-8 shadow-sm scroll-mt-20">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5 border-b border-slate-200 dark:border-neutral-800 pb-4">
-            <div>
-              <div className="flex items-center gap-2 mb-1">
-                <span className="p-2 rounded-xl bg-blue-50 dark:bg-neutral-900 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-neutral-800">
-                  <Code2 size={18} />
-                </span>
-                <h2 className="text-base sm:text-lg font-black text-black dark:text-white">
-                  4. Hands-On Practical Lab: Follow Instructions in VS Code
-                </h2>
-              </div>
-              <p className="text-xs text-slate-600 dark:text-slate-400">
-                Code like a professional software engineer! Follow the step-by-step instructions below in <strong className="text-black dark:text-white font-bold">Visual Studio Code (VS Code)</strong> on your PC, test your output locally, and push to GitHub.
-              </p>
-            </div>
-
-            <div className="flex items-center gap-2 shrink-0">
-              <span className="px-3 py-1 rounded-xl bg-blue-50 dark:bg-neutral-900 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-neutral-800 text-xs font-black">
-                {lesson.practicalLab.tasks.length} Coding Tasks
-              </span>
-            </div>
-          </div>
-
-          <div className="space-y-6">
-            {/* Guide Step 1: Open VS Code */}
-            <div className="rounded-xl border border-slate-200 dark:border-neutral-800 bg-slate-50 dark:bg-neutral-900/60 p-4">
-              <div className="flex items-center justify-between gap-2 mb-2">
-                <div className="flex items-center gap-2 font-bold text-xs sm:text-sm text-black dark:text-white">
-                  <span className="w-5 h-5 rounded-full bg-blue-600 text-white text-[11px] font-black flex items-center justify-center shrink-0">1</span>
-                  <span>Create Project Folder &amp; Open in VS Code</span>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => handleCopyCode(vsCodeTerminalCommand, "cmd")}
-                  className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white dark:bg-black hover:bg-slate-100 dark:hover:bg-neutral-800 border border-slate-200 dark:border-neutral-800 text-[11px] font-bold text-slate-700 dark:text-slate-300 transition-all cursor-pointer"
-                >
-                  {copiedVsCodeCmd ? <Check size={12} className="text-blue-600 dark:text-blue-400" /> : <Copy size={12} />}
-                  <span>{copiedVsCodeCmd ? "Copied!" : "Copy Command"}</span>
-                </button>
-              </div>
-              <p className="text-xs text-slate-600 dark:text-slate-400 mb-2">
-                Open <strong className="text-black dark:text-white">⊞ Windows Terminal</strong> or Command Prompt on your PC and run:
-              </p>
-              <div className="rounded-lg bg-neutral-950 p-3 font-mono text-xs text-blue-400 overflow-x-auto border border-neutral-800">
-                <code>{vsCodeTerminalCommand}</code>
-              </div>
-              <p className="text-[11px] text-slate-500 mt-1.5">
-                💡 Tip: The command <code className="text-blue-600 dark:text-blue-400 bg-white dark:bg-black px-1.5 py-0.5 rounded border border-slate-200 dark:border-neutral-800">code .</code> immediately opens the new project folder inside Visual Studio Code.
-              </p>
-            </div>
-
-            {/* Guide Step 2: Create Solution File & Starter Template */}
-            <div className="rounded-xl border border-slate-200 dark:border-neutral-800 bg-slate-50 dark:bg-neutral-900/60 p-4">
-              <div className="flex items-center justify-between gap-2 mb-2">
-                <div className="flex items-center gap-2 font-bold text-xs sm:text-sm text-black dark:text-white">
-                  <span className="w-5 h-5 rounded-full bg-blue-600 text-white text-[11px] font-black flex items-center justify-center shrink-0">2</span>
-                  <span>Create <code className="text-blue-600 dark:text-blue-400 font-mono">{primaryFile}</code> &amp; Paste Starter Template</span>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => handleCopyCode(lesson.practicalLab.initialCode, "starter")}
-                  className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white dark:bg-black hover:bg-slate-100 dark:hover:bg-neutral-800 border border-slate-200 dark:border-neutral-800 text-[11px] font-bold text-slate-700 dark:text-slate-300 transition-all cursor-pointer"
-                >
-                  {copiedStarterCode ? <Check size={12} className="text-blue-600 dark:text-blue-400" /> : <Copy size={12} />}
-                  <span>{copiedStarterCode ? "Copied!" : "Copy Starter Code"}</span>
-                </button>
-              </div>
-              <p className="text-xs text-slate-600 dark:text-slate-400 mb-2">
-                In VS Code Explorer (<code className="text-slate-700 dark:text-slate-300">Ctrl + Shift + E</code>), click <strong>New File</strong>, name it <code className="text-blue-600 dark:text-blue-400 font-mono font-bold">{primaryFile}</code>, and paste this base template:
-              </p>
-              <div className="rounded-xl overflow-hidden border border-slate-200 dark:border-neutral-800 bg-neutral-900">
-                <div className="flex items-center justify-between px-3 py-1.5 bg-neutral-950 border-b border-neutral-800 text-[11px] font-mono text-slate-400">
-                  <span className="text-white font-bold">{primaryFile}</span>
-                  <span className="uppercase text-blue-400 font-bold">{lesson.practicalLab.language}</span>
-                </div>
-                <pre className="p-3.5 overflow-x-auto text-xs font-mono text-white leading-relaxed">
-                  <code>{lesson.practicalLab.initialCode}</code>
-                </pre>
-              </div>
-            </div>
-
-            {/* Guide Step 3: Implement Tasks Specifications (Checklist) */}
-            <div>
-              <div className="flex items-center justify-between gap-2 mb-3">
-                <div className="flex items-center gap-2 font-bold text-xs sm:text-sm text-black dark:text-white">
-                  <span className="w-5 h-5 rounded-full bg-blue-600 text-white text-[11px] font-black flex items-center justify-center shrink-0">3</span>
-                  <span>Implement Practical Tasks in VS Code (Checklist)</span>
-                </div>
-                <span className="text-[11px] text-slate-500 font-mono">
-                  {Object.values(vsCodeTasksChecked).filter(Boolean).length} / {lesson.practicalLab.tasks.length} Checked
-                </span>
-              </div>
-
-              <div className="space-y-3">
-                {lesson.practicalLab.tasks.map((task, idx) => {
-                  const isChecked = Boolean(vsCodeTasksChecked[task.id]);
-                  return (
-                    <div 
-                      key={task.id}
-                      className={`p-4 rounded-xl border transition-all ${
-                        isChecked
-                          ? "bg-blue-50/50 dark:bg-neutral-900 border-blue-600/40"
-                          : "bg-white dark:bg-neutral-950 border-slate-200 dark:border-neutral-800"
-                      }`}
-                    >
-                      <div className="flex items-start gap-3">
-                        <button
-                          type="button"
-                          onClick={() => toggleVsCodeTask(task.id)}
-                          className="mt-0.5 text-blue-600 dark:text-blue-400 cursor-pointer shrink-0 hover:scale-110 transition-transform"
-                          title={isChecked ? "Mark incomplete" : "Mark done in VS Code"}
-                        >
-                          {isChecked ? <CheckCircle2 size={18} className="fill-blue-600 text-white dark:text-black" /> : <Circle size={18} />}
-                        </button>
-                        <div className="flex-1 min-w-0">
-                          <div className="flex flex-wrap items-center gap-2 mb-1">
-                            <span className="px-2 py-0.5 rounded text-[10px] font-black bg-blue-50 dark:bg-neutral-900 border border-blue-200 dark:border-neutral-800 text-blue-600 dark:text-blue-400 uppercase">
-                              Task {idx + 1}
-                            </span>
-                            <h4 className={`text-xs sm:text-sm font-black text-black dark:text-white ${isChecked ? "line-through text-slate-500 dark:text-slate-400" : ""}`}>
-                              {task.title}
-                            </h4>
-                          </div>
-                          <p className="text-xs text-slate-700 dark:text-slate-300 mb-2 leading-relaxed">
-                            {task.instruction}
-                          </p>
-
-                          {task.hint && (
-                            <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 text-[11px] text-slate-700 dark:text-slate-300 flex items-start justify-between gap-2">
-                              <div className="flex items-start gap-1.5">
-                                <Lightbulb size={13} className="text-blue-600 dark:text-blue-400 shrink-0 mt-0.5" />
-                                <div>
-                                  <strong className="text-black dark:text-white">Syntax / Hint: </strong>
-                                  <code className="font-mono text-blue-600 dark:text-blue-400">{task.hint}</code>
-                                </div>
-                              </div>
-                              <button
-                                type="button"
-                                onClick={() => handleCopyCode(task.hint, "snippet", task.id)}
-                                className="text-slate-500 hover:text-blue-600 text-[10px] font-bold shrink-0 flex items-center gap-1 cursor-pointer"
-                                title="Copy hint snippet"
-                              >
-                                {copiedSnippetId === task.id ? <Check size={11} className="text-blue-600" /> : <Copy size={11} />}
-                                <span>{copiedSnippetId === task.id ? "Copied" : "Copy"}</span>
-                              </button>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* Guide Step 4: Preview & Local Testing */}
-            <div className="rounded-xl border border-slate-200 dark:border-neutral-800 bg-slate-50 dark:bg-neutral-900/60 p-4">
-              <div className="flex items-center gap-2 font-bold text-xs sm:text-sm text-black dark:text-white mb-2">
-                <span className="w-5 h-5 rounded-full bg-blue-600 text-white text-[11px] font-black flex items-center justify-center shrink-0">4</span>
-                <span>Test &amp; Preview Locally on Your PC</span>
-              </div>
-              <ul className="space-y-1.5 text-xs text-slate-700 dark:text-slate-300 list-disc list-inside">
-                {lesson.practicalLab.language === "html" || lesson.practicalLab.language === "css" || lesson.practicalLab.language === "javascript" ? (
-                  <>
-                    <li>Right-click <code className="text-blue-600 dark:text-blue-400 font-mono font-bold">{primaryFile}</code> in VS Code and select <strong className="text-black dark:text-white">"Open with Live Server"</strong>.</li>
-                    <li>Alternatively, open File Explorer, navigate to <code className="text-slate-600 dark:text-slate-400">{targetFolder}</code>, and double-click <code className="text-blue-600 dark:text-blue-400 font-mono font-bold">{primaryFile}</code> to view in Google Chrome or Edge.</li>
-                    <li>Verify all elements and styles look correct in the browser before pushing!</li>
-                  </>
-                ) : (
-                  <>
-                    <li>In VS Code, press <code className="text-slate-700 dark:text-slate-300 font-bold">Ctrl + ~</code> to open the integrated terminal.</li>
-                    <li>Compile your code with gcc: <code className="text-blue-600 dark:text-blue-400 font-mono font-bold">gcc {primaryFile} -o app</code></li>
-                    <li>Run the binary: <code className="text-blue-600 dark:text-blue-400 font-mono font-bold">./app</code> (or <code className="text-blue-600 dark:text-blue-400 font-mono font-bold">app.exe</code> on Windows) to verify output.</li>
-                  </>
-                )}
-              </ul>
-            </div>
-
-            {/* Guide Step 5: Ready to push bridge */}
-            <div className="p-4 rounded-xl bg-blue-50 dark:bg-neutral-900 border border-blue-200 dark:border-neutral-800 flex items-start gap-3">
-              <Sparkles size={18} className="text-blue-600 dark:text-blue-400 shrink-0 mt-0.5" />
-              <div className="text-xs text-slate-700 dark:text-slate-300">
-                <strong className="text-black dark:text-white block mb-0.5">Code Complete in VS Code? Next Step:</strong>
-                <span>
-                  After implementing and verifying your code in VS Code, proceed to <strong className="text-black dark:text-white">Step 7 (Viva Check)</strong> and then execute the Git commands in <strong className="text-black dark:text-white">Step 8</strong> to push your project to GitHub. Once pushed, enter your repo link for automated live evaluation!
-                </span>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* STEP 5: Debugging Challenge */}
-        <section className="rounded-2xl bg-white dark:bg-neutral-950 border border-slate-200 dark:border-neutral-800 p-5 sm:p-6 mb-8 shadow-sm">
-          <div className="flex items-center justify-between gap-2 mb-3">
-            <h2 className="text-base font-black text-black dark:text-white flex items-center gap-2">
-              <span className="text-blue-600 dark:text-blue-400">🐛</span>
-              <span>5. Spot-the-Error: Debugging Challenge</span>
-            </h2>
-            <button
-              onClick={() => setShowBugSolution(!showBugSolution)}
-              className="px-3 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-extrabold transition-all active:scale-95 cursor-pointer"
-            >
-              {showBugSolution ? "Hide Solution" : "Reveal Explanation"}
-            </button>
-          </div>
-
-          <p className="text-xs text-slate-700 dark:text-slate-300 mb-3">
-            Inspect the buggy snippet below. Can you figure out why it fails before reading the solution?
-          </p>
-
-          <div className="rounded-xl overflow-hidden border border-slate-200 dark:border-neutral-800 bg-neutral-900 mb-4">
-            <div className="px-4 py-1.5 bg-neutral-950 border-b border-neutral-800 text-[11px] font-mono text-slate-300 font-bold">
-              ⚠️ Broken Code Snippet
-            </div>
-            <pre className="p-4 overflow-x-auto text-xs font-mono text-white leading-relaxed">
-              <code>{lesson.debuggingChallenge.buggyCode}</code>
-            </pre>
-          </div>
-
-          {showBugSolution && (
-            <div className="space-y-3 pt-2">
-              <div className="p-3.5 rounded-xl bg-blue-50 dark:bg-neutral-900 border border-blue-200 dark:border-neutral-800 text-xs text-slate-800 dark:text-slate-200">
-                <strong className="text-blue-600 dark:text-blue-400 block mb-1">Why this causes a bug:</strong>
-                <span>{lesson.debuggingChallenge.bugExplanation}</span>
-              </div>
-
-              <div className="rounded-xl overflow-hidden border border-blue-600/40 bg-neutral-900">
-                <div className="px-4 py-1.5 bg-neutral-950 border-b border-neutral-800 text-[11px] font-mono text-blue-400 font-bold">
-                  ✔ Verified Fix
-                </div>
-                <pre className="p-4 overflow-x-auto text-xs font-mono text-white leading-relaxed">
-                  <code>{lesson.debuggingChallenge.fixedCode}</code>
-                </pre>
-              </div>
-            </div>
-          )}
-        </section>
-
-        {/* STEP 6: Independent Homework Assignment */}
-        <section className="rounded-2xl bg-white dark:bg-neutral-950 border border-slate-200 dark:border-neutral-800 p-5 sm:p-6 mb-8 shadow-sm">
-          <h2 className="text-base font-black text-black dark:text-white flex items-center gap-2 mb-3">
-            <span className="text-blue-600 dark:text-blue-400">📝</span>
-            <span>6. Independent Task / Homework Assignment</span>
-          </h2>
-          <h3 className="text-sm font-extrabold text-black dark:text-white mb-2">{lesson.assignment.title}</h3>
-          
-          <ul className="space-y-1.5 mb-4 text-xs text-slate-700 dark:text-slate-300">
-            {lesson.assignment.instructions.map((inst, i) => (
-              <li key={i} className="flex items-start gap-2">
-                <span className="text-blue-600 dark:text-blue-400 font-bold">•</span>
-                <span>{inst}</span>
-              </li>
-            ))}
-          </ul>
-
-          <div className="p-3 rounded-xl bg-slate-50 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 text-xs text-slate-600 dark:text-slate-400">
-            <strong className="text-black dark:text-white">Submission Evaluation Criteria: </strong>
-            <span>{lesson.assignment.submissionCriteria}</span>
-          </div>
-        </section>
-
-        {/* STEP 7: Viva / Knowledge Check */}
-        <section id="viva-check" className="rounded-2xl bg-white dark:bg-neutral-950 border border-slate-200 dark:border-neutral-800 p-5 sm:p-6 mb-8 shadow-sm scroll-mt-20">
-          <div className="flex items-center justify-between gap-2 mb-3">
-            <h2 className="text-base font-black text-black dark:text-white flex items-center gap-2">
-              <span className="text-blue-600 dark:text-blue-400">🎓</span>
-              <span>7. Viva Check: Mandatory Conceptual Test</span>
-            </h2>
-            {vivaPassed && (
-              <span className="px-2.5 py-0.5 rounded-full bg-blue-50 dark:bg-neutral-900 border border-blue-200 dark:border-neutral-800 text-blue-600 dark:text-blue-400 text-[11px] font-black flex items-center gap-1">
-                <CheckCircle2 size={12} /> Viva Verified
-              </span>
-            )}
-          </div>
-          <p className="text-xs sm:text-sm text-black dark:text-white font-bold mb-4">
-            {lesson.vivaCheck.question}
-          </p>
-
-          <div className="space-y-2 mb-4">
-            {lesson.vivaCheck.options.map((opt, i) => {
-              const isSelected = selectedVivaOption === i;
-              const isCorrect = i === lesson.vivaCheck.correctAnswer;
-              let btnClass = "bg-white hover:bg-slate-50 dark:bg-neutral-950 dark:hover:bg-neutral-900 border-slate-200 dark:border-neutral-800 text-black dark:text-white";
-
-              if (isVivaSubmitted) {
-                if (isCorrect) {
-                  btnClass = "bg-blue-600 border-blue-600 text-white font-bold";
-                } else if (isSelected) {
-                  btnClass = "bg-slate-100 dark:bg-neutral-900 border-slate-300 dark:border-neutral-700 text-slate-500 line-through";
-                }
-              } else if (isSelected) {
-                btnClass = "bg-blue-50 dark:bg-neutral-900 border-blue-600 text-blue-600 dark:text-blue-400 font-bold";
-              }
-
-              return (
-                <button
-                  key={i}
-                  disabled={isVivaSubmitted}
-                  onClick={() => setSelectedVivaOption(i)}
-                  className={`w-full text-left p-3 rounded-xl border text-xs transition-all flex items-center justify-between cursor-pointer ${btnClass}`}
-                >
-                  <span>{opt}</span>
-                  {isVivaSubmitted && isCorrect && <CheckCircle2 size={14} className="text-white shrink-0" />}
-                </button>
-              );
-            })}
-          </div>
-
-          {!isVivaSubmitted ? (
-            <button
-              disabled={selectedVivaOption === null}
-              onClick={handleVivaSubmit}
-              className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-40 text-white font-extrabold text-xs transition-all active:scale-95 shadow-sm cursor-pointer"
-            >
-              Verify Viva Answer
-            </button>
-          ) : (
-            <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 text-xs text-slate-700 dark:text-slate-300">
-              <strong className="text-blue-600 dark:text-blue-400 block mb-0.5">Explanation:</strong>
-              <span>{lesson.vivaCheck.explanation}</span>
-            </div>
-          )}
-        </section>
-
-        {/* STEP 8: MANDATORY GITHUB SUBMISSION & PUSH VERIFICATION */}
-        <section className="rounded-2xl bg-white dark:bg-neutral-950 border-2 border-blue-600/50 p-6 sm:p-7 mb-10 shadow-sm relative overflow-hidden">
-          <div className="relative z-10">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
-              <div className="flex items-center gap-2">
-                <span className="p-2 rounded-xl bg-blue-50 dark:bg-neutral-900 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-neutral-800">
-                  <GitBranch size={18} />
-                </span>
-                <div>
-                  <h2 className="text-base sm:text-lg font-black text-black dark:text-white">
-                    8. Mandatory Step: Push to GitHub to Unlock Next Lesson
-                  </h2>
-                  <p className="text-xs text-slate-600 dark:text-slate-400">
-                    Target Repo: <code className="text-blue-600 dark:text-blue-400 bg-slate-100 dark:bg-neutral-900 px-2 py-0.5 rounded font-mono font-bold">{lesson.githubWorkflow.repoName}</code>
-                  </p>
-                </div>
-              </div>
-
-              <button
-                onClick={() => handleCopyCode(lesson.githubWorkflow.commands.join("\n"), "git")}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-neutral-900 dark:hover:bg-neutral-800 border border-slate-200 dark:border-neutral-800 text-xs font-bold text-slate-700 dark:text-slate-300 transition-all active:scale-95 cursor-pointer self-start sm:self-auto"
-              >
-                {copiedGit ? <Check size={13} className="text-blue-600 dark:text-blue-400" /> : <Copy size={13} />}
-                <span>{copiedGit ? "Copied!" : "Copy Commands"}</span>
-              </button>
-            </div>
-
-            {/* Terminal Commands Box */}
-            <div className="rounded-xl overflow-hidden border border-slate-200 dark:border-neutral-800 bg-neutral-900 mb-5">
-              <div className="px-4 py-2 bg-neutral-950 border-b border-neutral-800 text-[11px] font-mono text-slate-400 flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Terminal size={12} className="text-blue-400" />
-                  <span className="text-white">Execute in Windows 11 Terminal / VS Code:</span>
-                </div>
-                <span className="text-slate-500 text-[10px]">main branch</span>
-              </div>
-              <pre className="p-4 overflow-x-auto text-xs font-mono text-white leading-relaxed">
-                <code>{lesson.githubWorkflow.commands.join("\n")}</code>
-              </pre>
-            </div>
-
-            {/* Prerequisites Readiness Checklist Box */}
-            <div className="p-4 rounded-2xl bg-slate-50 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 mb-5">
-              <div className="flex items-center justify-between mb-3 border-b border-slate-200 dark:border-neutral-800 pb-2">
-                <span className="text-xs font-black uppercase tracking-wider text-black dark:text-white flex items-center gap-1.5">
-                  <ShieldCheck size={14} className="text-blue-600 dark:text-blue-400" />
-                  <span>Completion Prerequisites Verification</span>
-                </span>
-                <span className="text-[11px] font-mono text-slate-500">
-                  {isAllStepsCompleted ? "4 / 4 Complete" : "Incomplete Steps"}
-                </span>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
-                {/* 1. Google Auth */}
-                <div className="p-2.5 rounded-xl bg-white dark:bg-black border border-slate-200 dark:border-neutral-800 flex items-center justify-between">
-                  <div className="flex items-center gap-2 min-w-0">
-                    <UserCheck size={14} className="text-blue-600 dark:text-blue-400 shrink-0" />
-                    <span className="truncate">Google Login</span>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                {lesson.objectives.map((obj, idx) => (
+                  <div key={idx} className="flex items-start gap-2 bg-slate-50 dark:bg-neutral-900 p-3 rounded-xl border border-slate-200 dark:border-neutral-800 text-xs text-slate-800 dark:text-slate-200">
+                    <span className="text-blue-600 dark:text-blue-400 font-bold shrink-0 mt-0.5">✔</span>
+                    <span>{obj}</span>
                   </div>
-                  <span className="text-[11px] font-bold text-blue-600 dark:text-blue-400 shrink-0">
-                    ✔ {user ? user.email.split("@")[0] : "Required"}
+                ))}
+              </div>
+            </section>
+
+            {/* STEP 2: Comprehensive Lesson Masterclass & Architecture */}
+            <div className="mb-8">
+              <PracticalLessonExplainer lesson={lesson} />
+            </div>
+
+            {/* STEP 3: Teacher Demonstration Code */}
+            <section className="rounded-2xl bg-white dark:bg-neutral-950 border border-slate-200 dark:border-neutral-800 p-5 sm:p-6 mb-8 shadow-sm">
+              <div className="flex items-center justify-between gap-2 mb-3">
+                <div>
+                  <h2 className="text-base font-black text-black dark:text-white flex items-center gap-2">
+                    <span className="text-blue-600 dark:text-blue-400">👨‍🏫</span>
+                    <span>3. Teacher Demonstration Code</span>
+                  </h2>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{lesson.teacherDemo.explanation}</p>
+                </div>
+
+                <button
+                  onClick={() => handleCopyCode(lesson.teacherDemo.code, "demo")}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-neutral-900 dark:hover:bg-neutral-800 border border-slate-200 dark:border-neutral-800 text-xs font-bold text-slate-700 dark:text-slate-300 transition-all active:scale-95 cursor-pointer"
+                >
+                  {copiedCode ? <Check size={13} className="text-blue-600 dark:text-blue-400" /> : <Copy size={13} />}
+                  <span>{copiedCode ? "Copied!" : "Copy Code"}</span>
+                </button>
+              </div>
+
+              <div className="relative rounded-2xl overflow-hidden border border-slate-300 dark:border-neutral-800 bg-[#090d16]">
+                <div className="flex items-center justify-between px-4 py-2.5 bg-[#0d1322] border-b border-slate-800 text-[11px] font-mono text-slate-300">
+                  <span className="text-white font-bold flex items-center gap-2">
+                    <FileCode size={13} className="text-blue-400" />
+                    <span>{lesson.teacherDemo.title}</span>
+                  </span>
+                  <span className="uppercase text-blue-400 font-bold px-2 py-0.5 rounded bg-blue-950/60 border border-blue-800/40 text-[10px]">
+                    {lesson.teacherDemo.language}
                   </span>
                 </div>
+                <pre className="p-4 sm:p-5 overflow-x-hidden whitespace-pre-wrap break-words break-all sm:break-words text-xs font-mono text-slate-100 leading-relaxed select-all">
+                  <code className="whitespace-pre-wrap break-words break-all sm:break-words">{lesson.teacherDemo.code}</code>
+                </pre>
+              </div>
+            </section>
 
-                {/* 2. VS Code Practical Tasks */}
-                <div className="p-2.5 rounded-xl bg-white dark:bg-black border border-slate-200 dark:border-neutral-800 flex items-center justify-between">
-                  <div className="flex items-center gap-2 min-w-0">
-                    <Code2 size={14} className="text-blue-600 dark:text-blue-400 shrink-0" />
-                    <span className="truncate">VS Code Implementation</span>
+            {/* Stage 1 Footer Navigator */}
+            {currentStep !== "all" && (
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-3 p-4 rounded-2xl bg-slate-50 dark:bg-neutral-900/70 border border-slate-200 dark:border-neutral-800 mb-8">
+                <div className="text-xs text-slate-600 dark:text-slate-400 text-center sm:text-left">
+                  <strong className="text-black dark:text-white block font-bold mb-0.5">Concepts Understood?</strong>
+                  <span>Open VS Code on your PC to write your code with live interactive checkpoints.</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setCurrentStep(2);
+                    window.scrollTo({ top: 220, behavior: "smooth" });
+                  }}
+                  className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-black text-xs flex items-center gap-1.5 shadow-sm transition-all cursor-pointer active:scale-95 shrink-0"
+                >
+                  <span>Start Lab in VS Code</span>
+                  <ChevronRight size={15} />
+                </button>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* ── STAGE 2: Hands-On VS Code Practical Lab ── */}
+        {(currentStep === 2 || currentStep === "all") && (
+          <div>
+            <section id="vscode-lab" className="rounded-2xl bg-white dark:bg-neutral-950 border border-slate-200 dark:border-neutral-800 p-5 sm:p-7 mb-8 shadow-sm scroll-mt-20">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5 border-b border-slate-200 dark:border-neutral-800 pb-4">
+                <div>
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="p-2 rounded-xl bg-blue-50 dark:bg-neutral-900 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-neutral-800">
+                      <Code2 size={18} />
+                    </span>
+                    <h2 className="text-base sm:text-lg font-black text-black dark:text-white">
+                      2. Hands-On Practical Lab: Follow Instructions in VS Code
+                    </h2>
                   </div>
-                  <a href="#vscode-lab" className="text-[11px] font-bold text-blue-600 dark:text-blue-400 hover:underline shrink-0">
-                    ✔ Ready in VS Code
-                  </a>
+                  <p className="text-xs text-slate-600 dark:text-slate-400">
+                    Code like a professional software engineer! Follow the step-by-step instructions below in <strong className="text-black dark:text-white font-bold">Visual Studio Code (VS Code)</strong> on your PC, test your output locally, and push to GitHub.
+                  </p>
                 </div>
 
-                {/* 3. Viva Check */}
-                <div className="p-2.5 rounded-xl bg-white dark:bg-black border border-slate-200 dark:border-neutral-800 flex items-center justify-between">
-                  <div className="flex items-center gap-2 min-w-0">
-                    <HelpCircle size={14} className={vivaPassed ? "text-blue-600 dark:text-blue-400 shrink-0" : "text-slate-400 shrink-0"} />
-                    <span className="truncate">Step 7 Viva Check</span>
+                <div className="flex flex-wrap items-center gap-2 shrink-0">
+                  {/* View Mode Tabs: Guide vs Live Preview */}
+                  <div className="flex items-center bg-slate-100 dark:bg-neutral-900 p-1 rounded-xl border border-slate-200 dark:border-neutral-800 text-xs font-bold">
+                    <button
+                      type="button"
+                      onClick={() => setLabTab("guide")}
+                      className={`px-3 py-1 rounded-lg transition-all cursor-pointer flex items-center gap-1.5 ${
+                        labTab === "guide"
+                          ? "bg-white dark:bg-neutral-950 text-blue-600 dark:text-blue-400 shadow-sm"
+                          : "text-slate-600 dark:text-slate-400 hover:text-black dark:hover:text-white"
+                      }`}
+                    >
+                      <Code2 size={13} />
+                      <span>VS Code Guide</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setLabTab("preview")}
+                      className={`px-3 py-1 rounded-lg transition-all cursor-pointer flex items-center gap-1.5 ${
+                        labTab === "preview"
+                          ? "bg-blue-600 text-white shadow-sm"
+                          : "text-slate-600 dark:text-slate-400 hover:text-black dark:hover:text-white"
+                      }`}
+                    >
+                      <Globe size={13} />
+                      <span>Live Browser Preview</span>
+                    </button>
                   </div>
-                  {vivaPassed ? (
-                    <span className="text-[11px] font-bold text-blue-600 dark:text-blue-400 shrink-0">
-                      ✔ Answer Verified
-                    </span>
-                  ) : (
-                    <a href="#viva-check" className="text-[11px] font-bold text-slate-500 hover:text-blue-600 underline shrink-0">
-                      Verify Viva
-                    </a>
-                  )}
-                </div>
 
-                {/* 4. Own GitHub Repo */}
-                <div className="p-2.5 rounded-xl bg-white dark:bg-black border border-slate-200 dark:border-neutral-800 flex items-center justify-between">
-                  <div className="flex items-center gap-2 min-w-0">
-                    <GitBranch size={14} className={isGitHubUrlValid(githubUrlInput) ? "text-blue-600 dark:text-blue-400 shrink-0" : "text-slate-400 shrink-0"} />
-                    <span className="truncate">Own GitHub Project</span>
-                  </div>
-                  {isGitHubUrlValid(githubUrlInput) ? (
-                    <span className="text-[11px] font-bold text-blue-600 dark:text-blue-400 shrink-0">
-                      ✔ Valid Repo Link
-                    </span>
-                  ) : (
-                    <span className="text-[11px] font-bold text-slate-400 shrink-0">
-                      Required
-                    </span>
-                  )}
+                  <span className="px-3 py-1.5 rounded-xl bg-blue-50 dark:bg-neutral-900 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-neutral-800 text-xs font-black">
+                    {lesson.practicalLab.tasks.length} Coding Tasks
+                  </span>
                 </div>
               </div>
-            </div>
 
-            {/* Expected GitHub Repository Structure (Cumulative up to today) */}
-            <ExpectedRepoStructureCard lesson={lesson} />
+              {/* Lab Tab 1: Live Expected Browser Preview */}
+              {labTab === "preview" ? (
+                <div className="space-y-4">
+                  <div className="rounded-2xl border border-slate-200 dark:border-neutral-800 bg-slate-100 dark:bg-neutral-900 overflow-hidden shadow-inner">
+                    {/* Simulated Browser Chrome Header */}
+                    <div className="flex flex-wrap items-center justify-between gap-2 px-4 py-3 bg-slate-200/80 dark:bg-neutral-950 border-b border-slate-300 dark:border-neutral-800">
+                      <div className="flex items-center gap-2">
+                        <span className="w-3 h-3 rounded-full bg-rose-500 inline-block" />
+                        <span className="w-3 h-3 rounded-full bg-amber-500 inline-block" />
+                        <span className="w-3 h-3 rounded-full bg-emerald-500 inline-block" />
+                        <span className="text-xs font-bold text-slate-700 dark:text-slate-300 ml-2 flex items-center gap-1.5">
+                          <Globe size={13} className="text-blue-600 dark:text-blue-400" />
+                          <span>Expected Browser Output Preview</span>
+                        </span>
+                      </div>
 
-            {/* GitHub URL Submission Form */}
-            <form onSubmit={handleGitHubVerifyAndComplete} className="space-y-3 pt-1">
-              <div>
-                <label htmlFor="ghUrl" className="block text-xs font-black text-black dark:text-white mb-1.5">
-                  Paste your OWN personal GitHub Repository URL or Commit Link:
-                </label>
-                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
-                  <input
-                    id="ghUrl"
-                    type="url"
-                    required
-                    placeholder="https://github.com/your-username/my-bca-project"
-                    value={githubUrlInput}
-                    onChange={(e) => setGithubUrlInput(e.target.value)}
-                    className="flex-1 px-4 py-2.5 rounded-xl bg-white dark:bg-black border border-slate-300 dark:border-neutral-700 text-black dark:text-white text-xs font-mono placeholder:text-slate-400 focus:outline-none focus:border-blue-600"
-                  />
-                  <button
-                    type="submit"
-                    disabled={githubSubmitting || !isAllStepsCompleted}
-                    className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-40 text-white font-black text-xs transition-all active:scale-95 shadow-md cursor-pointer shrink-0 flex items-center justify-center gap-2 disabled:cursor-not-allowed"
-                    title={
-                      !vivaPassed
-                        ? "Pass the Viva Check question first"
-                        : !isGitHubUrlValid(githubUrlInput)
-                        ? "Enter your own GitHub repository URL"
-                        : "Verify and mark complete"
-                    }
-                  >
-                    <GitBranch size={14} />
-                    <span>
-                      {githubSubmitting
-                        ? "Verifying on GitHub..."
-                        : isCompleted
-                        ? "Update GitHub Link"
-                        : isAllStepsCompleted
-                        ? "Verify & Unlock Next Lesson 🚀"
-                        : "Pass Viva & Add Repo to Unlock 🔒"}
-                    </span>
-                  </button>
-                </div>
-                <p className="text-[11px] text-slate-500 mt-1.5">
-                  Note: NextSem directly checks your live repository code on GitHub to verify authentic implementation of Day {lesson.day} requirements.
-                </p>
-              </div>
+                      <div className="flex items-center gap-2 px-3 py-1 rounded-lg bg-white dark:bg-neutral-900 border border-slate-300 dark:border-neutral-800 text-[11px] font-mono text-slate-600 dark:text-slate-400">
+                        <span className="text-emerald-500 font-bold">🔒</span>
+                        <span>http://localhost:5500/{primaryFile}</span>
+                      </div>
+                    </div>
 
-              {/* Live GitHub Code Verification Inspector Status */}
-              {isVerifyingGithubCode && (
-                <div className="p-3.5 rounded-xl bg-blue-50 dark:bg-neutral-900 border border-blue-200 dark:border-neutral-800 flex items-center gap-3 animate-pulse">
-                  <div className="w-4 h-4 rounded-full border-2 border-blue-600 border-t-transparent animate-spin shrink-0" />
-                  <div className="text-xs">
-                    <div className="font-bold text-black dark:text-white">Connecting to GitHub & Inspecting Pushed Code...</div>
-                    <div className="text-slate-500 font-mono text-[11px]">Probing branches ('main' / 'master') for Day {lesson.day} source files and evaluating code syntax...</div>
+                    {/* Preview Content Area */}
+                    <div className="p-3 sm:p-5 bg-slate-100 dark:bg-neutral-900 flex justify-center">
+                      {lesson.practicalLab.language === "c" ? (
+                        <div className="w-full rounded-xl bg-neutral-950 text-emerald-400 p-4 font-mono text-xs border border-neutral-800 shadow-lg min-h-[260px]">
+                          <div className="text-slate-500 text-[11px] mb-2 border-b border-neutral-800 pb-1">
+                            $ gcc {primaryFile} -o app &amp;&amp; ./app
+                          </div>
+                          <div className="whitespace-pre-wrap leading-relaxed">
+                            {lesson.teacherDemo.explanation}
+                          </div>
+                        </div>
+                      ) : (
+                        <iframe
+                          title="Live Expected Browser Output"
+                          srcDoc={lesson.teacherDemo.code}
+                          sandbox="allow-scripts"
+                          className="w-full min-h-[380px] bg-white rounded-xl border border-slate-300 dark:border-neutral-800 shadow-md"
+                        />
+                      )}
+                    </div>
+
+                    {/* Browser Footer Helper Bar */}
+                    <div className="p-3 bg-white dark:bg-neutral-950 border-t border-slate-200 dark:border-neutral-800 text-xs text-slate-600 dark:text-slate-400 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                      <div className="flex items-center gap-2">
+                        <Sparkles size={14} className="text-blue-600 dark:text-blue-400 shrink-0" />
+                        <span>This live preview shows what your webpage looks like when opened with VS Code Live Server.</span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => setLabTab("guide")}
+                        className="font-bold text-blue-600 dark:text-blue-400 hover:underline cursor-pointer self-start sm:self-auto shrink-0"
+                      >
+                        ← Back to VS Code Checklist
+                      </button>
+                    </div>
                   </div>
                 </div>
-              )}
+              ) : (
+                /* Lab Tab 2: Standard Step-by-Step Guide & Tasks Checklist */
+                <div className="space-y-6">
+                  {/* Guide Step 1: Open VS Code */}
+                  <div className="rounded-xl border border-slate-200 dark:border-neutral-800 bg-slate-50 dark:bg-neutral-900/60 p-4">
+                    <div className="flex items-center gap-2 font-bold text-xs sm:text-sm text-black dark:text-white mb-2">
+                      <span className="w-5 h-5 rounded-full bg-blue-600 text-white text-[11px] font-black flex items-center justify-center shrink-0">1</span>
+                      <span>Create Project Folder &amp; Open in VS Code</span>
+                    </div>
+                    <p className="text-xs text-slate-600 dark:text-slate-400 mb-3">
+                      Open <strong className="text-black dark:text-white">⊞ Windows Terminal</strong> or Command Prompt on your PC and execute:
+                    </p>
+                    <TerminalCommandBox
+                      commands={vsCodeTerminalCommand}
+                      title="Windows 11 Terminal / PowerShell"
+                      branch=""
+                      cwd={`~/${targetFolder}`}
+                      allowOneLiner={true}
+                      defaultWrap={true}
+                    />
+                    <p className="text-[11px] text-slate-500 mt-2">
+                      💡 Tip: The command <code className="text-blue-600 dark:text-blue-400 bg-white dark:bg-black px-1.5 py-0.5 rounded border border-slate-200 dark:border-neutral-800 font-mono font-bold">code .</code> immediately opens the new project folder inside Visual Studio Code.
+                    </p>
+                  </div>
 
-              {/* Detailed GitHub Code Inspection Result Card */}
-              {githubVerificationResult && !isVerifyingGithubCode && (
-                <div className={`p-4 rounded-xl border text-xs transition-all ${
-                  githubVerificationResult.success
-                    ? "bg-blue-50/70 dark:bg-neutral-900 border-blue-600 dark:border-blue-500"
-                    : "bg-slate-50 dark:bg-neutral-900 border-slate-300 dark:border-neutral-700"
-                }`}>
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2.5 mb-2.5 border-b border-slate-200 dark:border-neutral-800">
-                    <div className="flex items-center gap-2 font-black text-black dark:text-white">
-                      {githubVerificationResult.success ? (
+                  {/* Guide Step 2: Create Solution File & Starter Template */}
+                  <div className="rounded-xl border border-slate-200 dark:border-neutral-800 bg-slate-50 dark:bg-neutral-900/60 p-4">
+                    <div className="flex items-center justify-between gap-2 mb-2">
+                      <div className="flex items-center gap-2 font-bold text-xs sm:text-sm text-black dark:text-white">
+                        <span className="w-5 h-5 rounded-full bg-blue-600 text-white text-[11px] font-black flex items-center justify-center shrink-0">2</span>
+                        <span>Create <code className="text-blue-600 dark:text-blue-400 font-mono">{primaryFile}</code> &amp; Paste Starter Template</span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => handleCopyCode(lesson.practicalLab.initialCode, "starter")}
+                        className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white dark:bg-black hover:bg-slate-100 dark:hover:bg-neutral-800 border border-slate-200 dark:border-neutral-800 text-[11px] font-bold text-slate-700 dark:text-slate-300 transition-all cursor-pointer"
+                      >
+                        {copiedStarterCode ? <Check size={12} className="text-blue-600 dark:text-blue-400" /> : <Copy size={12} />}
+                        <span>{copiedStarterCode ? "Copied!" : "Copy Starter Code"}</span>
+                      </button>
+                    </div>
+                    <p className="text-xs text-slate-600 dark:text-slate-400 mb-2">
+                      In VS Code Explorer (<code className="text-slate-700 dark:text-slate-300">Ctrl + Shift + E</code>), click <strong>New File</strong>, name it <code className="text-blue-600 dark:text-blue-400 font-mono font-bold">{primaryFile}</code>, and paste this base template:
+                    </p>
+                    <div className="rounded-xl overflow-hidden border border-slate-200 dark:border-neutral-800 bg-neutral-900">
+                      <div className="flex items-center justify-between px-3 py-1.5 bg-neutral-950 border-b border-neutral-800 text-[11px] font-mono text-slate-400">
+                        <span className="text-white font-bold">{primaryFile}</span>
+                        <span className="uppercase text-blue-400 font-bold">{lesson.practicalLab.language}</span>
+                      </div>
+                      <pre className="p-4 sm:p-5 overflow-x-hidden whitespace-pre-wrap break-words break-all sm:break-words text-xs font-mono text-white leading-relaxed select-all">
+                        <code className="whitespace-pre-wrap break-words break-all sm:break-words">{lesson.practicalLab.initialCode}</code>
+                      </pre>
+                    </div>
+                  </div>
+
+                  {/* Guide Step 3: Implement Tasks Specifications (Checklist) */}
+                  <div>
+                    <div className="flex items-center justify-between gap-2 mb-3">
+                      <div className="flex items-center gap-2 font-bold text-xs sm:text-sm text-black dark:text-white">
+                        <span className="w-5 h-5 rounded-full bg-blue-600 text-white text-[11px] font-black flex items-center justify-center shrink-0">3</span>
+                        <span>Implement Practical Tasks in VS Code (Checklist)</span>
+                      </div>
+                      <span className="text-[11px] text-slate-500 font-mono">
+                        {Object.values(vsCodeTasksChecked).filter(Boolean).length} / {lesson.practicalLab.tasks.length} Checked
+                      </span>
+                    </div>
+
+                    <div className="space-y-3">
+                      {lesson.practicalLab.tasks.map((task, idx) => {
+                        const isChecked = Boolean(vsCodeTasksChecked[task.id]);
+                        return (
+                          <div 
+                            key={task.id}
+                            className={`p-4 rounded-xl border transition-all ${
+                              isChecked
+                                ? "bg-blue-50/50 dark:bg-neutral-900 border-blue-600/40"
+                                : "bg-white dark:bg-neutral-950 border-slate-200 dark:border-neutral-800"
+                            }`}
+                          >
+                            <div className="flex items-start gap-3">
+                              <button
+                                type="button"
+                                onClick={() => toggleVsCodeTask(task.id)}
+                                className="mt-0.5 text-blue-600 dark:text-blue-400 cursor-pointer shrink-0 hover:scale-110 transition-transform"
+                                title={isChecked ? "Mark incomplete" : "Mark done in VS Code"}
+                              >
+                                {isChecked ? <CheckCircle2 size={18} className="fill-blue-600 text-white dark:text-black" /> : <Circle size={18} />}
+                              </button>
+                              <div className="flex-1 min-w-0">
+                                <div className="flex flex-wrap items-center gap-2 mb-1">
+                                  <span className="px-2 py-0.5 rounded text-[10px] font-black bg-blue-50 dark:bg-neutral-900 border border-blue-200 dark:border-neutral-800 text-blue-600 dark:text-blue-400 uppercase">
+                                    Task {idx + 1}
+                                  </span>
+                                  <h4 className={`text-xs sm:text-sm font-black text-black dark:text-white ${isChecked ? "line-through text-slate-500 dark:text-slate-400" : ""}`}>
+                                    {task.title}
+                                  </h4>
+                                </div>
+                                <p className="text-xs text-slate-700 dark:text-slate-300 mb-2 leading-relaxed">
+                                  {task.instruction}
+                                </p>
+
+                                {task.hint && (
+                                  <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 text-[11px] text-slate-700 dark:text-slate-300 flex items-start justify-between gap-2">
+                                    <div className="flex items-start gap-1.5">
+                                      <Lightbulb size={13} className="text-blue-600 dark:text-blue-400 shrink-0 mt-0.5" />
+                                      <div>
+                                        <strong className="text-black dark:text-white">Syntax / Hint: </strong>
+                                        <code className="font-mono text-blue-600 dark:text-blue-400">{task.hint}</code>
+                                      </div>
+                                    </div>
+                                    <button
+                                      type="button"
+                                      onClick={() => handleCopyCode(task.hint, "snippet", task.id)}
+                                      className="text-slate-500 hover:text-blue-600 text-[10px] font-bold shrink-0 flex items-center gap-1 cursor-pointer"
+                                      title="Copy hint snippet"
+                                    >
+                                      {copiedSnippetId === task.id ? <Check size={11} className="text-blue-600" /> : <Copy size={11} />}
+                                      <span>{copiedSnippetId === task.id ? "Copied" : "Copy"}</span>
+                                    </button>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* Guide Step 4: Preview & Local Testing */}
+                  <div className="rounded-xl border border-slate-200 dark:border-neutral-800 bg-slate-50 dark:bg-neutral-900/60 p-4">
+                    <div className="flex items-center gap-2 font-bold text-xs sm:text-sm text-black dark:text-white mb-2">
+                      <span className="w-5 h-5 rounded-full bg-blue-600 text-white text-[11px] font-black flex items-center justify-center shrink-0">4</span>
+                      <span>Test &amp; Preview Locally on Your PC</span>
+                    </div>
+                    <ul className="space-y-1.5 text-xs text-slate-700 dark:text-slate-300 list-disc list-inside">
+                      {lesson.practicalLab.language === "html" || lesson.practicalLab.language === "css" || lesson.practicalLab.language === "javascript" ? (
                         <>
-                          <CheckCircle2 size={16} className="text-blue-600 dark:text-blue-400 shrink-0" />
-                          <span>Live GitHub Code Verification: PASSED ✅</span>
+                          <li>Right-click <code className="text-blue-600 dark:text-blue-400 font-mono font-bold">{primaryFile}</code> in VS Code and select <strong className="text-black dark:text-white">"Open with Live Server"</strong>.</li>
+                          <li>Alternatively, open File Explorer, navigate to <code className="text-slate-600 dark:text-slate-400">{targetFolder}</code>, and double-click <code className="text-blue-600 dark:text-blue-400 font-mono font-bold">{primaryFile}</code> to view in Google Chrome or Edge.</li>
+                          <li>Verify all elements and styles look correct in the browser before pushing!</li>
                         </>
                       ) : (
                         <>
-                          <AlertCircle size={16} className="text-slate-600 dark:text-slate-400 shrink-0" />
-                          <span>GitHub Code Verification Findings ⚠️</span>
+                          <li>In VS Code, press <code className="text-slate-700 dark:text-slate-300 font-bold">Ctrl + ~</code> to open the integrated terminal.</li>
+                          <li>Compile your code with gcc: <code className="text-blue-600 dark:text-blue-400 font-mono font-bold">gcc {primaryFile} -o app</code></li>
+                          <li>Run the binary: <code className="text-blue-600 dark:text-blue-400 font-mono font-bold">./app</code> (or <code className="text-blue-600 dark:text-blue-400 font-mono font-bold">app.exe</code> on Windows) to verify output.</li>
                         </>
                       )}
-                    </div>
-                    {githubVerificationResult.matchedFile && (
-                      <span className="font-mono text-[10px] px-2 py-0.5 rounded bg-white dark:bg-black border border-slate-200 dark:border-neutral-800 text-slate-700 dark:text-slate-300 self-start sm:self-auto">
-                        📄 {githubVerificationResult.matchedFile} ({githubVerificationResult.branch} branch • {githubVerificationResult.fileSize} chars)
-                      </span>
-                    )}
+                    </ul>
                   </div>
 
-                  {/* Passed items list */}
-                  {githubVerificationResult.passedItems.length > 0 && (
-                    <div className="space-y-1 mb-2">
-                      <div className="text-[10px] font-black uppercase tracking-wider text-blue-600 dark:text-blue-400">Verified on GitHub:</div>
-                      {githubVerificationResult.passedItems.map((item, idx) => (
-                        <div key={idx} className="flex items-center gap-1.5 text-slate-700 dark:text-slate-300 text-[11px]">
-                          <Check size={13} className="text-blue-600 dark:text-blue-400 shrink-0" />
-                          <span>{item}</span>
-                        </div>
-                      ))}
+                  {/* Guide Step 5: Ready to push bridge */}
+                  <div className="p-4 rounded-xl bg-blue-50 dark:bg-neutral-900 border border-blue-200 dark:border-neutral-800 flex items-start gap-3">
+                    <Sparkles size={18} className="text-blue-600 dark:text-blue-400 shrink-0 mt-0.5" />
+                    <div className="text-xs text-slate-700 dark:text-slate-300">
+                      <strong className="text-black dark:text-white block mb-0.5">Code Complete in VS Code? Next Step:</strong>
+                      <span>
+                        After implementing and verifying your code in VS Code, proceed to <strong className="text-black dark:text-white">Step 3 (Bug Hunt)</strong> and <strong className="text-black dark:text-white">Step 4 (Viva Check)</strong> before executing git push in Step 5!
+                      </span>
                     </div>
-                  )}
-
-                  {/* Missing items list */}
-                  {githubVerificationResult.missingItems.length > 0 && (
-                    <div className="space-y-1 mt-2.5 pt-2.5 border-t border-slate-200 dark:border-neutral-800">
-                      <div className="text-[10px] font-black uppercase tracking-wider text-slate-500">Missing or Needs Attention:</div>
-                      {githubVerificationResult.missingItems.map((item, idx) => (
-                        <div key={idx} className="flex items-start gap-1.5 text-slate-700 dark:text-slate-300 text-[11px]">
-                          <Circle size={8} className="text-slate-400 mt-1 shrink-0" />
-                          <span>{item}</span>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-
-                  {/* Code snippet preview */}
-                  {githubVerificationResult.rawContentSnippet && (
-                    <div className="mt-2.5 pt-2 border-t border-slate-200 dark:border-neutral-800">
-                      <div className="text-[10px] font-mono text-slate-500 mb-1">Preview of code fetched from GitHub:</div>
-                      <pre className="p-2 rounded bg-white dark:bg-black border border-slate-200 dark:border-neutral-800 text-[10px] font-mono text-slate-800 dark:text-slate-200 overflow-x-auto max-h-24 leading-snug">
-                        {githubVerificationResult.rawContentSnippet}
-                      </pre>
-                    </div>
-                  )}
+                  </div>
                 </div>
               )}
+            </section>
 
-              {githubFeedback.message && (
-                <div className={`p-3 rounded-xl border text-xs font-bold ${
-                  githubFeedback.status === "success" 
-                    ? "bg-blue-50 dark:bg-blue-950/60 border-blue-600 text-blue-700 dark:text-blue-300" 
-                    : "bg-slate-100 dark:bg-neutral-900 border-slate-300 dark:border-neutral-700 text-black dark:text-white"
-                }`}>
-                  {githubFeedback.message}
-                </div>
-              )}
+            {/* Stage 2 Footer Navigator */}
+            {currentStep !== "all" && (
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-3 p-4 rounded-2xl bg-slate-50 dark:bg-neutral-900/70 border border-slate-200 dark:border-neutral-800 mb-8">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setCurrentStep(1);
+                    window.scrollTo({ top: 220, behavior: "smooth" });
+                  }}
+                  className="px-4 py-2 rounded-xl bg-white dark:bg-neutral-950 hover:bg-slate-100 dark:hover:bg-neutral-800 border border-slate-200 dark:border-neutral-800 text-black dark:text-white font-bold text-xs flex items-center gap-1.5 transition-all cursor-pointer active:scale-95 w-full sm:w-auto justify-center"
+                >
+                  <ChevronLeft size={15} />
+                  <span>← Step 1: Concepts &amp; Demo</span>
+                </button>
 
-              {isCompleted && !githubFeedback.message && (
-                <div className="p-3 rounded-xl bg-blue-50 dark:bg-neutral-900 border border-blue-200 dark:border-neutral-800 text-xs text-blue-700 dark:text-blue-300 flex items-center gap-2 font-bold">
-                  <CheckCircle2 size={15} className="text-blue-600 dark:text-blue-400 shrink-0" />
-                  <span>Verified! Your code is pushed to GitHub and recorded in your student profile.</span>
+                <div className="text-xs text-slate-500 font-mono text-center">
+                  Tasks: {Object.values(vsCodeTasksChecked).filter(Boolean).length} / {lesson.practicalLab.tasks.length} Completed
                 </div>
-              )}
-            </form>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setCurrentStep(3);
+                    window.scrollTo({ top: 220, behavior: "smooth" });
+                  }}
+                  className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-black text-xs flex items-center gap-1.5 shadow-sm transition-all cursor-pointer active:scale-95 w-full sm:w-auto justify-center"
+                >
+                  <span>Continue to Bug Hunt</span>
+                  <ChevronRight size={15} />
+                </button>
+              </div>
+            )}
           </div>
-        </section>
+        )}
+
+        {/* ── STAGE 3: Spot-the-Error & Assignment ── */}
+        {(currentStep === 3 || currentStep === "all") && (
+          <div>
+            {/* ── INTERACTIVE BUG DETECTIVE ARENA ── */}
+            <BugDetectiveLab
+              day={lesson.day}
+              title={lesson.debuggingChallenge.title}
+              buggyCode={lesson.debuggingChallenge.buggyCode}
+              bugExplanation={lesson.debuggingChallenge.bugExplanation}
+              fixedCode={lesson.debuggingChallenge.fixedCode}
+            />
+
+            {/* STEP 6: Independent Homework Assignment */}
+            <section className="rounded-2xl bg-white dark:bg-neutral-950 border border-slate-200 dark:border-neutral-800 p-5 sm:p-6 mb-8 shadow-sm">
+              <h2 className="text-base font-black text-black dark:text-white flex items-center gap-2 mb-3">
+                <span className="text-blue-600 dark:text-blue-400">📝</span>
+                <span>Independent Practice: Assignment</span>
+              </h2>
+              <h3 className="text-sm font-extrabold text-black dark:text-white mb-2">{lesson.assignment.title}</h3>
+              
+              <ul className="space-y-1.5 mb-4 text-xs text-slate-700 dark:text-slate-300">
+                {lesson.assignment.instructions.map((inst, i) => (
+                  <li key={i} className="flex items-start gap-2">
+                    <span className="text-blue-600 dark:text-blue-400 font-bold">•</span>
+                    <span>{inst}</span>
+                  </li>
+                ))}
+              </ul>
+
+              <div className="p-3 rounded-xl bg-slate-50 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 text-xs text-slate-600 dark:text-slate-400">
+                <strong className="text-black dark:text-white">Submission Evaluation Criteria: </strong>
+                <span>{lesson.assignment.submissionCriteria}</span>
+              </div>
+
+              {/* Optional Expandable Implementation Blueprint & Tag Checklist */}
+              <div className="mt-4 pt-3 border-t border-slate-100 dark:border-neutral-900">
+                <button
+                  type="button"
+                  onClick={() => setShowAssignmentBlueprint(!showAssignmentBlueprint)}
+                  className="inline-flex items-center gap-2 text-xs font-bold text-blue-600 dark:text-blue-400 hover:underline cursor-pointer"
+                >
+                  <Lightbulb size={14} />
+                  <span>{showAssignmentBlueprint ? "Hide Homework Blueprint & Tag Guidance" : "💡 Need Help? View Expected Tag Blueprint & Guidance"}</span>
+                </button>
+
+                {showAssignmentBlueprint && (
+                  <div className="mt-3 p-4 rounded-xl bg-slate-50 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 text-xs space-y-3 animate-in fade-in duration-150">
+                    <div className="flex items-center justify-between">
+                      <span className="font-bold text-black dark:text-white flex items-center gap-1.5">
+                        <FileCode size={14} className="text-blue-500" />
+                        <span>Recommended Blueprint for {lesson.assignment.title}</span>
+                      </span>
+                      <span className="text-[10px] text-slate-500 font-mono">VS Code Reference</span>
+                    </div>
+
+                    <p className="text-slate-600 dark:text-slate-400 leading-relaxed text-[11px]">
+                      Follow this structure inside your local code editor. Every field must have a connected <code className="text-blue-600 dark:text-blue-400">&lt;label for="..."&gt;</code> and appropriate input validation:
+                    </p>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px]">
+                      <div className="p-2.5 rounded-lg bg-white dark:bg-black border border-slate-200 dark:border-neutral-800 space-y-1">
+                        <span className="font-bold text-black dark:text-white block">1. Personal Details</span>
+                        <span className="text-slate-500 block">• Name: <code>type="text"</code>, <code>required</code>, <code>minlength="3"</code></span>
+                        <span className="text-slate-500 block">• Email: <code>type="email"</code>, <code>required</code></span>
+                        <span className="text-slate-500 block">• Phone: <code>type="tel"</code>, <code>pattern="[0-9]{10}"</code></span>
+                      </div>
+
+                      <div className="p-2.5 rounded-lg bg-white dark:bg-black border border-slate-200 dark:border-neutral-800 space-y-1">
+                        <span className="font-bold text-black dark:text-white block">2. Professional Controls</span>
+                        <span className="text-slate-500 block">• Resume: <code>type="file"</code>, <code>accept=".pdf,.doc"</code></span>
+                        <span className="text-slate-500 block">• Experience: <code>type="radio"</code> with same <code>name="experience"</code></span>
+                        <span className="text-slate-500 block">• Skills: <code>type="checkbox"</code> (HTML, CSS, JS, C, SQL)</span>
+                      </div>
+                    </div>
+
+                    <div className="p-2.5 rounded-lg bg-blue-50/70 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-900/40 text-[11px] text-slate-700 dark:text-slate-300">
+                      💡 <strong>Golden Rule:</strong> Ensure all inputs have their <code>name</code> attribute configured so the form does not send an empty payload when tested in your browser!
+                    </div>
+                  </div>
+                )}
+              </div>
+            </section>
+
+            {/* Stage 3 Footer Navigator */}
+            {currentStep !== "all" && (
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-3 p-4 rounded-2xl bg-slate-50 dark:bg-neutral-900/70 border border-slate-200 dark:border-neutral-800 mb-8">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setCurrentStep(2);
+                    window.scrollTo({ top: 220, behavior: "smooth" });
+                  }}
+                  className="px-4 py-2 rounded-xl bg-white dark:bg-neutral-950 hover:bg-slate-100 dark:hover:bg-neutral-800 border border-slate-200 dark:border-neutral-800 text-black dark:text-white font-bold text-xs flex items-center gap-1.5 transition-all cursor-pointer active:scale-95 w-full sm:w-auto justify-center"
+                >
+                  <ChevronLeft size={15} />
+                  <span>← Step 2: VS Code Lab</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setCurrentStep(4);
+                    window.scrollTo({ top: 220, behavior: "smooth" });
+                  }}
+                  className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-black text-xs flex items-center gap-1.5 shadow-sm transition-all cursor-pointer active:scale-95 w-full sm:w-auto justify-center"
+                >
+                  <span>Proceed to Viva Check</span>
+                  <ChevronRight size={15} />
+                </button>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* ── STAGE 4: Viva Check ── */}
+        {(currentStep === 4 || currentStep === "all") && (
+          <div>
+            {/* STEP 7: Viva / Knowledge Check */}
+            <section id="viva-check" className="rounded-2xl bg-white dark:bg-neutral-950 border border-slate-200 dark:border-neutral-800 p-5 sm:p-6 mb-8 shadow-sm scroll-mt-20">
+              <div className="flex items-center justify-between gap-2 mb-3">
+                <h2 className="text-base font-black text-black dark:text-white flex items-center gap-2">
+                  <span className="text-blue-600 dark:text-blue-400">🎓</span>
+                  <span>4. Viva Check: Mandatory Conceptual Test</span>
+                </h2>
+                {vivaPassed && (
+                  <span className="px-2.5 py-0.5 rounded-full bg-blue-50 dark:bg-neutral-900 border border-blue-200 dark:border-neutral-800 text-blue-600 dark:text-blue-400 text-[11px] font-black flex items-center gap-1">
+                    <CheckCircle2 size={12} /> Viva Verified
+                  </span>
+                )}
+              </div>
+              <p className="text-xs sm:text-sm text-black dark:text-white font-bold mb-4">
+                {lesson.vivaCheck.question}
+              </p>
+
+              <div className="space-y-2.5 mb-4">
+                {shuffledVivaOptions.map((item, i) => {
+                  const isSelected = selectedVivaOption === i;
+                  const isCorrect = item.originalIndex === lesson.vivaCheck.correctAnswer;
+                  const optionLetter = String.fromCharCode(65 + i); // 'A', 'B', 'C', 'D'
+                  let btnClass = "bg-white hover:bg-slate-50 dark:bg-neutral-950 dark:hover:bg-neutral-900 border-slate-200 dark:border-neutral-800 text-black dark:text-white";
+
+                  if (isVivaSubmitted) {
+                    if (isCorrect) {
+                      btnClass = "bg-blue-600 border-blue-600 text-white font-bold";
+                    } else if (isSelected) {
+                      btnClass = "bg-rose-50 dark:bg-rose-950/30 border-rose-300 dark:border-rose-800 text-rose-600 dark:text-rose-400";
+                    }
+                  } else if (isSelected) {
+                    btnClass = "bg-blue-50 dark:bg-neutral-900 border-blue-600 text-blue-600 dark:text-blue-400 font-bold";
+                  }
+
+                  return (
+                    <button
+                      key={i}
+                      disabled={isVivaSubmitted && vivaPassed}
+                      onClick={() => setSelectedVivaOption(i)}
+                      className={`w-full text-left p-3.5 rounded-xl border text-xs transition-all flex items-start justify-between gap-3 cursor-pointer ${btnClass}`}
+                    >
+                      <div className="flex items-start gap-2.5 min-w-0">
+                        <span className={`w-5 h-5 rounded-full flex items-center justify-center font-black text-[10px] shrink-0 mt-0.5 ${
+                          isVivaSubmitted && isCorrect 
+                            ? "bg-white text-blue-600" 
+                            : isSelected 
+                            ? "bg-blue-600 text-white" 
+                            : "bg-slate-100 dark:bg-neutral-800 text-slate-600 dark:text-slate-300"
+                        }`}>
+                          {optionLetter}
+                        </span>
+                        <span className="break-words leading-relaxed">{item.text}</span>
+                      </div>
+                      {isVivaSubmitted && isCorrect && <CheckCircle2 size={16} className="text-white shrink-0 mt-0.5" />}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {!isVivaSubmitted ? (
+                <button
+                  disabled={selectedVivaOption === null}
+                  onClick={handleVivaSubmit}
+                  className="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-40 text-white font-extrabold text-xs transition-all active:scale-95 shadow-sm cursor-pointer"
+                >
+                  Verify Viva Answer
+                </button>
+              ) : !vivaPassed ? (
+                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+                  <button
+                    onClick={() => {
+                      setIsVivaSubmitted(false);
+                      setSelectedVivaOption(null);
+                      // Reshuffle options again on retry so position cannot be memorized
+                      setShuffledVivaOptions(prev => {
+                        const copy = [...prev];
+                        for (let i = copy.length - 1; i > 0; i--) {
+                          const j = Math.floor(Math.random() * (i + 1));
+                          [copy[i], copy[j]] = [copy[j], copy[i]];
+                        }
+                        return copy;
+                      });
+                    }}
+                    className="px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-extrabold text-xs transition-all active:scale-95 shadow-sm cursor-pointer"
+                  >
+                    Incorrect — Reshuffle & Try Again 🔄
+                  </button>
+                  <span className="text-xs text-amber-600 dark:text-amber-400 font-medium">
+                    Options have been reshuffled. Think through the concept carefully!
+                  </span>
+                </div>
+              ) : (
+                <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 text-xs text-slate-700 dark:text-slate-300">
+                  <strong className="text-blue-600 dark:text-blue-400 block mb-0.5">Explanation:</strong>
+                  <span>{lesson.vivaCheck.explanation}</span>
+                </div>
+              )}
+            </section>
+
+            {/* Stage 4 Footer Navigator */}
+            {currentStep !== "all" && (
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-3 p-4 rounded-2xl bg-slate-50 dark:bg-neutral-900/70 border border-slate-200 dark:border-neutral-800 mb-8">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setCurrentStep(3);
+                    window.scrollTo({ top: 220, behavior: "smooth" });
+                  }}
+                  className="px-4 py-2 rounded-xl bg-white dark:bg-neutral-950 hover:bg-slate-100 dark:hover:bg-neutral-800 border border-slate-200 dark:border-neutral-800 text-black dark:text-white font-bold text-xs flex items-center gap-1.5 transition-all cursor-pointer active:scale-95 w-full sm:w-auto justify-center"
+                >
+                  <ChevronLeft size={15} />
+                  <span>← Step 3: Bug Hunt</span>
+                </button>
+
+                <div className="text-xs text-slate-500 font-mono text-center">
+                  {vivaPassed ? "✔ Viva Passed" : "Answer correctly to proceed"}
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setCurrentStep(5);
+                    window.scrollTo({ top: 220, behavior: "smooth" });
+                  }}
+                  className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-black text-xs flex items-center gap-1.5 shadow-sm transition-all cursor-pointer active:scale-95 w-full sm:w-auto justify-center"
+                >
+                  <span>Final Step: GitHub Push 🚀</span>
+                  <ChevronRight size={15} />
+                </button>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* ── STAGE 5: GitHub Push & Unlock ── */}
+        {(currentStep === 5 || currentStep === "all") && (
+          <div>
+            {/* STEP 8: MANDATORY GITHUB SUBMISSION & PUSH VERIFICATION */}
+            <section className="rounded-2xl bg-white dark:bg-neutral-950 border-2 border-blue-600/50 p-6 sm:p-7 mb-10 shadow-sm relative overflow-hidden">
+              <div className="relative z-10">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
+                  <div className="flex items-center gap-2">
+                    <span className="p-2 rounded-xl bg-blue-50 dark:bg-neutral-900 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-neutral-800">
+                      <GitBranch size={18} />
+                    </span>
+                    <div>
+                      <h2 className="text-base sm:text-lg font-black text-black dark:text-white">
+                        5. Mandatory Step: Push to GitHub to Unlock Next Lesson
+                      </h2>
+                      <p className="text-xs text-slate-600 dark:text-slate-400">
+                        Target Repo: <code className="text-blue-600 dark:text-blue-400 bg-slate-100 dark:bg-neutral-900 px-2 py-0.5 rounded font-mono font-bold">{lesson.githubWorkflow.repoName}</code>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Terminal Commands Box (Optimized with Word Wrap, Line Numbers, Syntax Highlighting & 1-Click Copy) */}
+                <div className="mb-5">
+                  <TerminalCommandBox
+                    commands={lesson.githubWorkflow.commands}
+                    title="Windows 11 Terminal / VS Code"
+                    branch="main"
+                    repoName={lesson.githubWorkflow.repoName}
+                    cwd={`~/${lesson.githubWorkflow.repoName || "html-css-projects"}`}
+                    allowOneLiner={true}
+                    defaultWrap={true}
+                  />
+                </div>
+
+                {/* Prerequisites Readiness Checklist Box */}
+                <div className="p-4 rounded-2xl bg-slate-50 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 mb-5">
+                  <div className="flex items-center justify-between mb-3 border-b border-slate-200 dark:border-neutral-800 pb-2">
+                    <span className="text-xs font-black uppercase tracking-wider text-black dark:text-white flex items-center gap-1.5">
+                      <ShieldCheck size={14} className="text-blue-600 dark:text-blue-400" />
+                      <span>Completion Prerequisites Verification</span>
+                    </span>
+                    <span className="text-[11px] font-mono text-slate-500">
+                      {isAllStepsCompleted ? "4 / 4 Complete" : "Incomplete Steps"}
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
+                    {/* 1. Google Auth */}
+                    <div className="p-2.5 rounded-xl bg-white dark:bg-black border border-slate-200 dark:border-neutral-800 flex items-center justify-between">
+                      <div className="flex items-center gap-2 min-w-0">
+                        <UserCheck size={14} className="text-blue-600 dark:text-blue-400 shrink-0" />
+                        <span className="truncate">Google Login</span>
+                      </div>
+                      <span className="text-[11px] font-bold text-blue-600 dark:text-blue-400 shrink-0">
+                        ✔ {user ? user.email.split("@")[0] : "Required"}
+                      </span>
+                    </div>
+
+                    {/* 2. VS Code Practical Tasks */}
+                    <div className="p-2.5 rounded-xl bg-white dark:bg-black border border-slate-200 dark:border-neutral-800 flex items-center justify-between">
+                      <div className="flex items-center gap-2 min-w-0">
+                        <Code2 size={14} className="text-blue-600 dark:text-blue-400 shrink-0" />
+                        <span className="truncate">VS Code Implementation</span>
+                      </div>
+                      <button 
+                        type="button" 
+                        onClick={() => setCurrentStep(2)} 
+                        className="text-[11px] font-bold text-blue-600 dark:text-blue-400 hover:underline shrink-0 cursor-pointer"
+                      >
+                        ✔ Ready in VS Code
+                      </button>
+                    </div>
+
+                    {/* 3. Viva Check */}
+                    <div className="p-2.5 rounded-xl bg-white dark:bg-black border border-slate-200 dark:border-neutral-800 flex items-center justify-between">
+                      <div className="flex items-center gap-2 min-w-0">
+                        <HelpCircle size={14} className={vivaPassed ? "text-blue-600 dark:text-blue-400 shrink-0" : "text-slate-400 shrink-0"} />
+                        <span className="truncate">Step 4 Viva Check</span>
+                      </div>
+                      {vivaPassed ? (
+                        <span className="text-[11px] font-bold text-blue-600 dark:text-blue-400 shrink-0">
+                          ✔ Answer Verified
+                        </span>
+                      ) : (
+                        <button 
+                          type="button" 
+                          onClick={() => setCurrentStep(4)} 
+                          className="text-[11px] font-bold text-slate-500 hover:text-blue-600 underline shrink-0 cursor-pointer"
+                        >
+                          Verify Viva
+                        </button>
+                      )}
+                    </div>
+
+                    {/* 4. Own GitHub Repo */}
+                    <div className="p-2.5 rounded-xl bg-white dark:bg-black border border-slate-200 dark:border-neutral-800 flex items-center justify-between">
+                      <div className="flex items-center gap-2 min-w-0">
+                        <GitBranch size={14} className={isGitHubUrlValid(githubUrlInput) ? "text-blue-600 dark:text-blue-400 shrink-0" : "text-slate-400 shrink-0"} />
+                        <span className="truncate">Own GitHub Project</span>
+                      </div>
+                      {isGitHubUrlValid(githubUrlInput) ? (
+                        <span className="text-[11px] font-bold text-blue-600 dark:text-blue-400 shrink-0">
+                          ✔ Valid Repo Link
+                        </span>
+                      ) : (
+                        <span className="text-[11px] font-bold text-slate-400 shrink-0">
+                          Required
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Expected GitHub Repository Structure (Cumulative up to today) */}
+                <ExpectedRepoStructureCard lesson={lesson} />
+
+                {/* GitHub URL Submission Form */}
+                <form onSubmit={handleGitHubVerifyAndComplete} className="space-y-3 pt-1">
+                  <div>
+                    <label htmlFor="ghUrl" className="block text-xs font-black text-black dark:text-white mb-1.5">
+                      Paste your OWN personal GitHub Repository URL or Commit Link:
+                    </label>
+                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+                      <input
+                        id="ghUrl"
+                        type="url"
+                        required
+                        placeholder="https://github.com/your-username/my-bca-project"
+                        value={githubUrlInput}
+                        onChange={(e) => setGithubUrlInput(e.target.value)}
+                        className="flex-1 px-4 py-2.5 rounded-xl bg-white dark:bg-black border border-slate-300 dark:border-neutral-700 text-black dark:text-white text-xs font-mono placeholder:text-slate-400 focus:outline-none focus:border-blue-600"
+                      />
+                      <button
+                        type="submit"
+                        disabled={githubSubmitting || !isAllStepsCompleted}
+                        className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-40 text-white font-black text-xs transition-all active:scale-95 shadow-md cursor-pointer shrink-0 flex items-center justify-center gap-2 disabled:cursor-not-allowed"
+                        title={
+                          !vivaPassed
+                            ? "Pass the Viva Check question first"
+                            : !isGitHubUrlValid(githubUrlInput)
+                            ? "Enter your own GitHub repository URL"
+                            : "Verify and mark complete"
+                        }
+                      >
+                        <GitBranch size={14} />
+                        <span>
+                          {githubSubmitting
+                            ? "Verifying on GitHub..."
+                            : isCompleted
+                            ? "Update GitHub Link"
+                            : isAllStepsCompleted
+                            ? "Verify & Unlock Next Lesson 🚀"
+                            : "Pass Viva & Add Repo to Unlock 🔒"}
+                        </span>
+                      </button>
+                    </div>
+                    <p className="text-[11px] text-slate-500 mt-1.5">
+                      Note: NextSem directly checks your live repository code on GitHub to verify authentic implementation of Day {lesson.day} requirements.
+                    </p>
+                  </div>
+
+                  {/* Live GitHub Code Verification Inspector Status */}
+                  {isVerifyingGithubCode && (
+                    <div className="p-3.5 rounded-xl bg-blue-50 dark:bg-neutral-900 border border-blue-200 dark:border-neutral-800 flex items-center gap-3 animate-pulse">
+                      <div className="w-4 h-4 rounded-full border-2 border-blue-600 border-t-transparent animate-spin shrink-0" />
+                      <div className="text-xs">
+                        <div className="font-bold text-black dark:text-white">Connecting to GitHub &amp; Inspecting Pushed Code...</div>
+                        <div className="text-slate-500 font-mono text-[11px]">Probing branches (&apos;main&apos; / &apos;master&apos;) for Day {lesson.day} source files and evaluating code syntax...</div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Detailed GitHub Code Inspection Result Card */}
+                  {githubVerificationResult && !isVerifyingGithubCode && (
+                    <div className={`p-4 rounded-xl border text-xs transition-all ${
+                      githubVerificationResult.success
+                        ? "bg-blue-50/70 dark:bg-neutral-900 border-blue-600 dark:border-blue-500"
+                        : "bg-slate-50 dark:bg-neutral-900 border-slate-300 dark:border-neutral-700"
+                    }`}>
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2.5 mb-2.5 border-b border-slate-200 dark:border-neutral-800">
+                        <div className="flex items-center gap-2 font-black text-black dark:text-white">
+                          {githubVerificationResult.success ? (
+                            <>
+                              <CheckCircle2 size={16} className="text-blue-600 dark:text-blue-400 shrink-0" />
+                              <span>Live GitHub Code Verification: PASSED ✅</span>
+                            </>
+                          ) : (
+                            <>
+                              <AlertCircle size={16} className="text-slate-600 dark:text-slate-400 shrink-0" />
+                              <span>GitHub Code Verification Findings ⚠️</span>
+                            </>
+                          )}
+                        </div>
+                        {githubVerificationResult.matchedFile && (
+                          <span className="font-mono text-[10px] px-2 py-0.5 rounded bg-white dark:bg-black border border-slate-200 dark:border-neutral-800 text-slate-700 dark:text-slate-300 self-start sm:self-auto">
+                            📄 {githubVerificationResult.matchedFile} ({githubVerificationResult.branch} branch • {githubVerificationResult.fileSize} chars)
+                          </span>
+                        )}
+                      </div>
+
+                      {/* Passed items list */}
+                      {githubVerificationResult.passedItems.length > 0 && (
+                        <div className="space-y-1 mb-2">
+                          <div className="text-[10px] font-black uppercase tracking-wider text-blue-600 dark:text-blue-400">Verified on GitHub:</div>
+                          {githubVerificationResult.passedItems.map((item, idx) => (
+                            <div key={idx} className="flex items-center gap-1.5 text-slate-700 dark:text-slate-300 text-[11px]">
+                              <Check size={13} className="text-blue-600 dark:text-blue-400 shrink-0" />
+                              <span>{item}</span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+
+                      {/* Missing items list */}
+                      {githubVerificationResult.missingItems.length > 0 && (
+                        <div className="space-y-1 mt-2.5 pt-2.5 border-t border-slate-200 dark:border-neutral-800">
+                          <div className="text-[10px] font-black uppercase tracking-wider text-slate-500">Missing or Needs Attention:</div>
+                          {githubVerificationResult.missingItems.map((item, idx) => (
+                            <div key={idx} className="flex items-start gap-1.5 text-slate-700 dark:text-slate-300 text-[11px]">
+                              <Circle size={8} className="text-slate-400 mt-1 shrink-0" />
+                              <span>{item}</span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+
+                      {/* Code snippet preview */}
+                      {githubVerificationResult.rawContentSnippet && (
+                        <div className="mt-2.5 pt-2 border-t border-slate-200 dark:border-neutral-800">
+                          <div className="text-[10px] font-mono text-slate-500 mb-1">Preview of code fetched from GitHub:</div>
+                          <pre className="p-3 rounded-xl bg-white dark:bg-black border border-slate-200 dark:border-neutral-800 text-[10px] font-mono text-slate-800 dark:text-slate-200 overflow-x-hidden whitespace-pre-wrap break-words break-all sm:break-words max-h-36 leading-snug">
+                            <code className="whitespace-pre-wrap break-words break-all sm:break-words">{githubVerificationResult.rawContentSnippet}</code>
+                          </pre>
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {githubFeedback.message && (
+                    <div className={`p-3 rounded-xl border text-xs font-bold ${
+                      githubFeedback.status === "success" 
+                        ? "bg-blue-50 dark:bg-blue-950/60 border-blue-600 text-blue-700 dark:text-blue-300" 
+                        : "bg-slate-100 dark:bg-neutral-900 border-slate-300 dark:border-neutral-700 text-black dark:text-white"
+                    }`}>
+                      {githubFeedback.message}
+                    </div>
+                  )}
+
+                  {isCompleted && !githubFeedback.message && (
+                    <div className="p-3 rounded-xl bg-blue-50 dark:bg-neutral-900 border border-blue-200 dark:border-neutral-800 text-xs text-blue-700 dark:text-blue-300 flex items-center gap-2 font-bold">
+                      <CheckCircle2 size={15} className="text-blue-600 dark:text-blue-400 shrink-0" />
+                      <span>Verified! Your code is pushed to GitHub and recorded in your student profile.</span>
+                    </div>
+                  )}
+                </form>
+              </div>
+            </section>
+
+            {/* Stage 5 Footer Navigator */}
+            {currentStep !== "all" && (
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-3 p-4 rounded-2xl bg-slate-50 dark:bg-neutral-900/70 border border-slate-200 dark:border-neutral-800 mb-8">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setCurrentStep(4);
+                    window.scrollTo({ top: 220, behavior: "smooth" });
+                  }}
+                  className="px-4 py-2 rounded-xl bg-white dark:bg-neutral-950 hover:bg-slate-100 dark:hover:bg-neutral-800 border border-slate-200 dark:border-neutral-800 text-black dark:text-white font-bold text-xs flex items-center gap-1.5 transition-all cursor-pointer active:scale-95 w-full sm:w-auto justify-center"
+                >
+                  <ChevronLeft size={15} />
+                  <span>← Step 4: Viva Check</span>
+                </button>
+                <span className="text-xs font-mono text-slate-500 text-center">
+                  {isCompleted ? "Day Completed! See advance buttons below 🚀" : "Submit Repo URL to Unlock Next Day"}
+                </span>
+              </div>
+            )}
+          </div>
+        )}
 
         {/* Bottom Navigation Buttons */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-slate-200 dark:border-neutral-800">

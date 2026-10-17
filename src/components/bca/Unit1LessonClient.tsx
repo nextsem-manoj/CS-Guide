@@ -27,6 +27,7 @@ export default function Unit1LessonClient({ lessonId }: Props) {
   
   const [selectedLang, setSelectedLang] = useState<'english' | 'hinglish'>('hinglish');
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
+  const [shuffledMcqOptions, setShuffledMcqOptions] = useState<Array<{ text: string; originalIndex: number }>>([]);
   const [isAnswerSubmitted, setIsAnswerSubmitted] = useState(false);
   const [showPdfEmbed, setShowPdfEmbed] = useState(false);
   const [userPoints, setUserPoints] = useState(0);
@@ -51,6 +52,20 @@ export default function Unit1LessonClient({ lessonId }: Props) {
     setShowPdfEmbed(false);
     setPillBlankInput("");
     setIsPillSubmitted(false);
+
+    // Randomize checkpoint options
+    const activeMcqData = lesson.mcq[selectedLang];
+    if (activeMcqData?.options) {
+      const items = activeMcqData.options.map((text, originalIndex) => ({
+        text,
+        originalIndex
+      }));
+      for (let i = items.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [items[i], items[j]] = [items[j], items[i]];
+      }
+      setShuffledMcqOptions(items);
+    }
 
     // Load progress
     const savedUser = localStorage.getItem('nextsem_user');
@@ -77,7 +92,9 @@ export default function Unit1LessonClient({ lessonId }: Props) {
     setShowAllMcqs(true);
 
     const activeMcq = lesson.mcq[selectedLang];
-    if (selectedOption === activeMcq.correctAnswer && !isCompleted) {
+    const selectedItem = shuffledMcqOptions[selectedOption];
+    const isAnsCorrect = selectedItem ? selectedItem.originalIndex === activeMcq.correctAnswer : false;
+    if (isAnsCorrect && !isCompleted) {
       setIsCompleted(true);
       const savedUser = localStorage.getItem('nextsem_user');
       let email = 'guest';
@@ -512,8 +529,10 @@ export default function Unit1LessonClient({ lessonId }: Props) {
           </p>
 
           <div className="space-y-2.5 mb-6">
-            {activeMcq.options.map((option, idx) => {
-              let btnClass = "w-full text-left p-3.5 rounded-2xl border text-xs sm:text-sm font-semibold transition-all cursor-pointer flex items-center justify-between ";
+            {shuffledMcqOptions.map((item, idx) => {
+              const isCorrect = item.originalIndex === activeMcq.correctAnswer;
+              const optionLetter = String.fromCharCode(65 + idx);
+              let btnClass = "w-full text-left p-3.5 rounded-2xl border text-xs sm:text-sm font-semibold transition-all cursor-pointer flex items-start justify-between gap-3 ";
 
               if (!isAnswerSubmitted) {
                 if (selectedOption === idx) {
@@ -522,7 +541,7 @@ export default function Unit1LessonClient({ lessonId }: Props) {
                   btnClass += "bg-slate-50 dark:bg-neutral-950 border-slate-200 dark:border-neutral-800 text-black dark:text-white hover:bg-slate-100 dark:hover:bg-neutral-800";
                 }
               } else {
-                if (idx === activeMcq.correctAnswer) {
+                if (isCorrect) {
                   btnClass += "bg-blue-600 text-white border-blue-600 font-bold shadow-sm";
                 } else if (selectedOption === idx) {
                   btnClass += "bg-black text-white dark:bg-white dark:text-black border-black dark:border-white font-bold";
@@ -538,9 +557,20 @@ export default function Unit1LessonClient({ lessonId }: Props) {
                   className={btnClass}
                   disabled={isAnswerSubmitted}
                 >
-                  <span>{option}</span>
-                  {isAnswerSubmitted && idx === activeMcq.correctAnswer && (
-                    <CheckCircle2 size={16} className="text-white shrink-0" />
+                  <div className="flex items-start gap-2.5 min-w-0">
+                    <span className={`w-5 h-5 rounded-full flex items-center justify-center font-black text-[10px] shrink-0 mt-0.5 ${
+                      isAnswerSubmitted && isCorrect
+                        ? "bg-white text-blue-600"
+                        : selectedOption === idx
+                        ? "bg-blue-600 text-white"
+                        : "bg-slate-200 dark:bg-neutral-800 text-slate-700 dark:text-slate-300"
+                    }`}>
+                      {optionLetter}
+                    </span>
+                    <span className="break-words leading-relaxed">{item.text}</span>
+                  </div>
+                  {isAnswerSubmitted && isCorrect && (
+                    <CheckCircle2 size={16} className="text-white shrink-0 mt-0.5" />
                   )}
                 </button>
               );
@@ -561,12 +591,12 @@ export default function Unit1LessonClient({ lessonId }: Props) {
             </button>
           ) : (
             <div className={`p-4 rounded-2xl border text-xs leading-relaxed ${
-              selectedOption === activeMcq.correctAnswer
+              selectedOption !== null && shuffledMcqOptions[selectedOption]?.originalIndex === activeMcq.correctAnswer
                 ? 'bg-blue-50 dark:bg-neutral-950 border-blue-200 dark:border-neutral-800 text-blue-700 dark:text-blue-300'
                 : 'bg-slate-100 dark:bg-neutral-950 border-slate-200 dark:border-neutral-800 text-black dark:text-white'
             }`}>
               <div className="font-extrabold mb-1 flex items-center gap-1.5 text-sm">
-                {selectedOption === activeMcq.correctAnswer ? (
+                {selectedOption !== null && shuffledMcqOptions[selectedOption]?.originalIndex === activeMcq.correctAnswer ? (
                   <>🎉 Correct Answer! (+10 Points Added)</>
                 ) : (
                   <>❌ Incorrect — Explanation:</>

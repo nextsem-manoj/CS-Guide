@@ -35,19 +35,19 @@ export const INITIAL_COMMUNITY_STORIES: BcaStudentStory[] = [
     userId: "manoj-lead",
     userName: "Er. Manoj Kumar",
     userHandle: "manoj_dev",
-    userAvatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80",
+    userAvatar: "/nextsem-emblem.png",
     isVerified: true,
     role: "Lead Developer",
     hasUnseenStories: true,
     latestDay: 5,
-    lastActive: "15m ago",
+    lastActive: "Active now",
     slides: [
       {
         id: "slide-m5",
         day: 5,
         lessonTitle: "HTML Forms & Input Elements",
         category: "HTML",
-        timestamp: "15m ago",
+        timestamp: "Active now",
         caption: "Built responsive student registration form with input validation and pushed to GitHub Pages! 🚀 Live and verified.",
         vivaScore: "100% Viva Approved",
         githubRepoUrl: "https://github.com/nextsemacademy-max/bca",
@@ -84,132 +84,48 @@ export const INITIAL_COMMUNITY_STORIES: BcaStudentStory[] = [
         techTags: ["HTML5", "Images", "Hyperlinks", "GitCommit"],
         gradientTheme: "from-emerald-600 via-teal-700 to-slate-900",
         createdAt: Date.now() - 1000 * 60 * 1440
-      }
-    ]
-  },
-  {
-    id: "story-priya",
-    userId: "priya-101",
-    userName: "Priya Sharma",
-    userHandle: "priya_webdev",
-    userAvatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80",
-    isVerified: true,
-    role: "Student",
-    hasUnseenStories: true,
-    latestDay: 4,
-    lastActive: "42m ago",
-    slides: [
-      {
-        id: "slide-p4",
-        day: 4,
-        lessonTitle: "HTML Semantic Elements & Page Structure",
-        category: "HTML",
-        timestamp: "42m ago",
-        caption: "Completed Day 4! Loving the clean structure of semantic HTML tags. Pushed everything to my personal GitHub repository.",
-        vivaScore: "100% First Attempt",
-        githubRepoUrl: "https://github.com/priya-sharma-dev/ignou-bca-practicals",
-        techTags: ["HTML5", "SemanticTags", "IGNOU_BCA"],
-        gradientTheme: "from-rose-600 via-pink-600 to-purple-800",
-        codeSnippetPreview: `<header>\n  <h1>IGNOU BCA Practical</h1>\n  <nav><a href="#about">About</a></nav>\n</header>`,
-        createdAt: Date.now() - 1000 * 60 * 42
       },
       {
-        id: "slide-p2",
+        id: "slide-m2",
         day: 2,
         lessonTitle: "HTML Headings, Paragraphs & Text Formatting",
         category: "HTML",
-        timestamp: "1d ago",
-        caption: "Mastered h1-h6 hierarchy and text styling with <strong> and <em>. Zero syntax errors!",
-        vivaScore: "100% Approved",
-        githubRepoUrl: "https://github.com/priya-sharma-dev/ignou-bca-practicals",
-        techTags: ["HTML5", "Headings", "Formatting"],
-        gradientTheme: "from-purple-600 via-violet-700 to-slate-900",
-        createdAt: Date.now() - 1000 * 60 * 1500
-      }
-    ]
-  },
-  {
-    id: "story-aman",
-    userId: "aman-202",
-    userName: "Aman Verma",
-    userHandle: "aman_codes",
-    userAvatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80",
-    isVerified: false,
-    role: "Student",
-    hasUnseenStories: true,
-    latestDay: 3,
-    lastActive: "1h ago",
-    slides: [
-      {
-        id: "slide-a3",
-        day: 3,
-        lessonTitle: "HTML Links and Images",
-        category: "HTML",
-        timestamp: "1h ago",
-        caption: "Finally resolved image path issues on Windows! Learned that ../ moves up one directory. Pushed to GitHub via VS Code terminal.",
+        timestamp: "2d ago",
+        caption: "Mastered HTML typography hierarchy from h1 through h6 with semantic emphasis and strong tags. Zero syntax errors.",
         vivaScore: "100% Viva Approved",
-        githubRepoUrl: "https://github.com/amanverma-cs/bca-web-practical",
-        techTags: ["HTML5", "RelativePaths", "GitPush"],
-        gradientTheme: "from-amber-600 via-orange-600 to-rose-900",
-        createdAt: Date.now() - 1000 * 60 * 60
-      }
-    ]
-  },
-  {
-    id: "story-sneha",
-    userId: "sneha-303",
-    userName: "Sneha Patel",
-    userHandle: "sneha_frontend",
-    userAvatar: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150&auto=format&fit=crop&q=80",
-    isVerified: true,
-    role: "BCA Peer",
-    hasUnseenStories: true,
-    latestDay: 2,
-    lastActive: "3h ago",
-    slides: [
+        githubRepoUrl: "https://github.com/nextsemacademy-max/bca",
+        liveDemoUrl: "https://nextsemacademy-max.github.io/bca/",
+        techTags: ["HTML5", "Headings", "Formatting", "WebStandards"],
+        gradientTheme: "from-purple-600 via-indigo-700 to-slate-900",
+        createdAt: Date.now() - 1000 * 60 * 2880
+      },
       {
-        id: "slide-s2",
-        day: 2,
-        lessonTitle: "HTML Headings, Paragraphs & Text Formatting",
-        category: "HTML",
-        timestamp: "3h ago",
-        caption: "Day 2 done! The step-by-step instructions make it so much easier than college books. My repository is live on GitHub.",
-        vivaScore: "100% Approved",
-        githubRepoUrl: "https://github.com/snehapatel-dev/bca-semester-1",
-        techTags: ["HTML5", "VSCode", "WebDev"],
-        gradientTheme: "from-teal-600 via-emerald-600 to-slate-900",
-        createdAt: Date.now() - 1000 * 60 * 180
-      }
-    ]
-  },
-  {
-    id: "story-rahul",
-    userId: "rahul-404",
-    userName: "Rahul Mehta",
-    userHandle: "rahul_tech",
-    userAvatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80",
-    isVerified: false,
-    role: "Student",
-    hasUnseenStories: false,
-    latestDay: 1,
-    lastActive: "5h ago",
-    slides: [
-      {
-        id: "slide-r1",
+        id: "slide-m1",
         day: 1,
         lessonTitle: "HTML Setup & First Webpage",
         category: "HTML",
-        timestamp: "5h ago",
-        caption: "Configured VS Code with Live Server and pushed my very first index.html file to GitHub! Feeling ready for Day 2.",
-        vivaScore: "100% Approved",
-        githubRepoUrl: "https://github.com/rahulmehta-dev/my-first-website",
-        techTags: ["VSCode", "HTMLSetup", "FirstCommit"],
-        gradientTheme: "from-blue-700 via-indigo-700 to-slate-900",
-        createdAt: Date.now() - 1000 * 60 * 300
+        timestamp: "3d ago",
+        caption: "Initialized Git repository, configured VS Code with Live Server, and deployed initial index.html to GitHub Pages.",
+        vivaScore: "100% Viva Approved",
+        githubRepoUrl: "https://github.com/nextsemacademy-max/bca",
+        liveDemoUrl: "https://nextsemacademy-max.github.io/bca/",
+        techTags: ["VSCode", "HTML5", "Git", "FirstCommit"],
+        gradientTheme: "from-blue-700 via-cyan-700 to-slate-900",
+        createdAt: Date.now() - 1000 * 60 * 4320
       }
     ]
   }
 ];
+
+export function getStoryDisplayName(name: string): string {
+  if (!name) return "Student";
+  const clean = name.trim();
+  if (/^er\.\s+/i.test(clean)) {
+    const parts = clean.split(/\s+/);
+    return parts.length > 1 ? `Er. ${parts[1]}` : clean;
+  }
+  return clean.split(/\s+/)[0];
+}
 
 export function getLessonTitleByDay(day: number): string {
   const titles: Record<number, string> = {
@@ -245,4 +161,43 @@ export function getLessonTitleByDay(day: number): string {
     30: "Milestone: Interactive Task Manager Web App"
   };
   return titles[day] || `Day ${day} Practical Lesson`;
+}
+
+export function getUserInitials(name: string): string {
+  if (!name) return "U";
+  const clean = name.replace(/^er\.\s+/i, "").trim();
+  const parts = clean.split(/\s+/).filter(Boolean);
+  if (parts.length >= 2) {
+    return `${parts[0][0]}${parts[1][0]}`.toUpperCase();
+  }
+  return (clean[0] || "U").toUpperCase();
+}
+
+export function getAvatarGradient(name: string): string {
+  const gradients = [
+    "bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-800",
+    "bg-gradient-to-br from-purple-600 via-pink-600 to-rose-700",
+    "bg-gradient-to-br from-emerald-600 via-teal-700 to-slate-900",
+    "bg-gradient-to-br from-cyan-600 via-blue-600 to-slate-900",
+    "bg-gradient-to-br from-amber-600 via-orange-600 to-rose-900",
+  ];
+  let hash = 0;
+  for (let i = 0; i < (name || "").length; i++) {
+    hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  return gradients[Math.abs(hash) % gradients.length];
+}
+
+export function formatTimeAgo(time: number | string): string {
+  const ts = typeof time === "string" ? new Date(time).getTime() : time;
+  if (!ts || isNaN(ts)) return "Recently";
+  const diff = Date.now() - ts;
+  if (diff < 0) return "Just now";
+  const mins = Math.floor(diff / (1000 * 60));
+  if (mins < 1) return "Just now";
+  if (mins < 60) return `${mins}m ago`;
+  const hours = Math.floor(mins / (1000 * 60 * 60));
+  if (hours < 24) return `${hours}h ago`;
+  const days = Math.floor(hours / 24);
+  return `${days}d ago`;
 }

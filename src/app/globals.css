@@ -394,7 +394,7 @@ body.in-book-mode .prose p {
   }
 }
 
-/* Instagram Story floating reactions animation */
+/* Story floating reactions animation */
 @keyframes storyFloat {
   0% {
     opacity: 1;
@@ -420,4 +420,16 @@ body.in-book-mode .prose p {
 
 .animate-pulse-subtle {
   animation: pulseSubtle 2.5s ease-in-out infinite;
+}
+
+/* Universal Educational Code Word-Wrap: Never put content under horizontal scroll bar */
+pre {
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+pre code {
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }

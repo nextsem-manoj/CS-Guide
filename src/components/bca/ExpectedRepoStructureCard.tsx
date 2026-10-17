@@ -8,6 +8,7 @@ import {
   AlertCircle, ArrowRight
 } from "lucide-react";
 import { PracticalLesson } from "@/data/bcaPracticalData";
+import TerminalCommandBox from "@/components/bca/TerminalCommandBox";
 
 interface Props {
   lesson: PracticalLesson;
@@ -341,27 +342,15 @@ git push origin main`;
           </div>
 
           {/* ── 2. EXACT TERMINAL COMMANDS BOX (COPY-PASTEABLE) ── */}
-          <div className="rounded-xl border border-slate-300 dark:border-neutral-800 bg-slate-900 text-slate-200 font-mono text-xs overflow-hidden shadow-inner">
-            <div className="px-3.5 py-2 bg-slate-950 border-b border-slate-800 flex items-center justify-between">
-              <div className="flex items-center gap-2 text-[11px] text-slate-400">
-                <Terminal size={14} className="text-blue-400" />
-                <span className="font-bold text-slate-300">
-                  Terminal Commands to Create &amp; Push Day {currentDay}
-                </span>
-              </div>
-              <button
-                type="button"
-                onClick={handleCopyCommands}
-                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-[10px] font-bold transition-all active:scale-95 cursor-pointer shadow-sm"
-              >
-                {copiedCommands ? <Check size={12} /> : <Copy size={12} />}
-                <span>{copiedCommands ? "Copied!" : "Copy All Commands"}</span>
-              </button>
-            </div>
-            <pre className="p-3.5 text-[11px] overflow-x-auto text-emerald-400 whitespace-pre leading-relaxed">
-              {terminalSnippet}
-            </pre>
-          </div>
+          <TerminalCommandBox
+            commands={terminalSnippet}
+            title={`Terminal Commands to Create & Push Day ${currentDay}`}
+            branch="main"
+            repoName={lesson.githubWorkflow.repoName || "html-css-projects"}
+            cwd={`~/${lesson.githubWorkflow.repoName || "html-css-projects"}/day-${padDay}`}
+            allowOneLiner={false}
+            defaultWrap={true}
+          />
 
           {/* ── 3. COMMON PITFALLS & ERROR AVOIDANCE CHECKLIST ── */}
           <div className="p-3.5 sm:p-4 rounded-xl bg-amber-50/60 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900/40 text-xs space-y-2">
@@ -407,7 +396,7 @@ git push origin main`;
             </div>
 
             {/* Tree Content */}
-            <div className="p-4 space-y-2 overflow-x-auto">
+            <div className="p-4 space-y-2 overflow-x-hidden">
               {/* Root Readme */}
               <div className="flex items-center gap-2 text-slate-400 text-[11px] pl-2">
                 <FileText size={13} className="text-slate-500 shrink-0" />

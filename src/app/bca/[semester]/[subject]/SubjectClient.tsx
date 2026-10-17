@@ -390,7 +390,7 @@ export default function SubjectSyllabusDashboard({ semester, subject }: { semest
                                       <span className="text-blue-600 dark:text-blue-400 font-bold uppercase tracking-wider text-[10px]">Algorithm Solution (Steps 1 to 8):</span>
                                       <span className="text-slate-500 text-[10px]">Discriminant D = b² - 4ac</span>
                                     </div>
-                                    <pre className="bg-slate-900 border border-slate-800 rounded-lg p-3 text-[11px] font-mono text-slate-200 overflow-x-auto leading-relaxed whitespace-pre-wrap">
+                                    <pre className="bg-slate-900 border border-slate-800 rounded-lg p-3 text-[11px] font-mono text-slate-200 overflow-x-hidden leading-relaxed whitespace-pre-wrap break-words break-all sm:break-words">
 {`Step 1: Start.
 Step 2: Read coefficients a, b, c.
 Step 3: If a == 0, Print 'Not quadratic (Linear equation)' and Stop.
@@ -415,7 +415,7 @@ Step 8: Stop.`}
                                         <span className="text-blue-600 dark:text-blue-400 font-bold uppercase tracking-wider text-[10px]">C++ 17/20 Implementation:</span>
                                         <span className="text-slate-500 text-[10px] font-mono">#include &lt;cmath&gt;</span>
                                       </div>
-                                      <pre className="bg-slate-900 border border-slate-800 rounded-lg p-3 text-[11px] font-mono text-cyan-300 overflow-x-auto leading-relaxed whitespace-pre-wrap">
+                                      <pre className="bg-slate-900 border border-slate-800 rounded-lg p-3 text-[11px] font-mono text-cyan-300 overflow-x-hidden leading-relaxed whitespace-pre-wrap break-words break-all sm:break-words">
 {`#include <iostream>
 #include <cmath>
 #include <iomanip>

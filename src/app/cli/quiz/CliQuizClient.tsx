@@ -26,6 +26,18 @@ export default function CliQuizClient() {
 
   const currentLesson = cliLessons[currentQuestionIdx] || cliLessons[0];
   const currentExercise = getExerciseForLang(currentLesson.exercise, selectedLang);
+  const [shuffledOptions, setShuffledOptions] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (currentExercise?.options && Array.isArray(currentExercise.options)) {
+      const copy = [...currentExercise.options];
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      setShuffledOptions(copy);
+    }
+  }, [currentQuestionIdx, selectedLang, currentExercise?.question]);
 
   const handleOptionSelect = (option: string) => {
     if (selectedOption !== null) return;
@@ -156,8 +168,10 @@ export default function CliQuizClient() {
 
                 {/* Option Buttons */}
                 <div className="space-y-3">
-                  {currentExercise.options.map((option: string, idx: number) => {
+                  {(shuffledOptions.length > 0 ? shuffledOptions : currentExercise.options).map((option: string, idx: number) => {
                     const isSelected = selectedOption === option;
+                    const optionLetters = ['A', 'B', 'C', 'D', 'E'];
+                    const letter = optionLetters[idx] || `${idx + 1}`;
                     let btnStyle = "bg-slate-900 border-slate-800 text-slate-200 hover:border-[#04AA6D]/50 hover:bg-slate-850";
                     if (selectedOption !== null) {
                       if (option === currentExercise.correctAnswer) {
@@ -171,12 +185,23 @@ export default function CliQuizClient() {
 
                     return (
                       <button
-                        key={idx}
+                        key={`${option}-${idx}`}
                         onClick={() => handleOptionSelect(option)}
                         disabled={selectedOption !== null}
                         className={`w-full text-left p-4 rounded-xl border font-mono text-sm transition-all cursor-pointer flex items-center justify-between gap-3 ${btnStyle}`}
                       >
-                        <span>{option}</span>
+                        <div className="flex items-center gap-3 min-w-0">
+                          <span className={`w-6 h-6 rounded-lg text-xs font-sans font-black flex items-center justify-center shrink-0 border ${
+                            selectedOption !== null && option === currentExercise.correctAnswer
+                              ? "bg-emerald-500 text-slate-950 border-emerald-400"
+                              : selectedOption !== null && isSelected
+                              ? "bg-rose-500 text-white border-rose-400"
+                              : "bg-slate-800 text-slate-300 border-slate-700"
+                          }`}>
+                            {letter}
+                          </span>
+                          <span className="break-words leading-relaxed">{option}</span>
+                        </div>
                         {selectedOption !== null && (
                           option === currentExercise.correctAnswer ? (
                             <CheckCircle2 size={18} className="text-emerald-400 shrink-0" />

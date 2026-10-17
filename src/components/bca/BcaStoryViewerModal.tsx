@@ -4,12 +4,11 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 import { 
   X, ChevronLeft, ChevronRight, CheckCircle2, GitBranch, 
-  ExternalLink, Sparkles, Heart, Flame, ThumbsUp, Rocket, 
-  Code2, Share2, Play, Pause, ShieldCheck, ArrowRight
+  ExternalLink, Sparkles, Code2, Play, Pause, ShieldCheck, ArrowRight
 } from "lucide-react";
-import { BcaStudentStory, BcaStorySlide } from "@/data/bcaStoriesData";
+import { BcaStudentStory, BcaStorySlide, getUserInitials, getAvatarGradient } from "@/data/bcaStoriesData";
 
-interface BcaInstagramStoryModalProps {
+export interface BcaStoryViewerModalProps {
   stories: BcaStudentStory[];
   initialUserIndex: number;
   isOpen: boolean;
@@ -25,13 +24,13 @@ interface FloatingReaction {
 
 const SLIDE_DURATION_MS = 5000;
 
-export default function BcaInstagramStoryModal({
+export default function BcaStoryViewerModal({
   stories,
   initialUserIndex,
   isOpen,
   onClose,
   onMarkSeen
-}: BcaInstagramStoryModalProps) {
+}: BcaStoryViewerModalProps) {
   const [currentUserIndex, setCurrentUserIndex] = useState(initialUserIndex);
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const [progress, setProgress] = useState(0);
@@ -211,7 +210,7 @@ export default function BcaInstagramStoryModal({
         ))}
       </div>
 
-      {/* Story Player Container (Mobile 100%, Desktop Instagram Phone View) */}
+      {/* Story Player Container */}
       <div 
         className="w-full h-full sm:h-[90vh] sm:max-w-md sm:rounded-3xl bg-neutral-950 flex flex-col justify-between overflow-hidden relative shadow-2xl border-0 sm:border sm:border-neutral-800"
         onMouseDown={handleHoldStart}
@@ -255,12 +254,19 @@ export default function BcaInstagramStoryModal({
                     src={currentStory.userAvatar}
                     alt={currentStory.userName}
                     className="w-9 h-9 rounded-full object-cover border-2 border-white/80 shadow-md"
+                    onError={(e) => {
+                      (e.currentTarget as HTMLElement).style.display = "none";
+                      const fb = document.getElementById(`modal-fb-${currentStory.id}`);
+                      if (fb) fb.classList.remove("hidden");
+                    }}
                   />
-                ) : (
-                  <div className="w-9 h-9 rounded-full bg-blue-600 flex items-center justify-center font-bold text-white text-xs border border-white/80">
-                    {currentStory.userName.charAt(0)}
-                  </div>
-                )}
+                ) : null}
+                <div 
+                  id={`modal-fb-${currentStory.id}`}
+                  className={`w-9 h-9 rounded-full ${getAvatarGradient(currentStory.userName)} flex items-center justify-center font-bold text-white text-xs border border-white/80 ${currentStory.userAvatar ? "hidden" : "flex"}`}
+                >
+                  {getUserInitials(currentStory.userName)}
+                </div>
                 {currentStory.isVerified && (
                   <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-blue-500 flex items-center justify-center text-[9px] text-white border border-black">
                     ✓
@@ -356,7 +362,7 @@ export default function BcaInstagramStoryModal({
                 {currentSlide.lessonTitle}
               </h2>
               <p className="text-xs text-white/60 font-mono mt-0.5">
-                BCA Semester 1 Practical Portal
+                BCA Practical Portal • NextSem
               </p>
             </div>
 
@@ -368,12 +374,12 @@ export default function BcaInstagramStoryModal({
 
             {/* Code Snippet Highlight (if available) */}
             {currentSlide.codeSnippetPreview && (
-              <div className="rounded-2xl bg-black/80 border border-neutral-800 p-3 font-mono text-[11px] text-emerald-400 overflow-x-auto shadow-inner">
+              <div className="rounded-2xl bg-black/80 border border-neutral-800 p-3 font-mono text-[11px] text-emerald-400 overflow-x-hidden shadow-inner">
                 <div className="text-[10px] text-white/40 pb-1 mb-1 border-b border-white/10 flex items-center justify-between">
                   <span>verified-solution.html</span>
                   <Code2 size={12} className="text-white/40" />
                 </div>
-                <pre className="whitespace-pre">{currentSlide.codeSnippetPreview}</pre>
+                <pre className="whitespace-pre-wrap break-words break-all sm:break-words overflow-x-hidden">{currentSlide.codeSnippetPreview}</pre>
               </div>
             )}
 
@@ -441,7 +447,7 @@ export default function BcaInstagramStoryModal({
           </div>
         </div>
 
-        {/* Bottom Instagram Reactions & Kudos Dock */}
+        {/* Bottom Reactions & Kudos Dock */}
         <div className="absolute bottom-0 left-0 right-0 z-30 p-3 bg-gradient-to-t from-black/95 via-black/80 to-transparent">
           <div className="flex items-center justify-between gap-2 max-w-sm mx-auto">
             {/* Quick Reaction Emojis */}

@@ -8,10 +8,15 @@ service cloud.firestore {
       allow read, update, delete: if false;
     }
 
-    // User progress details for the terminal simulator
+    // User progress details for the terminal simulator & BCA
     match /users_progress/{userId} {
       allow read, write: if request.auth != null && request.auth.uid == userId;
     }
-    
+
+    // BCA Practical Stories & Community Updates
+    match /bca_practical_stories/{storyId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
   }
 }

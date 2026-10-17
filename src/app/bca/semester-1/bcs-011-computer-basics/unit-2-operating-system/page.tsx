@@ -727,7 +727,7 @@ export default function Unit2OperatingSystemLessonPage() {
                 <span className="text-emerald-400 font-mono text-[10px]">100% Authentic PC Output</span>
               </div>
 
-              <pre className="p-4 sm:p-6 font-mono text-xs text-emerald-400 overflow-x-auto leading-relaxed whitespace-pre selection:bg-emerald-500 selection:text-black">
+              <pre className="p-4 sm:p-6 font-mono text-xs text-emerald-400 overflow-x-hidden leading-relaxed whitespace-pre-wrap break-words break-all sm:break-words selection:bg-emerald-500 selection:text-black">
                 {activeCmd.output}
               </pre>
             </div>

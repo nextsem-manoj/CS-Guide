@@ -1,15 +1,24 @@
 "use client";
 
-import React, { useState, useEffect, useMemo } from "react";
-import { Plus, Sparkles, CheckCircle2, ChevronRight, Flame } from "lucide-react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
+import { Plus, Flame } from "lucide-react";
+import { collection, onSnapshot, query, limit, doc, setDoc } from "firebase/firestore";
+import { db } from "@/lib/firebase";
 import { useStudentProgress } from "@/context/StudentProgressContext";
 import { 
-  BcaStudentStory, BcaStorySlide, INITIAL_COMMUNITY_STORIES, getLessonTitleByDay 
+  BcaStudentStory, 
+  BcaStorySlide, 
+  INITIAL_COMMUNITY_STORIES, 
+  getLessonTitleByDay,
+  getStoryDisplayName,
+  getUserInitials,
+  getAvatarGradient,
+  formatTimeAgo
 } from "@/data/bcaStoriesData";
-import BcaInstagramStoryModal from "./BcaInstagramStoryModal";
+import BcaStoryViewerModal from "./BcaStoryViewerModal";
 import BcaStoryComposeModal from "./BcaStoryComposeModal";
 
-export default function BcaInstagramStoriesTray() {
+export default function BcaStoriesTray() {
   const { user, completedDays, githubRepoUrls, githubUsername } = useStudentProgress();
 
   const [communityStories, setCommunityStories] = useState<BcaStudentStory[]>(INITIAL_COMMUNITY_STORIES);
@@ -18,25 +27,123 @@ export default function BcaInstagramStoriesTray() {
   const [isViewerOpen, setIsViewerOpen] = useState(false);
   const [isComposeOpen, setIsComposeOpen] = useState(false);
 
-  // Load seen stories & custom stories from localStorage on mount
+  // Load seen stories from localStorage on mount
   useEffect(() => {
     try {
       const savedSeen = localStorage.getItem("nextsem_seen_stories");
       if (savedSeen) setSeenStoryIds(JSON.parse(savedSeen));
-
-      const savedCustom = localStorage.getItem("nextsem_user_custom_stories");
-      if (savedCustom) {
-        const parsedCustom: BcaStorySlide[] = JSON.parse(savedCustom);
-        if (parsedCustom.length > 0) {
-          // Custom slides are present
-        }
-      }
     } catch (e) {
       console.warn("Could not load local stories cache:", e);
     }
   }, []);
 
-  // Compute "Your Story" slides dynamically from completedDays and githubRepoUrls
+  // Real-time synchronization of actual student submissions from Firestore
+  useEffect(() => {
+    try {
+      const q = query(collection(db, "bca_practical_stories"), limit(40));
+      const unsubscribe = onSnapshot(
+        q,
+        (snapshot) => {
+          try {
+            const rawDocs = snapshot.docs.map((d) => ({ id: d.id, ...d.data() })) as any[];
+
+            // Group slides by actual student userId (excluding current authenticated user who has "Your Story")
+            const storiesByUser: Record<string, {
+              userId: string;
+              userName: string;
+              userAvatar: string | null;
+              latestDay: number;
+              lastActiveTs: number;
+              slides: BcaStorySlide[];
+            }> = {};
+
+            rawDocs.forEach((docItem) => {
+              const uid = docItem.userId;
+              // Skip current user (already represented in "Your Story") and skip mentor internal id
+              if (!uid || uid === user?.uid || uid === "manoj-lead") return;
+
+              const dayNum = Number(docItem.day) || 1;
+              const title = docItem.lessonTitle || getLessonTitleByDay(dayNum);
+              const tsNum = typeof docItem.createdAt === "number" 
+                ? docItem.createdAt 
+                : (docItem.timestamp ? new Date(docItem.timestamp).getTime() : Date.now());
+
+              const slide: BcaStorySlide = {
+                id: docItem.id || `slide-${uid}-${dayNum}`,
+                day: dayNum,
+                lessonTitle: title,
+                category: dayNum <= 10 ? "HTML" : dayNum <= 20 ? "CSS" : "JavaScript",
+                timestamp: formatTimeAgo(tsNum),
+                caption: docItem.caption || `Completed Day ${dayNum}: ${title} and pushed verified code to GitHub! 🚀 Viva approved.`,
+                vivaScore: "100% Viva Approved",
+                githubRepoUrl: docItem.githubRepoUrl || "https://github.com",
+                liveDemoUrl: docItem.liveDemoUrl,
+                techTags: [dayNum <= 10 ? "HTML5" : dayNum <= 20 ? "CSS3" : "JavaScript", "VSCode", "Git"],
+                gradientTheme: "from-blue-600 via-indigo-600 to-purple-800",
+                createdAt: tsNum
+              };
+
+              if (!storiesByUser[uid]) {
+                storiesByUser[uid] = {
+                  userId: uid,
+                  userName: docItem.userName || "BCA Student",
+                  userAvatar: docItem.userPhoto || null,
+                  latestDay: dayNum,
+                  lastActiveTs: tsNum,
+                  slides: [slide]
+                };
+              } else {
+                storiesByUser[uid].slides.push(slide);
+                if (dayNum > storiesByUser[uid].latestDay) {
+                  storiesByUser[uid].latestDay = dayNum;
+                }
+                if (tsNum > storiesByUser[uid].lastActiveTs) {
+                  storiesByUser[uid].lastActiveTs = tsNum;
+                  if (docItem.userPhoto) storiesByUser[uid].userAvatar = docItem.userPhoto;
+                  if (docItem.userName) storiesByUser[uid].userName = docItem.userName;
+                }
+              }
+            });
+
+            // Convert to BcaStudentStory array with real data
+            const realStudentStories: BcaStudentStory[] = Object.values(storiesByUser).map((group) => {
+              const sortedSlides = [...group.slides].sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+              return {
+                id: `story-${group.userId}`,
+                userId: group.userId,
+                userName: group.userName,
+                userHandle: group.userName.toLowerCase().replace(/[^a-z0-9]/g, "_").slice(0, 15) || "student",
+                userAvatar: group.userAvatar,
+                isVerified: false,
+                role: "Student",
+                hasUnseenStories: true,
+                latestDay: group.latestDay,
+                lastActive: formatTimeAgo(group.lastActiveTs),
+                slides: sortedSlides
+              };
+            });
+
+            // Order real students by latest milestone
+            realStudentStories.sort((a, b) => (b.slides[0]?.createdAt || 0) - (a.slides[0]?.createdAt || 0));
+
+            // Merge: Er. Manoj Kumar (Curriculum Author) + Actual Live Students
+            setCommunityStories([...INITIAL_COMMUNITY_STORIES, ...realStudentStories]);
+          } catch (err) {
+            console.warn("Could not process community stories snapshot:", err);
+          }
+        },
+        (error) => {
+          console.warn("Firestore community stories listener warning:", error);
+        }
+      );
+
+      return () => unsubscribe();
+    } catch (e) {
+      console.warn("Error setting up Firestore stories listener:", e);
+    }
+  }, [user]);
+
+  // Compute "Your Story" slides dynamically from authenticated user's real progress
   const userStory: BcaStudentStory = useMemo(() => {
     const customSavedRaw = typeof window !== "undefined" ? localStorage.getItem("nextsem_user_custom_stories") : null;
     let customSlides: BcaStorySlide[] = [];
@@ -56,7 +163,7 @@ export default function BcaInstagramStoriesTray() {
           lessonTitle: title,
           category: day <= 10 ? "HTML" : day <= 20 ? "CSS" : "JavaScript",
           timestamp: "Recently",
-          caption: `Completed Day ${day}: ${title} and pushed code to GitHub! 🚀 Viva passed 100%.`,
+          caption: `Completed Day ${day}: ${title} and pushed verified code to GitHub! 🚀 Viva passed 100%.`,
           vivaScore: "100% Viva Approved",
           githubRepoUrl: ghUrl,
           techTags: [day <= 10 ? "HTML5" : day <= 20 ? "CSS3" : "JavaScript", "VSCode", "Git"],
@@ -84,21 +191,22 @@ export default function BcaInstagramStoriesTray() {
     };
   }, [user, completedDays, githubRepoUrls, githubUsername]);
 
-  // Combine userStory with communityStories
+  // Combine userStory with verified communityStories
   const allStories = useMemo(() => {
     return [userStory, ...communityStories];
   }, [userStory, communityStories]);
 
-  // Handle Mark Seen
-  const handleMarkSeen = (storyId: string) => {
+  // Handle Mark Seen with useCallback and idempotency guard
+  const handleMarkSeen = useCallback((storyId: string) => {
     setSeenStoryIds((prev) => {
+      if (prev[storyId]) return prev;
       const updated = { ...prev, [storyId]: true };
       try {
         localStorage.setItem("nextsem_seen_stories", JSON.stringify(updated));
       } catch {}
       return updated;
     });
-  };
+  }, []);
 
   // Handle clicking "Your Story"
   const handleYourStoryClick = () => {
@@ -117,7 +225,7 @@ export default function BcaInstagramStoriesTray() {
   };
 
   // Handle Custom Story Published from Modal
-  const handleStoryPublished = (data: { day: number; caption: string; githubUrl: string }) => {
+  const handleStoryPublished = async (data: { day: number; caption: string; githubUrl: string }) => {
     const title = getLessonTitleByDay(data.day);
     const newSlide: BcaStorySlide = {
       id: `custom-${Date.now()}`,
@@ -133,12 +241,32 @@ export default function BcaInstagramStoriesTray() {
       createdAt: Date.now()
     };
 
+    // Save locally for instant 0ms hydration
     try {
       const existing = localStorage.getItem("nextsem_user_custom_stories");
       const list: BcaStorySlide[] = existing ? JSON.parse(existing) : [];
       const updated = [newSlide, ...list];
       localStorage.setItem("nextsem_user_custom_stories", JSON.stringify(updated));
     } catch {}
+
+    // Cloud broadcast to real community feed in Firestore
+    if (user && !user.isGuest) {
+      try {
+        await setDoc(doc(db, "bca_practical_stories", `${user.uid}_custom_${Date.now()}`), {
+          userId: user.uid,
+          userName: user.name,
+          userPhoto: user.photo || null,
+          day: data.day,
+          lessonTitle: title,
+          caption: data.caption,
+          githubRepoUrl: data.githubUrl,
+          timestamp: new Date().toISOString(),
+          createdAt: Date.now()
+        }, { merge: true });
+      } catch (err) {
+        console.warn("Could not sync custom story to Firestore:", err);
+      }
+    }
 
     // Open viewer immediately to show their newly posted story
     setTimeout(() => {
@@ -148,13 +276,13 @@ export default function BcaInstagramStoriesTray() {
   };
 
   return (
-    <section aria-label="BCA Students Story Tray" className="w-full mb-8 select-none">
+    <section aria-label="BCA Students Daily Status Feed" className="w-full mb-8 select-none">
       {/* Header Label & Live Indicator */}
       <div className="flex items-center justify-between mb-3 px-1">
         <div className="flex items-center gap-2">
           <span className="w-2.5 h-2.5 rounded-full bg-rose-500 animate-pulse" />
           <h2 className="text-xs sm:text-sm font-extrabold uppercase tracking-wider text-black dark:text-white flex items-center gap-1.5">
-            <span>BCA Student Stories & Updates</span>
+            <span>BCA Student Stories &amp; Updates</span>
             <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-rose-50 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400 border border-rose-200 dark:border-rose-900">
               Live
             </span>
@@ -176,7 +304,7 @@ export default function BcaInstagramStoriesTray() {
           {/* ── 1. YOUR STORY BUBBLE ── */}
           <div className="flex flex-col items-center shrink-0 w-[72px] sm:w-[80px] text-center group cursor-pointer">
             <div className="relative" onClick={handleYourStoryClick}>
-              {/* Instagram Gradient Ring (if user has active slides) or subtle ring */}
+              {/* Vibrant Ring (if user has active slides) or dashed ring */}
               <div 
                 className={`p-[2.5px] rounded-full transition-transform group-hover:scale-105 active:scale-95 ${
                   userStory.slides.length > 0
@@ -190,12 +318,19 @@ export default function BcaInstagramStoriesTray() {
                       src={userStory.userAvatar}
                       alt={userStory.userName}
                       className="w-14 h-14 sm:w-16 sm:h-16 rounded-full object-cover"
+                      onError={(e) => {
+                        (e.currentTarget as HTMLElement).style.display = "none";
+                        const fb = document.getElementById("your-story-fallback");
+                        if (fb) fb.classList.remove("hidden");
+                      }}
                     />
-                  ) : (
-                    <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center font-black text-white text-lg">
-                      {user ? user.name.charAt(0) : "You"}
-                    </div>
-                  )}
+                  ) : null}
+                  <div 
+                    id="your-story-fallback"
+                    className={`w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center font-black text-white text-base shadow-inner ${userStory.userAvatar ? "hidden" : "flex"}`}
+                  >
+                    {user ? getUserInitials(user.name) : "You"}
+                  </div>
                 </div>
               </div>
 
@@ -217,14 +352,15 @@ export default function BcaInstagramStoriesTray() {
               Your Story
             </span>
             <span className="text-[9px] font-mono text-slate-500 dark:text-slate-400">
-              {userStory.slides.length > 0 ? `Day ${userStory.latestDay} • Active` : "Share status"}
+              {userStory.slides.length > 0 ? `Day ${userStory.latestDay} • Active` : (user ? "Share status" : "Sign in & share")}
             </span>
           </div>
 
-          {/* ── 2. COMMUNITY PEER STORIES ── */}
+          {/* ── 2. VERIFIED MENTOR & ACTUAL PEER STUDENTS ── */}
           {communityStories.map((story, idx) => {
             const actualIndex = idx + 1; // offset by 1 because userStory is at index 0
             const isSeen = !!seenStoryIds[story.id];
+            const shortName = getStoryDisplayName(story.userName);
 
             return (
               <div
@@ -233,7 +369,7 @@ export default function BcaInstagramStoriesTray() {
                 className="flex flex-col items-center shrink-0 w-[72px] sm:w-[80px] text-center group cursor-pointer"
               >
                 <div className="relative">
-                  {/* Instagram Gradient Ring */}
+                  {/* Vibrant Gradient Ring */}
                   <div 
                     className={`p-[2.5px] rounded-full transition-transform group-hover:scale-105 active:scale-95 ${
                       !isSeen
@@ -247,12 +383,19 @@ export default function BcaInstagramStoriesTray() {
                           src={story.userAvatar}
                           alt={story.userName}
                           className="w-14 h-14 sm:w-16 sm:h-16 rounded-full object-cover"
+                          onError={(e) => {
+                            (e.currentTarget as HTMLElement).style.display = "none";
+                            const fb = document.getElementById(`avatar-fb-${story.id}`);
+                            if (fb) fb.classList.remove("hidden");
+                          }}
                         />
-                      ) : (
-                        <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-neutral-800 flex items-center justify-center font-bold text-white text-base">
-                          {story.userName.charAt(0)}
-                        </div>
-                      )}
+                      ) : null}
+                      <div 
+                        id={`avatar-fb-${story.id}`}
+                        className={`w-14 h-14 sm:w-16 sm:h-16 rounded-full ${getAvatarGradient(story.userName)} flex items-center justify-center font-black text-white text-base shadow-inner ${story.userAvatar ? "hidden" : "flex"}`}
+                      >
+                        {getUserInitials(story.userName)}
+                      </div>
                     </div>
                   </div>
 
@@ -265,7 +408,7 @@ export default function BcaInstagramStoriesTray() {
 
                 {/* Name */}
                 <span className="text-[11px] font-bold text-black dark:text-white mt-1.5 truncate max-w-full group-hover:text-blue-600 dark:group-hover:text-blue-400">
-                  {story.userName.split(" ")[0]}
+                  {shortName}
                 </span>
                 <span className="text-[9px] font-mono text-slate-500 dark:text-slate-400 truncate max-w-full">
                   {story.lastActive}
@@ -276,9 +419,9 @@ export default function BcaInstagramStoriesTray() {
         </div>
       </div>
 
-      {/* ── INSTAGRAM STORY PLAYER MODAL ── */}
+      {/* ── STORY PLAYER MODAL ── */}
       {isViewerOpen && activeStoryIndex !== null && (
-        <BcaInstagramStoryModal
+        <BcaStoryViewerModal
           stories={allStories}
           initialUserIndex={activeStoryIndex}
           isOpen={isViewerOpen}

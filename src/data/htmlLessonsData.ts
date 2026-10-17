@@ -46,12 +46,12 @@ export const htmlLessons: Lesson[] = [
       english: {
         question: "What is the physical reality of the internet?",
         options: [
-          "A software package installed on Windows",
-          "A satellite-only beam that doesn't use wires",
-          "A global network of physical cables, routers, and data centers",
-          "A magical cloud in the sky",
+          "A standalone operating system executable package installed on Windows",
+          "An atmospheric wireless radio beam transmitting data without cables",
+          "A global network of physical cables, routers, and secure data centers",
+          "A virtual cloud container existing purely in local memory storage",
         ],
-        correctAnswer: "A global network of physical cables, routers, and data centers",
+        correctAnswer: "A global network of physical cables, routers, and secure data centers",
         hint: "Remember, the internet is not magical or invisible. It relies on thousands of miles of cables running under the oceans!"
       },
       hinglish: {
@@ -197,9 +197,9 @@ Note: Some HTML elements have no content (like the \`<br>\` element). These elem
         question: "Which components are involved in establishing a complete Web connection sequence?",
         options: [
           "Client-Server request/response, DNS domain resolution, IP addressing, and TCP 3-way handshake",
-          "Only local file reading without network interfaces",
-          "Only CSS styling sheets without server communication",
-          "Only graphic design software rendering"
+          "Local disk file reading, desktop window management, display driver sync, and RAM allocation",
+          "CSS layout stylesheet compilation, SVG vector rendering, typography cache, and font parsing",
+          "Graphic design software rasterization, color palette sampling, DPI scaling, and canvas export"
         ],
         correctAnswer: "Client-Server request/response, DNS domain resolution, IP addressing, and TCP 3-way handshake",
         hint: "A web connection relies on 4 fundamental steps: finding the server (DNS), getting its address (IP), connecting (TCP Handshake), and requesting the page (Client-Server)."
@@ -531,9 +531,9 @@ Network layer se le kar application layer tak web communication flow:
       question: "Where should the <!DOCTYPE html> declaration be placed in an HTML file?",
       options: [
         "At the very first line of the document, before the <html> tag",
-        "Inside the <head> element block",
-        "Directly after the opening <body> tag",
-        "At the end of the document to close all tags"
+        "Inside the <head> container block directly above the title tag",
+        "Directly after the opening <body> tag alongside main sections",
+        "At the bottom of the document footer to close remaining tags"
       ],
       correctAnswer: "At the very first line of the document, before the <html> tag",
       hint: "It isn't an HTML tag itself; it is a preamble declaration placed before any tags start!"
@@ -590,12 +590,12 @@ Network layer se le kar application layer tak web communication flow:
     exercise: {
       question: "Which type of content belongs inside the <head> element?",
       options: [
-        "Interactive button widgets and input form fields",
-        "Metadata, page titles, character encodings, and CSS link sheets",
-        "Image and native video players visible to users",
-        "Visible paragraph texts and heading structures",
+        "Interactive button widgets, submission forms, and input fields",
+        "Metadata, page titles, character encodings, and CSS stylesheets",
+        "Visible image media galleries, canvas elements, and video players",
+        "Rendered article paragraphs, footer links, and heading hierarchies",
       ],
-      correctAnswer: "Metadata, page titles, character encodings, and CSS link sheets",
+      correctAnswer: "Metadata, page titles, character encodings, and CSS stylesheets",
       hint: "The head element contains invisible configurations and settings, NOT visible contents."
     },
     english: {
@@ -891,12 +891,12 @@ Network layer se le kar application layer tak web communication flow:
     exercise: {
       question: "By default, how does the browser display consecutive <p> tags?",
       options: [
-        "Side-by-side on the same line",
-        "Inside a single block container",
-        "Italicized",
-        "Stacked vertically with vertical margins",
+        "Inline horizontally across the very same line",
+        "Enclosed inside a single shared flex container",
+        "Italicized typography with compact font weight",
+        "Stacked vertically separated by vertical margin",
       ],
-      correctAnswer: "Stacked vertically with vertical margins",
+      correctAnswer: "Stacked vertically separated by vertical margin",
       hint: "The browser automatically adds some empty vertical spacing to separate block paragraphs."
     },
     english: {
@@ -951,10 +951,10 @@ Network layer se le kar application layer tak web communication flow:
     exercise: {
       question: "What is the primary semantic purpose of the <hr /> tag in HTML5?",
       options: [
-        "To load background styles",
+        "To download external style rules from remote servers",
         "To mark a thematic shift or transition between topics",
-        "To make text bold",
-        "To draw borders around layout cards",
+        "To format selected inline heading text with bold weight",
+        "To render decorative borders surrounding parent card boxes",
       ],
       correctAnswer: "To mark a thematic shift or transition between topics",
       hint: "It represents a thematic break, drawing a straight horizontal line by default."

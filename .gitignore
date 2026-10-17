@@ -63,3 +63,5 @@ Must-Know-about-computing-/
 Test-Templates/
 WindowsPowerShell/
 test_auth_check*.json
+*.pdf
+**/android/app/src/main/assets/public/

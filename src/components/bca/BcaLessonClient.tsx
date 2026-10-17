@@ -31,6 +31,7 @@ export default function BcaLessonClient({ lesson }: BcaLessonClientProps) {
   // Exercise States
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [showExplanation, setShowExplanation] = useState(false);
+  const [shuffledMcqOptions, setShuffledMcqOptions] = useState<Array<{ text: string; originalIndex: number }>>([]);
 
   // Fill-in-the-blank state
   const [userBlankInput, setUserBlankInput] = useState("");
@@ -79,10 +80,28 @@ export default function BcaLessonClient({ lesson }: BcaLessonClientProps) {
     }
   };
 
-  const handleOptionSelect = (optIdx: number, e?: React.MouseEvent) => {
-    setSelectedOption(optIdx);
+  // Dynamically randomize MCQ options
+  useEffect(() => {
+    if (activeExercise?.mcq?.options) {
+      const items = activeExercise.mcq.options.map((text, originalIndex) => ({
+        text,
+        originalIndex
+      }));
+      for (let i = items.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [items[i], items[j]] = [items[j], items[i]];
+      }
+      setShuffledMcqOptions(items);
+      setSelectedOption(null);
+      setShowExplanation(false);
+    }
+  }, [lesson.id, selectedLang]);
+
+  const handleOptionSelect = (shuffledIdx: number, e?: React.MouseEvent) => {
+    setSelectedOption(shuffledIdx);
     setShowExplanation(true);
-    if (optIdx === activeExercise.mcq.correctAnswer) {
+    const selectedItem = shuffledMcqOptions[shuffledIdx];
+    if (selectedItem && selectedItem.originalIndex === activeExercise.mcq.correctAnswer) {
       triggerCelebration(e);
     }
   };
@@ -401,7 +420,7 @@ export default function BcaLessonClient({ lesson }: BcaLessonClientProps) {
 
               {/* Code Snippet Box */}
               {section.codeSnippet && (
-                <div className="relative mt-4 rounded-2xl bg-slate-950 border border-slate-800 p-4 font-mono text-xs text-white overflow-x-auto shadow-inner">
+                <div className="relative mt-4 rounded-2xl bg-slate-950 border border-slate-800 p-4 font-mono text-xs text-white overflow-x-hidden shadow-inner">
                   <div className="flex items-center justify-between text-slate-400 pb-2 border-b border-slate-800 text-[11px] font-semibold">
                     <span className="flex items-center gap-1.5">
                       <Terminal className="w-3.5 h-3.5 text-blue-400" /> C++ Architecture Code Sample
@@ -414,7 +433,9 @@ export default function BcaLessonClient({ lesson }: BcaLessonClientProps) {
                       <span>{copiedIndex === idx ? "Copied!" : "Copy"}</span>
                     </button>
                   </div>
-                  <pre className="pt-3 leading-relaxed text-blue-200">{section.codeSnippet}</pre>
+                  <pre className="pt-3 leading-relaxed text-blue-200 whitespace-pre-wrap break-words break-all sm:break-words overflow-x-hidden">
+                    <code className="whitespace-pre-wrap break-words break-all sm:break-words">{section.codeSnippet}</code>
+                  </pre>
                 </div>
               )}
 
@@ -534,9 +555,10 @@ export default function BcaLessonClient({ lesson }: BcaLessonClientProps) {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {activeExercise.mcq.options.map((option, optIdx) => {
+              {shuffledMcqOptions.map((item, optIdx) => {
                 const isSelected = selectedOption === optIdx;
-                const isCorrect = optIdx === activeExercise.mcq.correctAnswer;
+                const isCorrect = item.originalIndex === activeExercise.mcq.correctAnswer;
+                const optionLetter = String.fromCharCode(65 + optIdx);
                 
                 let btnStyle = "bg-white dark:bg-neutral-900 border-slate-200 dark:border-neutral-800 text-black dark:text-white hover:border-blue-600";
                 if (showExplanation) {
@@ -548,9 +570,18 @@ export default function BcaLessonClient({ lesson }: BcaLessonClientProps) {
                   <button
                     key={optIdx}
                     onClick={(e) => handleOptionSelect(optIdx, e)}
-                    className={`p-4 rounded-xl border text-left text-xs sm:text-sm transition-all cursor-pointer ${btnStyle}`}
+                    className={`p-4 rounded-xl border text-left text-xs sm:text-sm transition-all cursor-pointer flex items-start gap-2.5 ${btnStyle}`}
                   >
-                    {option}
+                    <span className={`w-5 h-5 rounded-full flex items-center justify-center font-black text-[10px] shrink-0 mt-0.5 ${
+                      showExplanation && isCorrect 
+                        ? "bg-white text-blue-600" 
+                        : isSelected 
+                        ? "bg-blue-600 text-white" 
+                        : "bg-slate-100 dark:bg-neutral-800 text-slate-600 dark:text-slate-300"
+                    }`}>
+                      {optionLetter}
+                    </span>
+                    <span className="break-words leading-relaxed">{item.text}</span>
                   </button>
                 );
               })}

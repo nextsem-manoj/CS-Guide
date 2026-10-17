@@ -6,12 +6,14 @@ import Link from 'next/link';
 import { useTheme } from 'next-themes';
 import { useStudentProgress } from '@/context/StudentProgressContext';
 import { PRACTICAL_LESSONS, PRACTICAL_SPRINTS } from '@/data/bcaPracticalData';
+import BcaStoriesTray from '@/components/bca/BcaStoriesTray';
+import StudentPeerNetwork from '@/components/bca/StudentPeerNetwork';
 import { 
   Play, CheckCircle2, Lock, ArrowRight, Laptop, 
   Terminal, Sparkles, BookOpen, ChevronRight, 
-  Search, LogIn, LogOut, Code, GitBranch, Award,
+  LogIn, LogOut, GitBranch, Award,
   Clock, ShieldCheck, ChevronDown, ChevronUp, Sun, Moon,
-  Calendar, Layers
+  Calendar, Heart, Flame, Code2, Compass, Zap
 } from 'lucide-react';
 
 export default function HomeClient() {
@@ -31,10 +33,37 @@ export default function HomeClient() {
   const [selectedSemester, setSelectedSemester] = useState<number>(1);
   const [activeSprint, setActiveSprint] = useState<number>(1);
   const [showTheorySection, setShowTheorySection] = useState<boolean>(false);
+  const [likedCardIds, setLikedCardIds] = useState<Record<string, boolean>>({});
+  const [cardLikesCount, setCardLikesCount] = useState<Record<string, number>>({
+    "day-1": 142,
+    "day-2": 98,
+    "day-3": 115,
+    "day-4": 164,
+    "day-5": 210,
+  });
 
   useEffect(() => {
     setMounted(true);
+    try {
+      const savedLikes = localStorage.getItem("nextsem_card_likes");
+      if (savedLikes) setLikedCardIds(JSON.parse(savedLikes));
+    } catch {}
   }, []);
+
+  const handleLikeCard = (cardId: string, e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const isCurrentlyLiked = !!likedCardIds[cardId];
+    const updatedLikes = { ...likedCardIds, [cardId]: !isCurrentlyLiked };
+    setLikedCardIds(updatedLikes);
+    setCardLikesCount(prev => ({
+      ...prev,
+      [cardId]: (prev[cardId] || 100) + (isCurrentlyLiked ? -1 : 1)
+    }));
+    try {
+      localStorage.setItem("nextsem_card_likes", JSON.stringify(updatedLikes));
+    } catch {}
+  };
 
   const completedCount = completedDays.length;
 
@@ -43,11 +72,45 @@ export default function HomeClient() {
     setTheme(currentTheme === 'dark' ? 'light' : 'dark');
   };
 
+  // Trending Spotlight Labs for the Visual Reel-Style Feed
+  const spotlightDays = [
+    {
+      day: 1,
+      title: "HTML Setup & First Webpage",
+      category: "HTML5",
+      snippet: "<!DOCTYPE html>\n<html>\n  <head><title>My Portfolio</title></head>\n  <body><h1>Hello World!</h1></body>\n</html>",
+      estTime: "45 mins",
+      vivaScore: "100% Viva Approved",
+      slug: "day-1-html-setup-first-webpage",
+      color: "from-blue-600 to-indigo-700"
+    },
+    {
+      day: 4,
+      title: "HTML Semantic Elements & Page Structure",
+      category: "HTML5 & SEO",
+      snippet: "<header><nav><a href=\"/\">Home</a></nav></header>\n<main><article>Clean Semantic Web</article></main>\n<footer>&copy; 2026 NextSem</footer>",
+      estTime: "45 mins",
+      vivaScore: "100% Viva Approved",
+      slug: "day-4-html-semantic-elements-page-structure",
+      color: "from-cyan-600 to-blue-700"
+    },
+    {
+      day: 5,
+      title: "HTML Forms & Input Validations",
+      category: "Forms & Data",
+      snippet: "<form action=\"/submit\" method=\"POST\">\n  <input type=\"text\" required pattern=\"[0-9]{9,10}\" />\n  <button type=\"submit\">Submit BCA Record</button>\n</form>",
+      estTime: "50 mins",
+      vivaScore: "100% Viva Approved",
+      slug: "day-5-html-forms-input-elements",
+      color: "from-purple-600 to-pink-700"
+    }
+  ];
+
   return (
     <div className="min-h-screen bg-white dark:bg-black text-black dark:text-white flex flex-col justify-between font-sans transition-colors duration-150 selection:bg-blue-600 selection:text-white">
       
       {/* ── TOP HEADER (Clean Blue, Black & White) ── */}
-      <header className="sticky top-0 z-50 bg-white/95 dark:bg-black/95 backdrop-blur-md border-b border-slate-200 dark:border-neutral-800 py-3.5 px-4 sm:px-8">
+      <header className="sticky top-0 z-50 bg-white/95 dark:bg-black/95 backdrop-blur-md border-b border-slate-200 dark:border-neutral-800 py-3 px-4 sm:px-8">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           
           {/* Logo */}
@@ -56,7 +119,7 @@ export default function HomeClient() {
               &lt;/&gt;
             </div>
             <div className="flex flex-col leading-none">
-              <span className="font-extrabold text-lg tracking-tight text-black dark:text-white group-hover:text-blue-600 transition-colors">
+              <span className="font-extrabold text-base sm:text-lg tracking-tight text-black dark:text-white group-hover:text-blue-600 transition-colors">
                 BCA Practical Lab
               </span>
               <span className="text-[10px] font-mono text-blue-600 dark:text-blue-400 font-bold tracking-wider">
@@ -66,7 +129,7 @@ export default function HomeClient() {
           </Link>
 
           {/* Header Controls: Author + Theme Toggle + Search + Auth */}
-          <div className="flex items-center gap-2.5">
+          <div className="flex items-center gap-2 sm:gap-2.5">
             <div className="hidden md:flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 text-xs font-semibold text-slate-700 dark:text-slate-300">
               <span className="w-1.5 h-1.5 rounded-full bg-blue-600" />
               <span>By <strong className="text-black dark:text-white">Er. Manoj Kumar</strong></span>
@@ -76,7 +139,7 @@ export default function HomeClient() {
             {mounted && (
               <button
                 onClick={toggleTheme}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-neutral-900 dark:hover:bg-neutral-800 border border-slate-200 dark:border-neutral-800 text-xs font-bold text-slate-800 dark:text-slate-200 transition-all cursor-pointer"
+                className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-neutral-900 dark:hover:bg-neutral-800 border border-slate-200 dark:border-neutral-800 text-xs font-bold text-slate-800 dark:text-slate-200 transition-all cursor-pointer"
                 title={`Switch to ${currentTheme === 'dark' ? 'Light' : 'Dark'} Mode`}
               >
                 {currentTheme === 'dark' ? (
@@ -93,7 +156,7 @@ export default function HomeClient() {
               </button>
             )}
 
-            {/* Secondary Theory & Syllabus Link */}
+            {/* Theory Reference Link */}
             <button
               onClick={() => {
                 setShowTheorySection(true);
@@ -140,7 +203,7 @@ export default function HomeClient() {
             ) : (
               <button 
                 onClick={signIn}
-                className="flex items-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-white px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all shadow-sm cursor-pointer"
+                className="flex items-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-white px-3 sm:px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all shadow-sm cursor-pointer"
               >
                 <LogIn size={13} />
                 <span>Sign In</span>
@@ -151,26 +214,29 @@ export default function HomeClient() {
         </div>
       </header>
 
-      {/* ── HERO BANNER: 100% PRACTICAL WORKS DAY-WISE ── */}
-      <main className="flex-1 max-w-6xl mx-auto w-full px-4 sm:px-6 py-8 sm:py-12 space-y-8">
+      {/* ── MAIN CONTENT ── */}
+      <main className="flex-1 max-w-6xl mx-auto w-full px-4 sm:px-6 py-6 sm:py-8 space-y-8">
         
-        {/* Hero Title & Direct Call to Action */}
-        <div className="text-center space-y-3.5 max-w-3xl mx-auto">
+        {/* ── 1. DAILY STORIES & STATUS FEED TRAY ── */}
+        <BcaStoriesTray />
+
+        {/* ── 2. HERO SECTION: 360-DAY PRACTICAL ROADMAP ── */}
+        <div className="text-center space-y-4 max-w-3xl mx-auto pt-2">
           <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800/50 text-blue-700 dark:text-blue-400 text-xs font-bold tracking-wide">
             <Sparkles size={13} />
             <span>3-Year University Degree Curriculum • 6 Semesters • 360 Practical Days</span>
           </div>
 
           <h1 className="text-3xl sm:text-5xl font-black text-black dark:text-white tracking-tight leading-tight">
-            BCA Practical Coding Lab
+            Learn to Code. Build Real Projects. Defend Your Viva.
           </h1>
 
           <p className="text-sm sm:text-base text-slate-700 dark:text-slate-300 font-medium leading-relaxed max-w-2xl mx-auto">
-            Universal 3-year practical curriculum designed for all BCA students. Solve daily hands-on coding tasks, debug broken programs, pass technical viva checks, push code to GitHub, and build your developer portfolio across all 6 semesters.
+            Universal 3-year job-ready practical curriculum designed for all BCA students. Solve daily hands-on coding tasks, debug broken programs, pass technical viva checks, push code to your personal GitHub, and earn verified milestones.
           </p>
 
-          {/* Quick Stats Pill (Blue, Black, White) */}
-          <div className="pt-2 flex flex-wrap items-center justify-center gap-3 text-xs font-bold text-slate-700 dark:text-slate-300">
+          {/* Quick Metrics Badges */}
+          <div className="pt-1 flex flex-wrap items-center justify-center gap-2.5 text-xs font-bold text-slate-700 dark:text-slate-300">
             <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800">
               <Laptop size={14} className="text-blue-600 dark:text-blue-400" />
               <span>360 Daily Coding Labs</span>
@@ -181,7 +247,7 @@ export default function HomeClient() {
             </div>
             <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800">
               <GitBranch size={14} className="text-blue-600 dark:text-blue-400" />
-              <span>Daily GitHub Push Workflow</span>
+              <span>GitHub Push Workflow</span>
             </div>
             <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800">
               <Award size={14} className="text-blue-600 dark:text-blue-400" />
@@ -195,7 +261,7 @@ export default function HomeClient() {
             )}
           </div>
 
-          {/* Primary Action Button */}
+          {/* Primary Action Buttons */}
           <div className="pt-3 flex flex-wrap items-center justify-center gap-3">
             <Link
               href="/bca/practical/day-1-html-setup-first-webpage"
@@ -209,15 +275,111 @@ export default function HomeClient() {
               href="/bca/practical"
               className="inline-flex items-center gap-2 px-5 sm:px-6 py-3.5 rounded-2xl bg-slate-100 hover:bg-slate-200 dark:bg-neutral-900 dark:hover:bg-neutral-800 border border-slate-200 dark:border-neutral-800 text-black dark:text-white font-bold text-sm sm:text-base transition-all active:scale-95"
             >
+              <Compass size={16} />
               <span>Explore All 6 Semesters</span>
-              <ArrowRight size={16} />
             </Link>
           </div>
         </div>
 
-        {/* ── SPRINT TABS ── */}
-        <div className="border-t border-slate-200 dark:border-neutral-800 pt-6">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+        {/* ── 3. FEATURED DAILY MILESTONES (Engaging Feed-Style Cards) ── */}
+        <section aria-label="Featured Daily Coding Milestones" className="border-t border-slate-200 dark:border-neutral-800 pt-8">
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-blue-600" />
+                <h2 className="text-base sm:text-lg font-black text-black dark:text-white">
+                  Trending Practical Milestones
+                </h2>
+              </div>
+              <p className="text-xs text-slate-500 dark:text-slate-400">
+                Top rated coding tasks completed by BCA peers this week
+              </p>
+            </div>
+
+            <Link
+              href="/bca/practical"
+              className="text-xs font-bold text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1"
+            >
+              <span>View All 360 Days</span>
+              <ChevronRight size={14} />
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {spotlightDays.map((item) => {
+              const cardId = `day-${item.day}`;
+              const isLiked = !!likedCardIds[cardId];
+              const likes = cardLikesCount[cardId] || 120;
+
+              return (
+                <div
+                  key={item.day}
+                  className="rounded-3xl bg-slate-50/70 dark:bg-neutral-950 border border-slate-200 dark:border-neutral-800/90 p-5 flex flex-col justify-between hover:shadow-xl hover:border-blue-500/50 transition-all group backdrop-blur-sm"
+                >
+                  <div className="space-y-3">
+                    {/* Header: Day Badge & Micro Kudos */}
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <span className="px-2.5 py-1 rounded-xl bg-blue-600 text-white font-black text-xs shadow-sm">
+                          Day {item.day}
+                        </span>
+                        <span className="text-[11px] font-bold text-slate-600 dark:text-slate-400 bg-white dark:bg-neutral-900 px-2 py-0.5 rounded-lg border border-slate-200 dark:border-neutral-800">
+                          {item.category}
+                        </span>
+                      </div>
+
+                      {/* Heart Button */}
+                      <button
+                        onClick={(e) => handleLikeCard(cardId, e)}
+                        className={`flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold font-mono transition-all active:scale-125 cursor-pointer ${
+                          isLiked 
+                            ? "bg-rose-50 dark:bg-rose-950/50 text-rose-600 border border-rose-300 dark:border-rose-800" 
+                            : "bg-white dark:bg-neutral-900 text-slate-500 hover:text-rose-500 border border-slate-200 dark:border-neutral-800"
+                        }`}
+                        title="Cheer with kudos"
+                      >
+                        <Heart size={13} className={isLiked ? "fill-rose-500 text-rose-500" : ""} />
+                        <span>{likes}</span>
+                      </button>
+                    </div>
+
+                    {/* Title */}
+                    <h3 className="text-base font-black text-black dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-1">
+                      {item.title}
+                    </h3>
+
+                    {/* Syntax Snippet Preview */}
+                    <div className="rounded-2xl bg-black/90 border border-neutral-800 p-3 font-mono text-[11px] text-emerald-400 overflow-x-auto shadow-inner">
+                      <pre className="whitespace-pre">{item.snippet}</pre>
+                    </div>
+                  </div>
+
+                  {/* Footer Meta & Action */}
+                  <div className="pt-4 border-t border-slate-200 dark:border-neutral-800/80 mt-4 flex items-center justify-between">
+                    <div className="flex items-center gap-1.5 text-xs text-slate-500 font-medium">
+                      <Clock size={12} className="text-blue-500" />
+                      <span>{item.estTime}</span>
+                      <span>•</span>
+                      <span className="text-emerald-500 font-bold">100% Viva</span>
+                    </div>
+
+                    <Link
+                      href={`/bca/practical/${item.slug}`}
+                      className="inline-flex items-center gap-1 px-3.5 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs transition-all shadow-sm active:scale-95"
+                    >
+                      <span>Start Lab</span>
+                      <ChevronRight size={13} />
+                    </Link>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </section>
+
+        {/* ── 4. COMPLETE 6-SEMESTER ROADMAP & SPRINTS ── */}
+        <div className="border-t border-slate-200 dark:border-neutral-800 pt-8">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
             <div>
               <h2 className="text-xl sm:text-2xl font-black text-black dark:text-white">
                 3-Year Day-by-Day Practical Roadmap
@@ -399,7 +561,12 @@ export default function HomeClient() {
           )}
         </div>
 
-        {/* ── THEORETICAL PART (Secondary Reference Section) ── */}
+        {/* ── REGISTERED BCA PEER COMMUNITY (FOLLOW & FOLLOWING) ── */}
+        <section id="peer-network-section" className="border-t border-slate-200 dark:border-neutral-800 pt-8">
+          <StudentPeerNetwork />
+        </section>
+
+        {/* ── 5. THEORETICAL PART (Secondary Reference Section) ── */}
         <section id="theory-reference-section" className="border-t border-slate-200 dark:border-neutral-800 pt-8">
           <div className="rounded-3xl bg-white dark:bg-neutral-950 border border-slate-200 dark:border-neutral-800 p-6 sm:p-8">
             <button
@@ -494,7 +661,7 @@ export default function HomeClient() {
       </main>
 
       {/* ── FOOTER ── */}
-      <footer className="bg-slate-100 dark:bg-neutral-950 border-t border-slate-200 dark:border-neutral-800 py-5 px-4 text-center">
+      <footer className="bg-slate-100 dark:bg-neutral-950 border-t border-slate-200 dark:border-neutral-800 py-6 px-4 text-center">
         <div className="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-600 dark:text-slate-400">
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-blue-600" />

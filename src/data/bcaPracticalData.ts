@@ -470,12 +470,12 @@ export const PRACTICAL_LESSONS: PracticalLesson[] = [
     vivaCheck: {
       question: 'Why is <!DOCTYPE html> required at the very first line of an HTML document?',
       options: [
-        'It downloads external CSS styles from the server.',
-        'It signals the browser to render the page in standard HTML5 mode rather than Quirks mode.',
-        'It is an encrypted security key required by the server.',
-        'It creates a link to the website database.'
+        'It signals the browser engine to render the document in W3C Standards mode instead of legacy Quirks mode.',
+        'It instructs the web server to pre-compile and bundle external stylesheets prior to network dispatch.',
+        'It generates an encrypted TLS security token required by the browser to authorize DOM script execution.',
+        'It dynamically injects ECMAScript runtime polyfill modules required for backwards browser compatibility.'
       ],
-      correctAnswer: 1,
+      correctAnswer: 0,
       explanation: '<!DOCTYPE html> is a document type declaration that forces the web browser into full standards compliance mode, avoiding legacy quirks mode quirks.'
     }
   },
@@ -578,12 +578,12 @@ export const PRACTICAL_LESSONS: PracticalLesson[] = [
     vivaCheck: {
       question: 'What is the semantic difference between <b> and <strong> in HTML5?',
       options: [
-        '<b> is deprecated and will not render in modern browsers.',
-        '<b> only styles text bold visually, while <strong> conveys strong importance to screen readers and search bots.',
-        '<strong> makes text red, while <b> makes it black.',
-        'There is zero difference; they are 100% interchangeable.'
+        '<b> applies visual bold styling without semantic weight; <strong> conveys programmatic importance to assistive readers.',
+        '<b> is restricted exclusively to heading containers; <strong> is permitted only within paragraphs and blockquotes.',
+        '<strong> renders bold typography exclusively on desktop screens; <b> applies bold styles across mobile touch devices.',
+        '<b> is deprecated by modern WHATWG specifications; <strong> represents the only compliant element for bold styling.'
       ],
-      correctAnswer: 1,
+      correctAnswer: 0,
       explanation: '<b> is purely stylistic (offset text without extra importance), whereas <strong> gives semantic importance, which assists accessibility readers and SEO indexers.'
     }
   },
@@ -691,10 +691,10 @@ export const PRACTICAL_LESSONS: PracticalLesson[] = [
     vivaCheck: {
       question: 'Why is the `alt` attribute strictly mandatory on an <img> tag according to web standards?',
       options: [
-        'It tells the browser what file format the image is.',
-        'It ensures screen readers can announce image content for visually impaired users and displays fallback text if the image fails to load.',
-        'It speeds up internet connection bandwidth.',
-        'It prevents other users from downloading the image.'
+        'It specifies the binary compression algorithm required by the browser to decompress rasterized image files.',
+        'It provides programmatic context for screen readers and displays text if the image asset fails to load.',
+        'It prevents external domain originators from hotlinking image files and consuming host server bandwidth.',
+        'It pre-calculates responsive aspect ratios to prevent cumulative layout shift prior to complete image fetch.'
       ],
       correctAnswer: 1,
       explanation: 'The `alt` text provides essential accessibility for screen readers and is displayed if network failure prevents the image from downloading.'
@@ -819,12 +819,12 @@ export const PRACTICAL_LESSONS: PracticalLesson[] = [
     vivaCheck: {
       question: 'What is the purpose of `colspan` attribute in a `<td>` or `<th>` tag?',
       options: [
-        'It changes the color of the column.',
-        'It merges the current cell across multiple horizontal columns.',
-        'It spans the cell vertically across multiple rows.',
-        'It sets the column font size.'
+        'It expands a table data cell horizontally across two or more adjacent columns in the current row grid.',
+        'It stretches a table cell vertically across two or more consecutive rows within the parent tbody container.',
+        'It defines proportional column width percentages relative to the total horizontal table layout boundary.',
+        'It associates accessible column header identifiers with nested row data cells for multi-tier tables.'
       ],
-      correctAnswer: 1,
+      correctAnswer: 0,
       explanation: '`colspan` specifies how many horizontal columns a table cell should span across.'
     }
   },
@@ -946,10 +946,10 @@ export const PRACTICAL_LESSONS: PracticalLesson[] = [
     vivaCheck: {
       question: 'What happens to form data when the form method is "GET"?',
       options: [
-        'Data is encrypted with SHA-256 before transmission.',
-        'Form input values are appended visibly to the URL query string (e.g. ?name=rahul).',
-        'Data is stored inside localStorage permanently.',
-        'The form automatically downloads as a PDF file.'
+        'Form inputs are encapsulated inside the HTTP request body with multi-part stream encryption algorithms.',
+        'Form values are appended visibly to the destination URL as key-value parameters in the query string.',
+        'Form data is cached strictly in client localStorage and omitted entirely from the network request packet.',
+        'The browser opens an asynchronous WebSocket connection to transmit field data in real-time binary chunks.'
       ],
       correctAnswer: 1,
       explanation: 'HTTP GET attaches form parameters directly into the URL as key-value query parameters, making it unsuitable for passwords and sensitive information.'
@@ -1058,7 +1058,7 @@ export const PRACTICAL_LESSONS: PracticalLesson[] = [
   <main>
     <h2>Sidebar Details</h2>
   </main>
-</body>`,
+  </body>`,
       bugExplanation: 'The HTML5 specification forbids having more than one visible `<main>` element per document. Main must contain the central unique content; the second element should be an `<aside>` or `<section>`.',
       fixedCode: `<body>
   <main>
@@ -1093,12 +1093,12 @@ export const PRACTICAL_LESSONS: PracticalLesson[] = [
     vivaCheck: {
       question: 'What is the primary difference between `<section>` and `<article>`?',
       options: [
-        '<section> is used for images only; <article> is used for audio.',
-        '<article> is independent and syndicatable on its own (like a blog post); <section> represents a thematic sub-grouping of content.',
-        '<section> can only appear inside a footer.',
-        'There is no distinction in HTML5.'
+        '<article> represents a self-contained, independently syndicatable composition; <section> is a thematic grouping.',
+        '<section> defines standalone distributable content; <article> is strictly used for nesting sidebars and footnotes.',
+        '<article> requires an enclosing aside container; <section> is exclusively permitted within main page landmarks.',
+        '<section> auto-generates semantic RSS feeds; <article> serves purely as a visual CSS grid wrapper for typography.'
       ],
-      correctAnswer: 1,
+      correctAnswer: 0,
       explanation: 'An `<article>` is intended to be self-contained and independently distributable (e.g., newspaper story, widget, blog post). A `<section>` is a generic thematic grouping.'
     }
   },
@@ -1266,10 +1266,10 @@ export const PRACTICAL_LESSONS: PracticalLesson[] = [
     vivaCheck: {
       question: 'What is the purpose of the `README.md` file in a GitHub project repository?',
       options: [
-        'It executes backend database migration scripts.',
-        'It documents what the project does, how to run it locally, and highlights author credentials for visitors and interviewers.',
-        'It hides private API keys from the public.',
-        'It automatically compiles TypeScript to JavaScript.'
+        'It executes automated cloud database migrations and unit test suites upon code commit to main branch.',
+        'It introduces project architecture, local installation steps, and developer credentials to visitors.',
+        'It stores encrypted production environment variables and API secret keys securely in the Git index.',
+        'It acts as a compiled binary cache that accelerates GitHub Pages static asset bundling workflows.'
       ],
       correctAnswer: 1,
       explanation: 'A professional README.md acts as the welcome documentation of a repository, explaining project purpose, installation steps, and showcase links.'
@@ -1385,10 +1385,10 @@ export const PRACTICAL_LESSONS: PracticalLesson[] = [
     vivaCheck: {
       question: 'Which method of applying CSS has the highest specificity/precedence by default?',
       options: [
-        'External stylesheet linked via <link>',
-        'Internal stylesheet defined in <style>',
-        'Inline style defined directly on an element via the style="..." attribute',
-        'Browser user-agent default styles'
+        'External stylesheets linked via <link rel="stylesheet"> declared inside the HTML head section.',
+        'Internal stylesheet rules declared inside <style> tags located within the document head element.',
+        'Inline styles applied directly to an individual HTML element via the style="..." attribute.',
+        'Browser default user-agent styling sheets applied automatically prior to CSSOM parsing.'
       ],
       correctAnswer: 2,
       explanation: 'Inline styles have a specificity weight of (1,0,0,0), overriding external and internal style rules unless `!important` is used.'
@@ -1500,7 +1500,7 @@ body {
 }
 .submitBtn {
   background: blue;
-} `,
+}`,
       bugExplanation: 'Dots (`.`) are for CLASSES, and hashes (`#`) are for IDs! The developer inverted them. The selector should be `#submitBtn` and `.btn`.',
       fixedCode: `.btn {
   color: red;
@@ -1532,12 +1532,12 @@ body {
     vivaCheck: {
       question: 'Which of the following selectors has the highest CSS specificity value?',
       options: [
-        'div.card (Element + Class)',
-        '#profile-header (ID Selector)',
-        '.navbar .nav-link (Two Classes)',
-        'p (Element Selector)'
+        '#profile-header (ID selector with specificity weight 0,1,0,0)',
+        '.navbar .nav-link (Two class selectors with weight 0,0,2,0)',
+        'div.card (Element plus class selector with weight 0,0,1,1)',
+        'div > ul > li (Three element tag selectors with specificity weight 0,0,0,3)'
       ],
-      correctAnswer: 1,
+      correctAnswer: 0,
       explanation: 'An ID selector has specificity (0,1,0,0), which overrides any number of classes (0,0,x,0) and element selectors (0,0,0,x).'
     }
   },
@@ -1601,7 +1601,7 @@ h1 {
   font-size: 1.125rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-}`
+} `
     },
     practicalLab: {
       labTitle: 'Day 10 Coding Lab: High-Contrast Dark Mode Card',
@@ -1673,12 +1673,12 @@ h1 {
     vivaCheck: {
       question: 'What does the fourth value in `rgba(4, 170, 109, 0.5)` represent?',
       options: [
-        'Hue rotation degree',
-        'Alpha channel representing opacity (transparency) from 0.0 (transparent) to 1.0 (opaque)',
-        'Brightness enhancement level',
-        'Saturation percentage'
+        'The alpha channel controlling color opacity and transparency, ranging from 0.0 (transparent) to 1.0 (opaque).',
+        'The ambient color temperature offset shifting the RGB spectrum between warm amber and cool cyan tint hues.',
+        'The saturation intensity percentage amplifying pigment vibrancy without altering underlying luminance values.',
+        'The luminance threshold defining minimum WCAG contrast ratios against adjacent background DOM elements.'
       ],
-      correctAnswer: 1,
+      correctAnswer: 0,
       explanation: 'The `a` in RGBA stands for Alpha, which controls the opacity of the color from 0.0 (100% transparent) to 1.0 (100% solid).'
     }
   },
@@ -1944,12 +1944,12 @@ h1 {
     vivaCheck: {
       question: 'What is the visual difference between `display: none` and `visibility: hidden`?',
       options: [
-        'There is zero difference; they both behave identically.',
-        'display: none removes the element completely from page layout, while visibility: hidden hides it visually but still occupies space.',
-        'visibility: hidden deletes the element from HTML DOM permanently.',
-        'display: none makes the text transparent while keeping borders visible.'
+        'display: none removes the element from rendering flow entirely, while visibility: hidden hides it while preserving layout geometry.',
+        'visibility: hidden purges the node from memory permanently, while display: none retains the DOM tree with zero physical dimensions.',
+        'display: none makes inner typography fully transparent, while visibility: hidden removes background colors and border boundaries.',
+        'visibility: hidden operates strictly in server-side templates, while display: none is processed exclusively by client browsers.'
       ],
-      correctAnswer: 1,
+      correctAnswer: 0,
       explanation: 'display: none causes the browser to not render the element at all, freeing its space. visibility: hidden renders a blank empty space of the exact same size.'
     }
   },
@@ -2045,7 +2045,7 @@ h1 {
           instruction: 'Add `position: relative;` to .card-container.',
           hint: 'Write position: relative; inside .card-container.',
           validatorKeywords: ['position:', 'relative'],
-          validatorRegex: 'position:\s*relative'
+          validatorRegex: 'position:\\s*relative'
         },
         {
           id: 'd13-t2',
@@ -2053,7 +2053,7 @@ h1 {
           instruction: 'Add `position: absolute;`, `top: 10px;`, and `right: 10px;` to .card-badge.',
           hint: 'Set position: absolute; top: 10px; right: 10px; in .card-badge.',
           validatorKeywords: ['position:', 'absolute', 'top:', 'right:'],
-          validatorRegex: 'position:\s*absolute[\s\S]*?top:\s*10px[\s\S]*?right:\s*10px'
+          validatorRegex: 'position:\\s*absolute[\\s\\S]*?top:\\s*10px[\\s\\S]*?right:\\s*10px'
         }
       ]
     },
@@ -2105,12 +2105,12 @@ h1 {
     vivaCheck: {
       question: 'Why must a parent container have `position: relative` when placing an `absolute` child inside it?',
       options: [
-        'It triggers hardware GPU animation rendering.',
-        'It establishes the parent as the coordinate origin (bounding box) for the absolute child.',
-        'It changes the parent background color automatically.',
-        'It makes the parent float to the left.'
+        'It establishes the parent container as the coordinate origin boundary for positioning the absolute child element.',
+        'It triggers GPU hardware acceleration so child transform translations render at smooth sixty frames per second.',
+        'It instructs browser rendering engines to hoist the child DOM node above all neighboring stacking context layers.',
+        'It enables automatic z-index recalculation preventing nested children from overflowing parent margin boundaries.'
       ],
-      correctAnswer: 1,
+      correctAnswer: 0,
       explanation: 'An absolute element calculates its top/right/bottom/left coordinates relative to its nearest positioned ancestor. Giving the parent position: relative locks the coordinate origin to the parent bounds.'
     }
   },
@@ -2200,7 +2200,7 @@ h1 {
           instruction: 'Add `display: flex;` and `justify-content: space-between;` to .app-header.',
           hint: 'Write display: flex; justify-content: space-between; in .app-header.',
           validatorKeywords: ['display:', 'flex', 'justify-content:', 'space-between'],
-          validatorRegex: 'display:\s*flex[\s\S]*?justify-content:\s*space-between'
+          validatorRegex: 'display:\\s*flex[\\s\\S]*?justify-content:\\s*space-between'
         },
         {
           id: 'd14-t2',
@@ -2208,7 +2208,7 @@ h1 {
           instruction: 'Add `display: flex;` and `gap: 16px;` to .header-actions.',
           hint: 'Write display: flex; gap: 16px; inside .header-actions.',
           validatorKeywords: ['display:', 'gap:', '16px'],
-          validatorRegex: 'display:\s*flex[\s\S]*?gap:\s*16px'
+          validatorRegex: 'display:\\s*flex[\\s\\S]*?gap:\\s*16px'
         }
       ]
     },
@@ -2249,12 +2249,12 @@ h1 {
     vivaCheck: {
       question: 'What is the default direction of the main axis in a CSS Flexbox container?',
       options: [
-        'column (vertical)',
-        'row (horizontal left-to-right)',
-        'row-reverse',
-        'diagonal'
+        'row (items arranged horizontally from left to right along main axis)',
+        'column (items stacked vertically from top to bottom along main axis)',
+        'row-reverse (items arranged horizontally from right to left in reverse)',
+        'wrap-auto (items dynamically auto-tiling based on viewport dimensions)'
       ],
-      correctAnswer: 1,
+      correctAnswer: 0,
       explanation: 'The initial default value of flex-direction is row, meaning items are arranged horizontally from left to right along the main axis.'
     }
   },
@@ -2535,12 +2535,12 @@ h1 {
     vivaCheck: {
       question: 'What does 1fr mean in CSS Grid?',
       options: [
-        '1 fixed frame rate unit',
-        '1 fraction of the available free space in the grid container',
-        '1 font relative rem scale',
-        '100 pixels in standard resolution'
+        '1 fraction of available free space distributed across explicit tracks in the grid container.',
+        '1 fixed frame rendering interval synchronized with browser display refresh frequency cycles.',
+        '1 font-relative viewport measurement scaling proportionally with parent typography units.',
+        '1 fractional subpixel calculation rounding layout boundaries down to avoid anti-aliasing.'
       ],
-      correctAnswer: 1,
+      correctAnswer: 0,
       explanation: 'fr stands for fractional unit, representing a fraction of the unused space available inside the grid container.'
     }
   },
@@ -2641,7 +2641,7 @@ h1 {
           instruction: 'Add `grid-column: span 2;` to .hero-card.',
           hint: 'Write grid-column: span 2; in .hero-card.',
           validatorKeywords: ['grid-column:', 'span 2'],
-          validatorRegex: 'grid-column:\s*span\s+2'
+          validatorRegex: 'grid-column:\\s*span\\s+2'
         }
       ]
     },
@@ -2689,12 +2689,12 @@ h1 {
     vivaCheck: {
       question: 'What does `grid-column: 1 / -1` accomplish on a CSS Grid item?',
       options: [
-        'It hides the element from view.',
-        'It spans the element across the entire width of the grid, from the very first to the very last column line.',
-        'It sets the width to negative 1 pixel.',
-        'It rotates the column upside down.'
+        'It spans the element across the entire grid width from the first to the very last explicit column line.',
+        'It clamps item bounding dimensions to a negative offset preventing overflow across grid layout tracks.',
+        'It triggers an inverted matrix transformation mirroring column placement along the vertical grid axis.',
+        'It detaches the element from the grid container context and positions it as a fixed viewport overlay.'
       ],
-      correctAnswer: 1,
+      correctAnswer: 0,
       explanation: 'In CSS Grid line numbering, -1 refers to the last line of the explicit grid. 1 / -1 spans from the start line to the end line, covering 100% of the columns.'
     }
   },
@@ -2776,7 +2776,7 @@ h1 {
           instruction: 'Add `@media (min-width: 768px) { .responsive-cards { grid-template-columns: repeat(3, 1fr); } }`.',
           hint: 'Write @media (min-width: 768px) { .responsive-cards { grid-template-columns: repeat(3, 1fr); } }',
           validatorKeywords: ['@media', 'min-width:', '768px', 'grid-template-columns:', 'repeat(3, 1fr)'],
-          validatorRegex: '@media\s*\(\s*min-width:\s*768px\s*\)[\s\S]*?grid-template-columns:\s*repeat\(3,\s*1fr\)'
+          validatorRegex: '@media\\s*\\(\\s*min-width:\\s*768px\\s*\\)[\\s\\S]*?grid-template-columns:\\s*repeat\\(3,\\s*1fr\\)'
         }
       ]
     },
@@ -2824,10 +2824,10 @@ h1 {
     vivaCheck: {
       question: 'Why is the mobile-first CSS architecture preferred over desktop-first?',
       options: [
-        'Mobile-first code requires less memory and progressively enhances performance on constrained mobile devices.',
-        'Desktop computers cannot read CSS media queries.',
-        'Mobile devices only support pure HTML without CSS.',
-        'Desktop-first is forbidden by search engines.'
+        'It serves lightweight baseline styles to constrained mobile devices and progressively enhances larger screens.',
+        'Desktop browser rendering engines execute min-width media queries significantly faster than max-width queries.',
+        'Modern search engines penalize websites that declare desktop viewports before mobile viewport meta directives.',
+        'It forces mobile operating systems to cache stylesheets in flash memory rather than reloading network assets.'
       ],
       correctAnswer: 0,
       explanation: 'Mobile-first ensures mobile users download simpler, lighter baseline CSS, and richer layout features are loaded conditionally as screen width increases.'
@@ -2914,7 +2914,7 @@ h1 {
           instruction: 'Add `transition: all 0.3s ease;` to .action-btn.',
           hint: 'Write transition: all 0.3s ease; inside .action-btn.',
           validatorKeywords: ['transition:', '0.3s', 'ease'],
-          validatorRegex: 'transition:\s*(all\s+)?0\.3s\s+ease'
+          validatorRegex: 'transition:\\s*(all\\s+)?0\\.3s\\s+ease'
         },
         {
           id: 'd19-t2',
@@ -2922,7 +2922,7 @@ h1 {
           instruction: 'Add `transform: translateY(-3px);` to .action-btn:hover.',
           hint: 'Include transform: translateY(-3px); inside .action-btn:hover.',
           validatorKeywords: ['transform:', 'translateY(-3px)'],
-          validatorRegex: 'transform:\s*translateY\(-3px\)'
+          validatorRegex: 'transform:\\s*translateY\\(-3px\\)'
         }
       ]
     },
@@ -2964,10 +2964,10 @@ h1 {
     vivaCheck: {
       question: 'Why is `transform: translateY()` preferred over `top` or `margin-top` for hover animations?',
       options: [
-        'transform runs on the GPU compositor thread without triggering layout reflow, guaranteeing smooth 60fps.',
-        'margin-top is deprecated in modern CSS.',
-        'transform works only in dark mode.',
-        'translateY reduces file download size.'
+        'It executes on the GPU compositor thread without triggering costly browser layout reflow or repaint cycles.',
+        'It compiles directly into native hardware vector instructions bypassing browser CSSOM recalculation steps.',
+        'Properties like margin-top and top are formally marked deprecated in CSS3 and ignored by modern engines.',
+        'It compresses animated visual keyframes into smaller TCP packets during network asset transmission runs.'
       ],
       correctAnswer: 0,
       explanation: 'Transform does not change geometry in the layout tree, meaning the browser composite engine renders it directly on the GPU without costly document reflow.'
@@ -3079,7 +3079,7 @@ h1 {
           instruction: 'Ensure .portal-nav has `display: flex;` and `justify-content: space-between;`.',
           hint: 'Keep display: flex and justify-content: space-between in .portal-nav.',
           validatorKeywords: ['display:', 'flex', 'justify-content:', 'space-between'],
-          validatorRegex: 'display:\s*flex[\s\S]*?justify-content:\s*space-between'
+          validatorRegex: 'display:\\s*flex[\\s\\S]*?justify-content:\\s*space-between'
         },
         {
           id: 'd20-t2',
@@ -3087,7 +3087,7 @@ h1 {
           instruction: 'Ensure .portal-grid has `display: grid;` and `grid-template-columns: repeat(3, 1fr);`.',
           hint: 'Keep display: grid and grid-template-columns: repeat(3, 1fr); in .portal-grid.',
           validatorKeywords: ['display:', 'grid', 'grid-template-columns:', 'repeat(3, 1fr)'],
-          validatorRegex: 'display:\s*grid[\s\S]*?grid-template-columns:\s*repeat\(3,\s*1fr\)'
+          validatorRegex: 'display:\\s*grid[\\s\\S]*?grid-template-columns:\\s*repeat\\(3,\\s*1fr\\)'
         }
       ]
     },
@@ -3134,10 +3134,10 @@ h1 {
     vivaCheck: {
       question: 'What is the primary architectural difference between Flexbox and CSS Grid when building a full website layout?',
       options: [
-        'Flexbox is 1-dimensional (content-first along row or column), while CSS Grid is 2-dimensional (layout-first along rows and columns simultaneously).',
-        'Flexbox works only on mobile, while CSS Grid works only on desktop.',
-        'CSS Grid is deprecated in favor of Flexbox.',
-        'Flexbox requires JavaScript, while CSS Grid is pure HTML.'
+        'Flexbox is 1-dimensional (content-driven along one axis); CSS Grid is 2-dimensional (layout-driven across rows and columns).',
+        'CSS Grid renders strictly on server runtimes; Flexbox is compiled asynchronously during browser DOM hydration cycles.',
+        'Flexbox requires JavaScript runtime polyfills on mobile devices; CSS Grid renders natively across all screen sizes.',
+        'CSS Grid is restricted to SVG graphic canvases; Flexbox operates exclusively on HTML5 semantic document elements.'
       ],
       correctAnswer: 0,
       explanation: 'Flexbox is designed for 1-dimensional item distribution (like navigation bars or button groups), whereas CSS Grid is designed for 2-dimensional grid layouts (like entire page skeletons and card matrices).'
@@ -3267,10 +3267,10 @@ console.log("Updated Marks:", semesterMarks);`
     vivaCheck: {
       question: 'What is the primary difference between let and const in modern JavaScript (ES6)?',
       options: [
-        'let allows reassignment to a new value; const prevents binding reassignment.',
-        'const variables can only hold numbers, while let variables hold strings.',
-        'let is hoisted to global scope, while const is local to functions only.',
-        'const is executed faster by V8 engine, but let supports arrays.'
+        'let allows variable reassignment; const creates an immutable binding that cannot be reassigned.',
+        'const declares variables in global scope; let restricts variables to asynchronous worker threads.',
+        'let variables are garbage collected immediately; const variables persist throughout session runtime.',
+        'const variables are restricted to primitive numbers; let accommodates dynamic objects and arrays.'
       ],
       correctAnswer: 0,
       explanation: 'const creates an immutable binding (the identifier cannot be reassigned to a different reference/value), whereas let allows the variable identifier to be reassigned new values throughout its scope.'
@@ -3575,10 +3575,10 @@ console.log("Access Level:", accessLevel); // Prints: Read Only`
     vivaCheck: {
       question: 'Which of the following values is NOT falsy in JavaScript?',
       options: [
-        '"0" (string containing zero)',
-        '0 (number zero)',
-        'null',
-        'undefined'
+        'The non-empty string "0" (evaluates to truthy)',
+        'The primitive number zero (evaluates to falsy)',
+        'The primitive null keyword (evaluates to falsy)',
+        'The primitive undefined value (evaluates to falsy)'
       ],
       correctAnswer: 0,
       explanation: 'In JavaScript, any non-empty string is truthy, including "0", "false", and " ". The standard falsy values are false, 0, -0, 0n, "", null, undefined, and NaN.'
@@ -3716,10 +3716,10 @@ while (count > 0) {
     vivaCheck: {
       question: 'What is the main difference between a while loop and a do...while loop?',
       options: [
-        'do...while executes its code block at least once, even if the condition is false initially.',
-        'while loops can only iterate over arrays, while do...while loops can iterate over numbers.',
-        'do...while is asynchronous, while while is synchronous.',
-        'There is no difference; they are syntactic aliases.'
+        'do...while executes its code block at least once before evaluating its termination test condition.',
+        'while evaluates its condition asynchronously on a web worker thread while do...while blocks the event loop.',
+        'do...while is restricted to traversing iterable collections while while loops operate exclusively on numbers.',
+        'while loops automatically deallocate loop variables upon completion whereas do...while retains global scope.'
       ],
       correctAnswer: 0,
       explanation: 'A do...while loop evaluates its test condition at the bottom (post-test), which guarantees that the loop body executes at least once before the condition is verified.'
@@ -3861,10 +3861,10 @@ console.log("Discount:", finalDiscount); // Prints: 150`
     vivaCheck: {
       question: 'What is the return value of a JavaScript function that does NOT contain a return statement?',
       options: [
-        'undefined',
-        'null',
-        '0',
-        'false'
+        'Returns undefined, indicating the absence of an explicit return value from the function execution.',
+        'Returns null, indicating that an empty object reference was automatically instantiated by the engine.',
+        'Returns 0, indicating that the function executed successfully to completion without throwing errors.',
+        'Returns false, indicating an incomplete truthiness evaluation during lexical evaluation of the body.'
       ],
       correctAnswer: 0,
       explanation: 'In JavaScript, any function that finishes execution without hitting a return statement implicitly returns undefined.'
@@ -4000,10 +4000,10 @@ console.log("All passing:", passing); // Prints: [65, 80, 45]`
     vivaCheck: {
       question: 'Does the JavaScript Array.prototype.map() method mutate the original array?',
       options: [
-        'No, it returns a new array with the transformed elements without mutating the original.',
-        'Yes, it overwrites each element in-place to save memory.',
-        'Only if the array contains primitive numbers.',
-        'Yes, unless Object.freeze() is called.'
+        'No, it returns a brand-new array containing transformed items without modifying the original array.',
+        'Yes, it mutates the existing array in-place to optimize garbage collection and reduce heap allocation.',
+        'Only if elements are primitive types; arrays storing reference objects are preserved immutably.',
+        'Yes, unless the caller passes an immutable read-only proxy flag in the optional second parameter.'
       ],
       correctAnswer: 0,
       explanation: 'Array.prototype.map() is a pure non-mutating method: it returns a brand new array populated with the results of calling the provided function on every element in the calling array.'
@@ -4149,10 +4149,10 @@ console.log(student.address?.city || "City Not Provided"); // Safely prints fall
     vivaCheck: {
       question: 'What is the standard purpose of JSON.stringify() in web applications?',
       options: [
-        'To convert a JavaScript object into a JSON-formatted string for network transmission or storage.',
-        'To parse a JSON string from a server into a live JavaScript object.',
-        'To encrypt sensitive user passwords before sending to a database.',
-        'To compile JavaScript code into binary machine code.'
+        'To serialize a JavaScript object into a JSON string for network transmission or persistent storage.',
+        'To deserialize a JSON text payload received from a remote server into an active JavaScript memory object.',
+        'To securely hash and encrypt user credentials before dispatching HTTP payloads across TLS connections.',
+        'To transpile modern ECMAScript object syntax into backward-compatible ES5 prototype declarations.'
       ],
       correctAnswer: 0,
       explanation: 'JSON.stringify() serializes a JavaScript value/object into a JSON text string, which is the universal standard format for transmitting data across HTTP network requests and storing in localStorage.'
@@ -4314,10 +4314,10 @@ console.log(student.address?.city || "City Not Provided"); // Safely prints fall
     vivaCheck: {
       question: 'Why is textContent preferred over innerHTML when inserting user-generated text into a webpage?',
       options: [
-        'textContent treats all input as plain text, preventing Cross-Site Scripting (XSS) attacks.',
-        'innerHTML only works with external CSS stylesheets.',
-        'textContent is the only API supported by Chrome browser.',
-        'innerHTML converts all text to uppercase automatically.'
+        'It treats input strictly as raw text, neutralising malicious markup to prevent Cross-Site Scripting (XSS).',
+        'It compiles inserted strings directly to bytecode, improving rendering speed compared to innerHTML parsing.',
+        'Properties like innerHTML are deprecated in WHATWG specifications and will be removed in future standards.',
+        'It enables browser CSS layout engines to calculate typography bounding boxes without reflowing DOM trees.'
       ],
       correctAnswer: 0,
       explanation: 'innerHTML parses strings as HTML markup, meaning malicious users could inject <script> or event handlers (XSS vulnerability). textContent strictly inserts plain text without HTML parsing.'
@@ -4481,10 +4481,10 @@ btn.addEventListener("click", handleButtonClick);`
     vivaCheck: {
       question: 'What is the purpose of calling event.preventDefault() inside a form submit event handler?',
       options: [
-        'It stops the default browser behavior of submitting the form via HTTP and reloading the page.',
-        'It clears all user input fields in the form automatically.',
-        'It validates email address syntax using regular expressions.',
-        'It encrypts the form payload before network dispatch.'
+        'It stops default HTTP form submission and page reloading, allowing JavaScript to handle data in-place.',
+        'It clears all input elements in the form and resets validation error indicators to their initial state.',
+        'It verifies that required input fields comply with HTML5 constraint validation regular expressions.',
+        'It wraps form data in an encrypted SHA-256 binary envelope before transmitting across network sockets.'
       ],
       correctAnswer: 0,
       explanation: 'Standard HTML forms reload the page when submitted. In modern Single Page Applications (SPAs) and interactive apps, e.preventDefault() stops this full page reload so JavaScript can validate and process data in-place.'
@@ -4659,10 +4659,10 @@ console.log("Total Score:", total); // Fixed: Prints 170 (Mathematical addition)
     vivaCheck: {
       question: 'Why does adding two <input> values directly (inputA.value + inputB.value) often result in unexpected outputs like "5060" instead of 110?',
       options: [
-        'Because input.value always returns data as a String; the + operator performs string concatenation instead of addition.',
-        'Because HTML form inputs are encrypted in UTF-16 hexadecimal format.',
-        'Because JavaScript requires an external math library to add numbers greater than 50.',
-        'Because the browser DOM parser rounds all input numbers to strings.'
+        'input.value is always a String, causing the + operator to perform string concatenation instead of numeric addition.',
+        'HTML form inputs store values in UTF-16 hexadecimal byte buffers that require explicit bitwise shifting to parse.',
+        'JavaScript engines require imported math modules to perform binary addition operations on strings from DOM nodes.',
+        'The browser input validator automatically wraps numeric values inside string quotation marks for sanitization.'
       ],
       correctAnswer: 0,
       explanation: 'The value property of HTML input elements is typed as string. To perform mathematical addition, strings must be explicitly parsed using Number(val), parseInt(val, 10), or parseFloat(val).'
