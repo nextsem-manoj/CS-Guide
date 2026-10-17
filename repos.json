@@ -1,0 +1,26 @@
+{
+  "defaultParentDir": "..",
+  "repositories": [
+    {
+      "id": "cs-guide",
+      "name": "NextSem Academy — CS-Guide & BCA Practical Portal",
+      "url": "https://github.com/nextsemacademy-max/CS-Guide.git",
+      "dir": "CS-Guide",
+      "aliases": ["cs-guide", "cs", "guide", "bca-portal"]
+    },
+    {
+      "id": "ncert.nextsem.online",
+      "name": "StudyGuide by Nextsem — NCERT & NIOS Hub",
+      "url": "https://github.com/nextsemacademy-max/ncert.nextsem.online.git",
+      "dir": "ncert.nextsem.online",
+      "aliases": ["ncert", "studyguide", "ncert.nextsem.online", "study"]
+    },
+    {
+      "id": "bca",
+      "name": "BCA Student Practical Coding Exercises",
+      "url": "https://github.com/nextsemacademy-max/bca.git",
+      "dir": "bca",
+      "aliases": ["bca", "practicals", "exercises"]
+    }
+  ]
+}

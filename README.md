@@ -1,7 +1,30 @@
 See live at https://bca-nextsem.web.app/
 
+---
 
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## 🚀 NextSem Workspace & Multi-Repository Automation
+
+Manage all NextSem repositories (`CS-Guide`, `ncert.nextsem.online`, `bca`, etc.) seamlessly:
+
+```bash
+# 1. Inspect repository status, metrics & immediate next step
+status cs-guide             # Or: .\status cs-guide | npm run status -- cs-guide
+status ncert                # Or: .\status ncert    | npm run status -- ncert
+status bca                  # Or: .\status bca      | npm run status -- bca
+status                      # Master dashboard of all repos
+
+# 2. Auto-clone all missing repositories
+repo clone                  # Automatically clones all missing repos from GitHub
+repo clone <repo-name>      # Clone a specific repo
+
+# 3. List or add new repositories
+repo list                   # List all registered repositories & local paths
+repo add <id> <git-url>     # Tell the manager a new repository
+```
+
+---
+
+
 
 ## Getting Started
 
