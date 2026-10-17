@@ -1,6 +1,13 @@
-{
+﻿{
   "defaultParentDir": "..",
   "repositories": [
+    {
+      "id": "nextsem.online",
+      "name": "NextSem Online — Core Ecosystem Hub",
+      "url": "https://github.com/nextsemacademy-max/nextsem.online.git",
+      "dir": "nextsem.online",
+      "aliases": ["nextsem.online", "nextsem", "hub"]
+    },
     {
       "id": "cs-guide",
       "name": "NextSem Academy — CS-Guide & BCA Practical Portal",

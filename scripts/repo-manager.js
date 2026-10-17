@@ -51,7 +51,9 @@ function loadConfig() {
     process.exit(1);
   }
   try {
-    return JSON.parse(fs.readFileSync(CONFIG_FILE, 'utf8'));
+    let raw = fs.readFileSync(CONFIG_FILE, 'utf8');
+    if (raw.charCodeAt(0) === 0xFEFF) raw = raw.slice(1);
+    return JSON.parse(raw);
   } catch (err) {
     console.error(`${C.red}✖ Failed to parse repos.json: ${err.message}${C.reset}`);
     process.exit(1);
@@ -183,6 +185,22 @@ function matchesRepo(repo, query) {
   if (repo.dir && repo.dir.toLowerCase() === q) return true;
   if (repo.aliases && repo.aliases.some(a => a.toLowerCase() === q)) return true;
   return false;
+}
+
+/**
+ * Extract Status and Next Step for Nextsem Online Ecosystem Hub
+ */
+function inspectNextsemOnline(repoPath) {
+  return {
+    milestone: 'Flagship NextSem Academy Web & Mobile Portal',
+    nextStep: 'Maintain Google AdSense/AdMob monetization compliance & Flutter mobile production builds.',
+    extraMetrics: [
+      'Architecture: Next.js 16 (Port 3000) + Flutter Mobile App (mobile/)',
+      'Curriculum Tracks: Windows CMD CLI Track + HTML5 Visual Developer Suite',
+      'Gamification & Monetization: Hearts, Streaks, AdSense (Web) & AdMob (Mobile)',
+      'Production Hosting: Firebase (bca-nextsem.web.app) & Domain nextsem.online'
+    ]
+  };
 }
 
 /**
@@ -347,7 +365,9 @@ function showSingleRepoStatus(repo, config) {
 
   // Domain Inspection
   let inspection;
-  if (repo.id === 'cs-guide' || repo.aliases?.includes('cs-guide')) {
+  if (repo.id === 'nextsem.online' || repo.aliases?.includes('nextsem')) {
+    inspection = inspectNextsemOnline(repoPath);
+  } else if (repo.id === 'cs-guide' || repo.aliases?.includes('cs-guide')) {
     inspection = inspectCsGuide(repoPath);
   } else if (repo.id === 'ncert.nextsem.online' || repo.aliases?.includes('ncert')) {
     inspection = inspectNcert(repoPath);
@@ -383,7 +403,9 @@ function showMasterStatusDashboard(config) {
     const git = getGitMetrics(repoPath);
 
     let inspection;
-    if (repo.id === 'cs-guide' || repo.aliases?.includes('cs-guide')) {
+    if (repo.id === 'nextsem.online' || repo.aliases?.includes('nextsem')) {
+      inspection = inspectNextsemOnline(repoPath);
+    } else if (repo.id === 'cs-guide' || repo.aliases?.includes('cs-guide')) {
       inspection = inspectCsGuide(repoPath);
     } else if (repo.id === 'ncert.nextsem.online' || repo.aliases?.includes('ncert')) {
       inspection = inspectNcert(repoPath);
