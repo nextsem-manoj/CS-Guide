@@ -19,6 +19,7 @@ import GoogleOneTapPrompt from "@/components/auth/GoogleOneTapPrompt";
 import BugDetectiveLab from "@/components/bca/BugDetectiveLab";
 import TerminalCommandBox from "@/components/bca/TerminalCommandBox";
 import PracticalLessonExplainer from "@/components/bca/PracticalLessonExplainer";
+import MobileToPcCompanionBar from "@/components/bca/MobileToPcCompanionBar";
 
 interface Props {
   lesson: PracticalLesson;
@@ -760,6 +761,17 @@ export default function BcaPracticalLessonClient({ lesson }: Props) {
             </div>
           ) : null}
         </div>
+
+        {/* Dual-Device Mobile to PC Companion Bar */}
+        <MobileToPcCompanionBar
+          day={lesson.day}
+          daySlug={lesson.slug}
+          lessonTitle={lesson.title}
+          primaryFile={primaryFile}
+          targetFolder={targetFolder}
+          terminalCommand={vsCodeTerminalCommand}
+          isCompleted={isCompleted}
+        />
 
         {/* Top Header Bar */}
         <header className="rounded-2xl bg-white dark:bg-neutral-950 border border-slate-200 dark:border-neutral-800 p-5 sm:p-6 mb-6 shadow-sm">

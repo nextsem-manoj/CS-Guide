@@ -2521,7 +2521,140 @@ h1 {
         'Give each card `padding: 18px;`, `margin: 12px 0;`, and a rounded border of `border-radius: 12px;`.'
       ],
       submissionCriteria: 'Inspect elements in Chrome DevTools Box Model visualizer to verify margin, border, padding.'
-    },
+,
+      fileName: 'alert-cards.html',
+      solutionCode: `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BCA Day 11 - CSS Box Model Notification Cards</title>
+  <style>
+    /* 1. Universal Box-Sizing Reset */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #0b1120;
+      color: #f8fafc;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+    }
+
+    .container {
+      max-width: 580px;
+      width: 100%;
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 20px;
+      padding: 32px;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
+    }
+
+    h1 {
+      font-size: 22px;
+      margin-bottom: 8px;
+      color: #38bdf8;
+    }
+
+    .subtitle {
+      font-size: 13px;
+      color: #94a3b8;
+      margin-bottom: 24px;
+    }
+
+    /* 2. Base Alert Box Model Card */
+    .alert-card {
+      padding: 18px 20px;
+      margin: 14px 0;
+      border-radius: 12px;
+      border-left: 5px solid;
+      background-color: #0f172a;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .alert-card:hover {
+      transform: translateX(4px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    }
+
+    .alert-card h3 {
+      font-size: 15px;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .alert-card p {
+      font-size: 13px;
+      color: #cbd5e1;
+      line-height: 1.5;
+    }
+
+    /* 3. Status Variants */
+    .alert-success {
+      border-left-color: #10b981;
+      background: rgba(16, 185, 129, 0.08);
+      border-top: 1px solid rgba(16, 185, 129, 0.2);
+      border-right: 1px solid rgba(16, 185, 129, 0.2);
+      border-bottom: 1px solid rgba(16, 185, 129, 0.2);
+    }
+    .alert-success h3 { color: #34d399; }
+
+    .alert-warning {
+      border-left-color: #f59e0b;
+      background: rgba(245, 158, 11, 0.08);
+      border-top: 1px solid rgba(245, 158, 11, 0.2);
+      border-right: 1px solid rgba(245, 158, 11, 0.2);
+      border-bottom: 1px solid rgba(245, 158, 11, 0.2);
+    }
+    .alert-warning h3 { color: #fbbf24; }
+
+    .alert-error {
+      border-left-color: #ef4444;
+      background: rgba(239, 68, 68, 0.08);
+      border-top: 1px solid rgba(239, 68, 68, 0.2);
+      border-right: 1px solid rgba(239, 68, 68, 0.2);
+      border-bottom: 1px solid rgba(239, 68, 68, 0.2);
+    }
+    .alert-error h3 { color: #f87171; }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>BCA Practical Alert System</h1>
+    <p class="subtitle">Demonstrating CSS Box Model: padding (inside), border-box sizing, and margin (outside spacing).</p>
+
+    <!-- Success Alert -->
+    <div class="alert-card alert-success">
+      <h3>✓ Practical Lab Approved</h3>
+      <p>Your Day 11 practical code has passed the technical validation suite with 100% score.</p>
+    </div>
+
+    <!-- Warning Alert -->
+    <div class="alert-card alert-warning">
+      <h3>⚠ Unpushed Git Commits</h3>
+      <p>You have 2 local commits. Run git push origin main to synchronize your GitHub profile.</p>
+    </div>
+
+    <!-- Error Alert -->
+    <div class="alert-card alert-error">
+      <h3>✕ Missing CSS Reset</h3>
+      <p>Always verify * { box-sizing: border-box; } is loaded to prevent horizontal scrollbars.</p>
+    </div>
+  </div>
+
+</body>
+</html>`    },
     githubWorkflow: {
       repoName: 'html-css-projects',
       commitMessage: 'Day 11: CSS Box Model, border-box dimensions and margin spacing',
@@ -2656,7 +2789,108 @@ h1 {
         'Add a secret badge with class `.hidden-badge` styled with `display: none`.'
       ],
       submissionCriteria: 'Inspect element in browser to verify inline-block layout and absence of DOM reflow issues.'
-    },
+,
+      fileName: 'nav-display.html',
+      solutionCode: `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BCA Day 12 - CSS Display Modes Comparison</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      background: #0f172a;
+      color: #f1f5f9;
+      padding: 32px 16px;
+      line-height: 1.6;
+    }
+    .wrapper {
+      max-width: 720px;
+      margin: 0 auto;
+      background: #1e293b;
+      padding: 28px;
+      border-radius: 16px;
+      border: 1px solid #334155;
+    }
+    h1 { font-size: 22px; color: #38bdf8; margin-bottom: 16px; }
+    .demo-section {
+      background: #0f172a;
+      padding: 16px;
+      border-radius: 12px;
+      margin: 16px 0;
+      border: 1px solid #334155;
+    }
+    .demo-title { font-size: 13px; font-weight: bold; color: #fbbf24; margin-bottom: 8px; }
+    
+    /* Display: inline (No width/height respect) */
+    .inline-item {
+      display: inline;
+      background: #2563eb;
+      color: white;
+      padding: 4px 8px;
+      margin: 4px;
+      border-radius: 4px;
+    }
+    
+    /* Display: block (Takes full width) */
+    .block-item {
+      display: block;
+      background: #059669;
+      color: white;
+      padding: 8px 12px;
+      margin: 6px 0;
+      border-radius: 6px;
+    }
+    
+    /* Display: inline-block (Horizontal flow + accepts width/height) */
+    .inline-block-item {
+      display: inline-block;
+      width: 130px;
+      height: 40px;
+      line-height: 40px;
+      text-align: center;
+      background: #7c3aed;
+      color: white;
+      margin: 4px;
+      border-radius: 8px;
+      font-weight: 600;
+    }
+    
+    /* Display: none (Completely hidden from flow) */
+    .hidden-item {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <h1>CSS Display Property in Action</h1>
+    
+    <div class="demo-section">
+      <div class="demo-title">1. Inline (Flows like text, ignores width/height):</div>
+      <span class="inline-item">Item One</span>
+      <span class="inline-item">Item Two</span>
+      <span class="inline-item">Item Three</span>
+    </div>
+
+    <div class="demo-section">
+      <div class="demo-title">2. Block (Full width, stacks vertically):</div>
+      <div class="block-item">Block Item A (100% available width)</div>
+      <div class="block-item">Block Item B (Stacks onto next line)</div>
+    </div>
+
+    <div class="demo-section">
+      <div class="demo-title">3. Inline-Block (Horizontal navbar pills with precise width/height):</div>
+      <div class="inline-block-item">BCS-011</div>
+      <div class="inline-block-item">BCSL-013</div>
+      <div class="inline-block-item">BCS-012</div>
+      <div class="inline-block-item">FEG-02</div>
+    </div>
+  </div>
+</body>
+</html>`    },
     githubWorkflow: {
       repoName: 'html-css-projects',
       commitMessage: 'Day 12: CSS display modes, block vs inline-block and badge cloud',
@@ -2817,7 +3051,104 @@ h1 {
         'Add a high `z-index: 100` so it stays floating above all scrolling page content.'
       ],
       submissionCriteria: 'Scroll the webpage in Chrome to verify the bottom bar never moves or disappears.'
-    },
+,
+      fileName: 'modal-overlay.html',
+      solutionCode: `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BCA Day 13 - CSS Positioning & Modal Dialog</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      background: #0f172a;
+      color: white;
+      padding: 32px;
+      min-height: 200vh; /* demonstrate sticky/fixed behavior */
+    }
+    /* Fixed trigger button at bottom right */
+    .floating-help-btn {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      padding: 12px 20px;
+      border-radius: 50px;
+      background: #2563eb;
+      color: white;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
+      z-index: 10;
+    }
+    /* Fixed Modal Backdrop Overlay */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 50;
+    }
+    /* Modal Card with Relative Position for Absolute Close Button */
+    .modal-card {
+      position: relative;
+      background: #1e293b;
+      border: 1px solid #334155;
+      padding: 28px;
+      border-radius: 16px;
+      max-width: 440px;
+      width: 90%;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+    }
+    .modal-close-btn {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      background: #334155;
+      border: none;
+      color: white;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .modal-card h2 { font-size: 18px; color: #38bdf8; margin-bottom: 8px; }
+    .modal-card p { font-size: 13px; color: #cbd5e1; line-height: 1.5; margin-bottom: 16px; }
+    .btn-action {
+      width: 100%;
+      padding: 10px;
+      background: #2563eb;
+      border: none;
+      border-radius: 8px;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>CSS Positioning: Static, Relative, Absolute, Fixed</h1>
+  <p style="color: #94a3b8; margin-top: 8px;">Scroll down to verify the floating button stays anchored to the viewport.</p>
+
+  <!-- Modal Dialog -->
+  <div class="modal-backdrop">
+    <div class="modal-card">
+      <button class="modal-close-btn" onclick="alert('Close clicked')">✕</button>
+      <h2>BCA Practical Viva Verification</h2>
+      <p>Demonstrating position: fixed (modal backdrop covering 100vw/100vh) and position: absolute (close button pinned to top-right).</p>
+      <button class="btn-action" onclick="alert('Submission Approved!')">Confirm Submission</button>
+    </div>
+  </div>
+
+  <button class="floating-help-btn" onclick="alert('Help desk active')">💬 Ask Mentor</button>
+</body>
+</html>`    },
     githubWorkflow: {
       repoName: 'html-css-projects',
       commitMessage: 'Day 13: CSS positioning coordinate systems, absolute badges and fixed bars',
@@ -2961,7 +3292,98 @@ h1 {
         'Add hover background color changes to each button.'
       ],
       submissionCriteria: 'Inspect in Chrome DevTools to ensure gap spacing is active and zero margin hacks are used.'
-    },
+,
+      fileName: 'flex-navbar.html',
+      solutionCode: `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BCA Day 14 - Flexbox Navigation Bar</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #0b1120;
+      color: #f8fafc;
+    }
+    
+    /* 1. Flexbox Navigation Header */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 32px;
+      background: #1e293b;
+      border-bottom: 1px solid #334155;
+    }
+    
+    .logo {
+      font-size: 18px;
+      font-weight: 800;
+      color: #38bdf8;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    /* 2. Flex Navigation Links */
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 24px;
+    }
+    
+    .nav-links a {
+      color: #cbd5e1;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+      transition: color 0.2s ease;
+    }
+    .nav-links a:hover { color: #38bdf8; }
+    
+    .btn-cta {
+      padding: 8px 18px;
+      background: #2563eb;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: bold;
+      transition: background 0.2s ease;
+    }
+    .btn-cta:hover { background: #1d4ed8; }
+
+    .hero {
+      max-width: 800px;
+      margin: 60px auto;
+      text-align: center;
+      padding: 0 16px;
+    }
+    .hero h1 { font-size: 32px; color: white; margin-bottom: 12px; }
+    .hero p { color: #94a3b8; font-size: 16px; }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <a href="#" class="logo">🚀 BCA DevPortal</a>
+    <ul class="nav-links">
+      <li><a href="#curriculum">Curriculum</a></li>
+      <li><a href="#practicals">Practicals</a></li>
+      <li><a href="#viva">Viva Bank</a></li>
+      <li><a href="#github">GitHub</a></li>
+    </ul>
+    <a href="#login" class="btn-cta">Student Login</a>
+  </nav>
+
+  <div class="hero">
+    <h1>Modern CSS Flexbox Navigation</h1>
+    <p>Using display: flex with justify-content: space-between to evenly distribute brand logo, nav links, and CTA button.</p>
+  </div>
+</body>
+</html>`    },
     githubWorkflow: {
       repoName: 'html-css-projects',
       commitMessage: 'Day 14: Flexbox main axis alignment, space-between navbars and gap property',
@@ -3107,7 +3529,147 @@ h1 {
         'Inspect how resizing the browser window causes 3 columns -> 2 columns -> 1 column smoothly.'
       ],
       submissionCriteria: 'Verify using responsive inspect mode that cards never overflow horizontally on mobile.'
-    },
+,
+      fileName: 'pricing-cards.html',
+      solutionCode: `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BCA Day 15 - Flexbox Responsive Pricing Cards</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      background: #0b1120;
+      color: white;
+      padding: 40px 16px;
+    }
+    .container {
+      max-width: 980px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    h1 { font-size: 26px; color: #38bdf8; margin-bottom: 8px; }
+    .subtitle { color: #94a3b8; font-size: 14px; margin-bottom: 36px; }
+
+    /* Flexbox Container with flex-wrap and align-items: stretch */
+    .card-deck {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 24px;
+      align-items: stretch;
+    }
+
+    .card {
+      flex: 1 1 280px;
+      max-width: 320px;
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 16px;
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      text-align: left;
+      transition: transform 0.25s ease, border-color 0.25s ease;
+    }
+    .card:hover {
+      transform: translateY(-6px);
+      border-color: #38bdf8;
+    }
+    .card.featured {
+      border: 2px solid #2563eb;
+      background: #172554;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 50px;
+      font-size: 11px;
+      font-weight: bold;
+      background: #2563eb;
+      color: white;
+      margin-bottom: 12px;
+    }
+    .tier-name { font-size: 20px; font-weight: bold; margin-bottom: 6px; }
+    .price { font-size: 28px; font-weight: 800; color: #38bdf8; margin-bottom: 16px; }
+    .price span { font-size: 13px; color: #94a3b8; font-weight: normal; }
+
+    .features { list-style: none; margin-bottom: 24px; flex-grow: 1; }
+    .features li { font-size: 13px; color: #cbd5e1; margin-bottom: 8px; }
+    .features li::before { content: "✓ "; color: #10b981; font-weight: bold; }
+
+    .btn-enroll {
+      width: 100%;
+      padding: 12px;
+      background: #2563eb;
+      border: none;
+      border-radius: 8px;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      text-align: center;
+      text-decoration: none;
+      display: block;
+    }
+    .btn-enroll:hover { background: #1d4ed8; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>BCA Specialization Learning Tracks</h1>
+    <p class="subtitle">Equally sized cards using Flexbox flex-grow, flex-wrap, and stretch alignment.</p>
+
+    <div class="card-deck">
+      <div class="card">
+        <div>
+          <span class="badge">Track 1</span>
+          <div class="tier-name">Web Development</div>
+          <div class="price">Free <span>/ Semester 1</span></div>
+          <ul class="features">
+            <li>Semantic HTML5 & Modern CSS</li>
+            <li>CSS Grid & Flexbox Layouts</li>
+            <li>GitHub Pages Deployment</li>
+          </ul>
+        </div>
+        <a href="#enroll" class="btn-enroll">Start Practice</a>
+      </div>
+
+      <div class="card featured">
+        <div>
+          <span class="badge">Track 2 (Most Popular)</span>
+          <div class="tier-name">Full-Stack Engineer</div>
+          <div class="price">Free <span>/ 360 Days</span></div>
+          <ul class="features">
+            <li>JavaScript ES6+ & DOM Projects</li>
+            <li>React & Next.js Framework</li>
+            <li>Node.js & MongoDB Backend</li>
+            <li>Technical Viva Voce Mastery</li>
+          </ul>
+        </div>
+        <a href="#enroll" class="btn-enroll">Enroll Full Track</a>
+      </div>
+
+      <div class="card">
+        <div>
+          <span class="badge">Track 3</span>
+          <div class="tier-name">Systems & C++</div>
+          <div class="price">Free <span>/ Semester 2</span></div>
+          <ul class="features">
+            <li>Pointers & Memory Control</li>
+            <li>Data Structures & Algorithms</li>
+            <li>Object-Oriented Programming</li>
+          </ul>
+        </div>
+        <a href="#enroll" class="btn-enroll">Start Practice</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>`    },
     githubWorkflow: {
       repoName: 'html-css-projects',
       commitMessage: 'Day 15: Flex-wrap responsive cards, align-items cross axis centering',
@@ -3247,7 +3809,154 @@ h1 {
         'Style each project card with title, tech stack badge, and a GitHub view button.'
       ],
       submissionCriteria: 'Inspect grid track lines in Chrome DevTools Grid Inspector overlay.'
-    },
+,
+      fileName: 'project-gallery.html',
+      solutionCode: `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BCA Day 16 - CSS Grid Project Gallery</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      background: #0b1120;
+      color: white;
+      padding: 32px 16px;
+    }
+    .wrapper { max-width: 1040px; margin: 0 auto; }
+    h1 { font-size: 24px; color: #38bdf8; margin-bottom: 8px; text-align: center; }
+    p.lead { color: #94a3b8; font-size: 14px; text-align: center; margin-bottom: 32px; }
+
+    /* 6-Item CSS Grid with repeat(auto-fit, minmax(280px, 1fr)) */
+    .grid-gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+    }
+
+    .project-card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 14px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+    .project-card:hover {
+      transform: translateY(-4px);
+      border-color: #38bdf8;
+    }
+
+    .day-badge {
+      font-size: 11px;
+      font-weight: 800;
+      color: #38bdf8;
+      margin-bottom: 8px;
+    }
+    .project-card h3 { font-size: 16px; margin-bottom: 8px; }
+    .project-card p { font-size: 13px; color: #94a3b8; line-height: 1.5; margin-bottom: 16px; }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 18px;
+    }
+    .tag {
+      font-size: 10px;
+      background: #0f172a;
+      border: 1px solid #334155;
+      color: #cbd5e1;
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+
+    .btn-github {
+      padding: 8px 14px;
+      background: #2563eb;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: bold;
+      text-align: center;
+    }
+    .btn-github:hover { background: #1d4ed8; }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <h1>BCA Semester 1 Practical Project Showcase</h1>
+    <p class="lead">Built using responsive CSS Grid with auto-fit fractional columns.</p>
+
+    <div class="grid-gallery">
+      <div class="project-card">
+        <div>
+          <div class="day-badge">DAY 01 • HTML SETUP</div>
+          <h3>Student Launch Webpage</h3>
+          <p>Initial HTML5 boilerplate with semantic structure and browser verification.</p>
+          <div class="tag-row"><span class="tag">HTML5</span><span class="tag">VSCode</span></div>
+        </div>
+        <a href="https://github.com" class="btn-github">View GitHub Repository</a>
+      </div>
+
+      <div class="project-card">
+        <div>
+          <div class="day-badge">DAY 04 • LISTS & TABLES</div>
+          <h3>Syllabus Matrix Portal</h3>
+          <p>Structured table formatting with rowspan, colspan, and accessibility captions.</p>
+          <div class="tag-row"><span class="tag">HTML Tables</span><span class="tag">Matrix</span></div>
+        </div>
+        <a href="https://github.com" class="btn-github">View GitHub Repository</a>
+      </div>
+
+      <div class="project-card">
+        <div>
+          <div class="day-badge">DAY 05 • FORMS</div>
+          <h3>Job Application Portal</h3>
+          <p>Client-side form validation with regex pattern matching and semantic fieldsets.</p>
+          <div class="tag-row"><span class="tag">Forms</span><span class="tag">Validation</span></div>
+        </div>
+        <a href="https://github.com" class="btn-github">View GitHub Repository</a>
+      </div>
+
+      <div class="project-card">
+        <div>
+          <div class="day-badge">DAY 06 • SEMANTICS</div>
+          <h3>College Campus Portal</h3>
+          <p>Clean semantic architecture with header, nav, main, article, aside, and footer.</p>
+          <div class="tag-row"><span class="tag">Semantics</span><span class="tag">SEO</span></div>
+        </div>
+        <a href="https://github.com" class="btn-github">View GitHub Repository</a>
+      </div>
+
+      <div class="project-card">
+        <div>
+          <div class="day-badge">DAY 09 • SELECTORS</div>
+          <h3>Component Library</h3>
+          <p>Modular button variants (.btn-success, .btn-danger) with hover states.</p>
+          <div class="tag-row"><span class="tag">CSS Selectors</span><span class="tag">DRY</span></div>
+        </div>
+        <a href="https://github.com" class="btn-github">View GitHub Repository</a>
+      </div>
+
+      <div class="project-card">
+        <div>
+          <div class="day-badge">DAY 15 • FLEXBOX</div>
+          <h3>Responsive Course Deck</h3>
+          <p>Equal height pricing and curriculum cards with flex-wrap and alignment.</p>
+          <div class="tag-row"><span class="tag">Flexbox</span><span class="tag">Layouts</span></div>
+        </div>
+        <a href="https://github.com" class="btn-github">View GitHub Repository</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>`    },
     githubWorkflow: {
       repoName: 'html-css-projects',
       commitMessage: 'Day 16: CSS Grid 2D layout, repeat syntax and fractional fr units',
@@ -3401,7 +4110,116 @@ h1 {
         'Add a full-width footer spanning all 4 columns (`grid-column: 1 / -1;`).'
       ],
       submissionCriteria: 'Inspect in Chrome DevTools to verify exact grid line coordinates.'
-    },
+,
+      fileName: 'magazine-layout.html',
+      solutionCode: `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BCA Day 17 - CSS Grid Newspaper Magazine Layout</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      background: #0f172a;
+      color: white;
+      padding: 32px 16px;
+    }
+    .magazine-container {
+      max-width: 1080px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+
+    /* Lead Story spans 2 columns and 2 rows */
+    .lead-story {
+      grid-column: span 2;
+      grid-row: span 2;
+      background: #1e293b;
+      border: 1px solid #3b82f6;
+      border-radius: 16px;
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .lead-story h2 { font-size: 26px; color: #38bdf8; margin: 12px 0; }
+    .lead-story p { color: #cbd5e1; font-size: 15px; line-height: 1.6; }
+
+    /* Regular News Cards */
+    .news-card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 20px;
+    }
+    .news-card h3 { font-size: 15px; color: white; margin-bottom: 8px; }
+    .news-card p { font-size: 12px; color: #94a3b8; line-height: 1.5; }
+
+    /* Footer spans full width (all 4 columns) */
+    .magazine-footer {
+      grid-column: 1 / -1;
+      background: #0f172a;
+      border-top: 1px solid #334155;
+      padding: 20px 0;
+      text-align: center;
+      font-size: 13px;
+      color: #64748b;
+    }
+    .badge {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 4px;
+      background: #2563eb;
+      font-size: 10px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="magazine-container">
+    <article class="lead-story">
+      <div>
+        <span class="badge">BREAKING • TECH</span>
+        <h2>NextSem Launches 360-Day BCA Practical Curriculum</h2>
+        <p>A ground-breaking interactive engineering curriculum allowing students to study on their mobile phone while simultaneously building verified software in Visual Studio Code on their PC.</p>
+      </div>
+      <div style="font-size: 12px; color: #64748b; margin-top: 20px;">By Er. Manoj Kumar • 5 min read</div>
+    </article>
+
+    <article class="news-card">
+      <span class="badge" style="background: #10b981;">CLOUD</span>
+      <h3>Firebase Hosting Deployed</h3>
+      <p>Instant static assets delivered through global CDN endpoints with 0ms hydration.</p>
+    </article>
+
+    <article class="news-card">
+      <span class="badge" style="background: #7c3aed;">GITHUB</span>
+      <h3>CI/CD Pipeline Verification</h3>
+      <p>Automated repository checks verify student code pushes line-by-line.</p>
+    </article>
+
+    <article class="news-card">
+      <span class="badge" style="background: #f59e0b;">UI/UX</span>
+      <h3>CSS Grid 2 Spanning Rules</h3>
+      <p>Mastering grid-column: span 2 and grid-row: span 2 for responsive dashboards.</p>
+    </article>
+
+    <article class="news-card">
+      <span class="badge" style="background: #ef4444;">VIVA</span>
+      <h3>100% Viva Voce Pass Rate</h3>
+      <p>All active students scored 100% on their Day 17 technical inspection questions.</p>
+    </article>
+
+    <footer class="magazine-footer">
+      NextSem BCA Computer Science Gazette • All 4 Columns Spanned via grid-column: 1 / -1
+    </footer>
+  </div>
+</body>
+</html>`    },
     githubWorkflow: {
       repoName: 'html-css-projects',
       commitMessage: 'Day 17: CSS Grid spanning, asymmetric editorial layouts and line indexing',
@@ -3536,7 +4354,101 @@ h1 {
         'On desktop (>= 1024px): 3 column card grid with horizontal header navigation.'
       ],
       submissionCriteria: 'Test using Chrome DevTools device mode toggling between iPhone, iPad, and Desktop.'
-    },
+,
+      fileName: 'responsive-course.html',
+      solutionCode: `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BCA Day 18 - Mobile-First Responsive Course Page</title>
+  <style>
+    /* 1. Mobile-First Base Styles (< 640px) */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      background: #0b1120;
+      color: white;
+      padding: 16px;
+      line-height: 1.6;
+    }
+    .header {
+      text-align: center;
+      padding: 24px 0;
+      border-bottom: 1px solid #1e293b;
+    }
+    .header h1 { font-size: 22px; color: #38bdf8; }
+    .header p { font-size: 13px; color: #94a3b8; }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: 1fr; /* 1 column on mobile */
+      gap: 16px;
+      margin-top: 24px;
+    }
+    .course-card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 20px;
+    }
+    .course-card h3 { font-size: 16px; color: white; margin-bottom: 6px; }
+    .course-card p { font-size: 13px; color: #cbd5e1; }
+
+    /* 2. Tablet Viewport (>= 640px): 2 Columns */
+    @media (min-width: 640px) {
+      body { padding: 32px; }
+      .card-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+      }
+      .header h1 { font-size: 26px; }
+    }
+
+    /* 3. Desktop Viewport (>= 1024px): 3 Columns */
+    @media (min-width: 1024px) {
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        text-align: left;
+        max-width: 1040px;
+        margin: 0 auto;
+      }
+      .card-grid {
+        max-width: 1040px;
+        margin: 32px auto 0;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 24px;
+      }
+      .header h1 { font-size: 30px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div>
+      <h1>BCA Semester 1 Course Modules</h1>
+      <p>Responsive Media Query Strategy (Mobile -> Tablet -> Desktop)</p>
+    </div>
+  </header>
+
+  <main class="card-grid">
+    <div class="course-card">
+      <h3>BCS-011: Computer Basics</h3>
+      <p>Foundations of computer hardware, operating systems, and memory hierarchy.</p>
+    </div>
+    <div class="course-card">
+      <h3>BCSL-013: PC Software Lab</h3>
+      <p>Hands-on practical development with HTML5, CSS3, JavaScript, and Linux CLI.</p>
+    </div>
+    <div class="course-card">
+      <h3>BCS-012: Mathematics</h3>
+      <p>Discrete mathematics, linear programming, matrices, and computational calculus.</p>
+    </div>
+  </main>
+</body>
+</html>`    },
     githubWorkflow: {
       repoName: 'html-css-projects',
       commitMessage: 'Day 18: Mobile-first responsive design, media query breakpoints and fluid grids',
@@ -3676,7 +4588,113 @@ h1 {
         'Add a `:active` state that scales buttons down to `scale(0.96)` on click.'
       ],
       submissionCriteria: 'Test hover and click micro-interactions in Google Chrome.'
-    },
+,
+      fileName: 'tier-cards.html',
+      solutionCode: `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BCA Day 19 - CSS Transitions & Transform Effects</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      background: #0b1120;
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+    }
+    .tier-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 24px;
+      max-width: 900px;
+      width: 100%;
+    }
+
+    /* Card with Smooth Transitions */
+    .tier-card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 16px;
+      padding: 32px 24px;
+      flex: 1 1 240px;
+      max-width: 280px;
+      text-align: center;
+      transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+      cursor: pointer;
+    }
+
+    /* Elevate on Hover */
+    .tier-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 16px 30px rgba(37, 99, 235, 0.25);
+      border-color: #38bdf8;
+    }
+
+    .tier-card h3 { font-size: 20px; color: #38bdf8; margin-bottom: 8px; }
+    .price { font-size: 28px; font-weight: 800; margin-bottom: 16px; }
+    .features { list-style: none; font-size: 13px; color: #cbd5e1; margin-bottom: 24px; }
+    .features li { margin-bottom: 8px; }
+
+    /* Interactive Button with Click Scale */
+    .btn-select {
+      width: 100%;
+      padding: 12px;
+      background: #2563eb;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: transform 0.15s ease, background 0.15s ease;
+    }
+    .btn-select:hover { background: #1d4ed8; }
+    .btn-select:active { transform: scale(0.96); }
+  </style>
+</head>
+<body>
+  <div class="tier-container">
+    <div class="tier-card">
+      <h3>Starter</h3>
+      <div class="price">Free</div>
+      <ul class="features">
+        <li>Days 1–10 Curriculum</li>
+        <li>Community Discord</li>
+        <li>Automated Quizzes</li>
+      </ul>
+      <button class="btn-select">Select Starter</button>
+    </div>
+
+    <div class="tier-card" style="border-color: #2563eb;">
+      <h3>Pro Developer</h3>
+      <div class="price">Free</div>
+      <ul class="features">
+        <li>Full 360-Day Pathway</li>
+        <li>1-on-1 Viva Reviews</li>
+        <li>GitHub Certification</li>
+      </ul>
+      <button class="btn-select" style="background: #3b82f6;">Select Pro</button>
+    </div>
+
+    <div class="tier-card">
+      <h3>Enterprise</h3>
+      <div class="price">Free</div>
+      <ul class="features">
+        <li>Capstone Review</li>
+        <li>Job Portal Access</li>
+        <li>Direct Mentorship</li>
+      </ul>
+      <button class="btn-select">Select Enterprise</button>
+    </div>
+  </div>
+</body>
+</html>`    },
     githubWorkflow: {
       repoName: 'html-css-projects',
       commitMessage: 'Day 19: CSS transitions, GPU-accelerated transform translateY and tactile hover states',
@@ -3846,7 +4864,133 @@ h1 {
         'Ensure 100% mobile responsiveness from 360px to 1440px.'
       ],
       submissionCriteria: 'Push to GitHub and verify live repository in NextSem BCA Practical Portal.'
-    },
+,
+      fileName: 'campus-portal.html',
+      solutionCode: `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BCA Day 20 - University Campus Portal Capstone</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      background: #060c18;
+      color: white;
+      line-height: 1.6;
+    }
+    /* Sticky Top Header */
+    .navbar {
+      position: sticky;
+      top: 0;
+      background: rgba(12, 19, 40, 0.95);
+      backdrop-filter: blur(8px);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 32px;
+      border-bottom: 1px solid #1e293b;
+      z-index: 100;
+    }
+    .navbar h2 { font-size: 18px; color: #38bdf8; }
+    .nav-links { display: flex; gap: 20px; list-style: none; }
+    .nav-links a { color: #cbd5e1; text-decoration: none; font-size: 14px; font-weight: 600; }
+    .nav-links a:hover { color: #38bdf8; }
+
+    /* Hero Section */
+    .hero {
+      text-align: center;
+      padding: 80px 20px;
+      background: radial-gradient(circle at center, rgba(37,99,235,0.15) 0%, transparent 70%);
+    }
+    .hero h1 { font-size: 36px; color: white; margin-bottom: 12px; }
+    .hero p { font-size: 16px; color: #94a3b8; max-width: 600px; margin: 0 auto 24px; }
+    .btn-cta {
+      padding: 12px 28px;
+      background: #2563eb;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: bold;
+      display: inline-block;
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+    .btn-cta:hover { transform: translateY(-2px); background: #1d4ed8; }
+
+    /* Departments Grid */
+    .section-title { text-align: center; font-size: 24px; margin: 40px 0 20px; color: #38bdf8; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+      max-width: 1040px;
+      margin: 0 auto 60px;
+      padding: 0 20px;
+    }
+    .dept-card {
+      background: #0c1328;
+      border: 1px solid #1e293b;
+      border-radius: 12px;
+      padding: 24px;
+      transition: transform 0.2s ease;
+    }
+    .dept-card:hover { transform: translateY(-5px); border-color: #38bdf8; }
+    .dept-card h3 { font-size: 18px; margin-bottom: 8px; color: white; }
+    .dept-card p { font-size: 13px; color: #94a3b8; }
+
+    /* Footer */
+    footer {
+      background: #050912;
+      border-top: 1px solid #1e293b;
+      padding: 30px 20px;
+      text-align: center;
+      font-size: 13px;
+      color: #64748b;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <h2>🎓 IGNOU BCA Academy</h2>
+    <ul class="nav-links">
+      <li><a href="#departments">Departments</a></li>
+      <li><a href="#faculty">Faculty</a></li>
+      <li><a href="#admissions">Admissions</a></li>
+    </ul>
+  </nav>
+
+  <header class="hero">
+    <h1>National Campus Portal 2026</h1>
+    <p>Empowering Computer Science & Application students with modern industry lab experience.</p>
+    <a href="#apply" class="btn-cta">Apply for BCA 2026</a>
+  </header>
+
+  <h2 class="section-title" id="departments">Academic Departments</h2>
+  <div class="grid">
+    <div class="dept-card">
+      <h3>Computer Applications (BCA)</h3>
+      <p>Full-Stack Web Engineering, Systems Architecture, and Database Systems.</p>
+    </div>
+    <div class="dept-card">
+      <h3>Information Technology</h3>
+      <p>Cloud Computing, Linux Administration, and Computer Networking.</p>
+    </div>
+    <div class="dept-card">
+      <h3>Artificial Intelligence</h3>
+      <p>Data Science, Computational Statistics, and Machine Learning algorithms.</p>
+    </div>
+    <div class="dept-card">
+      <h3>Cybersecurity</h3>
+      <p>Network Defense, Secure Systems Design, and Vulnerability Assessment.</p>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2026 NextSem IGNOU BCA Study Notes • Authored by Er. Manoj Kumar</p>
+  </footer>
+</body>
+</html>`    },
     githubWorkflow: {
       repoName: 'html-css-projects',
       commitMessage: 'Day 20: Sprint 2 Capstone Project - Responsive University Campus Portal',
@@ -3978,7 +5122,72 @@ console.log("Updated Marks:", semesterMarks);`
         'Inspect the script in Google Chrome DevTools console and verify zero errors.'
       ],
       submissionCriteria: 'Push your day-21/index.html file with working <script> variables to your GitHub repo.'
-    },
+,
+      fileName: 'developer-spec.html',
+      solutionCode: `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BCA Day 21 - JavaScript Variables & Data Types</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      background: #0b1120;
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    .spec-card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 16px;
+      padding: 32px;
+      max-width: 480px;
+      width: 100%;
+    }
+    h1 { font-size: 20px; color: #38bdf8; margin-bottom: 12px; }
+    pre {
+      background: #0f172a;
+      padding: 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      color: #34d399;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+  <div class="spec-card">
+    <h1>JavaScript Developer Profile Specification</h1>
+    <pre id="output">Loading developer profile variables...</pre>
+  </div>
+
+  <script>
+    // 1. Declare 5 variables representing core primitive types
+    const developerName = "Er. Manoj Kumar";       // String
+    const semester = 1;                           // Number
+    const isEnrolledBCA = true;                   // Boolean
+    const graduationProject = null;               // Null (intentional absence of value)
+    let thesisAdvisor;                            // Undefined (unassigned)
+
+    // 2. Format a multiline summary using ES6 Template Literals
+    const summary = \`Developer Name: \${developerName}
+Semester: Semester \${semester}
+Active Enrollment: \${isEnrolledBCA ? "Verified Active" : "Inactive"}
+Capstone Project: \${graduationProject === null ? "In Progress (Sprint 1)" : graduationProject}
+Thesis Advisor: \${typeof thesisAdvisor} (Assigned in Year 3)\`;
+
+    // 3. Log to browser console and render to DOM
+    console.log(summary);
+    document.getElementById("output").textContent = summary;
+  </script>
+</body>
+</html>`    },
     githubWorkflow: {
       repoName: 'html-css-projects',
       commitMessage: 'feat(day-21): add javascript intro variables and data types',
@@ -4117,7 +5326,90 @@ if (marks === 100) { // Fixed: Strict equality comparison
         'Print formatted PASS/FAIL criteria to the browser console.'
       ],
       submissionCriteria: 'Ensure your script uses strict equality (===) and proper logical operators.'
-    },
+,
+      fileName: 'eligibility-calculator.html',
+      solutionCode: `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BCA Day 22 - Admission Eligibility Calculator</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      background: #0b1120;
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    .calc-card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 16px;
+      padding: 32px;
+      max-width: 480px;
+      width: 100%;
+    }
+    h1 { font-size: 20px; color: #38bdf8; margin-bottom: 16px; }
+    .result-box {
+      background: #0f172a;
+      padding: 16px;
+      border-radius: 10px;
+      font-family: monospace;
+      font-size: 13px;
+      color: #cbd5e1;
+      line-height: 1.8;
+    }
+    .status { font-weight: bold; font-size: 16px; margin-top: 12px; }
+    .pass { color: #10b981; }
+    .fail { color: #ef4444; }
+  </style>
+</head>
+<body>
+  <div class="calc-card">
+    <h1>BCA Admission Eligibility Check</h1>
+    <div class="result-box" id="resultBox">Computing eligibility...</div>
+  </div>
+
+  <script>
+    // Test Scores
+    const mathScore = 72;
+    const physicsScore = 65;
+    const csScore = 88;
+
+    // Arithmetic Formulas
+    const totalMarks = mathScore + physicsScore + csScore;
+    const maxMarks = 300;
+    const average = (totalMarks / 3).toFixed(2);
+    const percentage = ((totalMarks / maxMarks) * 100).toFixed(2);
+
+    // Compound Logical Condition
+    const isEligible = (mathScore >= 60 && physicsScore >= 55 && csScore >= 65);
+
+    const logOutput = \`Mathematics: \${mathScore}/100
+Physics: \${physicsScore}/100
+Computer Science: \${csScore}/100
+------------------------------
+Total: \${totalMarks}/\${maxMarks}
+Average: \${average}
+Percentage: \${percentage}%\`;
+
+    console.log(logOutput);
+    console.log("Admission Status:", isEligible ? "ELIGIBLE FOR ADMISSION" : "NOT ELIGIBLE");
+
+    document.getElementById("resultBox").innerHTML = \`
+      <div>\${logOutput.replace(/\\n/g, "<br>")}</div>
+      <div class="status \${isEligible ? 'pass' : 'fail'}">
+        Status: \${isEligible ? "✓ ELIGIBLE FOR BCA ADMISSION" : "✕ NOT ELIGIBLE"}
+      </div>
+    \`;
+  </script>
+</body>
+</html>`    },
     githubWorkflow: {
       repoName: 'html-css-projects',
       commitMessage: 'feat(day-22): implement javascript operators and strict equality',
@@ -4286,7 +5578,100 @@ console.log("Access Level:", accessLevel); // Prints: Read Only`
         'Use console.log to present a structured receipt summary.'
       ],
       submissionCriteria: 'Ensure the code contains both an if-else if chain and a switch statement.'
-    },
+,
+      fileName: 'fee-engine.html',
+      solutionCode: `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BCA Day 23 - University Fee Discount Engine</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      background: #0b1120;
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    .card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 16px;
+      padding: 28px;
+      max-width: 480px;
+      width: 100%;
+    }
+    h1 { font-size: 20px; color: #38bdf8; margin-bottom: 12px; }
+    .receipt {
+      background: #0f172a;
+      border: 1px dashed #334155;
+      padding: 16px;
+      border-radius: 8px;
+      font-family: monospace;
+      font-size: 13px;
+      color: #38bdf8;
+      line-height: 1.8;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>BCA Fee Discount Engine</h1>
+    <div class="receipt" id="receipt">Generating fee structure receipt...</div>
+  </div>
+
+  <script>
+    const standardSemesterFee = 7500; // in INR
+    const studentCategory = "OBC";     // "General", "OBC", "SC", "ST"
+    const meritScore = 85;             // 0 to 100
+
+    let discountPercentage = 0;
+
+    // Switch case for category concession
+    switch (studentCategory.toUpperCase()) {
+      case "SC":
+      case "ST":
+        discountPercentage = 25;
+        break;
+      case "OBC":
+        discountPercentage = 10;
+        break;
+      case "GENERAL":
+      default:
+        discountPercentage = 0;
+        break;
+    }
+
+    // Additional merit bonus (if meritScore >= 80, add extra 5%)
+    if (meritScore >= 80 && meritScore <= 100) {
+      discountPercentage += 5;
+    }
+
+    const discountAmount = (standardSemesterFee * discountPercentage) / 100;
+    const finalFeePayable = standardSemesterFee - discountAmount;
+
+    const receiptText = \`==================================
+   IGNOU BCA SEMESTER 1 FEE RECEIPT
+==================================
+Base Semester Fee : ₹\${standardSemesterFee}
+Student Category  : \${studentCategory}
+Merit Score       : \${meritScore}/100
+Total Discount    : \${discountPercentage}%
+Discount Amount   : -₹\${discountAmount}
+----------------------------------
+Final Fee Payable : ₹\${finalFeePayable}
+==================================\`;
+
+    console.log(receiptText);
+    document.getElementById("receipt").innerHTML = receiptText.replace(/\\n/g, "<br>").replace(/ /g, "&nbsp;");
+  </script>
+</body>
+</html>`    },
     githubWorkflow: {
       repoName: 'html-css-projects',
       commitMessage: 'feat(day-23): add conditional branching and switch statements',
@@ -4427,7 +5812,91 @@ while (count > 0) {
         'Display all calculated statistics cleanly in the DevTools console.'
       ],
       submissionCriteria: 'Ensure all loops include correct incrementors and exit conditions.'
-    },
+,
+      fileName: 'marks-analyzer.html',
+      solutionCode: `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BCA Day 24 - Student Marksheet Statistical Analyzer</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      background: #0b1120;
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    .analyzer-card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 16px;
+      padding: 28px;
+      max-width: 500px;
+      width: 100%;
+    }
+    h1 { font-size: 20px; color: #38bdf8; margin-bottom: 12px; }
+    pre {
+      background: #0f172a;
+      padding: 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      color: #34d399;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+  <div class="analyzer-card">
+    <h1>BCA Semester Marks Analyzer</h1>
+    <pre id="output">Running statistical loops...</pre>
+  </div>
+
+  <script>
+    // 6 Semester Subject Scores
+    const subjectMarks = [78, 85, 92, 64, 88, 71];
+
+    let sum = 0;
+    let highest = subjectMarks[0];
+    let lowest = subjectMarks[0];
+
+    // For Loop: Compute statistics
+    for (let i = 0; i < subjectMarks.length; i++) {
+      const score = subjectMarks[i];
+      sum += score;
+      if (score > highest) highest = score;
+      if (score < lowest) lowest = score;
+    }
+
+    const average = (sum / subjectMarks.length).toFixed(2);
+
+    // While Loop: Simulated Exam Timer Countdown
+    let timer = 5;
+    const countdownSteps = [];
+    while (timer > 0) {
+      countdownSteps.push(\`Exam Timer: \${timer}s remaining...\`);
+      timer--;
+    }
+    countdownSteps.push("Exam Timer: 0s - Time Up!");
+
+    const result = \`Marks Array: [\${subjectMarks.join(", ")}]
+Total Marks Scored: \${sum}/600
+Highest Subject Mark: \${highest}
+Lowest Subject Mark: \${lowest}
+Average Percentage: \${average}%
+--------------------------------
+\${countdownSteps.join("\\n")}\`;
+
+    console.log(result);
+    document.getElementById("output").textContent = result;
+  </script>
+</body>
+</html>`    },
     githubWorkflow: {
       repoName: 'html-css-projects',
       commitMessage: 'feat(day-24): implement loops and array iteration algorithms',
@@ -4572,7 +6041,86 @@ console.log("Discount:", finalDiscount); // Prints: 150`
         'Test the functions with 3 student profiles and log reports to console.'
       ],
       submissionCriteria: 'Ensure all functions return values instead of relying on global side-effects.'
-    },
+,
+      fileName: 'marksheet-util.html',
+      solutionCode: `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BCA Day 25 - Universal Marksheet Utility Module</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      background: #0b1120;
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    .card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 16px;
+      padding: 28px;
+      max-width: 520px;
+      width: 100%;
+    }
+    h1 { font-size: 20px; color: #38bdf8; margin-bottom: 12px; }
+    pre {
+      background: #0f172a;
+      padding: 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      color: #a5b4fc;
+      white-space: pre-wrap;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>BCA Marksheet Generator Functions</h1>
+    <pre id="output">Computing student reports...</pre>
+  </div>
+
+  <script>
+    // 1. Percentage calculator function
+    const calculatePercentage = (marks, total) => ((marks / total) * 100).toFixed(1);
+
+    // 2. Letter grade evaluator function
+    function getLetterGrade(percentage) {
+      if (percentage >= 80) return "A+ (Distinction)";
+      if (percentage >= 65) return "A (First Division)";
+      if (percentage >= 50) return "B (Second Division)";
+      if (percentage >= 40) return "C (Pass)";
+      return "F (Needs Improvement)";
+    }
+
+    // 3. Multiline report builder function
+    function formatStudentReport(name, marks, total) {
+      const pct = calculatePercentage(marks, total);
+      const grade = getLetterGrade(pct);
+      return \`🎓 Student Report: \${name}
+   • Score: \${marks}/\${total}
+   • Percentage: \${pct}%
+   • Final Grade: \${grade}\`;
+    }
+
+    // Test with 3 students
+    const report1 = formatStudentReport("Raja Roy", 420, 500);
+    const report2 = formatStudentReport("Pankaj Sharma", 380, 500);
+    const report3 = formatStudentReport("Gauri Patel", 460, 500);
+
+    const fullOutput = [report1, report2, report3].join("\\n\\n--------------------------------\\n\\n");
+    console.log(fullOutput);
+    document.getElementById("output").textContent = fullOutput;
+  </script>
+</body>
+</html>`    },
     githubWorkflow: {
       repoName: 'html-css-projects',
       commitMessage: 'feat(day-25): add reusable functions arrow syntax and scope',
@@ -4711,7 +6259,77 @@ console.log("All passing:", passing); // Prints: [65, 80, 45]`
         'Use .reduce() to compute the weighted average marks of the student.'
       ],
       submissionCriteria: 'Ensure all array transformations use .map(), .filter(), and .reduce() without traditional for loops.'
-    },
+,
+      fileName: 'credits-aggregator.html',
+      solutionCode: `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BCA Day 26 - Credits & GPA Aggregator (Array Methods)</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      background: #0b1120;
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    .card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 16px;
+      padding: 28px;
+      max-width: 520px;
+      width: 100%;
+    }
+    h1 { font-size: 20px; color: #38bdf8; margin-bottom: 12px; }
+    ul { list-style: none; margin: 16px 0; }
+    li { background: #0f172a; padding: 8px 12px; margin-bottom: 6px; border-radius: 6px; font-size: 13px; border-left: 3px solid #10b981; }
+    .weighted-box { background: #172554; border: 1px solid #2563eb; padding: 12px; border-radius: 8px; font-weight: bold; margin-top: 16px; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>BCA Semester 1 Honors Aggregator</h1>
+    <div style="font-size: 12px; color: #94a3b8;">High-Scoring Subjects (Marks >= 75):</div>
+    <ul id="subjectList"></ul>
+    <div class="weighted-box" id="weightedGpa"></div>
+  </div>
+
+  <script>
+    const courses = [
+      { code: "BCS-011", name: "Computer Basics", marks: 82, credits: 3 },
+      { code: "BCSL-013", name: "PC Software Lab", marks: 90, credits: 2 },
+      { code: "BCS-012", name: "Mathematics", marks: 68, credits: 4 },
+      { code: "FEG-02", name: "Communication Skills", marks: 76, credits: 3 }
+    ];
+
+    // 1. .filter() to extract high-scoring subjects (marks >= 75)
+    const honorsCourses = courses.filter(c => c.marks >= 75);
+
+    // 2. .map() to create HTML list items
+    const listHtml = honorsCourses
+      .map(c => \`<li><strong>\${c.code}</strong> - \${c.name}: \${c.marks}/100 (\${c.credits} Credits)</li>\`)
+      .join("");
+    document.getElementById("subjectList").innerHTML = listHtml;
+
+    // 3. .reduce() to compute weighted average marks
+    const totalWeightedMarks = courses.reduce((acc, c) => acc + (c.marks * c.credits), 0);
+    const totalCredits = courses.reduce((acc, c) => acc + c.credits, 0);
+    const weightedAvg = (totalWeightedMarks / totalCredits).toFixed(2);
+
+    document.getElementById("weightedGpa").textContent = 
+      \`Weighted Semester Average: \${weightedAvg}% across \${totalCredits} total credits\`;
+    console.log("Honors courses:", honorsCourses);
+    console.log("Weighted average:", weightedAvg);
+  </script>
+</body>
+</html>`    },
     githubWorkflow: {
       repoName: 'html-css-projects',
       commitMessage: 'feat(day-26): implement array operations with map filter and reduce',
@@ -4860,7 +6478,92 @@ console.log(student.address?.city || "City Not Provided"); // Safely prints fall
         'Store and retrieve the array using JSON.stringify() and JSON.parse().'
       ],
       submissionCriteria: 'Demonstrate proper object creation, nested access, and JSON stringification.'
-    },
+,
+      fileName: 'course-catalog.html',
+      solutionCode: `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BCA Day 27 - Objects & JSON Serialization</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      background: #0b1120;
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    .catalog-card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 16px;
+      padding: 28px;
+      max-width: 520px;
+      width: 100%;
+    }
+    h1 { font-size: 20px; color: #38bdf8; margin-bottom: 12px; }
+    pre {
+      background: #0f172a;
+      padding: 14px;
+      border-radius: 8px;
+      font-size: 12px;
+      color: #38bdf8;
+      overflow-x: auto;
+      max-height: 240px;
+    }
+  </style>
+</head>
+<body>
+  <div class="catalog-card">
+    <h1>BCA Department Course Catalog (JSON)</h1>
+    <pre id="jsonPreview">Serializing catalog...</pre>
+  </div>
+
+  <script>
+    // 1. Array of course objects with nested instructor object
+    const courseCatalog = [
+      {
+        code: "BCS-011",
+        title: "Computer Basics and PC Software",
+        credits: 3,
+        instructor: { name: "Er. Manoj Kumar", designation: "Lead Curriculum Architect" }
+      },
+      {
+        code: "BCSL-013",
+        title: "Software Lab (Linux & Web Basics)",
+        credits: 2,
+        instructor: { name: "Pankaj Sharma", designation: "Lab Instructor" }
+      },
+      {
+        code: "BCS-012",
+        title: "Basic Mathematics",
+        credits: 4,
+        instructor: { name: "Dr. Uday Verma", designation: "Mathematics Department" }
+      }
+    ];
+
+    // 2. Object destructuring
+    const [firstCourse] = courseCatalog;
+    const { code, title, credits, instructor: { name } } = firstCourse;
+    console.log(\`Featured Course: \${code} - \${title} (\${credits} Credits) by \${name}\`);
+
+    // 3. JSON Serialization & Local Storage
+    const serialized = JSON.stringify(courseCatalog, null, 2);
+    localStorage.setItem("bca_course_catalog", serialized);
+
+    // 4. Retrieve and Parse
+    const retrieved = JSON.parse(localStorage.getItem("bca_course_catalog"));
+    console.log("Retrieved parsed count:", retrieved.length);
+
+    document.getElementById("jsonPreview").textContent = serialized;
+  </script>
+</body>
+</html>`    },
     githubWorkflow: {
       repoName: 'html-css-projects',
       commitMessage: 'feat(day-27): add javascript objects and json serialization',
@@ -5025,7 +6728,94 @@ console.log(student.address?.city || "City Not Provided"); // Safely prints fall
         'Verify in the browser that all DOM updates apply cleanly on initial page load.'
       ],
       submissionCriteria: 'Ensure DOM elements are targeted with querySelector and manipulated using textContent.'
-    },
+,
+      fileName: 'announcement-banner.html',
+      solutionCode: `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BCA Day 28 - DOM Selection & Dynamic Styling</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      background: #0b1120;
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    .wrapper { max-width: 500px; width: 100%; }
+    .announcement-card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 16px;
+      padding: 24px;
+      transition: all 0.3s ease;
+    }
+    .priority-badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 50px;
+      font-size: 11px;
+      font-weight: bold;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .card-title { font-size: 18px; margin-bottom: 8px; }
+    .card-date { font-size: 12px; color: #94a3b8; margin-bottom: 12px; }
+    .card-body { font-size: 13px; color: #cbd5e1; line-height: 1.5; }
+
+    /* Dynamic Priority Themes applied via DOM */
+    .priority-high {
+      border-left: 5px solid #ef4444;
+      background: #1c1917;
+    }
+    .priority-high .priority-badge { background: #ef4444; color: white; }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="announcement-card" id="campusCard">
+      <span class="priority-badge" id="priorityTag">Normal</span>
+      <h2 class="card-title" id="cardTitle">Loading Announcement...</h2>
+      <div class="card-date" id="cardDate">--</div>
+      <p class="card-body" id="cardBody">Fetching campus records...</p>
+    </div>
+  </div>
+
+  <script>
+    // 1. Select DOM elements using document.querySelector
+    const card = document.querySelector("#campusCard");
+    const priorityTag = document.querySelector("#priorityTag");
+    const cardTitle = document.querySelector("#cardTitle");
+    const cardDate = document.querySelector("#cardDate");
+    const cardBody = document.querySelector("#cardBody");
+
+    // 2. Data payload
+    const notice = {
+      title: "BCA 1st Semester Term-End Practical Exam Schedule",
+      date: "October 2026 Notification",
+      body: "All registered BCA students must push their verified GitHub repositories for Days 1–30 prior to the final laboratory viva examination.",
+      priority: "high"
+    };
+
+    // 3. Update DOM content dynamically
+    cardTitle.textContent = notice.title;
+    cardDate.textContent = notice.date;
+    cardBody.textContent = notice.body;
+    priorityTag.textContent = notice.priority.toUpperCase() + " PRIORITY";
+
+    // 4. Apply dynamic style classes
+    if (notice.priority === "high") {
+      card.classList.add("priority-high");
+    }
+  </script>
+</body>
+</html>`    },
     githubWorkflow: {
       repoName: 'html-css-projects',
       commitMessage: 'feat(day-28): implement dom selection textcontent and style manipulation',
@@ -5192,7 +6982,133 @@ btn.addEventListener("click", handleButtonClick);`
         'Add a submit listener that appends the note as a new paragraph element in the DOM.'
       ],
       submissionCriteria: 'Ensure the form submission does not reload the page and uses e.preventDefault().'
-    },
+,
+      fileName: 'note-taker.html',
+      solutionCode: `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BCA Day 29 - Interactive Live Note Taker</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      background: #0b1120;
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    .note-app {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 16px;
+      padding: 28px;
+      max-width: 480px;
+      width: 100%;
+    }
+    h1 { font-size: 20px; color: #38bdf8; margin-bottom: 16px; }
+    textarea {
+      width: 100%;
+      height: 100px;
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 12px;
+      color: white;
+      font-family: inherit;
+      font-size: 13px;
+      resize: vertical;
+      outline: none;
+    }
+    textarea:focus { border-color: #2563eb; }
+    .counter-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 8px 0 16px;
+      font-size: 12px;
+      color: #94a3b8;
+    }
+    .warning { color: #ef4444; font-weight: bold; }
+    .btn-submit {
+      width: 100%;
+      padding: 10px;
+      background: #2563eb;
+      border: none;
+      border-radius: 8px;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .notes-list { margin-top: 24px; list-style: none; }
+    .note-item {
+      background: #0f172a;
+      border-left: 3px solid #10b981;
+      padding: 10px 14px;
+      border-radius: 6px;
+      margin-bottom: 8px;
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+  <div class="note-app">
+    <h1>BCA Quick Lab Note Taker</h1>
+    <form id="noteForm">
+      <textarea id="noteInput" maxlength="200" placeholder="Type quick lab notes (max 200 chars)..."></textarea>
+      <div class="counter-row">
+        <span>Character Count:</span>
+        <span id="charCount">0 / 200</span>
+      </div>
+      <button type="submit" class="btn-submit">Add Note</button>
+    </form>
+
+    <ul class="notes-list" id="notesList"></ul>
+  </div>
+
+  <script>
+    const form = document.getElementById("noteForm");
+    const textarea = document.getElementById("noteInput");
+    const charCount = document.getElementById("charCount");
+    const notesList = document.getElementById("notesList");
+
+    // 1. Input Event: Real-time character counter
+    textarea.addEventListener("input", () => {
+      const currentLength = textarea.value.length;
+      charCount.textContent = \`\${currentLength} / 200\`;
+      
+      // Color red if exceeds 180 characters
+      if (currentLength >= 180) {
+        charCount.classList.add("warning");
+      } else {
+        charCount.classList.remove("warning");
+      }
+    });
+
+    // 2. Form Submit Event with e.preventDefault()
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const text = textarea.value.trim();
+      if (!text) return;
+
+      // Append new note item to DOM
+      const li = document.createElement("li");
+      li.className = "note-item";
+      li.textContent = text;
+      notesList.prepend(li);
+
+      // Reset
+      textarea.value = "";
+      charCount.textContent = "0 / 200";
+      charCount.classList.remove("warning");
+    });
+  </script>
+</body>
+</html>`    },
     githubWorkflow: {
       repoName: 'html-css-projects',
       commitMessage: 'feat(day-29): implement dom event listeners and form preventDefault',
@@ -5370,7 +7286,171 @@ console.log("Total Score:", total); // Fixed: Prints 170 (Mathematical addition)
         'Deploy to GitHub Pages or Firebase and verify all interactions run smoothly.'
       ],
       submissionCriteria: 'Submit a clean GitHub repository containing day-30/index.html and day-30/styles.css.'
-    },
+,
+      fileName: 'sgpa-portal.html',
+      solutionCode: `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BCA Day 30 - Production SGPA & Semester Transcript Portal</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      background: #060c18;
+      color: white;
+      min-height: 100vh;
+      padding: 32px 16px;
+    }
+    .portal-card {
+      max-width: 640px;
+      margin: 0 auto;
+      background: #0c1328;
+      border: 1px solid #1e293b;
+      border-radius: 20px;
+      padding: 32px;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+    }
+    h1 { font-size: 22px; color: #38bdf8; margin-bottom: 6px; }
+    .sub { font-size: 13px; color: #94a3b8; margin-bottom: 24px; }
+    
+    .subject-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #070d1e;
+      border: 1px solid #1e293b;
+      padding: 12px 16px;
+      border-radius: 10px;
+      margin-bottom: 10px;
+    }
+    .subject-info div { font-size: 13px; font-weight: bold; }
+    .subject-info span { font-size: 11px; color: #64748b; }
+    
+    input[type="number"] {
+      width: 80px;
+      padding: 8px;
+      background: #0c1328;
+      border: 1px solid #334155;
+      border-radius: 6px;
+      color: white;
+      text-align: center;
+      font-size: 14px;
+      outline: none;
+    }
+    input[type="number"]:focus { border-color: #2563eb; }
+
+    .btn-calc {
+      width: 100%;
+      padding: 14px;
+      background: #2563eb;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-weight: 800;
+      font-size: 14px;
+      cursor: pointer;
+      margin-top: 16px;
+      transition: background 0.2s ease;
+    }
+    .btn-calc:hover { background: #1d4ed8; }
+
+    .result-sheet {
+      margin-top: 24px;
+      padding: 20px;
+      background: #070d1e;
+      border: 1px dashed #2563eb;
+      border-radius: 12px;
+      display: none;
+    }
+    .score-badge { font-size: 24px; font-weight: 800; color: #34d399; }
+    .division-text { font-size: 14px; color: #38bdf8; font-weight: bold; margin-top: 4px; }
+  </style>
+</head>
+<body>
+  <div class="portal-card">
+    <h1>BCA Semester 1 SGPA Calculator</h1>
+    <p class="sub">Sprint 3 Capstone • 4 Core Subjects with Real-time Grade Evaluation</p>
+
+    <div class="subject-row">
+      <div class="subject-info">
+        <div>BCS-011: Computer Basics</div>
+        <span>3 Credits</span>
+      </div>
+      <input type="number" id="m1" value="78" min="0" max="100">
+    </div>
+
+    <div class="subject-row">
+      <div class="subject-info">
+        <div>BCSL-013: PC Software Lab</div>
+        <span>2 Credits</span>
+      </div>
+      <input type="number" id="m2" value="85" min="0" max="100">
+    </div>
+
+    <div class="subject-row">
+      <div class="subject-info">
+        <div>BCS-012: Mathematics</div>
+        <span>4 Credits</span>
+      </div>
+      <input type="number" id="m3" value="70" min="0" max="100">
+    </div>
+
+    <div class="subject-row">
+      <div class="subject-info">
+        <div>FEG-02: Communication Skills</div>
+        <span>3 Credits</span>
+      </div>
+      <input type="number" id="m4" value="75" min="0" max="100">
+    </div>
+
+    <button class="btn-calc" onclick="calculateTranscript()">Calculate SGPA &amp; Transcript</button>
+
+    <div class="result-sheet" id="resultSheet">
+      <div class="score-badge" id="sgpaVal">--</div>
+      <div class="division-text" id="divVal">--</div>
+      <div style="font-size: 12px; color: #94a3b8; margin-top: 8px;" id="breakdownVal">--</div>
+    </div>
+  </div>
+
+  <script>
+    function calculateTranscript() {
+      const s1 = parseFloat(document.getElementById("m1").value) || 0;
+      const s2 = parseFloat(document.getElementById("m2").value) || 0;
+      const s3 = parseFloat(document.getElementById("m3").value) || 0;
+      const s4 = parseFloat(document.getElementById("m4").value) || 0;
+
+      const credits = [3, 2, 4, 3];
+      const marks = [s1, s2, s3, s4];
+
+      const totalCredits = 12;
+      let totalWeightedScore = 0;
+      let rawTotal = 0;
+
+      for (let i = 0; i < 4; i++) {
+        rawTotal += marks[i];
+        totalWeightedScore += marks[i] * credits[i];
+      }
+
+      const percentage = (rawTotal / 400 * 100).toFixed(1);
+      const sgpa = (totalWeightedScore / (totalCredits * 10)).toFixed(2);
+
+      let division = "Fail";
+      if (percentage >= 75) division = "First Division with Distinction 🌟";
+      else if (percentage >= 60) division = "First Division";
+      else if (percentage >= 50) division = "Second Division";
+      else if (percentage >= 40) division = "Pass";
+
+      document.getElementById("sgpaVal").textContent = \`SGPA: \${sgpa} / 10.0\`;
+      document.getElementById("divVal").textContent = \`Award: \${division}\`;
+      document.getElementById("breakdownVal").textContent = 
+        \`Total Marks: \${rawTotal}/400 (\${percentage}%) • Total Credits: \${totalCredits}\`;
+      document.getElementById("resultSheet").style.display = "block";
+    }
+  </script>
+</body>
+</html>`    },
     githubWorkflow: {
       repoName: 'html-css-projects',
       commitMessage: 'feat(day-30): build sprint 3 capstone interactive student grade portal',
