@@ -16,11 +16,11 @@ const db = getFirestore(app);
 async function main() {
   console.log("Checking users_progress...");
   try {
-    const snap = await getDocs(query(collection(db, "users_progress"), limit(10)));
+    const snap = await getDocs(collection(db, "users_progress"));
     console.log(`Found ${snap.docs.length} users_progress docs`);
     snap.docs.forEach((doc) => {
       const d = doc.data();
-      console.log(`- ${doc.id}: email=${d.email}, displayName=${d.displayName}, photoURL=${d.photoURL}, bca_practical=${JSON.stringify(d.bca_practical)}`);
+      console.log(`- ${doc.id}: email=${d.email}, displayName=${d.displayName}, bca_practical=${JSON.stringify(d.bca_practical)}`);
     });
   } catch (err) {
     console.error("Error reading users_progress:", err);
@@ -28,11 +28,11 @@ async function main() {
 
   console.log("\nChecking bca_practical_stories...");
   try {
-    const sSnap = await getDocs(query(collection(db, "bca_practical_stories"), limit(10)));
+    const sSnap = await getDocs(collection(db, "bca_practical_stories"));
     console.log(`Found ${sSnap.docs.length} stories docs`);
     sSnap.docs.forEach((doc) => {
       const d = doc.data();
-      console.log(`- ${doc.id}: userName=${d.userName}, day=${d.day}, photo=${d.userPhoto}, repo=${d.githubRepoUrl}`);
+      console.log(`- ${doc.id}: userName=${d.userName}, day=${d.day}, userId=${d.userId}, createdAt=${d.createdAt}, repo=${d.githubRepoUrl}`);
     });
   } catch (err) {
     console.error("Error reading bca_practical_stories:", err);

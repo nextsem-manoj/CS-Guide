@@ -37,110 +37,193 @@ export default function BcaStoriesTray() {
     }
   }, []);
 
-  // Real-time synchronization of actual student submissions from Firestore
+  // Real-time synchronization of actual student submissions from both users_progress and bca_practical_stories
   useEffect(() => {
-    try {
-      const q = query(collection(db, "bca_practical_stories"), limit(40));
-      const unsubscribe = onSnapshot(
-        q,
-        (snapshot) => {
-          try {
-            const rawDocs = snapshot.docs.map((d) => ({ id: d.id, ...d.data() })) as any[];
+    let usersDocs: any[] = [];
+    let storiesDocs: any[] = [];
 
-            // Group slides by actual student userId (excluding current authenticated user who has "Your Story")
-            const storiesByUser: Record<string, {
-              userId: string;
-              userName: string;
-              userAvatar: string | null;
-              latestDay: number;
-              lastActiveTs: number;
-              slides: BcaStorySlide[];
-            }> = {};
+    const processCombinedStories = () => {
+      try {
+        const storiesByUser: Record<string, {
+          userId: string;
+          userName: string;
+          userAvatar: string | null;
+          latestDay: number;
+          lastActiveTs: number;
+          slides: BcaStorySlide[];
+          completedDays: number[];
+          urls: Record<string, string>;
+          ghUser: string;
+        }> = {};
 
-            rawDocs.forEach((docItem) => {
-              const uid = docItem.userId;
-              // Skip current user (already represented in "Your Story") and skip mentor internal id
-              if (!uid || uid === user?.uid || uid === "manoj-lead") return;
+        // 1. Ingest all registered students from users_progress (authoritative source of completedDays)
+        usersDocs.forEach((docItem) => {
+          const uid = docItem.id;
+          if (!uid || uid === user?.uid || uid === "manoj-lead" || docItem.email === user?.email) return;
 
-              const dayNum = Number(docItem.day) || 1;
-              const title = docItem.lessonTitle || getLessonTitleByDay(dayNum);
-              const tsNum = typeof docItem.createdAt === "number" 
-                ? docItem.createdAt 
-                : (docItem.timestamp ? new Date(docItem.timestamp).getTime() : Date.now());
+          const completedDaysList: number[] = docItem.bca_practical?.completedDays || [];
+          const maxDay = completedDaysList.length > 0 ? Math.max(...completedDaysList) : 1;
+          const name = docItem.displayName || docItem.email?.split("@")[0] || "BCA Student";
+          const lastUpdatedStr = docItem.bca_practical?.lastUpdated || docItem.lastLogin;
+          const lastActiveTs = lastUpdatedStr ? new Date(lastUpdatedStr).getTime() : Date.now() - 1000 * 60 * 30;
 
-              const slide: BcaStorySlide = {
-                id: docItem.id || `slide-${uid}-${dayNum}`,
+          storiesByUser[uid] = {
+            userId: uid,
+            userName: name,
+            userAvatar: docItem.photoURL || null,
+            latestDay: maxDay,
+            lastActiveTs,
+            slides: [],
+            completedDays: completedDaysList,
+            urls: docItem.bca_practical?.githubRepoUrls || {},
+            ghUser: docItem.bca_practical?.githubUsername || ""
+          };
+        });
+
+        // 2. Ingest all published stories/reels from bca_practical_stories
+        storiesDocs.forEach((docItem) => {
+          const uid = docItem.userId;
+          if (!uid || uid === user?.uid || uid === "manoj-lead") return;
+
+          const dayNum = Number(docItem.day) || 1;
+          const title = docItem.lessonTitle || getLessonTitleByDay(dayNum);
+          const tsNum = typeof docItem.createdAt === "number"
+            ? docItem.createdAt
+            : (docItem.timestamp ? new Date(docItem.timestamp).getTime() : Date.now());
+
+          const slide: BcaStorySlide = {
+            id: docItem.id || `slide-${uid}-${dayNum}`,
+            day: dayNum,
+            lessonTitle: title,
+            category: dayNum <= 10 ? "HTML" : dayNum <= 20 ? "CSS" : "JavaScript",
+            timestamp: formatTimeAgo(tsNum),
+            caption: docItem.caption || `Completed Day ${dayNum}: ${title} and pushed verified code to GitHub! 🚀 Viva approved.`,
+            vivaScore: "100% Viva Approved",
+            githubRepoUrl: docItem.githubRepoUrl || "https://github.com",
+            liveDemoUrl: docItem.liveDemoUrl,
+            techTags: [dayNum <= 10 ? "HTML5" : dayNum <= 20 ? "CSS3" : "JavaScript", "VSCode", "Git"],
+            gradientTheme: "from-blue-600 via-indigo-600 to-purple-800",
+            createdAt: tsNum
+          };
+
+          if (!storiesByUser[uid]) {
+            storiesByUser[uid] = {
+              userId: uid,
+              userName: docItem.userName || "BCA Student",
+              userAvatar: docItem.userPhoto || null,
+              latestDay: dayNum,
+              lastActiveTs: tsNum,
+              slides: [slide],
+              completedDays: [dayNum],
+              urls: {},
+              ghUser: ""
+            };
+          } else {
+            // Deduplicate slide by id or day
+            const existingIdx = storiesByUser[uid].slides.findIndex((s) => s.id === slide.id || s.day === dayNum);
+            if (existingIdx >= 0) {
+              storiesByUser[uid].slides[existingIdx] = slide;
+            } else {
+              storiesByUser[uid].slides.push(slide);
+            }
+            if (dayNum > storiesByUser[uid].latestDay) {
+              storiesByUser[uid].latestDay = dayNum;
+            }
+            if (tsNum > storiesByUser[uid].lastActiveTs) {
+              storiesByUser[uid].lastActiveTs = tsNum;
+              if (docItem.userPhoto) storiesByUser[uid].userAvatar = docItem.userPhoto;
+              if (docItem.userName) storiesByUser[uid].userName = docItem.userName;
+            }
+          }
+        });
+
+        // 3. For any completed day in users_progress lacking an explicit story doc, synthesize a slide
+        Object.values(storiesByUser).forEach((group) => {
+          group.completedDays.forEach((dayNum) => {
+            const hasSlide = group.slides.some((s) => s.day === dayNum);
+            if (!hasSlide) {
+              const title = getLessonTitleByDay(dayNum);
+              const ghUrl = group.urls[dayNum.toString()] || (group.ghUser ? `https://github.com/${group.ghUser}` : "https://github.com");
+              group.slides.push({
+                id: `auto-slide-${group.userId}-${dayNum}`,
                 day: dayNum,
                 lessonTitle: title,
                 category: dayNum <= 10 ? "HTML" : dayNum <= 20 ? "CSS" : "JavaScript",
-                timestamp: formatTimeAgo(tsNum),
-                caption: docItem.caption || `Completed Day ${dayNum}: ${title} and pushed verified code to GitHub! 🚀 Viva approved.`,
+                timestamp: formatTimeAgo(group.lastActiveTs),
+                caption: `Completed Day ${dayNum}: ${title} and pushed verified code to GitHub! 🚀 Viva approved.`,
                 vivaScore: "100% Viva Approved",
-                githubRepoUrl: docItem.githubRepoUrl || "https://github.com",
-                liveDemoUrl: docItem.liveDemoUrl,
+                githubRepoUrl: ghUrl,
                 techTags: [dayNum <= 10 ? "HTML5" : dayNum <= 20 ? "CSS3" : "JavaScript", "VSCode", "Git"],
                 gradientTheme: "from-blue-600 via-indigo-600 to-purple-800",
-                createdAt: tsNum
-              };
+                createdAt: group.lastActiveTs
+              });
+            }
+          });
 
-              if (!storiesByUser[uid]) {
-                storiesByUser[uid] = {
-                  userId: uid,
-                  userName: docItem.userName || "BCA Student",
-                  userAvatar: docItem.userPhoto || null,
-                  latestDay: dayNum,
-                  lastActiveTs: tsNum,
-                  slides: [slide]
-                };
-              } else {
-                storiesByUser[uid].slides.push(slide);
-                if (dayNum > storiesByUser[uid].latestDay) {
-                  storiesByUser[uid].latestDay = dayNum;
-                }
-                if (tsNum > storiesByUser[uid].lastActiveTs) {
-                  storiesByUser[uid].lastActiveTs = tsNum;
-                  if (docItem.userPhoto) storiesByUser[uid].userAvatar = docItem.userPhoto;
-                  if (docItem.userName) storiesByUser[uid].userName = docItem.userName;
-                }
-              }
-            });
+          // Sort student slides in descending order (highest day first)
+          group.slides.sort((a, b) => (b.day || 0) - (a.day || 0));
+          // Authoritative latest day badge
+          group.latestDay = Math.max(group.latestDay, ...group.slides.map((s) => s.day), 1);
+        });
 
-            // Convert to BcaStudentStory array with real data
-            const realStudentStories: BcaStudentStory[] = Object.values(storiesByUser).map((group) => {
-              const sortedSlides = [...group.slides].sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
-              return {
-                id: `story-${group.userId}`,
-                userId: group.userId,
-                userName: group.userName,
-                userHandle: group.userName.toLowerCase().replace(/[^a-z0-9]/g, "_").slice(0, 15) || "student",
-                userAvatar: group.userAvatar,
-                isVerified: false,
-                role: "Student",
-                hasUnseenStories: true,
-                latestDay: group.latestDay,
-                lastActive: formatTimeAgo(group.lastActiveTs),
-                slides: sortedSlides
-              };
-            });
+        // 4. Convert to BcaStudentStory array with real data
+        const realStudentStories: BcaStudentStory[] = Object.values(storiesByUser).map((group) => {
+          return {
+            id: `story-${group.userId}`,
+            userId: group.userId,
+            userName: group.userName,
+            userHandle: group.userName.toLowerCase().replace(/[^a-z0-9]/g, "_").slice(0, 15) || "student",
+            userAvatar: group.userAvatar,
+            isVerified: false,
+            role: "Student",
+            hasUnseenStories: true,
+            latestDay: group.latestDay,
+            lastActive: formatTimeAgo(group.lastActiveTs),
+            slides: group.slides
+          };
+        });
 
-            // Order real students by latest milestone
-            realStudentStories.sort((a, b) => (b.slides[0]?.createdAt || 0) - (a.slides[0]?.createdAt || 0));
-
-            // Merge: Er. Manoj Kumar (Curriculum Author) + Actual Live Students
-            setCommunityStories([...INITIAL_COMMUNITY_STORIES, ...realStudentStories]);
-          } catch (err) {
-            console.warn("Could not process community stories snapshot:", err);
+        // Order real students by latestDay (descending) then by most recent activity
+        realStudentStories.sort((a, b) => {
+          if (b.latestDay !== a.latestDay) {
+            return b.latestDay - a.latestDay;
           }
-        },
-        (error) => {
-          console.warn("Firestore community stories listener warning:", error);
-        }
-      );
+          return (b.slides[0]?.createdAt || 0) - (a.slides[0]?.createdAt || 0);
+        });
 
-      return () => unsubscribe();
-    } catch (e) {
-      console.warn("Error setting up Firestore stories listener:", e);
-    }
+        // Merge: Er. Manoj Kumar (Curriculum Author) + Actual Live Students
+        setCommunityStories([...INITIAL_COMMUNITY_STORIES, ...realStudentStories]);
+      } catch (err) {
+        console.warn("Could not process combined community stories:", err);
+      }
+    };
+
+    // Sub 1: users_progress
+    const qUsers = query(collection(db, "users_progress"), limit(50));
+    const unsubUsers = onSnapshot(
+      qUsers,
+      (snapshot) => {
+        usersDocs = snapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
+        processCombinedStories();
+      },
+      (error) => console.warn("Firestore users_progress listener warning:", error)
+    );
+
+    // Sub 2: bca_practical_stories
+    const qStories = query(collection(db, "bca_practical_stories"), limit(60));
+    const unsubStories = onSnapshot(
+      qStories,
+      (snapshot) => {
+        storiesDocs = snapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
+        processCombinedStories();
+      },
+      (error) => console.warn("Firestore stories listener warning:", error)
+    );
+
+    return () => {
+      unsubUsers();
+      unsubStories();
+    };
   }, [user]);
 
   // Compute "Your Story" slides dynamically from authenticated user's real progress

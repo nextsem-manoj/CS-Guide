@@ -348,8 +348,8 @@ export function StudentProgressProvider({ children }: { children: ReactNode }) {
       // Push merged back to Firestore quietly
       await setDoc(userDocRef, {
         email: firebaseUser.email,
-        displayName: firebaseUser.displayName,
-        photoURL: firebaseUser.photoURL,
+        displayName: firebaseUser.displayName || "BCA Student",
+        photoURL: firebaseUser.photoURL || null,
         ...(activeCbtScore ? { cbt_score: activeCbtScore } : {}),
         bca_practical: {
           completedDays: mergedDays,
@@ -360,6 +360,23 @@ export function StudentProgressProvider({ children }: { children: ReactNode }) {
           lastUpdated: new Date().toISOString()
         }
       }, { merge: true });
+
+      // Mirror all completed days to bca_practical_stories quietly
+      mergedDays.forEach((d) => {
+        const title = getLessonTitleByDay(d);
+        const repo = mergedUrls[d.toString()] || (activeGhUser ? `https://github.com/${activeGhUser}` : "");
+        setDoc(doc(db, "bca_practical_stories", `${firebaseUser.uid}_day_${d}`), {
+          userId: firebaseUser.uid,
+          userName: firebaseUser.displayName || "BCA Student",
+          userPhoto: firebaseUser.photoURL || null,
+          day: d,
+          lessonTitle: title,
+          caption: `Completed Day ${d}: ${title} and pushed verified code to GitHub! 🚀 Viva approved.`,
+          githubRepoUrl: repo,
+          timestamp: new Date().toISOString(),
+          createdAt: Date.now()
+        }, { merge: true }).catch(() => {});
+      });
 
     } catch (err) {
       console.warn("Silent background firestore sync warning:", err);
@@ -749,12 +766,12 @@ export function StudentProgressProvider({ children }: { children: ReactNode }) {
     if (user && !user.isGuest) {
       setDoc(doc(db, "users_progress", user.uid), {
         email: user.email,
-        displayName: user.name,
-        photoURL: user.photo,
+        displayName: user.name || "BCA Student",
+        photoURL: user.photo || null,
         bca_practical: {
           completedDays: newCompletedDays,
           githubRepoUrls: newUrls,
-          githubUsername: extractedUser || githubUsername,
+          githubUsername: extractedUser || githubUsername || "",
           selectedTrack,
           lastUpdated: new Date().toISOString()
         }
@@ -762,19 +779,19 @@ export function StudentProgressProvider({ children }: { children: ReactNode }) {
       .then(() => setIsCloudSynced(true))
       .catch((err) => console.error("Firestore sync warning:", err));
 
-      // Mirror story to Firestore stories collection quietly
+      // Mirror story to Firestore stories collection quietly (ensure safe nulls for Firestore SDK)
       const dayLessonTitle = getLessonTitleByDay(day);
       setDoc(doc(db, "bca_practical_stories", `${user.uid}_day_${day}`), {
         userId: user.uid,
-        userName: user.name,
-        userPhoto: user.photo,
+        userName: user.name || "BCA Student",
+        userPhoto: user.photo || null,
         day,
         lessonTitle: dayLessonTitle,
         caption: `Completed Day ${day}: ${dayLessonTitle} and pushed verified code to GitHub! 🚀 Technical Viva passed 100%.`,
         githubRepoUrl: cleanUrl,
         timestamp: new Date().toISOString(),
         createdAt: Date.now()
-      }, { merge: true }).catch(() => {});
+      }, { merge: true }).catch((err) => console.warn("Firestore story setDoc error:", err));
     }
 
     // Auto-publish daily story status milestone

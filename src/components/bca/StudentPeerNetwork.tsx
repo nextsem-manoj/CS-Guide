@@ -1087,10 +1087,11 @@ export function StudentPeerNetwork() {
             });
 
             if (firestorePeers.length > 0) {
-              // Combine seed peers and real firestore peers (prevent duplicates by ID)
+              // Sort real active peers by active day (highest first) and recent activity
+              firestorePeers.sort((a, b) => (b.activeDay - a.activeDay) || (b.lastActiveTs - a.lastActiveTs));
               const existingIds = new Set(firestorePeers.map((p) => p.id));
               const nonDuplicateSeeds = SEED_PEERS.filter((s) => !existingIds.has(s.id));
-              setPeers([...nonDuplicateSeeds, ...firestorePeers]);
+              setPeers([...firestorePeers, ...nonDuplicateSeeds]);
             }
           } catch (err) {
             console.warn("Could not process firestore registered peers:", err);
