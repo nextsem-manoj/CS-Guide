@@ -70,6 +70,9 @@ export interface PracticalLesson {
     title: string;
     instructions: string[];
     submissionCriteria: string;
+    fileName?: string;
+    solutionCode?: string;
+    starterCode?: string;
   };
   githubWorkflow: {
     repoName: string;
@@ -1071,6 +1074,7 @@ export const PRACTICAL_LESSONS: PracticalLesson[] = [
     },
     assignment: {
       title: 'Homework Task: Semantic College Portal Homepage',
+      fileName: 'college-portal.html',
       instructions: [
         'Create `college-portal.html` using 100% semantic tags.',
         'Header: College emblem image, site title, top navigation.',
@@ -1078,7 +1082,122 @@ export const PRACTICAL_LESSONS: PracticalLesson[] = [
         'Aside: Upcoming exam notices and university notification links.',
         'Footer: Address, contact info, and copyright.'
       ],
-      submissionCriteria: 'Inspect document outline in the browser to ensure no `<div class="header">` or `<div class="footer">` hacks are present.'
+      submissionCriteria: 'Inspect document outline in the browser to ensure no `<div class="header">` or `<div class="footer">` hacks are present.',
+      solutionCode: `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>National Institute of Technology & Management - College Portal</title>
+</head>
+<body>
+
+  <!-- 1. Semantic Site Header -->
+  <header>
+    <img src="https://images.unsplash.com/photo-1594322436404-5a0526db4d13?w=100&auto=format&fit=crop" alt="NITM College Emblem" width="80" height="80">
+    <h1>National Institute of Technology &amp; Management</h1>
+    <p>Affiliated to Central University &bull; NAAC Accredited 'A+' Grade</p>
+    
+    <!-- Top Primary Navigation -->
+    <nav aria-label="Main Navigation">
+      <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#departments">Departments</a></li>
+        <li><a href="#admissions">Admissions</a></li>
+        <li><a href="#notices">Notice Board</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- 2. Primary Unique Document Body (Main) -->
+  <main id="home">
+    
+    <!-- Feature Announcement Section -->
+    <section id="announcements">
+      <h2>Campus Announcements &amp; Highlights</h2>
+      <p><strong>Spring 2026 Admissions Open:</strong> Applications are now invited for undergraduate and postgraduate computer science programs. Scholarship tests scheduled for this weekend.</p>
+    </section>
+
+    <!-- Academic Departments Section -->
+    <section id="departments">
+      <h2>Academic Departments</h2>
+
+      <!-- Department 1: BCA -->
+      <article id="bca">
+        <header>
+          <h3>Bachelor of Computer Applications (BCA)</h3>
+          <p><strong>Duration:</strong> 3 Years (6 Semesters) | <strong>Degree Level:</strong> Undergraduate</p>
+        </header>
+        <p>Comprehensive curriculum covering full-stack web development, data structures &amp; algorithms in C/C++, cloud architecture, database systems, and industry capstone internships.</p>
+        <footer>
+          <p><em>Department Head: Prof. R. Sharma &bull; Enrolled Students: 240</em></p>
+        </footer>
+      </article>
+
+      <!-- Department 2: MCA -->
+      <article id="mca">
+        <header>
+          <h3>Master of Computer Applications (MCA)</h3>
+          <p><strong>Duration:</strong> 2 Years (4 Semesters) | <strong>Degree Level:</strong> Postgraduate</p>
+        </header>
+        <p>Advanced engineering coursework specializing in Artificial Intelligence, Deep Learning, Cloud Microservices, Big Data Analytics, and enterprise-grade software research.</p>
+        <footer>
+          <p><em>Department Head: Dr. S. Kulkarni &bull; Research Labs: AI &amp; Cloud Systems</em></p>
+        </footer>
+      </article>
+
+      <!-- Department 3: B.Tech Computer Science -->
+      <article id="btech">
+        <header>
+          <h3>B.Tech in Computer Science &amp; Engineering (CSE)</h3>
+          <p><strong>Duration:</strong> 4 Years (8 Semesters) | <strong>Degree Level:</strong> Engineering</p>
+        </header>
+        <p>Rigorous computer engineering focusing on compiler design, operating system internals, computer networking, cybersecurity, distributed systems, and real-time hardware interfaces.</p>
+        <footer>
+          <p><em>Department Head: Dr. V. Nair &bull; Industry Partners: Microsoft, Amazon, Google</em></p>
+        </footer>
+      </article>
+    </section>
+
+  </main>
+
+  <!-- 3. Sidebar / Complementary Content (Aside) -->
+  <aside id="notices" aria-label="Campus Notices & Quick Links">
+    <section>
+      <h3>📢 Upcoming University Notices</h3>
+      <ul>
+        <li><time datetime="2026-11-15">Nov 15, 2026</time> &mdash; BCA Semester 1 Practical Viva Voce Schedule released.</li>
+        <li><time datetime="2026-11-20">Nov 20, 2026</time> &mdash; MCA Project synopsis submission portal deadline.</li>
+        <li><time datetime="2026-11-28">Nov 28, 2026</time> &mdash; Annual Hackathon 2026 registration opens.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h3>🔗 University Quick Links</h3>
+      <ul>
+        <li><a href="https://ignou.ac.in" target="_blank" rel="noopener noreferrer">Student University Portal</a></li>
+        <li><a href="#exam-datesheet">Download Practical Date Sheet (PDF)</a></li>
+        <li><a href="#hall-ticket">Semester Examination Hall Ticket</a></li>
+        <li><a href="#grievance">Student Help Desk &amp; Grievance Cell</a></li>
+      </ul>
+    </section>
+  </aside>
+
+  <!-- 4. Semantic Site Footer -->
+  <footer id="contact">
+    <h2>National Institute of Technology &amp; Management</h2>
+    <address>
+      Knowledge City Campus, Tech Hub Road, Sector 62<br>
+      New Delhi &ndash; 110001, India<br>
+      Email: <a href="mailto:info@nitm-college.edu">info@nitm-college.edu</a> | Phone: <a href="tel:+911123456789">+91 (011) 2345-6789</a>
+    </address>
+    <p>&copy; 2026 National Institute of Technology &amp; Management. All rights reserved.</p>
+    <p><small>Designed with 100% semantic HTML5 elements &bull; No legacy &lt;div&gt; wrapper hacks &bull; Author: Er. Manoj Kumar</small></p>
+  </footer>
+
+</body>
+</html>`
     },
     githubWorkflow: {
       repoName: 'html-css-projects',

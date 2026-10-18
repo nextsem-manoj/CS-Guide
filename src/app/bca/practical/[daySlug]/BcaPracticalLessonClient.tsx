@@ -59,6 +59,7 @@ export default function BcaPracticalLessonClient({ lesson }: Props) {
   // Local VS Code Checklist & Copy States
   const [vsCodeTasksChecked, setVsCodeTasksChecked] = useState<Record<string, boolean>>({});
   const [copiedStarterCode, setCopiedStarterCode] = useState<boolean>(false);
+  const [copiedAssignmentCode, setCopiedAssignmentCode] = useState<boolean>(false);
   const [copiedVsCodeCmd, setCopiedVsCodeCmd] = useState<boolean>(false);
   const [copiedSnippetId, setCopiedSnippetId] = useState<string | null>(null);
 
@@ -145,7 +146,7 @@ export default function BcaPracticalLessonClient({ lesson }: Props) {
     }
   }, [lesson?.slug, lesson?.day, isCompleted]);
 
-  const handleCopyCode = (text: string, type: "demo" | "git" | "starter" | "cmd" | "snippet", snippetId?: string) => {
+  const handleCopyCode = (text: string, type: "demo" | "git" | "starter" | "cmd" | "snippet" | "assignment", snippetId?: string) => {
     if (navigator.clipboard) {
       navigator.clipboard.writeText(text);
       if (type === "demo") {
@@ -160,6 +161,9 @@ export default function BcaPracticalLessonClient({ lesson }: Props) {
       } else if (type === "cmd") {
         setCopiedVsCodeCmd(true);
         setTimeout(() => setCopiedVsCodeCmd(false), 2000);
+      } else if (type === "assignment") {
+        setCopiedAssignmentCode(true);
+        setTimeout(() => setCopiedAssignmentCode(false), 2000);
       } else if (type === "snippet" && snippetId) {
         setCopiedSnippetId(snippetId);
         setTimeout(() => setCopiedSnippetId(null), 2000);
@@ -1357,10 +1361,17 @@ export default function BcaPracticalLessonClient({ lesson }: Props) {
 
             {/* STEP 6: Independent Homework Assignment */}
             <section className="rounded-2xl bg-white dark:bg-neutral-950 border border-slate-200 dark:border-neutral-800 p-5 sm:p-6 mb-8 shadow-sm">
-              <h2 className="text-base font-black text-black dark:text-white flex items-center gap-2 mb-3">
-                <span className="text-blue-600 dark:text-blue-400">📝</span>
-                <span>Independent Practice: Assignment</span>
-              </h2>
+              <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
+                <h2 className="text-base font-black text-black dark:text-white flex items-center gap-2">
+                  <span className="text-blue-600 dark:text-blue-400">📝</span>
+                  <span>Independent Practice: Assignment</span>
+                </h2>
+                {lesson.assignment.fileName && (
+                  <span className="px-2.5 py-1 rounded-xl bg-blue-50 dark:bg-neutral-900 border border-blue-200 dark:border-neutral-800 text-[11px] font-mono font-bold text-blue-600 dark:text-blue-400">
+                    📄 {lesson.assignment.fileName}
+                  </span>
+                )}
+              </div>
               <h3 className="text-sm font-extrabold text-black dark:text-white mb-2">{lesson.assignment.title}</h3>
               
               <ul className="space-y-1.5 mb-4 text-xs text-slate-700 dark:text-slate-300">
@@ -1372,58 +1383,73 @@ export default function BcaPracticalLessonClient({ lesson }: Props) {
                 ))}
               </ul>
 
-              <div className="p-3 rounded-xl bg-slate-50 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 text-xs text-slate-600 dark:text-slate-400">
+              <div className="p-3 rounded-xl bg-slate-50 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 text-xs text-slate-600 dark:text-slate-400 mb-5">
                 <strong className="text-black dark:text-white">Submission Evaluation Criteria: </strong>
                 <span>{lesson.assignment.submissionCriteria}</span>
               </div>
 
-              {/* Optional Expandable Implementation Blueprint & Tag Checklist */}
-              <div className="mt-4 pt-3 border-t border-slate-100 dark:border-neutral-900">
-                <button
-                  type="button"
-                  onClick={() => setShowAssignmentBlueprint(!showAssignmentBlueprint)}
-                  className="inline-flex items-center gap-2 text-xs font-bold text-blue-600 dark:text-blue-400 hover:underline cursor-pointer"
-                >
-                  <Lightbulb size={14} />
-                  <span>{showAssignmentBlueprint ? "Hide Homework Blueprint & Tag Guidance" : "💡 Need Help? View Expected Tag Blueprint & Guidance"}</span>
-                </button>
-
-                {showAssignmentBlueprint && (
-                  <div className="mt-3 p-4 rounded-xl bg-slate-50 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 text-xs space-y-3 animate-in fade-in duration-150">
-                    <div className="flex items-center justify-between">
-                      <span className="font-bold text-black dark:text-white flex items-center gap-1.5">
-                        <FileCode size={14} className="text-blue-500" />
-                        <span>Recommended Blueprint for {lesson.assignment.title}</span>
+              {/* Exact Solution Code with 1-Click Copy-Paste Facility */}
+              {lesson.assignment.solutionCode && (
+                <div className="rounded-2xl bg-[#0d1117] dark:bg-black border border-slate-700/80 dark:border-neutral-800 p-4 sm:p-5 shadow-lg space-y-3">
+                  <div className="flex flex-wrap items-center justify-between gap-2.5 pb-3 border-b border-slate-800 dark:border-neutral-800">
+                    <div className="flex items-center gap-2">
+                      <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+                      <span className="text-xs sm:text-sm font-black text-white flex items-center gap-1.5 font-mono">
+                        <FileCode size={15} className="text-emerald-400" />
+                        <span>Exact Assignment Solution Code: <strong className="text-emerald-400">{lesson.assignment.fileName || "college-portal.html"}</strong></span>
                       </span>
-                      <span className="text-[10px] text-slate-500 font-mono">VS Code Reference</span>
                     </div>
 
-                    <p className="text-slate-600 dark:text-slate-400 leading-relaxed text-[11px]">
-                      Follow this structure inside your local code editor. Every field must have a connected <code className="text-blue-600 dark:text-blue-400">&lt;label for="..."&gt;</code> and appropriate input validation:
-                    </p>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px]">
-                      <div className="p-2.5 rounded-lg bg-white dark:bg-black border border-slate-200 dark:border-neutral-800 space-y-1">
-                        <span className="font-bold text-black dark:text-white block">1. Personal Details</span>
-                        <span className="text-slate-500 block">• Name: <code>type="text"</code>, <code>required</code>, <code>minlength="3"</code></span>
-                        <span className="text-slate-500 block">• Email: <code>type="email"</code>, <code>required</code></span>
-                        <span className="text-slate-500 block">• Phone: <code>type="tel"</code>, <code>pattern="[0-9]{10}"</code></span>
-                      </div>
-
-                      <div className="p-2.5 rounded-lg bg-white dark:bg-black border border-slate-200 dark:border-neutral-800 space-y-1">
-                        <span className="font-bold text-black dark:text-white block">2. Professional Controls</span>
-                        <span className="text-slate-500 block">• Resume: <code>type="file"</code>, <code>accept=".pdf,.doc"</code></span>
-                        <span className="text-slate-500 block">• Experience: <code>type="radio"</code> with same <code>name="experience"</code></span>
-                        <span className="text-slate-500 block">• Skills: <code>type="checkbox"</code> (HTML, CSS, JS, C, SQL)</span>
-                      </div>
-                    </div>
-
-                    <div className="p-2.5 rounded-lg bg-blue-50/70 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-900/40 text-[11px] text-slate-700 dark:text-slate-300">
-                      💡 <strong>Golden Rule:</strong> Ensure all inputs have their <code>name</code> attribute configured so the form does not send an empty payload when tested in your browser!
-                    </div>
+                    <button
+                      type="button"
+                      onClick={() => handleCopyCode(lesson.assignment.solutionCode!, "assignment")}
+                      className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-black transition-all shadow-md active:scale-95 cursor-pointer ${
+                        copiedAssignmentCode
+                          ? "bg-emerald-600 text-white shadow-emerald-600/30"
+                          : "bg-blue-600 hover:bg-blue-700 text-white shadow-blue-600/30"
+                      }`}
+                      title="Copy complete exact code to clipboard"
+                    >
+                      {copiedAssignmentCode ? (
+                        <>
+                          <CheckCircle2 size={14} />
+                          <span>Copied to Clipboard!</span>
+                        </>
+                      ) : (
+                        <>
+                          <Copy size={14} />
+                          <span>Copy Exact Code</span>
+                        </>
+                      )}
+                    </button>
                   </div>
-                )}
-              </div>
+
+                  <p className="text-[11px] text-slate-300 dark:text-slate-400 leading-relaxed font-sans">
+                    Open Visual Studio Code on your PC (<code className="text-blue-400 font-mono">code .</code>), create <code className="text-emerald-400 font-mono font-bold">{lesson.assignment.fileName || "college-portal.html"}</code>, paste this 100% semantic HTML code, verify in browser, and push to your GitHub repo:
+                  </p>
+
+                  <div className="relative">
+                    <pre className="font-mono text-xs text-emerald-300 dark:text-emerald-400 bg-black/90 p-4 rounded-xl border border-neutral-800 overflow-x-auto max-h-[420px] overflow-y-auto leading-relaxed select-all">
+                      <code>{lesson.assignment.solutionCode}</code>
+                    </pre>
+                  </div>
+
+                  <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-400 pt-1 font-mono">
+                    <span className="flex items-center gap-1 text-emerald-400 font-bold">
+                      <CheckCircle2 size={12} />
+                      <span>100% Semantic HTML5 Verified (Zero &lt;div&gt; hacks)</span>
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => handleCopyCode(lesson.assignment.solutionCode!, "assignment")}
+                      className="text-blue-400 hover:text-blue-300 hover:underline cursor-pointer flex items-center gap-1 font-bold"
+                    >
+                      <Copy size={12} />
+                      <span>{copiedAssignmentCode ? "Copied!" : "1-Click Copy Code"}</span>
+                    </button>
+                  </div>
+                </div>
+              )}
             </section>
 
             {/* Stage 3 Footer Navigator */}
