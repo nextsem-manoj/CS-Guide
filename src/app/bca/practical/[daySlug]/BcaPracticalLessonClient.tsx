@@ -1881,10 +1881,22 @@ export default function BcaPracticalLessonClient({ lesson }: Props) {
                     </div>
                   )}
 
-                  {isCompleted && !githubFeedback.message && (
-                    <div className="p-3 rounded-xl bg-blue-50 dark:bg-neutral-900 border border-blue-200 dark:border-neutral-800 text-xs text-blue-700 dark:text-blue-300 flex items-center gap-2 font-bold">
-                      <CheckCircle2 size={15} className="text-blue-600 dark:text-blue-400 shrink-0" />
-                      <span>Verified! Your code is pushed to GitHub and recorded in your student profile.</span>
+                  {isCompleted && (
+                    <div className="p-3.5 rounded-xl bg-emerald-50 dark:bg-neutral-900 border border-emerald-300 dark:border-emerald-800 text-xs text-emerald-800 dark:text-emerald-300 flex flex-wrap items-center justify-between gap-3 font-bold">
+                      <div className="flex items-center gap-2">
+                        <CheckCircle2 size={16} className="text-emerald-600 dark:text-emerald-400 shrink-0" />
+                        <span>Verified! Your code is pushed to GitHub and recorded in your student profile.</span>
+                      </div>
+                      <a
+                        href={user?.email === "nextsem.academy@gmail.com" ? "https://nextsemacademy-max.github.io/bca-practical/" : (githubUrlInput && githubUrlInput.includes("github.com") ? `https://${githubUrlInput.replace(/https?:\/\/github\.com\//, "").split("/")[0]}.github.io/${githubUrlInput.replace(/https?:\/\/github\.com\//, "").split("/")[1]?.replace(/\.git$/, "") || "bca-practical"}/` : "https://nextsemacademy-max.github.io/bca-practical/")}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs shadow-sm transition-all"
+                        title="Open Live GitHub Pages Preview"
+                      >
+                        <ExternalLink size={13} />
+                        <span>Live GitHub Pages</span>
+                      </a>
                     </div>
                   )}
                 </form>

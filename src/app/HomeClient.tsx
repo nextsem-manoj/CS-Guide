@@ -17,7 +17,7 @@ import StudentPeerNetwork from '@/components/bca/StudentPeerNetwork';
 import { 
   Play, CheckCircle2, Lock, ArrowRight, Laptop, 
   Terminal, Sparkles, BookOpen, ChevronRight, 
-  LogIn, LogOut, GitBranch, Award,
+  LogIn, LogOut, GitBranch, Award, ExternalLink,
   Clock, ShieldCheck, ChevronDown, ChevronUp, Sun, Moon,
   Calendar, Heart, Flame, Code2, Compass, Zap
 } from 'lucide-react';
@@ -161,12 +161,30 @@ export default function HomeClient() {
             </div>
           </Link>
 
-          {/* Header Controls: Author + Theme Toggle + Search + Auth */}
+          {/* Header Controls: Author + Live Pages + Theme Toggle + Search + Auth */}
           <div className="flex items-center gap-2 sm:gap-2.5">
-            <div className="hidden md:flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 text-xs font-semibold text-slate-700 dark:text-slate-300">
-              <span className="w-1.5 h-1.5 rounded-full bg-blue-600" />
+            <a
+              href="https://nextsemacademy-max.github.io/bca-practical/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hidden md:flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 hover:bg-slate-200 dark:bg-neutral-900 dark:hover:bg-neutral-800 border border-slate-200 dark:border-neutral-800 text-xs font-semibold text-slate-700 dark:text-slate-300 transition-all"
+              title="Open Live BCA Practical GitHub Pages by Er. Manoj Kumar"
+            >
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
               <span>By <strong className="text-black dark:text-white">Er. Manoj Kumar</strong></span>
-            </div>
+              <ExternalLink size={11} className="text-emerald-500 ml-0.5" />
+            </a>
+
+            <a
+              href="https://nextsemacademy-max.github.io/bca-practical/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hidden xl:flex items-center gap-1 px-3 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-950/60 dark:hover:bg-emerald-900/60 border border-emerald-300 dark:border-emerald-800 text-xs font-black text-emerald-700 dark:text-emerald-400 transition-all shadow-xs"
+              title="Open Live BCA Practical GitHub Pages"
+            >
+              <ExternalLink size={12} />
+              <span>Live GitHub Pages</span>
+            </a>
 
             {/* Dedicated Light / Dark Mode Toggle Button */}
             {mounted && (

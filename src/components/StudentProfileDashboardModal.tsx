@@ -69,6 +69,13 @@ export default function StudentProfileDashboardModal({ isOpen, onClose }: Props)
   const nextDayToStudy = getNextPracticalDayNumber(completedDays);
   const nextLessonObj = getPracticalLessonByDay(nextDayToStudy) || PRACTICAL_LESSONS[0];
 
+  // Determine student's live GitHub Pages URL
+  const userGitHubPagesUrl = user?.email === "nextsem.academy@gmail.com"
+    ? "https://nextsemacademy-max.github.io/bca-practical/"
+    : (githubUsername
+        ? `https://${githubUsername.toLowerCase().replace(/_/g, '-')}.github.io/bca-practical/`
+        : (githubRepoUrls["1"] ? `https://${githubRepoUrls["1"].replace(/https?:\/\/github\.com\//, "").split("/")[0]}.github.io/${githubRepoUrls["1"].replace(/https?:\/\/github\.com\//, "").split("/")[1] || "bca-practical"}/` : undefined));
+
   // Filtered practical lessons
   const filteredLessons = PRACTICAL_LESSONS.filter(l => {
     if (lessonFilter === 'completed') return completedDays.includes(l.day);
@@ -176,6 +183,19 @@ export default function StudentProfileDashboardModal({ isOpen, onClose }: Props)
                   <HelpCircle size={12} />
                   <span>How it works?</span>
                 </button>
+
+                {userGitHubPagesUrl && (
+                  <a
+                    href={userGitHubPagesUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-[11px] text-emerald-600 dark:text-emerald-400 hover:text-emerald-500 hover:underline font-black transition-colors px-2 py-0.5 rounded-md bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800/80 ml-1"
+                    title="Open Your Live Deployed GitHub Pages Website"
+                  >
+                    <ExternalLink size={11} />
+                    <span>Live GitHub Pages</span>
+                  </a>
+                )}
               </div>
             </div>
           </div>
@@ -422,15 +442,26 @@ export default function StudentProfileDashboardModal({ isOpen, onClose }: Props)
                         </span>
 
                         {repoUrl && (
-                          <a
-                            href={repoUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="p-1.5 rounded-lg bg-slate-100 dark:bg-neutral-800 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
-                            title="View Verified GitHub Repository"
-                          >
-                            <GitBranch size={13} />
-                          </a>
+                          <div className="flex items-center gap-1">
+                            <a
+                              href={repoUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="p-1.5 rounded-lg bg-slate-100 dark:bg-neutral-800 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                              title="View Verified GitHub Repository"
+                            >
+                              <GitBranch size={13} />
+                            </a>
+                            <a
+                              href={user?.email === "nextsem.academy@gmail.com" ? "https://nextsemacademy-max.github.io/bca-practical/" : (repoUrl.includes("github.com") ? `https://${repoUrl.replace(/https?:\/\/github\.com\//, "").split("/")[0]}.github.io/${repoUrl.replace(/https?:\/\/github\.com\//, "").split("/")[1] || "bca-practical"}/` : undefined)}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="p-1.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-300/40 dark:border-emerald-800/40 text-emerald-600 dark:text-emerald-400 hover:text-emerald-500 transition-colors"
+                              title="Open Live GitHub Pages Preview"
+                            >
+                              <ExternalLink size={13} />
+                            </a>
+                          </div>
                         )}
 
                         <Link

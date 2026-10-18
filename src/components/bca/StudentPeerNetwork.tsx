@@ -26,6 +26,7 @@ export interface PeerStudent {
   id: string;
   name: string;
   handle: string;
+  email?: string;
   avatar: string | null;
   role: "Mentor" | "Lead Developer" | "Student" | "BCA Peer";
   isVerified?: boolean;
@@ -36,8 +37,28 @@ export interface PeerStudent {
   lastActive: string;
   lastActiveTs: number;
   githubUrl?: string;
+  githubPagesUrl?: string;
   recentMilestone: string;
   track: string;
+}
+
+export function getGitHubPagesUrl(githubUrl?: string, email?: string): string | undefined {
+  if (email === "nextsem.academy@gmail.com") {
+    return "https://nextsemacademy-max.github.io/bca-practical/";
+  }
+  if (!githubUrl) return undefined;
+  if (githubUrl.includes(".github.io")) return githubUrl;
+  if (githubUrl.includes("nextsemacademy-max")) {
+    return "https://nextsemacademy-max.github.io/bca-practical/";
+  }
+  const match = githubUrl.match(/github\.com\/([a-zA-Z0-9_-]+)(?:\/([a-zA-Z0-9_.-]+))?/);
+  if (match) {
+    const owner = match[1];
+    const repo = match[2]?.replace(/\.git$/, "") || "bca-practical";
+    if (owner === "github" || owner === "your-username" || owner === "username") return undefined;
+    return `https://${owner}.github.io/${repo}/`;
+  }
+  return undefined;
 }
 
 // Initial registered peer seed network (Curriculum Author & Peer Study Community)
@@ -46,6 +67,7 @@ const SEED_PEERS: PeerStudent[] = [
     id: "manoj-lead",
     name: "Er. Manoj Kumar",
     handle: "manoj_dev",
+    email: "nextsem.academy@gmail.com",
     avatar: "/nextsem-emblem.png",
     role: "Lead Developer",
     isVerified: true,
@@ -55,7 +77,8 @@ const SEED_PEERS: PeerStudent[] = [
     followingCount: 38,
     lastActive: "Active now",
     lastActiveTs: Date.now() - 1000 * 60 * 5,
-    githubUrl: "https://github.com/nextsemacademy-max/bca",
+    githubUrl: "https://github.com/nextsemacademy-max/bca-practical",
+    githubPagesUrl: "https://nextsemacademy-max.github.io/bca-practical/",
     recentMilestone: "Pushed Day 6: HTML Semantic Elements & college-portal.html",
     track: "Full-Stack Web Dev"
   },
@@ -72,7 +95,8 @@ const SEED_PEERS: PeerStudent[] = [
     followingCount: 65,
     lastActive: "Active 15m ago",
     lastActiveTs: Date.now() - 1000 * 60 * 15,
-    githubUrl: "https://github.com",
+    githubUrl: "https://github.com/manoj-dev/bca-practical",
+    githubPagesUrl: "https://manoj-dev.github.io/bca-practical/",
     recentMilestone: "Building Day 6: college-portal.html in VS Code",
     track: "Full-Stack Web Dev"
   },
@@ -89,7 +113,8 @@ const SEED_PEERS: PeerStudent[] = [
     followingCount: 112,
     lastActive: "Active 45m ago",
     lastActiveTs: Date.now() - 1000 * 60 * 45,
-    githubUrl: "https://github.com",
+    githubUrl: "https://github.com/gauri-web/bca-practical",
+    githubPagesUrl: "https://gauri-web.github.io/bca-practical/",
     recentMilestone: "Passed Day 5: HTML Forms & Native Validation",
     track: "Full-Stack Web Dev"
   },
@@ -106,7 +131,8 @@ const SEED_PEERS: PeerStudent[] = [
     followingCount: 45,
     lastActive: "Active 1h ago",
     lastActiveTs: Date.now() - 1000 * 60 * 60,
-    githubUrl: "https://github.com",
+    githubUrl: "https://github.com/uday-v/bca-practical",
+    githubPagesUrl: "https://uday-v.github.io/bca-practical/",
     recentMilestone: "Verified Day 5: job-apply.html Form Inputs",
     track: "Software Systems"
   },
@@ -123,7 +149,8 @@ const SEED_PEERS: PeerStudent[] = [
     followingCount: 88,
     lastActive: "Active 2h ago",
     lastActiveTs: Date.now() - 1000 * 60 * 120,
-    githubUrl: "https://github.com",
+    githubUrl: "https://github.com/dinesh-dev/bca-practical",
+    githubPagesUrl: "https://dinesh-dev.github.io/bca-practical/",
     recentMilestone: "Pushed Day 4: BCA Semester Syllabus Matrix Table",
     track: "Full-Stack Web Dev"
   },
@@ -140,7 +167,8 @@ const SEED_PEERS: PeerStudent[] = [
     followingCount: 52,
     lastActive: "Active 2h ago",
     lastActiveTs: Date.now() - 1000 * 60 * 140,
-    githubUrl: "https://github.com",
+    githubUrl: "https://github.com/kamal-bca/bca-practical",
+    githubPagesUrl: "https://kamal-bca.github.io/bca-practical/",
     recentMilestone: "Completed Day 4: Structured Lists & Course Timetable",
     track: "Data & AI"
   },
@@ -157,7 +185,8 @@ const SEED_PEERS: PeerStudent[] = [
     followingCount: 71,
     lastActive: "Active 3h ago",
     lastActiveTs: Date.now() - 1000 * 60 * 180,
-    githubUrl: "https://github.com",
+    githubUrl: "https://github.com/ananya-r/bca-practical",
+    githubPagesUrl: "https://ananya-r.github.io/bca-practical/",
     recentMilestone: "Completed Day 3: Hyperlinks & Anchor rel Attributes",
     track: "Cloud & Networks"
   },
@@ -174,7 +203,8 @@ const SEED_PEERS: PeerStudent[] = [
     followingCount: 45,
     lastActive: "Active 20m ago",
     lastActiveTs: Date.now() - 1000 * 60 * 20,
-    githubUrl: "https://github.com",
+    githubUrl: "https://github.com/rohit-dev/bca-practical",
+    githubPagesUrl: "https://rohit-dev.github.io/bca-practical/",
     recentMilestone: "Pushed Day 6: HTML Semantic Layout & Header Nav",
     track: "Full-Stack Web Dev"
   },
@@ -191,7 +221,8 @@ const SEED_PEERS: PeerStudent[] = [
     followingCount: 92,
     lastActive: "Active 35m ago",
     lastActiveTs: Date.now() - 1000 * 60 * 35,
-    githubUrl: "https://github.com",
+    githubUrl: "https://github.com/pooja-codes/bca-practical",
+    githubPagesUrl: "https://pooja-codes.github.io/bca-practical/",
     recentMilestone: "Submitted Day 5 Form Accessibility Check",
     track: "Full-Stack Web Dev"
   },
@@ -208,7 +239,8 @@ const SEED_PEERS: PeerStudent[] = [
     followingCount: 58,
     lastActive: "Active 45m ago",
     lastActiveTs: Date.now() - 1000 * 60 * 45,
-    githubUrl: "https://github.com",
+    githubUrl: "https://github.com/ayush-t/bca-practical",
+    githubPagesUrl: "https://ayush-t.github.io/bca-practical/",
     recentMilestone: "Configured Git Push & VS Code Workspaces",
     track: "Software Systems"
   },
@@ -225,7 +257,8 @@ const SEED_PEERS: PeerStudent[] = [
     followingCount: 84,
     lastActive: "Active 1h ago",
     lastActiveTs: Date.now() - 1000 * 60 * 60,
-    githubUrl: "https://github.com",
+    githubUrl: "https://github.com/neha-s/bca-practical",
+    githubPagesUrl: "https://neha-s.github.io/bca-practical/",
     recentMilestone: "Built Timetable Table with Rowspan and Colspan",
     track: "Full-Stack Web Dev"
   },
@@ -242,7 +275,8 @@ const SEED_PEERS: PeerStudent[] = [
     followingCount: 61,
     lastActive: "Active 1h ago",
     lastActiveTs: Date.now() - 1000 * 60 * 75,
-    githubUrl: "https://github.com",
+    githubUrl: "https://github.com/varun-bca/bca-practical",
+    githubPagesUrl: "https://varun-bca.github.io/bca-practical/",
     recentMilestone: "Pushed Semantic Section & Aside Architecture",
     track: "Cloud & Networks"
   },
@@ -259,7 +293,8 @@ const SEED_PEERS: PeerStudent[] = [
     followingCount: 42,
     lastActive: "Active 2h ago",
     lastActiveTs: Date.now() - 1000 * 60 * 110,
-    githubUrl: "https://github.com",
+    githubUrl: "https://github.com/riya-dev/bca-practical",
+    githubPagesUrl: "https://riya-dev.github.io/bca-practical/",
     recentMilestone: "Practicing Hyperlinks and Anchor rel Attributes",
     track: "Full-Stack Web Dev"
   },
@@ -276,7 +311,8 @@ const SEED_PEERS: PeerStudent[] = [
     followingCount: 73,
     lastActive: "Active 2h ago",
     lastActiveTs: Date.now() - 1000 * 60 * 130,
-    githubUrl: "https://github.com",
+    githubUrl: "https://github.com/ankit-c/bca-practical",
+    githubPagesUrl: "https://ankit-c.github.io/bca-practical/",
     recentMilestone: "Resolved Day 4 Nested Ordered & Unordered Lists",
     track: "Software Systems"
   },
@@ -293,7 +329,8 @@ const SEED_PEERS: PeerStudent[] = [
     followingCount: 95,
     lastActive: "Active 2h ago",
     lastActiveTs: Date.now() - 1000 * 60 * 150,
-    githubUrl: "https://github.com",
+    githubUrl: "https://github.com/simran-k/bca-practical",
+    githubPagesUrl: "https://simran-k.github.io/bca-practical/",
     recentMilestone: "Validated Radio Buttons & Dropdown Selects",
     track: "Full-Stack Web Dev"
   },
@@ -310,7 +347,8 @@ const SEED_PEERS: PeerStudent[] = [
     followingCount: 38,
     lastActive: "Active 3h ago",
     lastActiveTs: Date.now() - 1000 * 60 * 170,
-    githubUrl: "https://github.com",
+    githubUrl: "https://github.com/harish-j/bca-practical",
+    githubPagesUrl: "https://harish-j.github.io/bca-practical/",
     recentMilestone: "Passed Day 2 Headings & Text Formatting Viva",
     track: "Data & AI"
   },
@@ -327,7 +365,8 @@ const SEED_PEERS: PeerStudent[] = [
     followingCount: 105,
     lastActive: "Active 3h ago",
     lastActiveTs: Date.now() - 1000 * 60 * 190,
-    githubUrl: "https://github.com",
+    githubUrl: "https://github.com/tanya-m/bca-practical",
+    githubPagesUrl: "https://tanya-m.github.io/bca-practical/",
     recentMilestone: "Completed Day 6 Assignment: college-portal.html",
     track: "Full-Stack Web Dev"
   },
@@ -344,7 +383,8 @@ const SEED_PEERS: PeerStudent[] = [
     followingCount: 49,
     lastActive: "Active 4h ago",
     lastActiveTs: Date.now() - 1000 * 60 * 230,
-    githubUrl: "https://github.com",
+    githubUrl: "https://github.com/saurabh-d/bca-practical",
+    githubPagesUrl: "https://saurabh-d.github.io/bca-practical/",
     recentMilestone: "Fixed Broken Image Paths with Relative URLs",
     track: "Software Systems"
   },
@@ -361,7 +401,8 @@ const SEED_PEERS: PeerStudent[] = [
     followingCount: 78,
     lastActive: "Active 4h ago",
     lastActiveTs: Date.now() - 1000 * 60 * 250,
-    githubUrl: "https://github.com",
+    githubUrl: "https://github.com/megha-i/bca-practical",
+    githubPagesUrl: "https://megha-i.github.io/bca-practical/",
     recentMilestone: "Implemented Native HTML5 Password & Email Validations",
     track: "Full-Stack Web Dev"
   },
@@ -378,7 +419,8 @@ const SEED_PEERS: PeerStudent[] = [
     followingCount: 89,
     lastActive: "Active 5h ago",
     lastActiveTs: Date.now() - 1000 * 60 * 290,
-    githubUrl: "https://github.com",
+    githubUrl: "https://github.com/aditya-k/bca-practical",
+    githubPagesUrl: "https://aditya-k.github.io/bca-practical/",
     recentMilestone: "Optimized Semantic HTML5 Nav and Footer Tags",
     track: "Cloud & Networks"
   },
@@ -395,7 +437,8 @@ const SEED_PEERS: PeerStudent[] = [
     followingCount: 64,
     lastActive: "Active 5h ago",
     lastActiveTs: Date.now() - 1000 * 60 * 310,
-    githubUrl: "https://github.com",
+    githubUrl: "https://github.com/kavita-y/bca-practical",
+    githubPagesUrl: "https://kavita-y.github.io/bca-practical/",
     recentMilestone: "Crafted BCS-011 Semester Timetable Matrix",
     track: "Full-Stack Web Dev"
   },
@@ -412,7 +455,8 @@ const SEED_PEERS: PeerStudent[] = [
     followingCount: 41,
     lastActive: "Active 6h ago",
     lastActiveTs: Date.now() - 1000 * 60 * 350,
-    githubUrl: "https://github.com",
+    githubUrl: "https://github.com/deepak-c/bca-practical",
+    githubPagesUrl: "https://deepak-c.github.io/bca-practical/",
     recentMilestone: "Practicing HTML Boilerplate in VS Code",
     track: "Data & AI"
   },
@@ -429,7 +473,8 @@ const SEED_PEERS: PeerStudent[] = [
     followingCount: 97,
     lastActive: "Active 6h ago",
     lastActiveTs: Date.now() - 1000 * 60 * 380,
-    githubUrl: "https://github.com",
+    githubUrl: "https://github.com/swati-b/bca-practical",
+    githubPagesUrl: "https://swati-b.github.io/bca-practical/",
     recentMilestone: "Pushed Day 6 Semantic Article Cards to GitHub",
     track: "Full-Stack Web Dev"
   },
@@ -446,7 +491,8 @@ const SEED_PEERS: PeerStudent[] = [
     followingCount: 56,
     lastActive: "Active 7h ago",
     lastActiveTs: Date.now() - 1000 * 60 * 410,
-    githubUrl: "https://github.com",
+    githubUrl: "https://github.com/manish-d/bca-practical",
+    githubPagesUrl: "https://manish-d.github.io/bca-practical/",
     recentMilestone: "Completed Day 5 Bug Hunt: Missing Submit Button",
     track: "Software Systems"
   },
@@ -463,7 +509,8 @@ const SEED_PEERS: PeerStudent[] = [
     followingCount: 48,
     lastActive: "Active 7h ago",
     lastActiveTs: Date.now() - 1000 * 60 * 430,
-    githubUrl: "https://github.com",
+    githubUrl: "https://github.com/praveen-r/bca-practical",
+    githubPagesUrl: "https://praveen-r.github.io/bca-practical/",
     recentMilestone: "Linked Multi-Page Navigation with Target Blank",
     track: "Full-Stack Web Dev"
   },
@@ -480,7 +527,8 @@ const SEED_PEERS: PeerStudent[] = [
     followingCount: 118,
     lastActive: "Active 8h ago",
     lastActiveTs: Date.now() - 1000 * 60 * 480,
-    githubUrl: "https://github.com",
+    githubUrl: "https://github.com/shweta-k/bca-practical",
+    githubPagesUrl: "https://shweta-k.github.io/bca-practical/",
     recentMilestone: "Completed Day 6 Viva Check on Semantic Elements",
     track: "Cloud & Networks"
   },
@@ -497,7 +545,8 @@ const SEED_PEERS: PeerStudent[] = [
     followingCount: 53,
     lastActive: "Active 8h ago",
     lastActiveTs: Date.now() - 1000 * 60 * 500,
-    githubUrl: "https://github.com",
+    githubUrl: "https://github.com/abhishek-j/bca-practical",
+    githubPagesUrl: "https://abhishek-j.github.io/bca-practical/",
     recentMilestone: "Mastered Table Headers, Tbody, and Border Styling",
     track: "Full-Stack Web Dev"
   },
@@ -514,7 +563,8 @@ const SEED_PEERS: PeerStudent[] = [
     followingCount: 76,
     lastActive: "Active 9h ago",
     lastActiveTs: Date.now() - 1000 * 60 * 540,
-    githubUrl: "https://github.com",
+    githubUrl: "https://github.com/nandini-b/bca-practical",
+    githubPagesUrl: "https://nandini-b.github.io/bca-practical/",
     recentMilestone: "Designed Student Registration Form with Fieldset",
     track: "Software Systems"
   },
@@ -531,7 +581,8 @@ const SEED_PEERS: PeerStudent[] = [
     followingCount: 44,
     lastActive: "Active 9h ago",
     lastActiveTs: Date.now() - 1000 * 60 * 560,
-    githubUrl: "https://github.com",
+    githubUrl: "https://github.com/karan-m/bca-practical",
+    githubPagesUrl: "https://karan-m.github.io/bca-practical/",
     recentMilestone: "Optimized SVG Icons & WebP Image Assets",
     track: "Data & AI"
   },
@@ -548,7 +599,8 @@ const SEED_PEERS: PeerStudent[] = [
     followingCount: 91,
     lastActive: "Active 10h ago",
     lastActiveTs: Date.now() - 1000 * 60 * 600,
-    githubUrl: "https://github.com",
+    githubUrl: "https://github.com/divya-p/bca-practical",
+    githubPagesUrl: "https://divya-p.github.io/bca-practical/",
     recentMilestone: "Constructed Semantic FAQ Section with Details & Summary",
     track: "Full-Stack Web Dev"
   },
@@ -565,7 +617,8 @@ const SEED_PEERS: PeerStudent[] = [
     followingCount: 51,
     lastActive: "Active 11h ago",
     lastActiveTs: Date.now() - 1000 * 60 * 660,
-    githubUrl: "https://github.com",
+    githubUrl: "https://github.com/rakesh-n/bca-practical",
+    githubPagesUrl: "https://rakesh-n.github.io/bca-practical/",
     recentMilestone: "Passed Technical Viva Check for HTML Tables",
     track: "Cloud & Networks"
   },
@@ -582,7 +635,8 @@ const SEED_PEERS: PeerStudent[] = [
     followingCount: 39,
     lastActive: "Active 11h ago",
     lastActiveTs: Date.now() - 1000 * 60 * 680,
-    githubUrl: "https://github.com",
+    githubUrl: "https://github.com/archana-p/bca-practical",
+    githubPagesUrl: "https://archana-p.github.io/bca-practical/",
     recentMilestone: "Configured VS Code Live Server Extension",
     track: "Software Systems"
   },
@@ -599,7 +653,8 @@ const SEED_PEERS: PeerStudent[] = [
     followingCount: 68,
     lastActive: "Active 12h ago",
     lastActiveTs: Date.now() - 1000 * 60 * 720,
-    githubUrl: "https://github.com",
+    githubUrl: "https://github.com/vikas-k/bca-practical",
+    githubPagesUrl: "https://vikas-k.github.io/bca-practical/",
     recentMilestone: "Submitted GitHub Repo with Form Action & Method",
     track: "Full-Stack Web Dev"
   },
@@ -616,7 +671,8 @@ const SEED_PEERS: PeerStudent[] = [
     followingCount: 102,
     lastActive: "Active 13h ago",
     lastActiveTs: Date.now() - 1000 * 60 * 780,
-    githubUrl: "https://github.com",
+    githubUrl: "https://github.com/monika-r/bca-practical",
+    githubPagesUrl: "https://monika-r.github.io/bca-practical/",
     recentMilestone: "Architected Responsive Semantic News Grid",
     track: "Full-Stack Web Dev"
   },
@@ -633,7 +689,8 @@ const SEED_PEERS: PeerStudent[] = [
     followingCount: 47,
     lastActive: "Active 14h ago",
     lastActiveTs: Date.now() - 1000 * 60 * 840,
-    githubUrl: "https://github.com",
+    githubUrl: "https://github.com/suraj-s/bca-practical",
+    githubPagesUrl: "https://suraj-s.github.io/bca-practical/",
     recentMilestone: "Configured Bookmark Links with ID Anchors",
     track: "Data & AI"
   },
@@ -650,7 +707,8 @@ const SEED_PEERS: PeerStudent[] = [
     followingCount: 82,
     lastActive: "Active 15h ago",
     lastActiveTs: Date.now() - 1000 * 60 * 900,
-    githubUrl: "https://github.com",
+    githubUrl: "https://github.com/preeti-a/bca-practical",
+    githubPagesUrl: "https://preeti-a.github.io/bca-practical/",
     recentMilestone: "Pushed HTML5 Range & Color Pickers",
     track: "Full-Stack Web Dev"
   },
@@ -667,7 +725,8 @@ const SEED_PEERS: PeerStudent[] = [
     followingCount: 59,
     lastActive: "Active 16h ago",
     lastActiveTs: Date.now() - 1000 * 60 * 960,
-    githubUrl: "https://github.com",
+    githubUrl: "https://github.com/tarun-b/bca-practical",
+    githubPagesUrl: "https://tarun-b.github.io/bca-practical/",
     recentMilestone: "Resolved Missing Closing Tags in Table Bug Hunt",
     track: "Software Systems"
   },
@@ -684,7 +743,8 @@ const SEED_PEERS: PeerStudent[] = [
     followingCount: 110,
     lastActive: "Active 17h ago",
     lastActiveTs: Date.now() - 1000 * 60 * 1020,
-    githubUrl: "https://github.com",
+    githubUrl: "https://github.com/isha-m/bca-practical",
+    githubPagesUrl: "https://isha-m.github.io/bca-practical/",
     recentMilestone: "Structured College Portal with Accessible Landmarks",
     track: "Cloud & Networks"
   },
@@ -701,7 +761,8 @@ const SEED_PEERS: PeerStudent[] = [
     followingCount: 36,
     lastActive: "Active 18h ago",
     lastActiveTs: Date.now() - 1000 * 60 * 1080,
-    githubUrl: "https://github.com",
+    githubUrl: "https://github.com/gaurav-p/bca-practical",
+    githubPagesUrl: "https://gaurav-p.github.io/bca-practical/",
     recentMilestone: "Mastered Strong, Em, and Code Formatting Tags",
     track: "Full-Stack Web Dev"
   },
@@ -718,7 +779,8 @@ const SEED_PEERS: PeerStudent[] = [
     followingCount: 79,
     lastActive: "Active 19h ago",
     lastActiveTs: Date.now() - 1000 * 60 * 1140,
-    githubUrl: "https://github.com",
+    githubUrl: "https://github.com/pallavi-g/bca-practical",
+    githubPagesUrl: "https://pallavi-g.github.io/bca-practical/",
     recentMilestone: "Added Pattern Regex Attributes to Phone Input",
     track: "Software Systems"
   },
@@ -735,7 +797,8 @@ const SEED_PEERS: PeerStudent[] = [
     followingCount: 46,
     lastActive: "Active 20h ago",
     lastActiveTs: Date.now() - 1000 * 60 * 1200,
-    githubUrl: "https://github.com",
+    githubUrl: "https://github.com/nitin-b/bca-practical",
+    githubPagesUrl: "https://nitin-b.github.io/bca-practical/",
     recentMilestone: "Generated Student Photo Gallery with Figcaption",
     track: "Data & AI"
   },
@@ -752,7 +815,8 @@ const SEED_PEERS: PeerStudent[] = [
     followingCount: 98,
     lastActive: "Active 21h ago",
     lastActiveTs: Date.now() - 1000 * 60 * 1260,
-    githubUrl: "https://github.com",
+    githubUrl: "https://github.com/sanya-c/bca-practical",
+    githubPagesUrl: "https://sanya-c.github.io/bca-practical/",
     recentMilestone: "Integrated Clean Semantic Aside Navigation",
     track: "Full-Stack Web Dev"
   },
@@ -769,7 +833,8 @@ const SEED_PEERS: PeerStudent[] = [
     followingCount: 63,
     lastActive: "Active 22h ago",
     lastActiveTs: Date.now() - 1000 * 60 * 1320,
-    githubUrl: "https://github.com",
+    githubUrl: "https://github.com/rohan-b/bca-practical",
+    githubPagesUrl: "https://rohan-b.github.io/bca-practical/",
     recentMilestone: "Designed Course Credit Table with Footers",
     track: "Software Systems"
   },
@@ -786,7 +851,8 @@ const SEED_PEERS: PeerStudent[] = [
     followingCount: 87,
     lastActive: "Active 23h ago",
     lastActiveTs: Date.now() - 1000 * 60 * 1380,
-    githubUrl: "https://github.com",
+    githubUrl: "https://github.com/komal-t/bca-practical",
+    githubPagesUrl: "https://komal-t.github.io/bca-practical/",
     recentMilestone: "Passed Day 5 Technical Viva Check on Forms",
     track: "Cloud & Networks"
   },
@@ -803,7 +869,8 @@ const SEED_PEERS: PeerStudent[] = [
     followingCount: 37,
     lastActive: "Active yesterday",
     lastActiveTs: Date.now() - 1000 * 60 * 1440,
-    githubUrl: "https://github.com",
+    githubUrl: "https://github.com/mayank-n/bca-practical",
+    githubPagesUrl: "https://mayank-n.github.io/bca-practical/",
     recentMilestone: "Initialized First Git Repository for Day 2",
     track: "Full-Stack Web Dev"
   },
@@ -820,7 +887,8 @@ const SEED_PEERS: PeerStudent[] = [
     followingCount: 104,
     lastActive: "Active yesterday",
     lastActiveTs: Date.now() - 1000 * 60 * 1500,
-    githubUrl: "https://github.com",
+    githubUrl: "https://github.com/geeta-m/bca-practical",
+    githubPagesUrl: "https://geeta-m.github.io/bca-practical/",
     recentMilestone: "Styled college-portal.html with Modern Semantic Tags",
     track: "Full-Stack Web Dev"
   },
@@ -837,7 +905,8 @@ const SEED_PEERS: PeerStudent[] = [
     followingCount: 50,
     lastActive: "Active yesterday",
     lastActiveTs: Date.now() - 1000 * 60 * 1560,
-    githubUrl: "https://github.com",
+    githubUrl: "https://github.com/sumit-s/bca-practical",
+    githubPagesUrl: "https://sumit-s.github.io/bca-practical/",
     recentMilestone: "Fixed Case Sensitivity Bug in Relative Links",
     track: "Data & AI"
   },
@@ -854,7 +923,8 @@ const SEED_PEERS: PeerStudent[] = [
     followingCount: 81,
     lastActive: "Active yesterday",
     lastActiveTs: Date.now() - 1000 * 60 * 1620,
-    githubUrl: "https://github.com",
+    githubUrl: "https://github.com/bhavna-s/bca-practical",
+    githubPagesUrl: "https://bhavna-s.github.io/bca-practical/",
     recentMilestone: "Validated Required Attributes on Student Form",
     track: "Software Systems"
   },
@@ -871,7 +941,8 @@ const SEED_PEERS: PeerStudent[] = [
     followingCount: 57,
     lastActive: "Active 2d ago",
     lastActiveTs: Date.now() - 1000 * 60 * 2880,
-    githubUrl: "https://github.com",
+    githubUrl: "https://github.com/mohit-r/bca-practical",
+    githubPagesUrl: "https://mohit-r.github.io/bca-practical/",
     recentMilestone: "Completed HTML List Styling & Description Lists",
     track: "Full-Stack Web Dev"
   },
@@ -888,7 +959,8 @@ const SEED_PEERS: PeerStudent[] = [
     followingCount: 96,
     lastActive: "Active 2d ago",
     lastActiveTs: Date.now() - 1000 * 60 * 2940,
-    githubUrl: "https://github.com",
+    githubUrl: "https://github.com/tanvi-m/bca-practical",
+    githubPagesUrl: "https://tanvi-m.github.io/bca-practical/",
     recentMilestone: "Organized Multi-Section BCA Academic Portal",
     track: "Cloud & Networks"
   },
@@ -905,7 +977,8 @@ const SEED_PEERS: PeerStudent[] = [
     followingCount: 43,
     lastActive: "Active 2d ago",
     lastActiveTs: Date.now() - 1000 * 60 * 3000,
-    githubUrl: "https://github.com",
+    githubUrl: "https://github.com/ashish-g/bca-practical",
+    githubPagesUrl: "https://ashish-g.github.io/bca-practical/",
     recentMilestone: "Implemented Downloadable Syllabus PDF Anchor",
     track: "Full-Stack Web Dev"
   },
@@ -922,7 +995,8 @@ const SEED_PEERS: PeerStudent[] = [
     followingCount: 85,
     lastActive: "Active 2d ago",
     lastActiveTs: Date.now() - 1000 * 60 * 3060,
-    githubUrl: "https://github.com",
+    githubUrl: "https://github.com/shalini-d/bca-practical",
+    githubPagesUrl: "https://shalini-d.github.io/bca-practical/",
     recentMilestone: "Pushed Verified job-apply.html to GitHub",
     track: "Software Systems"
   },
@@ -939,7 +1013,8 @@ const SEED_PEERS: PeerStudent[] = [
     followingCount: 40,
     lastActive: "Active 3d ago",
     lastActiveTs: Date.now() - 1000 * 60 * 4320,
-    githubUrl: "https://github.com",
+    githubUrl: "https://github.com/hemant-u/bca-practical",
+    githubPagesUrl: "https://hemant-u.github.io/bca-practical/",
     recentMilestone: "Passed HTML Doctype & Head Metadata Viva",
     track: "Data & AI"
   },
@@ -956,7 +1031,8 @@ const SEED_PEERS: PeerStudent[] = [
     followingCount: 108,
     lastActive: "Active 3d ago",
     lastActiveTs: Date.now() - 1000 * 60 * 4380,
-    githubUrl: "https://github.com",
+    githubUrl: "https://github.com/aarti-t/bca-practical",
+    githubPagesUrl: "https://aarti-t.github.io/bca-practical/",
     recentMilestone: "Pushed Semantic Layout with Modern Main Section",
     track: "Full-Stack Web Dev"
   },
@@ -973,7 +1049,8 @@ const SEED_PEERS: PeerStudent[] = [
     followingCount: 66,
     lastActive: "Active 3d ago",
     lastActiveTs: Date.now() - 1000 * 60 * 4440,
-    githubUrl: "https://github.com",
+    githubUrl: "https://github.com/yash-s/bca-practical",
+    githubPagesUrl: "https://yash-s.github.io/bca-practical/",
     recentMilestone: "Constructed Laboratory Experiment Schedule Table",
     track: "Software Systems"
   },
@@ -990,7 +1067,8 @@ const SEED_PEERS: PeerStudent[] = [
     followingCount: 90,
     lastActive: "Active 3d ago",
     lastActiveTs: Date.now() - 1000 * 60 * 4500,
-    githubUrl: "https://github.com",
+    githubUrl: "https://github.com/kirti-g/bca-practical",
+    githubPagesUrl: "https://kirti-g.github.io/bca-practical/",
     recentMilestone: "Handled Textarea Character Limits and Placeholders",
     track: "Full-Stack Web Dev"
   },
@@ -1007,7 +1085,8 @@ const SEED_PEERS: PeerStudent[] = [
     followingCount: 94,
     lastActive: "Active 4d ago",
     lastActiveTs: Date.now() - 1000 * 60 * 5760,
-    githubUrl: "https://github.com",
+    githubUrl: "https://github.com/lokesh-c/bca-practical",
+    githubPagesUrl: "https://lokesh-c.github.io/bca-practical/",
     recentMilestone: "Verified GitHub Commit History for Day 6",
     track: "Cloud & Networks"
   }
@@ -1080,7 +1159,12 @@ export function StudentPeerNetwork() {
                 followingCount: baseFollowing,
                 lastActive: formatTimeAgo(lastUpdatedTs),
                 lastActiveTs: lastUpdatedTs,
-                githubUrl: data.bca_practical?.githubRepoUrls?.[maxDay.toString()] || (data.bca_practical?.githubUsername ? `https://github.com/${data.bca_practical.githubUsername}` : undefined),
+                githubUrl: data.email === "nextsem.academy@gmail.com"
+                  ? "https://github.com/nextsemacademy-max/bca-practical"
+                  : (data.bca_practical?.githubRepoUrls?.[maxDay.toString()] || (data.bca_practical?.githubUsername ? `https://github.com/${data.bca_practical.githubUsername}/bca-practical` : undefined)),
+                githubPagesUrl: data.email === "nextsem.academy@gmail.com"
+                  ? "https://nextsemacademy-max.github.io/bca-practical/"
+                  : getGitHubPagesUrl(data.bca_practical?.githubRepoUrls?.[maxDay.toString()], data.email) || (data.bca_practical?.githubUsername ? `https://${data.bca_practical.githubUsername}.github.io/bca-practical/` : undefined),
                 recentMilestone: `Completed Day ${maxDay} practical laboratory exercises`,
                 track: data.bca_practical?.selectedTrack === "programming" ? "Software Systems" : data.bca_practical?.selectedTrack === "data-ai" ? "Data & AI" : "Full-Stack Web Dev"
               });
@@ -1407,17 +1491,32 @@ export function StudentPeerNetwork() {
                     </span>
                   </div>
 
-                  {peer.githubUrl && (
-                    <a
-                      href={peer.githubUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 text-[11px] font-bold text-blue-600 dark:text-blue-400 hover:underline"
-                    >
-                      <GitBranch size={11} />
-                      <span>Code</span>
-                    </a>
-                  )}
+                  <div className="flex items-center gap-2">
+                    {peer.githubUrl && (
+                      <a
+                        href={peer.githubUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 text-[11px] font-bold text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:underline transition-colors"
+                        title="View GitHub Repository"
+                      >
+                        <GitBranch size={11} />
+                        <span>Code</span>
+                      </a>
+                    )}
+                    {peer.githubPagesUrl && (
+                      <a
+                        href={peer.githubPagesUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 text-[11px] font-extrabold text-emerald-600 dark:text-emerald-400 hover:text-emerald-500 hover:underline transition-all px-2 py-0.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800/80 shadow-xs"
+                        title="View Live Deployed GitHub Pages"
+                      >
+                        <ExternalLink size={11} />
+                        <span>Pages</span>
+                      </a>
+                    )}
+                  </div>
                 </div>
               </div>
             );

@@ -11,6 +11,7 @@
     "task": "node scripts/bca-portal-helper.js",
     "status": "node scripts/repo-manager.js status",
     "repo": "node scripts/repo-manager.js",
+    "sync:bca": "node scripts/export_to_bca_repo.mjs",
     "save-chat": "node scripts/save_chat.js",
     "deploy:staging": "npm run build && npx firebase-tools deploy --only hosting --project nextsem-staging",
     "deploy:prod": "npm run build && npx firebase-tools deploy --only hosting --project ignou-study-notes-by-nextsem"
