@@ -1396,7 +1396,7 @@ export default function BcaPracticalLessonClient({ lesson }: Props) {
                       <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
                       <span className="text-xs sm:text-sm font-black text-white flex items-center gap-1.5 font-mono">
                         <FileCode size={15} className="text-emerald-400" />
-                        <span>Exact Assignment Solution Code: <strong className="text-emerald-400">{lesson.assignment.fileName || "college-portal.html"}</strong></span>
+                        <span>Exact Assignment Solution Code: <strong className="text-emerald-400">{lesson.assignment.fileName || "assignment.html"}</strong></span>
                       </span>
                     </div>
 
@@ -1425,7 +1425,7 @@ export default function BcaPracticalLessonClient({ lesson }: Props) {
                   </div>
 
                   <p className="text-[11px] text-slate-300 dark:text-slate-400 leading-relaxed font-sans">
-                    Open Visual Studio Code on your PC (<code className="text-blue-400 font-mono">code .</code>), create <code className="text-emerald-400 font-mono font-bold">{lesson.assignment.fileName || "college-portal.html"}</code>, paste this 100% semantic HTML code, verify in browser, and push to your GitHub repo:
+                    Open Visual Studio Code on your PC (<code className="text-blue-400 font-mono">code .</code>), create <code className="text-emerald-400 font-mono font-bold">{lesson.assignment.fileName || "assignment.html"}</code>, paste this complete step-by-step verified code, test in your browser, and push to your GitHub repo:
                   </p>
 
                   <div className="relative">
@@ -1437,7 +1437,7 @@ export default function BcaPracticalLessonClient({ lesson }: Props) {
                   <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-400 pt-1 font-mono">
                     <span className="flex items-center gap-1 text-emerald-400 font-bold">
                       <CheckCircle2 size={12} />
-                      <span>100% Semantic HTML5 Verified (Zero &lt;div&gt; hacks)</span>
+                      <span>Verified Assignment Code Solution (100% Tested & Ready to Run)</span>
                     </span>
                     <button
                       type="button"

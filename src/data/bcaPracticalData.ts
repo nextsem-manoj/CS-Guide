@@ -448,6 +448,7 @@ export const PRACTICAL_LESSONS: PracticalLesson[] = [
     },
     assignment: {
       title: 'Homework Task: Student Launch Page',
+      fileName: 'index.html',
       instructions: [
         'Create a local folder named `bca-day-1` on your PC.',
         'Open the folder in VS Code and create `index.html`.',
@@ -455,7 +456,25 @@ export const PRACTICAL_LESSONS: PracticalLesson[] = [
         'Add a paragraph detailing: Your BCA Roll Number, College Name, and your target career track.',
         'Open the file directly in Google Chrome and verify the display.'
       ],
-      submissionCriteria: 'Verify with browser DevTools (F12) that there are zero HTML syntax warnings.'
+      submissionCriteria: 'Verify with browser DevTools (F12) that there are zero HTML syntax warnings.',
+      solutionCode: `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BCA Student Launch Page - Day 1</title>
+</head>
+<body>
+  <h1>Er. Manoj Kumar</h1>
+  <p>
+    <strong>BCA Roll Number:</strong> 2403BCA101<br>
+    <strong>College Name:</strong> IGNOU BCA Center / Nextsem Academy<br>
+    <strong>Target Career Track:</strong> Full-Stack Software Engineer
+  </p>
+  <hr>
+  <p>Welcome to my BCA practical learning portfolio! Built directly in Visual Studio Code with 100% valid HTML5 standards.</p>
+</body>
+</html>`
     },
     githubWorkflow: {
       repoName: 'html-css-projects',
@@ -559,6 +578,7 @@ export const PRACTICAL_LESSONS: PracticalLesson[] = [
     },
     assignment: {
       title: 'Homework Task: Tech Biography Page',
+      fileName: 'biography.html',
       instructions: [
         'Create a page about Ada Lovelace or Alan Turing.',
         'Use an <h1> for the person’s name.',
@@ -566,7 +586,33 @@ export const PRACTICAL_LESSONS: PracticalLesson[] = [
         'Use <strong> for significant dates and inventions.',
         'Add a thematic divider (<hr>) before the footer.'
       ],
-      submissionCriteria: 'Inspect your heading structure using the Chrome accessibility tree or DevTools.'
+      submissionCriteria: 'Inspect your heading structure using the Chrome accessibility tree or DevTools.',
+      solutionCode: `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ada Lovelace - Tech Biography</title>
+</head>
+<body>
+  <h1>Ada Lovelace</h1>
+  <p>The world's first computer programmer, celebrated for her foundational insights into Charles Babbage’s mechanical computer.</p>
+
+  <h2>Early Life</h2>
+  <p>Born on <strong>10 December 1815</strong> in London, Ada demonstrated exceptional mathematical talent from early childhood under private tutoring.</p>
+
+  <h2>Major Achievements</h2>
+  <p>In <strong>1843</strong>, she translated Luigi Menabrea's memoir on Babbage's <em>Analytical Engine</em>, appending extensive personal notes containing the world's first published machine algorithm.</p>
+
+  <h2>Legacy</h2>
+  <p>Her visionary realization that computers could manipulate symbols beyond basic arithmetic laid the philosophical foundation for <strong>modern computer science</strong>.</p>
+
+  <hr>
+  <footer>
+    <p><small>&copy; 2026 BCA Practical Portfolio - Day 2 Semantic Text Formatting</small></p>
+  </footer>
+</body>
+</html>`
     },
     githubWorkflow: {
       repoName: 'html-css-projects',
@@ -673,13 +719,50 @@ export const PRACTICAL_LESSONS: PracticalLesson[] = [
     },
     assignment: {
       title: 'Homework Task: Multi-Page BCA Mini Site',
+      fileName: 'index.html',
       instructions: [
         'Create three HTML files in one directory: `index.html`, `courses.html`, and `contact.html`.',
         'Add navigation links on all three pages linking to each other using relative paths (`href="courses.html"`).',
         'Place a computer image on the homepage with width="400" and an accurate alt tag.',
         'Verify that clicking each navigation link transitions smoothly between the pages.'
       ],
-      submissionCriteria: 'All relative internal links must navigate smoothly without 404 errors.'
+      submissionCriteria: 'All relative internal links must navigate smoothly without 404 errors.',
+      solutionCode: `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BCA Student Portal - Day 3 Multi-Page Website</title>
+</head>
+<body>
+  <header>
+    <h1>Nextsem BCA Practical Learning Hub</h1>
+    <nav>
+      <strong>Navigation: </strong>
+      <a href="index.html">Home</a> |
+      <a href="courses.html">Course Catalog</a> |
+      <a href="contact.html">Contact Faculty</a> |
+      <a href="https://github.com" target="_blank" rel="noopener noreferrer">Official GitHub ↗</a>
+    </nav>
+  </header>
+  <hr>
+
+  <main>
+    <h2>Welcome to First Year Computer Science Practical</h2>
+    <p>This multi-page mini site demonstrates internal relative links, secure external hyperlinks with <code>rel="noopener noreferrer"</code>, and accessible image integration.</p>
+    
+    <figure>
+      <img src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=600" alt="Student workstation setup with mechanical keyboard and code editor" width="400">
+      <figcaption><small>Figure 1: Hands-on developer workstation setup.</small></figcaption>
+    </figure>
+  </main>
+  <hr>
+
+  <footer>
+    <p>&copy; 2026 IGNOU BCA Semester 1 Practical Workshop</p>
+  </footer>
+</body>
+</html>`
     },
     githubWorkflow: {
       repoName: 'html-css-projects',
@@ -801,13 +884,93 @@ export const PRACTICAL_LESSONS: PracticalLesson[] = [
     },
     assignment: {
       title: 'Homework Task: BCA Semester Syllabus Matrix',
+      fileName: 'syllabus-matrix.html',
       instructions: [
         'Create a webpage displaying the complete list of 6 BCA semesters using an ordered list (<ol>).',
         'Inside Semester 1, nest an unordered list (<ul>) of all subjects.',
         'Below the lists, create a table summarizing Subject, Credits, Lab requirement (Yes/No), and Exam weightage.',
         'Use `colspan="2"` on a footer summary row displaying "Total Credits: 16".'
       ],
-      submissionCriteria: 'Ensure the table passes W3C HTML validator without nesting errors.'
+      submissionCriteria: 'Ensure the table passes W3C HTML validator without nesting errors.',
+      solutionCode: `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BCA Semester Syllabus Matrix - Day 4</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; padding: 25px; line-height: 1.6; }
+    table { width: 100%; max-width: 650px; border-collapse: collapse; margin-top: 15px; }
+    table, th, td { border: 1px solid #cbd5e1; padding: 10px 14px; text-align: left; }
+    th { background-color: #0f172a; color: #ffffff; }
+    tfoot td { font-weight: bold; background-color: #f8fafc; }
+  </style>
+</head>
+<body>
+  <h1>IGNOU BCA Academic Curriculum Matrix</h1>
+  <h2>Six-Semester Degree Overview</h2>
+  <ol>
+    <li>
+      <strong>Semester 1 (Foundation)</strong>
+      <ul>
+        <li>BCS-011: Computer Basics and PC Software</li>
+        <li>BCS-012: Basic Mathematics</li>
+        <li>BCSL-013: Computer Basics Lab</li>
+        <li>FEG-02: Foundation in English</li>
+      </ul>
+    </li>
+    <li>Semester 2 (Data Structures & C Programming)</li>
+    <li>Semester 3 (Object-Oriented C++ & Systems)</li>
+    <li>Semester 4 (Database Management Systems & Java)</li>
+    <li>Semester 5 (Web Development & Software Engineering)</li>
+    <li>Semester 6 (Cloud Computing & Major Project)</li>
+  </ol>
+
+  <h2>Semester 1 Course Credit Breakdown</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Course Code</th>
+        <th>Course Title</th>
+        <th>Practical Lab</th>
+        <th>Credits</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>BCS-011</td>
+        <td>Computer Basics and PC Software</td>
+        <td>No</td>
+        <td>4</td>
+      </tr>
+      <tr>
+        <td>BCS-012</td>
+        <td>Basic Mathematics</td>
+        <td>No</td>
+        <td>4</td>
+      </tr>
+      <tr>
+        <td>BCSL-013</td>
+        <td>Software & Hardware Practical Lab</td>
+        <td>Yes</td>
+        <td>4</td>
+      </tr>
+      <tr>
+        <td>FEG-02</td>
+        <td>Foundation Course in English</td>
+        <td>No</td>
+        <td>4</td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td colspan="3">Total Semester 1 Academic Credits:</td>
+        <td>16</td>
+      </tr>
+    </tfoot>
+  </table>
+</body>
+</html>`
     },
     githubWorkflow: {
       repoName: 'html-css-projects',
@@ -926,6 +1089,7 @@ export const PRACTICAL_LESSONS: PracticalLesson[] = [
     },
     assignment: {
       title: 'Homework Task: Comprehensive BCA Job Portal Form',
+      fileName: 'job-apply.html',
       instructions: [
         'Build a job application form (`job-apply.html`).',
         'Include: Full Name, Email, Phone Number (`type="tel"`), Resume file upload (`type="file"`).',
@@ -934,7 +1098,75 @@ export const PRACTICAL_LESSONS: PracticalLesson[] = [
         'Add a `<textarea>` for Cover Letter.',
         'Mark all essential fields with the `required` attribute.'
       ],
-      submissionCriteria: 'Test submitting the form in your browser with blank inputs to verify that native validation popups appear.'
+      submissionCriteria: 'Test submitting the form in your browser with blank inputs to verify that native validation popups appear.',
+      solutionCode: `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BCA Tech Job Portal - Application Form</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; padding: 25px; line-height: 1.6; max-width: 650px; margin: 0 auto; }
+    fieldset { border: 1px solid #cbd5e1; border-radius: 8px; padding: 16px 20px; margin-bottom: 20px; }
+    legend { font-weight: bold; color: #0f172a; padding: 0 8px; }
+    input[type="text"], input[type="email"], input[type="tel"], textarea, select { width: 100%; padding: 8px 12px; margin-top: 4px; border: 1px solid #94a3b8; border-radius: 6px; box-sizing: border-box; }
+    button { padding: 10px 20px; font-weight: bold; border-radius: 6px; border: none; cursor: pointer; }
+    button[type="submit"] { background-color: #2563eb; color: white; margin-right: 10px; }
+    button[type="reset"] { background-color: #e2e8f0; color: #334155; }
+  </style>
+</head>
+<body>
+  <h1>Junior Software Engineer Application</h1>
+  <p>Please complete all required fields below to submit your job profile.</p>
+
+  <form action="/submit-job-application" method="POST" enctype="multipart/form-data">
+    <fieldset>
+      <legend>1. Personal & Contact Details</legend>
+      <p>
+        <label for="fullName">Full Legal Name *</label>
+        <input type="text" id="fullName" name="fullName" placeholder="e.g. Pankaj Sharma" required minlength="3">
+      </p>
+      <p>
+        <label for="email">Email Address *</label>
+        <input type="email" id="email" name="email" placeholder="student@example.com" required>
+      </p>
+      <p>
+        <label for="phone">Mobile Phone Number *</label>
+        <input type="tel" id="phone" name="phone" placeholder="+91 98765 43210" pattern="[0-9+ -]{10,15}" required>
+      </p>
+      <p>
+        <label for="resume">Upload Resume (PDF only) *</label><br>
+        <input type="file" id="resume" name="resume" accept=".pdf" required>
+      </p>
+    </fieldset>
+
+    <fieldset>
+      <legend>2. Technical Background</legend>
+      <p><strong>Professional Experience Level *</strong></p>
+      <label><input type="radio" name="experience" value="fresher" required checked> Fresher (BCA Graduate)</label><br>
+      <label><input type="radio" name="experience" value="1-2"> 1 - 2 Years Software Experience</label><br>
+      <label><input type="radio" name="experience" value="3+"> 3+ Years Industry Experience</label>
+
+      <p style="margin-top: 15px;"><strong>Core Technical Skills:</strong></p>
+      <label><input type="checkbox" name="tech" value="html" checked> HTML5</label><br>
+      <label><input type="checkbox" name="tech" value="css" checked> CSS3</label><br>
+      <label><input type="checkbox" name="tech" value="js"> JavaScript (ES6+)</label><br>
+      <label><input type="checkbox" name="tech" value="c"> C / C++ Systems</label><br>
+      <label><input type="checkbox" name="tech" value="sql"> SQL & Relational Databases</label>
+
+      <p style="margin-top: 15px;">
+        <label for="coverLetter">Statement of Purpose / Cover Letter:</label>
+        <textarea id="coverLetter" name="coverLetter" rows="4" placeholder="Highlight your academic projects and career objectives..."></textarea>
+      </p>
+    </fieldset>
+
+    <p>
+      <button type="submit">Submit Application 🚀</button>
+      <button type="reset">Clear All Fields</button>
+    </p>
+  </form>
+</body>
+</html>`
     },
     githubWorkflow: {
       repoName: 'html-css-projects',
@@ -1360,6 +1592,7 @@ export const PRACTICAL_LESSONS: PracticalLesson[] = [
     },
     assignment: {
       title: 'Mini Project Milestone: Deploy to GitHub Repository',
+      fileName: 'index.html',
       instructions: [
         'Create a new GitHub repository named `student-profile-html`.',
         'Place `index.html` and your profile image in the repository.',
@@ -1367,7 +1600,67 @@ export const PRACTICAL_LESSONS: PracticalLesson[] = [
         'Enable GitHub Pages in your repository settings under Settings > Pages > Deploy from Branch.',
         'Test your live URL on your mobile phone.'
       ],
-      submissionCriteria: 'Submit your live GitHub Pages link and repository URL.'
+      submissionCriteria: 'Submit your live GitHub Pages link and repository URL.',
+      solutionCode: `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BCA Student Developer Profile - Day 7 Milestone</title>
+</head>
+<body>
+  <header>
+    <h1>Er. Manoj Kumar</h1>
+    <p>BCA First Year Student • Aspiring Software Engineer</p>
+    <nav>
+      <strong>Quick Links: </strong>
+      <a href="#about">About</a> |
+      <a href="#skills">Skills</a> |
+      <a href="#projects">Projects</a> |
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+  <hr>
+
+  <main>
+    <section id="about">
+      <h2>About Me</h2>
+      <p>I am undertaking the 90-Day BCA practical development journey at Nextsem Academy. My focus is writing semantic, accessible, standard-compliant software systems.</p>
+      <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=250" alt="Student Profile Avatar" width="160">
+    </section>
+
+    <section id="skills">
+      <h2>Technical Skillset</h2>
+      <ul>
+        <li>HTML5 Semantic Architecture & Form Validation</li>
+        <li>Windows 11 Command Line Interface (CLI)</li>
+        <li>Git Version Control & GitHub Pages Deployment</li>
+        <li>C / C++ Programming Fundamentals</li>
+      </ul>
+    </section>
+
+    <section id="projects">
+      <h2>Featured Lab Exercises</h2>
+      <ol>
+        <li><strong>Day 1:</strong> Student Launch Page</li>
+        <li><strong>Day 4:</strong> BCA Semester Syllabus Matrix Table</li>
+        <li><strong>Day 5:</strong> Job Portal Application Form</li>
+        <li><strong>Day 6:</strong> Semantic Academic College Portal</li>
+      </ol>
+    </section>
+
+    <section id="contact">
+      <h2>Connect & Collaborate</h2>
+      <p>Explore my source code repositories on GitHub: <a href="https://github.com" target="_blank" rel="noopener noreferrer">https://github.com/my-bca-profile ↗</a></p>
+    </section>
+  </main>
+  <hr>
+
+  <footer>
+    <p><small>&copy; 2026 Student Developer Profile. Built with 100% Pure HTML5. Hosted live via GitHub Pages.</small></p>
+  </footer>
+</body>
+</html>`
     },
     githubWorkflow: {
       repoName: 'student-profile-html',
@@ -1482,6 +1775,7 @@ export const PRACTICAL_LESSONS: PracticalLesson[] = [
     },
     assignment: {
       title: 'Homework Task: Create Dedicated style.css File',
+      fileName: 'style.css',
       instructions: [
         'Open your Day 7 project or create a new folder `bca-day-8`.',
         'Create `index.html` and `style.css` side-by-side.',
@@ -1489,7 +1783,61 @@ export const PRACTICAL_LESSONS: PracticalLesson[] = [
         'In `style.css`, reset body margin to 0 and set default font-family to sans-serif.',
         'Change heading colors to `#0c1328` and paragraph line-height to 1.6.'
       ],
-      submissionCriteria: 'Confirm in Chrome DevTools Network tab (F12) that `style.css` returns HTTP Status 200.'
+      submissionCriteria: 'Confirm in Chrome DevTools Network tab (F12) that `style.css` returns HTTP Status 200.',
+      solutionCode: `/* ── style.css (Dedicated Stylesheet) ── */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background-color: #f8fafc;
+  color: #334155;
+  line-height: 1.6;
+  padding: 30px 20px;
+}
+
+.container {
+  max-width: 650px;
+  margin: 0 auto;
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 32px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+h1 {
+  color: #0c1328;
+  font-size: 26px;
+  margin-bottom: 12px;
+  letter-spacing: -0.5px;
+}
+
+p {
+  margin-bottom: 16px;
+  font-size: 15px;
+}
+
+/* ── index.html (Linked Document) ──
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BCA Day 8 - External Stylesheet</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>External CSS Architecture</h1>
+    <p>This document links to a dedicated style.css file using the standard link tag.</p>
+  </div>
+</body>
+</html>
+*/`
     },
     githubWorkflow: {
       repoName: 'html-css-projects',
@@ -1630,13 +1978,182 @@ body {
     },
     assignment: {
       title: 'Homework Task: Component Library Card Sheet',
+      fileName: 'component-library.html',
       instructions: [
         'Create a webpage demonstrating 4 reusable button variants using classes:',
         '`.btn-success` (Green background), `.btn-danger` (Red background), `.btn-warning` (Amber background), and `.btn-outline` (Transparent with border).',
         'Add smooth `:hover` transition effects to all buttons.',
         'Use grouping selectors (`.btn-success, .btn-danger, ...`) for shared padding and font styles.'
       ],
-      submissionCriteria: 'Ensure all buttons use shared classes to prevent repeating code (DRY - Don’t Repeat Yourself).'
+      submissionCriteria: 'Ensure all buttons use shared classes to prevent repeating code (DRY - Don’t Repeat Yourself).',
+      solutionCode: `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BCA Day 9 - Reusable Button Component Library</title>
+  <style>
+    /* Reset & Page Background */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #0b1120;
+      color: #f8fafc;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    /* Container Card Sheet */
+    .card-sheet {
+      background-color: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 16px;
+      padding: 32px;
+      max-width: 650px;
+      width: 100%;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+    }
+
+    .card-sheet h1 {
+      font-size: 24px;
+      margin-bottom: 8px;
+      color: #38bdf8;
+    }
+
+    .card-sheet p {
+      font-size: 14px;
+      color: #94a3b8;
+      margin-bottom: 24px;
+      line-height: 1.6;
+    }
+
+    .button-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    /* DRY Principle: Shared Button Base Styles via Grouping Selector */
+    .btn,
+    .btn-success,
+    .btn-danger,
+    .btn-warning,
+    .btn-outline {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 22px;
+      font-size: 14px;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      text-decoration: none;
+      border: 2px solid transparent;
+      transition: all 0.25s ease-in-out;
+      outline: none;
+    }
+
+    /* 1. Success Variant (Green background) */
+    .btn-success {
+      background-color: #16a34a;
+      color: #ffffff;
+      border-color: #16a34a;
+    }
+    .btn-success:hover {
+      background-color: #15803d;
+      border-color: #15803d;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(22, 163, 74, 0.4);
+    }
+
+    /* 2. Danger Variant (Red background) */
+    .btn-danger {
+      background-color: #dc2626;
+      color: #ffffff;
+      border-color: #dc2626;
+    }
+    .btn-danger:hover {
+      background-color: #b91c1c;
+      border-color: #b91c1c;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(220, 38, 38, 0.4);
+    }
+
+    /* 3. Warning Variant (Amber background) */
+    .btn-warning {
+      background-color: #f59e0b;
+      color: #0f172a;
+      border-color: #f59e0b;
+    }
+    .btn-warning:hover {
+      background-color: #d97706;
+      border-color: #d97706;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
+    }
+
+    /* 4. Outline Variant (Transparent with border) */
+    .btn-outline {
+      background-color: transparent;
+      color: #38bdf8;
+      border-color: #38bdf8;
+    }
+    .btn-outline:hover {
+      background-color: #38bdf8;
+      color: #0b1120;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(56, 189, 248, 0.4);
+    }
+
+    /* Active click effect for all button variants */
+    .btn-success:active,
+    .btn-danger:active,
+    .btn-warning:active,
+    .btn-outline:active {
+      transform: translateY(0);
+      box-shadow: none;
+    }
+
+    /* Architecture explanation callout */
+    .code-note {
+      background-color: #0f172a;
+      border-left: 4px solid #38bdf8;
+      padding: 14px 18px;
+      font-size: 13px;
+      color: #cbd5e1;
+      border-radius: 6px;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+
+  <main class="card-sheet">
+    <h1>🎨 Component Library: Button Variants</h1>
+    <p>Demonstrating reusable button classes built with CSS grouping selectors, pseudo-classes (<code>:hover</code>, <code>:active</code>), and the DRY principle.</p>
+
+    <div class="button-group">
+      <button type="button" class="btn-success">✔ Save Changes</button>
+      <button type="button" class="btn-danger">✖ Delete Account</button>
+      <button type="button" class="btn-warning">⚠ Warning Alert</button>
+      <button type="button" class="btn-outline">🔍 View Details</button>
+    </div>
+
+    <div class="code-note">
+      <strong>DRY Architecture Note:</strong> Common properties (<code>padding</code>, <code>font-size</code>, <code>border-radius</code>, <code>transition</code>, <code>cursor</code>) are declared once using grouping selectors. Each variant only overrides colors and shadow effects.
+    </div>
+  </main>
+
+</body>
+</html>`
     },
     githubWorkflow: {
       repoName: 'html-css-projects',
@@ -1771,13 +2288,105 @@ h1 {
     },
     assignment: {
       title: 'Homework Task: Themed Tech Article Layout',
+      fileName: 'themed-article.html',
       instructions: [
         'Import a Google Font of your choice (e.g., "Outfit", "Poppins", or "Inter").',
         'Create a dark-themed blog article with a curated color palette: Background `#060c18`, Surface Card `#0c1328`, Primary Text `#ffffff`, Accent `#04AA6D`, Muted `#94a3b8`.',
         'Apply `line-height: 1.7` to paragraphs to ensure optimal readability.',
         'Add a call-out quote block with an italic font and an emerald green left border.'
       ],
-      submissionCriteria: 'Verify that your color contrast ratio passes WCAG AA accessibility standards.'
+      submissionCriteria: 'Verify that your color contrast ratio passes WCAG AA accessibility standards.',
+      solutionCode: `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BCA Day 10 - Themed Tech Article Layout</title>
+  <!-- Google Font: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: #060c18;
+      color: #ffffff;
+      padding: 40px 20px;
+      line-height: 1.7;
+    }
+    .article-container {
+      max-width: 680px;
+      margin: 0 auto;
+      background-color: #0c1328;
+      border: 1px solid #1e293b;
+      border-radius: 16px;
+      padding: 36px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+    }
+    .tag {
+      display: inline-block;
+      color: #04AA6D;
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      margin-bottom: 8px;
+    }
+    h1 {
+      font-size: 28px;
+      font-weight: 800;
+      margin-bottom: 16px;
+      color: #ffffff;
+      line-height: 1.3;
+    }
+    p {
+      color: #cbd5e1;
+      margin-bottom: 20px;
+      font-size: 15px;
+    }
+    blockquote {
+      border-left: 4px solid #04AA6D;
+      background-color: rgba(4, 170, 109, 0.08);
+      padding: 16px 20px;
+      margin: 24px 0;
+      border-radius: 0 8px 8px 0;
+      font-style: italic;
+      color: #94a3b8;
+    }
+    footer {
+      border-top: 1px solid #1e293b;
+      padding-top: 16px;
+      margin-top: 24px;
+      font-size: 13px;
+      color: #64748b;
+    }
+  </style>
+</head>
+<body>
+
+  <article class="article-container">
+    <span class="tag">Web Design & Architecture</span>
+    <h1>Building Accessible Modern Dark Themes</h1>
+    <p>Good typography and color harmony make software interfaces comfortable to read for hours. By pairing high-contrast pure white headers with subtle dark navy surfaces and emerald accents, developers can create stunning visual experiences.</p>
+    
+    <blockquote>
+      "Design is not just what it looks like and feels like. Design is how it works." — Steve Jobs
+    </blockquote>
+
+    <p>This layout adheres to WCAG AA color contrast standards, ensuring clarity and readability across all desktop and mobile screens.</p>
+
+    <footer>
+      <p>&copy; 2026 BCA Practical Day 10 • Completed 100% in Visual Studio Code</p>
+    </footer>
+  </article>
+
+</body>
+</html>`
     },
     githubWorkflow: {
       repoName: 'html-css-projects',
