@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useMemo, useCallback } from "react";
-import { Plus, Flame } from "lucide-react";
+import { Plus, Flame, ExternalLink } from "lucide-react";
 import { collection, onSnapshot, query, limit, doc, setDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { useStudentProgress } from "@/context/StudentProgressContext";
@@ -20,6 +20,12 @@ import BcaStoryComposeModal from "./BcaStoryComposeModal";
 
 export default function BcaStoriesTray() {
   const { user, completedDays, githubRepoUrls, githubUsername } = useStudentProgress();
+
+  const userGitHubPagesUrl = user?.email === "nextsem.academy@gmail.com"
+    ? "https://nextsemacademy-max.github.io/bca-practical/"
+    : (githubUsername
+        ? `https://${githubUsername.toLowerCase().replace(/_/g, '-')}.github.io/bca-practical/`
+        : (githubRepoUrls["1"] ? `https://${githubRepoUrls["1"].replace(/https?:\/\/github\.com\//, "").split("/")[0]}.github.io/${githubRepoUrls["1"].replace(/https?:\/\/github\.com\//, "").split("/")[1] || "bca-practical"}/` : undefined));
 
   const [communityStories, setCommunityStories] = useState<BcaStudentStory[]>(INITIAL_COMMUNITY_STORIES);
   const [seenStoryIds, setSeenStoryIds] = useState<Record<string, boolean>>({});
@@ -168,6 +174,13 @@ export default function BcaStoriesTray() {
 
         // 4. Convert to BcaStudentStory array with real data
         const realStudentStories: BcaStudentStory[] = Object.values(storiesByUser).map((group) => {
+          const cleanHandle = group.ghUser
+            ? group.ghUser.toLowerCase().replace(/_/g, '-')
+            : (group.userName.toLowerCase().replace(/[^a-z0-9]/g, "-").slice(0, 15) || "student");
+          const ghPages = group.userId === "manoj-lead"
+            ? "https://nextsemacademy-max.github.io/bca-practical/"
+            : `https://${cleanHandle}.github.io/bca-practical/`;
+
           return {
             id: `story-${group.userId}`,
             userId: group.userId,
@@ -179,6 +192,7 @@ export default function BcaStoriesTray() {
             hasUnseenStories: true,
             latestDay: group.latestDay,
             lastActive: formatTimeAgo(group.lastActiveTs),
+            githubPagesUrl: ghPages,
             slides: group.slides
           };
         });
@@ -270,7 +284,8 @@ export default function BcaStoriesTray() {
       hasUnseenStories: combinedSlides.length > 0,
       slides: combinedSlides,
       latestDay,
-      lastActive: "Now"
+      lastActive: "Now",
+      githubPagesUrl: userGitHubPagesUrl
     };
   }, [user, completedDays, githubRepoUrls, githubUsername]);
 
@@ -372,13 +387,26 @@ export default function BcaStoriesTray() {
           </h2>
         </div>
 
-        <button
-          onClick={() => setIsComposeOpen(true)}
-          className="text-xs font-bold text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1 cursor-pointer"
-        >
-          <Plus size={13} className="stroke-[3]" />
-          <span>Post Status</span>
-        </button>
+        <div className="flex items-center gap-2 sm:gap-3">
+          <a
+            href="https://nextsemacademy-max.github.io/bca-practical/"
+            target="_blank"
+            rel="noopener noreferrer"
+            title="Open Master BCA Practical GitHub Pages Portfolio"
+            className="text-[11px] font-bold px-2.5 py-1 rounded-full bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-900/60 hover:bg-blue-600 hover:text-white flex items-center gap-1 transition-all shadow-xs"
+          >
+            <span>Live GitHub Pages</span>
+            <ExternalLink size={10} />
+          </a>
+
+          <button
+            onClick={() => setIsComposeOpen(true)}
+            className="text-xs font-bold text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1 cursor-pointer"
+          >
+            <Plus size={13} className="stroke-[3]" />
+            <span>Post Status</span>
+          </button>
+        </div>
       </div>
 
       {/* Horizontal Scrolling Stories Tray */}
@@ -434,9 +462,22 @@ export default function BcaStoriesTray() {
             <span className="text-[11px] font-bold text-black dark:text-white mt-1.5 truncate max-w-full group-hover:text-blue-600 dark:group-hover:text-blue-400">
               Your Story
             </span>
-            <span className="text-[9px] font-mono text-slate-500 dark:text-slate-400">
+            <span className="text-[9px] font-mono text-slate-500 dark:text-slate-400 truncate max-w-full">
               {userStory.slides.length > 0 ? `Day ${userStory.latestDay} • Active` : (user ? "Share status" : "Sign in & share")}
             </span>
+            {userGitHubPagesUrl && (
+              <a
+                href={userGitHubPagesUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={(e) => e.stopPropagation()}
+                title="Open Your Live GitHub Pages Portfolio"
+                className="mt-1 inline-flex items-center gap-0.5 px-2 py-0.5 rounded-full text-[9px] font-bold bg-blue-50 dark:bg-blue-950/80 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-800 hover:bg-blue-600 hover:text-white transition-all shadow-xs"
+              >
+                <span>Pages</span>
+                <ExternalLink size={8} />
+              </a>
+            )}
           </div>
 
           {/* ── 2. VERIFIED MENTOR & ACTUAL PEER STUDENTS ── */}
@@ -444,6 +485,11 @@ export default function BcaStoriesTray() {
             const actualIndex = idx + 1; // offset by 1 because userStory is at index 0
             const isSeen = !!seenStoryIds[story.id];
             const shortName = getStoryDisplayName(story.userName);
+            const storyPagesUrl = story.githubPagesUrl || (
+              story.userId === "manoj-lead"
+                ? "https://nextsemacademy-max.github.io/bca-practical/"
+                : `https://${story.userHandle.toLowerCase().replace(/_/g, '-')}.github.io/bca-practical/`
+            );
 
             return (
               <div
@@ -496,6 +542,21 @@ export default function BcaStoriesTray() {
                 <span className="text-[9px] font-mono text-slate-500 dark:text-slate-400 truncate max-w-full">
                   {story.lastActive}
                 </span>
+
+                {/* Live GitHub Pages Link */}
+                {storyPagesUrl && (
+                  <a
+                    href={storyPagesUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={(e) => e.stopPropagation()}
+                    title={`Open ${shortName}'s Live GitHub Pages Portfolio`}
+                    className="mt-1 inline-flex items-center gap-0.5 px-2 py-0.5 rounded-full text-[9px] font-bold bg-blue-50 dark:bg-blue-950/80 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-800 hover:bg-blue-600 hover:text-white transition-all shadow-xs"
+                  >
+                    <span>Pages</span>
+                    <ExternalLink size={8} />
+                  </a>
+                )}
               </div>
             );
           })}

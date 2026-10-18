@@ -27,6 +27,7 @@ export interface BcaStudentStory {
   slides: BcaStorySlide[];
   latestDay: number;
   lastActive: string;
+  githubPagesUrl?: string;
 }
 
 export const INITIAL_COMMUNITY_STORIES: BcaStudentStory[] = [
@@ -41,6 +42,7 @@ export const INITIAL_COMMUNITY_STORIES: BcaStudentStory[] = [
     hasUnseenStories: true,
     latestDay: 5,
     lastActive: "Active now",
+    githubPagesUrl: "https://nextsemacademy-max.github.io/bca-practical/",
     slides: [
       {
         id: "slide-m5",
@@ -50,8 +52,8 @@ export const INITIAL_COMMUNITY_STORIES: BcaStudentStory[] = [
         timestamp: "Active now",
         caption: "Built responsive student registration form with input validation and pushed to GitHub Pages! 🚀 Live and verified.",
         vivaScore: "100% Viva Approved",
-        githubRepoUrl: "https://github.com/nextsemacademy-max/bca",
-        liveDemoUrl: "https://nextsemacademy-max.github.io/bca/",
+        githubRepoUrl: "https://github.com/nextsemacademy-max/bca-practical",
+        liveDemoUrl: "https://nextsemacademy-max.github.io/bca-practical/",
         techTags: ["HTML5", "Forms", "InputValidation", "GitHubPages"],
         gradientTheme: "from-blue-600 via-indigo-600 to-purple-800",
         codeSnippetPreview: `<form action="/submit" method="POST">\n  <label for="enroll">Enrollment No:</label>\n  <input type="text" id="enroll" required pattern="[0-9]{9,10}" />\n  <button type="submit">Submit BCA Record</button>\n</form>`,
@@ -65,8 +67,8 @@ export const INITIAL_COMMUNITY_STORIES: BcaStudentStory[] = [
         timestamp: "2h ago",
         caption: "Replaced <div> soup with clean <header>, <nav>, <main>, <article>, and <footer> semantic tags! Clean SEO markup.",
         vivaScore: "100% Viva Approved",
-        githubRepoUrl: "https://github.com/nextsemacademy-max/bca",
-        liveDemoUrl: "https://nextsemacademy-max.github.io/bca/",
+        githubRepoUrl: "https://github.com/nextsemacademy-max/bca-practical",
+        liveDemoUrl: "https://nextsemacademy-max.github.io/bca-practical/",
         techTags: ["HTML5", "SemanticWeb", "SEO", "Accessibility"],
         gradientTheme: "from-cyan-600 via-blue-600 to-slate-900",
         createdAt: Date.now() - 1000 * 60 * 120
@@ -79,8 +81,8 @@ export const INITIAL_COMMUNITY_STORIES: BcaStudentStory[] = [
         timestamp: "Yesterday",
         caption: "Practiced relative vs absolute image paths, alt attributes for accessibility, and target='_blank' security with rel='noopener'.",
         vivaScore: "100% Viva Approved",
-        githubRepoUrl: "https://github.com/nextsemacademy-max/bca",
-        liveDemoUrl: "https://nextsemacademy-max.github.io/bca/",
+        githubRepoUrl: "https://github.com/nextsemacademy-max/bca-practical",
+        liveDemoUrl: "https://nextsemacademy-max.github.io/bca-practical/",
         techTags: ["HTML5", "Images", "Hyperlinks", "GitCommit"],
         gradientTheme: "from-emerald-600 via-teal-700 to-slate-900",
         createdAt: Date.now() - 1000 * 60 * 1440
@@ -93,8 +95,8 @@ export const INITIAL_COMMUNITY_STORIES: BcaStudentStory[] = [
         timestamp: "2d ago",
         caption: "Mastered HTML typography hierarchy from h1 through h6 with semantic emphasis and strong tags. Zero syntax errors.",
         vivaScore: "100% Viva Approved",
-        githubRepoUrl: "https://github.com/nextsemacademy-max/bca",
-        liveDemoUrl: "https://nextsemacademy-max.github.io/bca/",
+        githubRepoUrl: "https://github.com/nextsemacademy-max/bca-practical",
+        liveDemoUrl: "https://nextsemacademy-max.github.io/bca-practical/",
         techTags: ["HTML5", "Headings", "Formatting", "WebStandards"],
         gradientTheme: "from-purple-600 via-indigo-700 to-slate-900",
         createdAt: Date.now() - 1000 * 60 * 2880
@@ -107,8 +109,8 @@ export const INITIAL_COMMUNITY_STORIES: BcaStudentStory[] = [
         timestamp: "3d ago",
         caption: "Initialized Git repository, configured VS Code with Live Server, and deployed initial index.html to GitHub Pages.",
         vivaScore: "100% Viva Approved",
-        githubRepoUrl: "https://github.com/nextsemacademy-max/bca",
-        liveDemoUrl: "https://nextsemacademy-max.github.io/bca/",
+        githubRepoUrl: "https://github.com/nextsemacademy-max/bca-practical",
+        liveDemoUrl: "https://nextsemacademy-max.github.io/bca-practical/",
         techTags: ["VSCode", "HTML5", "Git", "FirstCommit"],
         gradientTheme: "from-blue-700 via-cyan-700 to-slate-900",
         createdAt: Date.now() - 1000 * 60 * 4320

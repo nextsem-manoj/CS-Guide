@@ -191,6 +191,11 @@ export default function BcaStoryViewerModal({
   const currentSlideId = currentSlide.id;
   const currentKudos = kudosCount[currentSlideId] || 12;
   const isLiked = !!hasLiked[currentSlideId];
+  const storyPagesUrl = currentSlide.liveDemoUrl || currentStory.githubPagesUrl || (
+    currentStory.userId === "manoj-lead"
+      ? "https://nextsemacademy-max.github.io/bca-practical/"
+      : `https://${currentStory.userHandle.toLowerCase().replace(/_/g, '-')}.github.io/bca-practical/`
+  );
 
   return (
     <div className="fixed inset-0 z-50 bg-black/95 sm:bg-black/90 backdrop-blur-md flex items-center justify-center p-0 sm:p-4 select-none animate-in fade-in duration-200">
@@ -296,7 +301,21 @@ export default function BcaStoryViewerModal({
               </div>
             </div>
 
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-1.5">
+              {storyPagesUrl && (
+                <a
+                  href={storyPagesUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={(e) => e.stopPropagation()}
+                  title="Open Live GitHub Pages Portfolio"
+                  className="px-2.5 py-1 rounded-full bg-blue-600/90 hover:bg-blue-600 text-white text-[11px] font-bold flex items-center gap-1 shadow-sm transition-transform active:scale-95"
+                >
+                  <span>Pages</span>
+                  <ExternalLink size={10} />
+                </a>
+              )}
+
               <button
                 onClick={(e) => {
                   e.stopPropagation();
@@ -404,20 +423,21 @@ export default function BcaStoryViewerModal({
                   href={currentSlide.githubRepoUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex-1 min-w-[140px] inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-white text-black font-extrabold text-xs hover:bg-neutral-200 transition-all shadow-sm active:scale-95"
+                  className="flex-1 min-w-[130px] inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-white text-black font-extrabold text-xs hover:bg-neutral-200 transition-all shadow-sm active:scale-95"
                 >
                   <ExternalLink size={13} />
                   Inspect Code
                 </a>
 
-                {currentSlide.liveDemoUrl && (
+                {storyPagesUrl && (
                   <a
-                    href={currentSlide.liveDemoUrl}
+                    href={storyPagesUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex-1 min-w-[140px] inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-blue-600 text-white font-extrabold text-xs hover:bg-blue-500 transition-all shadow-sm active:scale-95"
                   >
-                    <span>🌐 Live Page</span>
+                    <ExternalLink size={13} />
+                    <span>Live GitHub Pages</span>
                   </a>
                 )}
               </div>
