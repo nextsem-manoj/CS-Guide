@@ -4680,3 +4680,17 @@ export function getPracticalLessonBySlug(slug: string): PracticalLesson | undefi
 export function getPracticalLessonByDay(day: number): PracticalLesson | undefined {
   return PRACTICAL_LESSONS.find(lesson => lesson.day === day);
 }
+
+export function getNextPracticalDayNumber(completedDays: number[] = []): number {
+  return Array.from({ length: 360 }, (_, i) => i + 1).find(d => !completedDays.includes(d)) || 1;
+}
+
+export function getNextPracticalDayUrl(completedDays: number[] = []): string {
+  const nextDay = getNextPracticalDayNumber(completedDays);
+  const lesson = getPracticalLessonByDay(nextDay);
+  if (lesson) {
+    return `/bca/practical/${lesson.slug}`;
+  }
+  const firstLesson = PRACTICAL_LESSONS[0];
+  return firstLesson ? `/bca/practical/${firstLesson.slug}` : `/bca/practical/day-1-html-setup-first-webpage`;
+}

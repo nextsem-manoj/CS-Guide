@@ -9,7 +9,12 @@ import {
   HelpCircle
 } from "lucide-react";
 import { useStudentProgress } from "@/context/StudentProgressContext";
-import { CAREER_TRACKS, PRACTICAL_LESSONS } from "@/data/bcaPracticalData";
+import { 
+  CAREER_TRACKS, 
+  PRACTICAL_LESSONS, 
+  getNextPracticalDayNumber, 
+  getPracticalLessonByDay 
+} from "@/data/bcaPracticalData";
 import StudentSocialIntegrationsCard from "./profile/StudentSocialIntegrationsCard";
 import PracticalProcessGuideModal from "./profile/PracticalProcessGuideModal";
 import CbtScoreCard from "./profile/CbtScoreCard";
@@ -60,9 +65,9 @@ export default function StudentProfileDashboardModal({ isOpen, onClose }: Props)
   // Determine active track object
   const activeTrackObj = CAREER_TRACKS.find(t => t.id === selectedTrack) || CAREER_TRACKS[0];
 
-  // Find next unlocked day
-  const nextDayToStudy = Array.from({ length: 60 }, (_, i) => i + 1).find(d => !completedDays.includes(d)) || 1;
-  const nextLessonObj = PRACTICAL_LESSONS.find(l => l.day === nextDayToStudy);
+  // Find next unlocked day (1 to 360)
+  const nextDayToStudy = getNextPracticalDayNumber(completedDays);
+  const nextLessonObj = getPracticalLessonByDay(nextDayToStudy) || PRACTICAL_LESSONS[0];
 
   // Filtered practical lessons
   const filteredLessons = PRACTICAL_LESSONS.filter(l => {

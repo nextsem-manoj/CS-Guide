@@ -1,4 +1,4 @@
-﻿{
+{
   "defaultParentDir": "..",
   "repositories": [
     {
@@ -24,10 +24,10 @@
     },
     {
       "id": "bca",
-      "name": "BCA Student Practical Coding Exercises",
-      "url": "https://github.com/nextsemacademy-max/bca.git",
+      "name": "BCA Practical",
+      "url": "https://github.com/nextsemacademy-max/bca-practical.git",
       "dir": "bca",
-      "aliases": ["bca", "practicals", "exercises"]
+      "aliases": ["bca", "bca practical", "bca-practical", "practicals", "exercises"]
     }
   ]
 }

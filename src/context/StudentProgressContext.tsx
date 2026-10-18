@@ -217,8 +217,31 @@ export function StudentProgressProvider({ children }: { children: ReactNode }) {
       const savedSocials = localStorage.getItem(`nextsem_practical_socials_${email}`);
       const savedCbt = localStorage.getItem(`nextsem_cbt_score_${email}`) || localStorage.getItem("nextsem_cbt_score_latest");
 
-      if (savedCompleted) {
-        setCompletedDays(JSON.parse(savedCompleted));
+      let parsedCompleted: number[] = savedCompleted ? JSON.parse(savedCompleted) : [];
+      let parsedUrls: Record<string, string> = savedUrls ? JSON.parse(savedUrls) : {};
+
+      // If user logs in with real email, smoothly merge any days completed in guest mode
+      if (email !== "guest") {
+        try {
+          const guestCompleted = localStorage.getItem("nextsem_practical_completed_guest");
+          if (guestCompleted) {
+            const guestDays: number[] = JSON.parse(guestCompleted);
+            if (guestDays.length > 0) {
+              parsedCompleted = Array.from(new Set([...parsedCompleted, ...guestDays])).sort((a, b) => a - b);
+              localStorage.setItem(`nextsem_practical_completed_${email}`, JSON.stringify(parsedCompleted));
+            }
+          }
+          const guestUrls = localStorage.getItem("nextsem_practical_github_urls_guest");
+          if (guestUrls) {
+            const parsedGuestUrls = JSON.parse(guestUrls);
+            parsedUrls = { ...parsedGuestUrls, ...parsedUrls };
+            localStorage.setItem(`nextsem_practical_github_urls_${email}`, JSON.stringify(parsedUrls));
+          }
+        } catch {}
+      }
+
+      if (parsedCompleted.length > 0) {
+        setCompletedDays(parsedCompleted);
       } else {
         const legacy: number[] = [];
         for (let d = 1; d <= 90; d++) {
@@ -229,7 +252,7 @@ export function StudentProgressProvider({ children }: { children: ReactNode }) {
         setCompletedDays(legacy);
       }
 
-      if (savedUrls) setGithubRepoUrls(JSON.parse(savedUrls));
+      setGithubRepoUrls(parsedUrls);
       if (savedGhUser) setGithubUsernameState(savedGhUser);
       if (savedTrack) setSelectedTrackState(savedTrack);
       if (savedSocials) setSocialLinksState(JSON.parse(savedSocials));

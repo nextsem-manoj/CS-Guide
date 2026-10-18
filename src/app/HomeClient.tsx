@@ -5,7 +5,13 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useTheme } from 'next-themes';
 import { useStudentProgress } from '@/context/StudentProgressContext';
-import { PRACTICAL_LESSONS, PRACTICAL_SPRINTS } from '@/data/bcaPracticalData';
+import { 
+  PRACTICAL_LESSONS, 
+  PRACTICAL_SPRINTS,
+  getPracticalLessonByDay,
+  getNextPracticalDayNumber,
+  getNextPracticalDayUrl 
+} from '@/data/bcaPracticalData';
 import BcaStoriesTray from '@/components/bca/BcaStoriesTray';
 import StudentPeerNetwork from '@/components/bca/StudentPeerNetwork';
 import { 
@@ -26,7 +32,9 @@ export default function HomeClient() {
     isDayCompleted, 
     isDayUnlocked, 
     signIn, 
-    signOut 
+    signOut,
+    openProfileDashboard,
+    openAuthModal,
   } = useStudentProgress();
 
   // Active semester & sprint filter tabs
@@ -41,6 +49,33 @@ export default function HomeClient() {
     "day-4": 164,
     "day-5": 210,
   });
+
+  const completedCount = completedDays.length;
+  const sem1CompletedCount = completedDays.filter(d => d <= 60).length;
+  const sem1Percent = Math.min(100, Math.round((sem1CompletedCount / 60) * 100));
+  const totalPercent = Math.min(100, Math.round((completedCount / 360) * 100));
+
+  const nextDayToStudy = getNextPracticalDayNumber(completedDays);
+  const nextLessonObj = getPracticalLessonByDay(nextDayToStudy) || PRACTICAL_LESSONS[0];
+  const nextDayUrl = getNextPracticalDayUrl(completedDays);
+
+  const handleSignIn = () => {
+    sessionStorage.setItem("nextsem_login_redirect_to_next_day", "true");
+    openAuthModal();
+  };
+
+  // Auto-redirect user to their next uncompleted practical day upon logging in
+  const prevUserRef = React.useRef(user);
+  useEffect(() => {
+    if (!prevUserRef.current && user) {
+      const redirectPending = sessionStorage.getItem("nextsem_login_redirect_to_next_day");
+      if (redirectPending === "true") {
+        sessionStorage.removeItem("nextsem_login_redirect_to_next_day");
+        router.push(nextDayUrl);
+      }
+    }
+    prevUserRef.current = user;
+  }, [user, nextDayUrl, router]);
 
   useEffect(() => {
     setMounted(true);
@@ -64,8 +99,6 @@ export default function HomeClient() {
       localStorage.setItem("nextsem_card_likes", JSON.stringify(updatedLikes));
     } catch {}
   };
-
-  const completedCount = completedDays.length;
 
   const currentTheme = resolvedTheme || theme;
   const toggleTheme = () => {
@@ -180,18 +213,27 @@ export default function HomeClient() {
 
             {user ? (
               <div className="flex items-center gap-2">
-                <div className="flex items-center gap-2 bg-slate-100 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 px-2.5 py-1 rounded-xl">
+                <button
+                  type="button"
+                  onClick={openProfileDashboard}
+                  className="flex items-center gap-2 bg-slate-100 hover:bg-slate-200 dark:bg-neutral-900 dark:hover:bg-neutral-800 border border-slate-200 dark:border-neutral-800 px-2.5 py-1 rounded-xl transition-all cursor-pointer group"
+                  title="Open Student Profile & Practical Record"
+                >
                   {user.photo ? (
                     <img src={user.photo} alt="" className="w-5 h-5 rounded-full object-cover" />
                   ) : (
                     <div className="w-5 h-5 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-[10px]">
-                      {user.name.charAt(0)}
+                      {user.name.charAt(0).toUpperCase()}
                     </div>
                   )}
                   <span className="text-xs font-bold text-slate-900 dark:text-slate-100 hidden sm:inline max-w-[80px] truncate">
                     {user.name.split(" ")[0]}
                   </span>
-                </div>
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg bg-blue-600 text-white text-[10px] font-black shadow-sm group-hover:scale-105 transition-transform">
+                    <CheckCircle2 size={11} />
+                    <span>{completedCount} {completedCount === 1 ? 'Day' : 'Days'} Done</span>
+                  </span>
+                </button>
                 <button 
                   onClick={signOut}
                   className="p-1.5 text-slate-500 hover:text-black dark:text-slate-400 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-neutral-800 rounded-lg transition-colors cursor-pointer"
@@ -202,7 +244,7 @@ export default function HomeClient() {
               </div>
             ) : (
               <button 
-                onClick={signIn}
+                onClick={handleSignIn}
                 className="flex items-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-white px-3 sm:px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all shadow-sm cursor-pointer"
               >
                 <LogIn size={13} />
@@ -253,22 +295,40 @@ export default function HomeClient() {
               <Award size={14} className="text-blue-600 dark:text-blue-400" />
               <span>Viva Voce Defense Checks</span>
             </div>
-            {completedCount > 0 && (
-              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-100 dark:bg-blue-950/60 border border-blue-300 dark:border-blue-700 text-blue-700 dark:text-blue-300">
+            {user ? (
+              <button
+                type="button"
+                onClick={openProfileDashboard}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-600 text-white border border-blue-500 font-extrabold hover:bg-blue-700 transition-colors shadow-sm cursor-pointer"
+                title="View your verified days and practical submissions"
+              >
                 <CheckCircle2 size={14} />
-                <span>{completedCount} Days Completed</span>
-              </div>
+                <span>{completedCount} of 360 Days Completed ({totalPercent}%)</span>
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={handleSignIn}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 text-slate-700 dark:text-slate-300 hover:border-blue-600 dark:hover:border-blue-500 transition-colors cursor-pointer"
+              >
+                <CheckCircle2 size={14} className="text-blue-600 dark:text-blue-400" />
+                <span>Track Daily Progress (Sign In)</span>
+              </button>
             )}
           </div>
 
           {/* Primary Action Buttons */}
           <div className="pt-3 flex flex-wrap items-center justify-center gap-3">
             <Link
-              href="/bca/practical/day-1-html-setup-first-webpage"
+              href={nextDayUrl}
               className="inline-flex items-center gap-2 px-6 sm:px-8 py-3.5 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-black text-sm sm:text-base shadow-xl shadow-blue-600/25 transition-all hover:scale-[1.02] active:scale-95"
             >
               <Play size={16} className="fill-current" />
-              <span>Start Day 1 Practical »</span>
+              <span>
+                {completedCount > 0 
+                  ? `Continue Day ${nextDayToStudy}: ${nextLessonObj?.title || 'Next Practical'} »`
+                  : 'Start Day 1 Practical »'}
+              </span>
             </Link>
 
             <Link
@@ -280,6 +340,86 @@ export default function HomeClient() {
             </Link>
           </div>
         </div>
+
+        {/* ── 2.5 ACTIVE STUDENT PROGRESS & QUICK RESUME BANNER ── */}
+        <section aria-label="Student Practical Progress" className="rounded-3xl bg-slate-50/80 dark:bg-neutral-950 border border-slate-200 dark:border-neutral-800 p-5 sm:p-7 shadow-sm transition-all backdrop-blur-sm">
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5">
+            
+            {/* Left: Progress info & Stats */}
+            <div className="space-y-3 flex-1">
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="px-2.5 py-0.5 rounded-full bg-blue-600 text-white text-[11px] font-black uppercase tracking-wider">
+                  {user ? "Your Practical Journey" : "Live Learning Portal"}
+                </span>
+                <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">
+                  {user ? `Logged in as ${user.name}` : "Sign in to track verified GitHub code & viva"}
+                </span>
+              </div>
+
+              <div>
+                <h3 className="text-lg sm:text-xl font-black text-black dark:text-white">
+                  {completedCount > 0 
+                    ? `You've completed ${completedCount} of 360 Practical Days` 
+                    : "Begin Your 3-Year BCA Practical Journey"}
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-0.5">
+                  Semester 1 (Common Foundation): <strong className="text-black dark:text-white">{sem1CompletedCount} of 60 Days</strong> finished ({sem1Percent}%).
+                </p>
+              </div>
+
+              {/* Progress Bar */}
+              <div className="space-y-1.5 max-w-xl">
+                <div className="flex items-center justify-between text-[11px] font-bold text-slate-600 dark:text-slate-400">
+                  <span>Semester 1 Progress</span>
+                  <span>{sem1CompletedCount}/60 Days ({sem1Percent}%)</span>
+                </div>
+                <div className="w-full bg-slate-200 dark:bg-neutral-800 h-2.5 rounded-full overflow-hidden">
+                  <div 
+                    className="bg-blue-600 h-full rounded-full transition-all duration-500 ease-out" 
+                    style={{ width: `${Math.max(sem1Percent, sem1CompletedCount > 0 ? 5 : 0)}%` }}
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Right: Next Day CTA Button */}
+            <div className="flex flex-col sm:flex-row lg:flex-col items-stretch sm:items-center lg:items-end gap-2.5 shrink-0">
+              <Link
+                href={nextDayUrl}
+                className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-black text-xs sm:text-sm shadow-lg shadow-blue-600/20 transition-all hover:scale-[1.02] active:scale-95 text-center"
+              >
+                <Play size={14} className="fill-current shrink-0" />
+                <span>
+                  {completedCount > 0 
+                    ? `Continue Day ${nextDayToStudy}: ${nextLessonObj?.title || 'Next Lab'}` 
+                    : "Start Day 01: First Webpage"} »
+                </span>
+              </Link>
+
+              {user ? (
+                <button
+                  type="button"
+                  onClick={openProfileDashboard}
+                  className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-white dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 hover:border-blue-600 dark:hover:border-blue-500 text-black dark:text-white font-bold text-xs transition-colors cursor-pointer"
+                >
+                  <Award size={13} className="text-blue-600 dark:text-blue-400 shrink-0" />
+                  <span>View Completed Record &amp; GitHub</span>
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={handleSignIn}
+                  className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-white dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 hover:border-blue-600 dark:hover:border-blue-500 text-black dark:text-white font-bold text-xs transition-colors cursor-pointer"
+                >
+                  <LogIn size={13} className="text-blue-600 dark:text-blue-400 shrink-0" />
+                  <span>Sign In to Sync Cloud Progress</span>
+                </button>
+              )}
+            </div>
+
+          </div>
+        </section>
+
 
         {/* ── 3. FEATURED DAILY MILESTONES (Engaging Feed-Style Cards) ── */}
         <section aria-label="Featured Daily Coding Milestones" className="border-t border-slate-200 dark:border-neutral-800 pt-8">

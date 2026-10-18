@@ -6,6 +6,7 @@ import {
   Mail, Lock, User, AlertCircle, Sparkles, CheckCircle2 
 } from "lucide-react";
 import { useStudentProgress } from "@/context/StudentProgressContext";
+import { getNextPracticalDayUrl } from "@/data/bcaPracticalData";
 
 interface Props {
   isOpen: boolean;
@@ -32,6 +33,27 @@ export default function InAppAuthModal({ isOpen, onClose, defaultTab = "login" }
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
+
+  const checkAndRedirectToNextDay = (userEmail?: string) => {
+    if (typeof window === "undefined") return;
+    const isPending = sessionStorage.getItem("nextsem_login_redirect_to_next_day") === "true";
+    const isHome = window.location.pathname === "/";
+    if (isPending || isHome) {
+      sessionStorage.removeItem("nextsem_login_redirect_to_next_day");
+      try {
+        const emailVal = userEmail || (() => {
+          const userRaw = localStorage.getItem("nextsem_user");
+          return userRaw ? JSON.parse(userRaw).email : "guest";
+        })();
+        const saved = localStorage.getItem(`nextsem_practical_completed_${emailVal}`);
+        const completed: number[] = saved ? JSON.parse(saved) : [];
+        const targetUrl = getNextPracticalDayUrl(completed);
+        window.location.href = targetUrl;
+      } catch {
+        window.location.href = "/bca/practical/day-1-html-setup-first-webpage";
+      }
+    }
+  };
 
   useEffect(() => {
     if (defaultTab) setActiveTab(defaultTab);
@@ -66,10 +88,11 @@ export default function InAppAuthModal({ isOpen, onClose, defaultTab = "login" }
     try {
       const res = await signInWithEmail(email, password);
       if (res.success) {
-        setSuccessMsg("Welcome back! Signed in successfully.");
+        setSuccessMsg("Welcome back! Loading your next practical lab...");
         setTimeout(() => {
           onClose();
-        }, 350);
+          checkAndRedirectToNextDay(email);
+        }, 300);
       } else {
         setErrorMsg(res.error || "Failed to log in.");
       }
@@ -88,10 +111,11 @@ export default function InAppAuthModal({ isOpen, onClose, defaultTab = "login" }
     try {
       const res = await signUpWithEmail(name, email, password);
       if (res.success) {
-        setSuccessMsg("Account created successfully! Welcome to NextSem.");
+        setSuccessMsg("Account created successfully! Loading Day 1 practical lab...");
         setTimeout(() => {
           onClose();
-        }, 350);
+          checkAndRedirectToNextDay(email);
+        }, 300);
       } else {
         setErrorMsg(res.error || "Failed to create account.");
       }
@@ -105,9 +129,10 @@ export default function InAppAuthModal({ isOpen, onClose, defaultTab = "login" }
   const handleGuestLogin = () => {
     setErrorMsg(null);
     signInAsGuest(name || "Student");
-    setSuccessMsg("Guest session active! Instant access granted.");
+    setSuccessMsg("Guest session active! Loading practical lab...");
     setTimeout(() => {
       onClose();
+      checkAndRedirectToNextDay("guest");
     }, 200);
   };
 
@@ -115,8 +140,10 @@ export default function InAppAuthModal({ isOpen, onClose, defaultTab = "login" }
     setErrorMsg(null);
     setIsSubmitting(true);
     try {
+      sessionStorage.setItem("nextsem_login_redirect_to_next_day", "true");
       await signIn();
       onClose();
+      checkAndRedirectToNextDay();
     } catch (err: any) {
       if (err?.code !== "auth/popup-closed-by-user") {
         setErrorMsg("Google Sign-In failed: " + (err?.message || err));

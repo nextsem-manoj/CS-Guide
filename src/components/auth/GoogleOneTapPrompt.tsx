@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { usePathname } from "next/navigation";
 import { X, AlertCircle } from "lucide-react";
 import { useStudentProgress } from "@/context/StudentProgressContext";
+import { getNextPracticalDayUrl } from "@/data/bcaPracticalData";
 
 interface GoogleOneTapPromptProps {
   /** If true, renders embedded inside the login gate card instead of fixed top-right */
@@ -33,6 +34,16 @@ export default function GoogleOneTapPrompt({ embedded = false, onComplete }: Goo
       setIsVerifying(true);
       setErrorMessage(null);
       await signIn();
+      if (typeof window !== "undefined" && (pathname === "/" || sessionStorage.getItem("nextsem_login_redirect_to_next_day") === "true")) {
+        sessionStorage.removeItem("nextsem_login_redirect_to_next_day");
+        const userRaw = localStorage.getItem("nextsem_user");
+        const emailVal = userRaw ? JSON.parse(userRaw).email : "guest";
+        const saved = localStorage.getItem(`nextsem_practical_completed_${emailVal}`);
+        const completed: number[] = saved ? JSON.parse(saved) : [];
+        const targetUrl = getNextPracticalDayUrl(completed);
+        window.location.href = targetUrl;
+        return;
+      }
       if (onComplete) onComplete();
     } catch (err: any) {
       console.warn("Google sign-in status:", err);
