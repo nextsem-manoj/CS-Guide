@@ -48,8 +48,8 @@ export default function BcaPracticalLessonClient({ lesson }: Props) {
   const [gateError, setGateError] = useState<string | null>(null);
   const [gateSuccess, setGateSuccess] = useState<string | null>(null);
 
-  // Internal Step Tracker within the lesson (1 to 5 or 'all')
-  const [currentStep, setCurrentStep] = useState<number | "all">(1);
+  // Internal Step Tracker within the lesson (1 to 5 or 'all') - Default to 'all'
+  const [currentStep, setCurrentStep] = useState<number | "all">("all");
   const [labTab, setLabTab] = useState<"guide" | "preview">("guide");
   const [copiedCode, setCopiedCode] = useState<boolean>(false);
   const [copiedGit, setCopiedGit] = useState<boolean>(false);
