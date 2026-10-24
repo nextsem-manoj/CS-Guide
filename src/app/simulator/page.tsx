@@ -863,6 +863,13 @@ export default function SimulatorPage() {
           </svg>
           Sign in with Google
         </button>
+        <button
+          type="button"
+          onClick={() => setUserEmail("guest")}
+          className="w-full mt-3 bg-white/10 hover:bg-white/20 border border-white/15 text-white font-bold rounded-2xl py-2.5 text-xs transition-all cursor-pointer flex items-center justify-center gap-1.5"
+        >
+          <span>Continue as Guest</span>
+        </button>
       </div>
     </div>
   );
