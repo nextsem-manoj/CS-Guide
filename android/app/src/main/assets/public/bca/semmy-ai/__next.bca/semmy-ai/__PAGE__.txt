@@ -1,6 +1,0 @@
-1:"$Sreact.fragment"
-2:"$Sreact.suspense"
-3:I[67888,["5254","static/chunks/cc44e60b-9fb9c671245c4f16.js","5081","static/chunks/a36bde72-7c41a6c107052192.js","4354","static/chunks/1770a7a7-5136ac798b0aea04.js","1674","static/chunks/1674-adca1a21a64925d4.js","7805","static/chunks/7805-81484b40a96f7735.js","7600","static/chunks/7600-4288dba8b6deb972.js","5470","static/chunks/app/bca/semmy-ai/page-cf755db0912f4a51.js"],"default"]
-4:I[90484,[],"OutletBoundary"]
-0:{"rsc":["$","$1","c",{"children":[["$","$2",null,{"fallback":["$","div",null,{"className":"w-full h-screen bg-slate-950 flex items-center justify-center","children":["$","div",null,{"className":"w-10 h-10 border-4 border-t-indigo-500 border-slate-800 rounded-full animate-spin"}]}],"children":["$","$L3",null,{}]}],null,["$","$L4",null,{"children":["$","$2",null,{"name":"Next.MetadataOutlet","children":"$@5"}]}]]}],"isPartial":false,"staleTime":300,"varyParams":null,"buildId":"5MHRa6pox2IrYDNZTnq3k"}
-5:null

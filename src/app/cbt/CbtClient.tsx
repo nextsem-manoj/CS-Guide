@@ -183,7 +183,6 @@ export default function CbtClient() {
       setTimeRemaining((prev) => {
         if (prev <= 1) {
           clearInterval(timer);
-          handleFinishTest();
           return 0;
         }
         return prev - 1;
@@ -391,6 +390,13 @@ export default function CbtClient() {
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
+
+  // Auto-submit when time expires
+  useEffect(() => {
+    if (timeRemaining === 0 && !isSubmitted && examMode !== "practice") {
+      handleFinishTest();
+    }
+  }, [timeRemaining, isSubmitted, examMode]);
 
   // Sync Score after Google Login if submitted
   const handleCloudSyncNow = async () => {

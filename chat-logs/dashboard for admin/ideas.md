@@ -1,0 +1,1 @@
+also for nextsem.academy@gmail.com i want a dashboard where all syudents email username profile photo day wise completed lesson status with an option to approve or disapprove from my side of each day lesson status etc before implementing show me how we will implement it.

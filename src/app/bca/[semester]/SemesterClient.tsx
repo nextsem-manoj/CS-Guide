@@ -16,7 +16,13 @@ import {
   Play, 
   CheckCircle2, 
   Layers, 
-  Sparkles 
+  Sparkles,
+  ChevronDown,
+  ChevronUp,
+  Award,
+  ExternalLink,
+  Laptop,
+  Check
 } from 'lucide-react';
 
 export default function SemesterSubjectsDashboard({ semester }: { semester: string }) {
@@ -29,6 +35,9 @@ export default function SemesterSubjectsDashboard({ semester }: { semester: stri
   const [mounted, setMounted] = useState(false);
   const [userEmail, setUserEmail] = useState<string>("guest");
   const [points, setPoints] = useState(0);
+
+  // Accordion state for mobile view (Subject 1 expanded by default)
+  const [expandedSubjectCode, setExpandedSubjectCode] = useState<string>("BCS-111");
 
   useEffect(() => {
     setMounted(true);
@@ -51,19 +60,24 @@ export default function SemesterSubjectsDashboard({ semester }: { semester: stri
 
   if (!mounted) {
     return (
-      <div className="w-full h-screen bg-white dark:bg-black flex items-center justify-center">
-        <div className="w-10 h-10 border-4 border-t-blue-600 border-slate-200 dark:border-neutral-800 rounded-full animate-spin" />
+      <div className="w-full h-screen bg-[#ffffff] dark:bg-[#060c18] flex items-center justify-center">
+        <div className="w-10 h-10 border-4 border-t-emerald-500 border-slate-200 dark:border-neutral-800 rounded-full animate-spin" />
       </div>
     );
   }
 
   if (!currentSemester) {
     return (
-      <div className="w-full min-h-screen bg-white dark:bg-black text-black dark:text-white flex flex-col items-center justify-center p-6 text-center">
-        <GraduationCap size={48} className="text-blue-600 dark:text-blue-400 mb-4 animate-bounce" />
+      <div className="w-full min-h-screen bg-[#ffffff] dark:bg-[#060c18] text-black dark:text-white flex flex-col items-center justify-center p-6 text-center">
+        <GraduationCap size={48} className="text-emerald-500 mb-4 animate-bounce" />
         <h1 className="text-2xl font-black mb-2">Semester Not Found</h1>
-        <p className="text-slate-600 dark:text-slate-400 text-sm mb-6 max-w-sm">We couldn&apos;t locate the semester you are looking for in the BCA program guide.</p>
-        <Link href="/bca" className="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-xs uppercase tracking-wider transition-all">
+        <p className="text-slate-600 dark:text-slate-400 text-sm mb-6 max-w-sm">
+          We couldn&apos;t locate the semester you are looking for in the BCA curriculum guide.
+        </p>
+        <Link 
+          href="/bca" 
+          className="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs uppercase tracking-wider transition-all"
+        >
           Back to BCA Hub
         </Link>
       </div>
@@ -126,19 +140,31 @@ export default function SemesterSubjectsDashboard({ semester }: { semester: stri
       if (isComputerBasics) return "/bca/semester-1/bcs-011-computer-basics";
       if (subCode === "BCS-012") return "/bca/semester-1/bcs-012-basic-mathematics";
       if (subCode === "BCSL-013") return "/bca/semester-1/bcsl-013-software-lab";
-      if (subCode === "BEGLA-136") return "/bca/semester-1/begla-136-english";
+      if (subCode === "BEGLA-136" || subCode === "FEG-02") return "/bca/semester-1/begla-136-english";
       if (subCode === "BEVAE-181") return "/bca/semester-1/bevae-181-environmental-studies";
       return `/bca/semester-1/${subCode.toLowerCase()}`;
     }
     return `/bca/${semesterId}/${subCode.toLowerCase()}`;
   };
 
-  return (
-    <div className="w-full min-h-screen bg-white dark:bg-black text-black dark:text-white flex flex-col justify-between font-sans selection:bg-blue-600/30 relative pb-20 transition-colors">
-      {/* Background ambient glow */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-96 rounded-full bg-blue-600/5 dark:bg-blue-600/10 blur-[120px] pointer-events-none" />
+  const getSubjectCredits = (subCode: string) => {
+    if (subCode === "BCSL-013") return 2;
+    return 4;
+  };
 
-      {/* ── Top Header Bar with Subject Switcher ── */}
+  const getSubjectIcon = (subCode: string, isLab: boolean) => {
+    if (isLab) return "🧪";
+    if (subCode.includes("111") || subCode.includes("011")) return "💻";
+    if (subCode.includes("012")) return "📐";
+    if (subCode.includes("136") || subCode.includes("FEG")) return "💬";
+    if (subCode.includes("181")) return "🌿";
+    return "📘";
+  };
+
+  return (
+    <div className="w-full min-h-screen bg-[#ffffff] dark:bg-[#060c18] text-black dark:text-white flex flex-col justify-between font-sans selection:bg-emerald-500 selection:text-white relative pb-20 transition-colors">
+      
+      {/* ── Top Header Navigation Bar ── */}
       <BcaHeaderNav
         currentSubjectCode={`Semester ${semesterId}`}
         currentSubjectName={`${currentSemester.name} Hub`}
@@ -146,49 +172,69 @@ export default function SemesterSubjectsDashboard({ semester }: { semester: stri
       />
 
       {/* Main Container */}
-      <main className="flex-1 w-full max-w-5xl mx-auto px-4 md:px-8 py-6 space-y-6">
+      <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:py-8 space-y-6">
         
         {/* Navigation Breadcrumbs */}
-        <nav aria-label="Breadcrumbs" className="flex flex-wrap items-center gap-2 text-xs text-slate-500 dark:text-slate-400 font-bold py-1">
-          <Link href="/" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors flex items-center gap-1">
+        <nav aria-label="Breadcrumbs" className="flex flex-wrap items-center gap-2 text-xs text-slate-500 dark:text-slate-400 font-bold">
+          <Link href="/" className="hover:text-emerald-500 transition-colors flex items-center gap-1">
             <span>🏠 Home</span>
           </Link>
           <span className="text-slate-400 dark:text-neutral-700 font-bold">❯</span>
-          <Link href="/bca" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+          <Link href="/bca" className="hover:text-emerald-500 transition-colors">
             BCA Hub
           </Link>
           <span className="text-slate-400 dark:text-neutral-700 font-bold">❯</span>
-          <span className="text-blue-600 dark:text-blue-400 font-extrabold">{currentSemester.name}</span>
+          <span className="text-emerald-500 font-extrabold">{currentSemester.name}</span>
         </nav>
 
-        {/* Title Hero Section */}
-        <section className="p-6 sm:p-8 rounded-3xl bg-slate-50 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 shadow-sm space-y-4 md:flex md:items-center md:justify-between gap-6">
+        {/* ── Top Section Header (BCA HUB • SEMESTER DASHBOARD) ── */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2">
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 dark:bg-neutral-800 border border-blue-200 dark:border-neutral-700 text-blue-600 dark:text-blue-400 text-[10px] font-black uppercase tracking-widest mb-2">
-              <GraduationCap size={14} />
-              <span>IGNOU BCA Curriculum</span>
+            <div className="flex items-center gap-2">
+              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+              <h1 className="text-xl sm:text-2xl font-black uppercase tracking-wider text-black dark:text-white">
+                BCA HUB • <span className="text-emerald-500">SEMESTER DASHBOARD</span>
+              </h1>
             </div>
-            <h1 className="text-2xl sm:text-4xl font-black text-black dark:text-white tracking-tight leading-tight">
-              {currentSemester.name} <span className="text-blue-600 dark:text-blue-400">Subjects &amp; Units</span>
-            </h1>
-            <p className="text-slate-600 dark:text-slate-300 text-xs sm:text-sm leading-relaxed mt-1 font-medium">
-              Choose any subject below to view complete textbook blocks, unit-by-unit study notes, and lab simulators.
+            <p className="text-xs text-slate-600 dark:text-slate-400 font-medium mt-1">
+              Curriculum, Line-by-Line Textbook Units &amp; Lab Simulators Authored by <strong className="text-black dark:text-white">Er. Manoj Kumar</strong>
             </p>
           </div>
 
-          <div className="mt-4 md:mt-0 flex items-center gap-4 bg-white dark:bg-neutral-950 border border-slate-200 dark:border-neutral-800 p-4 rounded-2xl shrink-0 shadow-sm">
-            <div className="text-center">
-              <span className="block text-blue-600 dark:text-blue-400 font-black text-2xl">{semProg.pct}%</span>
-              <span className="block text-[9px] text-slate-500 dark:text-slate-400 font-black uppercase tracking-wider">Completed</span>
-            </div>
-            <div className="h-8 w-px bg-slate-200 dark:bg-neutral-800" />
-            <div className="text-center">
-              <span className="block text-black dark:text-white font-black text-2xl">{semProg.read}/{semProg.total}</span>
-              <span className="block text-[9px] text-slate-500 dark:text-slate-400 font-black uppercase tracking-wider">Units Read</span>
-            </div>
+          <div className="flex items-center gap-3 self-start sm:self-auto">
+            <span className="px-3 py-1 rounded-xl bg-emerald-500/10 text-emerald-500 border border-emerald-500/30 text-xs font-black">
+              {semProg.pct}% Semester Finished
+            </span>
+            <span className="text-xs font-bold text-slate-500">
+              ({semProg.read}/{semProg.total} Units)
+            </span>
           </div>
-        </section>
+        </div>
 
+        {/* ── 1. HORIZONTAL SEMESTER SELECTOR BAR (Desktop & Mobile Swipeable) ── */}
+        <div className="p-1.5 rounded-2xl bg-slate-100 dark:bg-[#0c1328] border border-slate-200 dark:border-neutral-800 shadow-sm overflow-x-auto custom-scrollbar">
+          <div className="flex items-center gap-1.5 min-w-max">
+            {bcaSemesters.map((sem) => {
+              const isActive = sem.id === semesterId;
+              return (
+                <button
+                  key={sem.id}
+                  type="button"
+                  onClick={() => router.push(`/bca/semester-${sem.id}`)}
+                  className={`px-4 sm:px-6 py-2.5 rounded-xl font-black text-xs uppercase tracking-wider transition-all cursor-pointer whitespace-nowrap ${
+                    isActive
+                      ? 'bg-emerald-600 text-white shadow-md shadow-emerald-600/30 ring-2 ring-emerald-500/50'
+                      : 'text-slate-700 dark:text-slate-300 hover:bg-white dark:hover:bg-neutral-900 hover:text-black dark:hover:text-white'
+                  }`}
+                >
+                  Semester {sem.id}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* AdSense Unit */}
         <div>
           <AdSenseBanner />
         </div>
@@ -202,90 +248,215 @@ export default function SemesterSubjectsDashboard({ semester }: { semester: stri
           />
         )}
 
-        {/* Subjects List */}
-        <section className="space-y-4">
-          <div className="flex items-center justify-between">
-            <h2 className="text-base sm:text-lg font-black text-black dark:text-white uppercase tracking-wider flex items-center gap-2">
-              <BookOpen size={18} className="text-blue-600 dark:text-blue-400" />
-              <span>All Subjects in {currentSemester.name}</span>
-            </h2>
-            <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400">Click subject to open syllabus</span>
+
+        {/* ════════════════════════════════════════════════════════════════
+            2. MOBILE VIEW: CLEAN SUBJECT ACCORDIONS (04-bca-dashboard-mobile-layout)
+        ════════════════════════════════════════════════════════════════ */}
+        <div className="block md:hidden space-y-3">
+          <div className="flex items-center justify-between text-xs font-black uppercase tracking-wider text-slate-500 dark:text-slate-400 px-1">
+            <span>Semester {semesterId} Subjects</span>
+            <span>Tap to Expand</span>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {currentSemester.subjects.map((sub) => {
+            const isExpanded = expandedSubjectCode === sub.code;
+            const sp = getSubjectProgress(sub.code);
+            const targetUrl = getSubjectUrl(sub.code);
+            const icon = getSubjectIcon(sub.code, sub.isLab);
+            const credits = getSubjectCredits(sub.code);
+            const allUnits = sub.blocks.flatMap(b => b.units);
+
+            return (
+              <div
+                key={sub.code}
+                className="rounded-2xl bg-white dark:bg-[#0c1328] border border-slate-200 dark:border-neutral-800 shadow-sm overflow-hidden transition-all"
+              >
+                {/* Accordion Toggle Header */}
+                <button
+                  type="button"
+                  onClick={() => setExpandedSubjectCode(isExpanded ? "" : sub.code)}
+                  className="w-full p-4 flex items-center justify-between text-left cursor-pointer hover:bg-slate-50 dark:hover:bg-[#101a35] transition-colors"
+                >
+                  <div className="flex items-center gap-3 min-w-0">
+                    <span className="text-xl shrink-0">{icon}</span>
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs font-black text-amber-500 dark:text-amber-400">
+                          {sub.code === "BCS-111" ? "BCS-011 / BCS-111" : sub.code}
+                        </span>
+                        <span className="text-[10px] font-bold text-slate-500">
+                          {credits} Credits
+                        </span>
+                      </div>
+                      <h3 className="text-xs font-bold text-black dark:text-white truncate mt-0.5">
+                        {sub.name}
+                      </h3>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2 shrink-0">
+                    <span className="text-[11px] font-mono font-bold text-emerald-500">
+                      {sp.pct > 0 ? `${sp.pct}%` : "Not Started"}
+                    </span>
+                    {isExpanded ? <ChevronUp size={16} className="text-slate-400" /> : <ChevronDown size={16} className="text-slate-400" />}
+                  </div>
+                </button>
+
+                {/* Expanded Accordion Body */}
+                {isExpanded && (
+                  <div className="p-4 pt-1 border-t border-slate-100 dark:border-neutral-800/80 space-y-4 animate-in fade-in duration-200">
+                    
+                    {/* Progress Bar */}
+                    <div className="space-y-1">
+                      <div className="flex items-center justify-between text-[10px] font-bold text-slate-500">
+                        <span>Syllabus Completion</span>
+                        <span>{sp.pct}% Complete</span>
+                      </div>
+                      <div className="w-full bg-slate-200 dark:bg-neutral-800 h-2 rounded-full overflow-hidden">
+                        <div 
+                          className="bg-amber-400 h-full rounded-full transition-all duration-300"
+                          style={{ width: `${Math.max(8, sp.pct)}%` }}
+                        />
+                      </div>
+                    </div>
+
+                    {/* Quick Unit Pills */}
+                    <div>
+                      <div className="text-[10px] font-black uppercase tracking-wider text-slate-500 mb-2">
+                        Textbook Units
+                      </div>
+                      <div className="flex flex-wrap gap-2">
+                        {allUnits.slice(0, 4).map((unit, uIdx) => (
+                          <Link
+                            key={unit.fileName}
+                            href={targetUrl}
+                            className="px-3 py-1 rounded-full text-xs font-bold transition-all bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 active:scale-95"
+                          >
+                            Unit {uIdx + 1}
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Prominent Gold Action Button */}
+                    <Link
+                      href={targetUrl}
+                      className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-500 text-black font-black text-xs shadow-md transition-all active:scale-95"
+                    >
+                      <Play size={13} className="fill-black" />
+                      <span>Start Lesson</span>
+                    </Link>
+
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+
+
+        {/* ════════════════════════════════════════════════════════════════
+            3. DESKTOP VIEW: 4-COLUMN CURRICULUM GRID (03-bca-dashboard-desktop-layout)
+        ════════════════════════════════════════════════════════════════ */}
+        <div className="hidden md:block space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {currentSemester.subjects.map((sub) => {
               const sp = getSubjectProgress(sub.code);
-              const totalUnits = sub.blocks.reduce((a, b) => a + b.units.length, 0);
-              const isDone = sp.pct === 100;
-              const isComputerBasics = sub.code === "BCS-111" || sub.code === "BCS-011";
               const targetUrl = getSubjectUrl(sub.code);
+              const credits = getSubjectCredits(sub.code);
+              const allUnits = sub.blocks.flatMap(b => b.units);
 
               return (
                 <div
                   key={sub.code}
-                  onClick={() => router.push(targetUrl)}
-                  className="p-5 rounded-3xl bg-white hover:bg-slate-50 dark:bg-neutral-900 dark:hover:bg-neutral-850 border border-slate-200 hover:border-blue-600 dark:border-neutral-800 dark:hover:border-blue-500 cursor-pointer transition-all duration-200 shadow-sm hover:shadow-md group flex flex-col justify-between space-y-4"
+                  className="rounded-3xl bg-white dark:bg-[#0c1328] border border-slate-200 dark:border-neutral-800 p-5 flex flex-col justify-between shadow-sm hover:shadow-xl hover:border-emerald-500/50 transition-all group"
                 >
-                  <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 text-xl font-bold transition-all duration-300 group-hover:scale-105 bg-blue-50 dark:bg-neutral-800 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-neutral-700">
-                      {sub.isLab ? '🧪' : '📘'}
+                  <div className="space-y-3.5">
+                    
+                    {/* Header Badges */}
+                    <div className="flex items-center justify-between">
+                      <span className="px-3 py-1 rounded-xl bg-amber-400/10 text-amber-500 border border-amber-400/30 text-xs font-black">
+                        {sub.code === "BCS-111" ? "BCS-011" : sub.code}
+                      </span>
+                      <span className="text-xs font-mono font-bold text-slate-500">
+                        Credits: {credits}
+                      </span>
                     </div>
 
-                    <div className="min-w-0 flex-1 text-left">
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <span className="text-[11px] font-black uppercase text-blue-600 dark:text-blue-400">
-                          {sub.code}
-                        </span>
-                        <span className="text-[9px] font-black uppercase px-2 py-0.5 rounded bg-slate-100 dark:bg-neutral-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-neutral-700">
-                          {sub.isLab ? 'Lab Module' : 'Theory Course'}
-                        </span>
-                        {isComputerBasics && (
-                          <span className="text-[9px] font-black uppercase px-2 py-0.5 bg-blue-50 dark:bg-neutral-800 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-neutral-700 rounded">
-                            Interactive Lessons
-                          </span>
-                        )}
+                    {/* Title */}
+                    <h3 className="text-base font-black text-black dark:text-white group-hover:text-amber-400 transition-colors line-clamp-2 leading-snug">
+                      {sub.name}
+                    </h3>
+
+                    {/* Syllabus Completion Progress Bar */}
+                    <div className="space-y-1">
+                      <div className="flex items-center justify-between text-[11px] font-bold text-slate-500 dark:text-slate-400">
+                        <span>Syllabus Completion</span>
+                        <span className="text-emerald-500 font-mono">{sp.pct}%</span>
                       </div>
-                      <h3 className="text-sm md:text-base font-black text-black dark:text-white truncate leading-snug mt-1 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                        {sub.name}
-                      </h3>
-                      <p className="text-[11px] text-slate-500 dark:text-slate-400 font-bold leading-normal mt-0.5">
-                        {sub.blocks.length} Blocks · {totalUnits} unit lessons
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center justify-between pt-3 border-t border-slate-100 dark:border-neutral-800">
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs font-black text-blue-600 dark:text-blue-400">{sp.pct}% Read</span>
-                      <span className="text-[10px] text-slate-400 dark:text-slate-500">({sp.read}/{sp.total})</span>
+                      <div className="w-full bg-slate-200 dark:bg-neutral-800 h-2 rounded-full overflow-hidden">
+                        <div 
+                          className="bg-emerald-500 h-full rounded-full transition-all duration-300"
+                          style={{ width: `${Math.max(6, sp.pct)}%` }}
+                        />
+                      </div>
                     </div>
 
-                    <div className="flex items-center gap-1.5 text-xs font-black text-blue-600 dark:text-blue-400 group-hover:translate-x-1 transition-all">
-                      <span>Open Syllabus</span>
-                      <Play size={12} className="fill-blue-600 dark:fill-blue-400 text-blue-600 dark:text-blue-400" />
+                    {/* Units Section */}
+                    <div className="pt-2 border-t border-slate-100 dark:border-neutral-800/80 space-y-2">
+                      <div className="text-[10px] font-black uppercase tracking-wider text-slate-500">
+                        Units Catalog
+                      </div>
+                      <div className="space-y-1.5">
+                        {allUnits.slice(0, 4).map((unit, idx) => (
+                          <div 
+                            key={unit.fileName}
+                            className="flex items-center justify-between p-2 rounded-xl bg-slate-50 dark:bg-neutral-900/60 border border-slate-200 dark:border-neutral-800/60 text-xs"
+                          >
+                            <span className="text-slate-700 dark:text-slate-300 font-bold truncate max-w-[130px]" title={unit.displayName}>
+                              Unit {idx + 1}: {unit.displayName.replace(/^Unit-\d+:\s*/i, '')}
+                            </span>
+                            <Link
+                              href={targetUrl}
+                              className="px-2.5 py-1 rounded-lg bg-amber-400 hover:bg-amber-500 text-black text-[10px] font-black shrink-0 transition-transform active:scale-95 shadow-xs"
+                            >
+                              Start Unit
+                            </Link>
+                          </div>
+                        ))}
+                      </div>
                     </div>
+
                   </div>
+
+                  {/* Card Footer: Author Attribution */}
+                  <div className="pt-4 border-t border-slate-100 dark:border-neutral-800/80 mt-4 text-[10px] text-slate-500 dark:text-slate-400 text-center font-medium">
+                    Curriculum by <strong className="text-black dark:text-white">Er. Manoj Kumar</strong>
+                  </div>
+
                 </div>
               );
             })}
           </div>
-        </section>
+        </div>
 
-        {/* Return to All Semesters Link */}
+        {/* Return to BCA Hub Link */}
         <div className="pt-6 border-t border-slate-200 dark:border-neutral-800 flex justify-center">
           <Link
             href="/bca"
-            className="px-6 py-3 rounded-2xl bg-white hover:bg-slate-50 dark:bg-neutral-900 dark:hover:bg-neutral-800 text-black dark:text-white font-extrabold text-xs sm:text-sm border border-slate-200 hover:border-blue-600 dark:border-neutral-800 dark:hover:border-blue-500 shadow-sm transition-all active:scale-95 flex items-center gap-2"
+            className="px-6 py-3 rounded-2xl bg-white hover:bg-slate-50 dark:bg-[#0c1328] dark:hover:bg-[#121c38] text-black dark:text-white font-extrabold text-xs sm:text-sm border border-slate-200 hover:border-emerald-500 dark:border-neutral-800 dark:hover:border-emerald-500 shadow-sm transition-all active:scale-95 flex items-center gap-2"
           >
-            <Layers size={16} className="text-blue-600 dark:text-blue-400" />
-            <span>View All 6 Semesters</span>
+            <Layers size={16} className="text-emerald-500" />
+            <span>Return to All 6 Semesters Hub</span>
           </Link>
         </div>
+
       </main>
 
-      <footer className="w-full py-6 text-center text-[10px] text-slate-500 dark:text-slate-400 border-t border-slate-200 dark:border-neutral-800 mt-auto">
-        © 2026 Nextsem Academy · IGNOU BCA Revised Syllabus Companion
+      <footer className="w-full py-6 text-center text-xs text-slate-500 dark:text-slate-400 border-t border-slate-200 dark:border-neutral-800 mt-auto">
+        Curriculum &amp; Textbook Units Authored by <strong className="text-black dark:text-white">Er. Manoj Kumar</strong> • NextSem CS Guide
       </footer>
+
     </div>
   );
 }

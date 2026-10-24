@@ -2,13 +2,12 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { 
-  ArrowLeft, ChevronLeft, ChevronRight, CheckCircle2, Circle, 
-  Terminal, Sparkles, Copy, Check, Bug, Lightbulb, GitBranch, 
-  BookOpen, HelpCircle, AlertCircle, Share2, Award, Clock, Lock,
+  ArrowLeft, ArrowRight, ChevronLeft, ChevronRight, CheckCircle2, Circle, 
+  Sparkles, Copy, Check, Lightbulb, GitBranch, 
+  HelpCircle, AlertCircle, Clock, Lock,
   ExternalLink, LogIn, UserCheck, ShieldCheck, Code2, UserPlus,
-  Mail, User, Globe, Eye, FileCode
+  Mail, User, Globe, FileCode
 } from "lucide-react";
 import BcaHeaderNav from "@/components/bca/BcaHeaderNav";
 import { PracticalLesson, PRACTICAL_LESSONS } from "@/data/bcaPracticalData";
@@ -19,14 +18,20 @@ import GoogleOneTapPrompt from "@/components/auth/GoogleOneTapPrompt";
 import BugDetectiveLab from "@/components/bca/BugDetectiveLab";
 import TerminalCommandBox from "@/components/bca/TerminalCommandBox";
 import PracticalLessonExplainer from "@/components/bca/PracticalLessonExplainer";
+import HtmlSemanticCodingTest from "@/components/bca/HtmlSemanticCodingTest";
 import MobileToPcCompanionBar from "@/components/bca/MobileToPcCompanionBar";
+import LineByLineInteractiveStudio from "@/components/bca/LineByLineInteractiveStudio";
+import Day1GitHubRepoCreationGuide from "@/components/bca/Day1GitHubRepoCreationGuide";
+import BcaStoriesTray from "@/components/bca/BcaStoriesTray";
+import { useCrossDeviceSync } from "@/context/CrossDeviceSyncContext";
+import { safeInstantCopy } from "@/lib/clipboard";
 
 interface Props {
   lesson: PracticalLesson;
 }
 
 export default function BcaPracticalLessonClient({ lesson }: Props) {
-  const router = useRouter();
+  const { copyAndSyncToCloud } = useCrossDeviceSync();
   const { 
     user, 
     isDayCompleted, 
@@ -34,7 +39,6 @@ export default function BcaPracticalLessonClient({ lesson }: Props) {
     completeDayWithGitHub, 
     githubRepoUrls, 
     signIn,
-    signInDirectlyAsStudent,
     signInWithEmail,
     signUpWithEmail,
     signInAsGuest 
@@ -49,19 +53,20 @@ export default function BcaPracticalLessonClient({ lesson }: Props) {
   const [gateError, setGateError] = useState<string | null>(null);
   const [gateSuccess, setGateSuccess] = useState<string | null>(null);
 
+  // Dual-Device Companion modal popup state (hidden by default, opened via top navbar icon)
+  const [isCompanionModalOpen, setIsCompanionModalOpen] = useState(false);
+
   // Internal Step Tracker within the lesson (1 to 5 or 'all') - Default to 'all'
   const [currentStep, setCurrentStep] = useState<number | "all">("all");
+  // Layout View Mode: 'reference' is the Traditional / Old Layout (Default), 'interactive' is the New Line-by-Line Studio
+  const [studioMode, setStudioMode] = useState<"interactive" | "reference">("reference");
   const [labTab, setLabTab] = useState<"guide" | "preview">("guide");
   const [copiedCode, setCopiedCode] = useState<boolean>(false);
-  const [copiedGit, setCopiedGit] = useState<boolean>(false);
-  const [showBugSolution, setShowBugSolution] = useState<boolean>(false);
-  const [showAssignmentBlueprint, setShowAssignmentBlueprint] = useState<boolean>(false);
 
   // Local VS Code Checklist & Copy States
   const [vsCodeTasksChecked, setVsCodeTasksChecked] = useState<Record<string, boolean>>({});
   const [copiedStarterCode, setCopiedStarterCode] = useState<boolean>(false);
   const [copiedAssignmentCode, setCopiedAssignmentCode] = useState<boolean>(false);
-  const [copiedVsCodeCmd, setCopiedVsCodeCmd] = useState<boolean>(false);
   const [copiedSnippetId, setCopiedSnippetId] = useState<string | null>(null);
 
   // Viva check state
@@ -87,6 +92,18 @@ export default function BcaPracticalLessonClient({ lesson }: Props) {
   const prevLesson = PRACTICAL_LESSONS.find(l => l.day === lesson.day - 1);
   const nextLesson = PRACTICAL_LESSONS.find(l => l.day === lesson.day + 1);
 
+  // File and Folder Constants for Dual-Screen Companion & VS Code Setup
+  const padDay = lesson.day < 10 ? `0${lesson.day}` : `${lesson.day}`;
+  const targetFolder = `bca-day-${padDay}`;
+  const primaryFile = lesson.practicalLab.language === "html" 
+    ? "index.html" 
+    : lesson.practicalLab.language === "css" 
+    ? "style.css" 
+    : lesson.practicalLab.language === "c" 
+    ? "main.c" 
+    : "script.js";
+  const vsCodeTerminalCommand = `mkdir ${targetFolder}\ncd ${targetFolder}\ncode .`;
+
   // Initialize saved existing repo state
   useEffect(() => {
     if (existingGhUrl) {
@@ -108,12 +125,37 @@ export default function BcaPracticalLessonClient({ lesson }: Props) {
     }
   }, [lesson.day]);
 
+  // Load saved layout view preference (Old/Traditional 'reference' vs New 'interactive')
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const savedLayout = localStorage.getItem(`nextsem_practical_layout_day_${lesson.day}`);
+        if (savedLayout === "interactive" || savedLayout === "reference") {
+          setStudioMode(savedLayout);
+        }
+      } catch {
+        // ignore
+      }
+    }
+  }, [lesson.day]);
+
+  const handleSwitchStudioMode = (mode: "interactive" | "reference") => {
+    setStudioMode(mode);
+    try {
+      localStorage.setItem(`nextsem_practical_layout_day_${lesson.day}`, mode);
+    } catch {
+      // ignore
+    }
+  };
+
   const toggleVsCodeTask = (taskId: string) => {
     setVsCodeTasksChecked(prev => {
       const next = { ...prev, [taskId]: !prev[taskId] };
       try {
         localStorage.setItem(`nextsem_vscode_tasks_bca_practical_day_${lesson.day}`, JSON.stringify(next));
-      } catch (e) {}
+      } catch {
+        // ignore
+      }
       return next;
     });
   };
@@ -145,30 +187,23 @@ export default function BcaPracticalLessonClient({ lesson }: Props) {
         setVivaPassed(false);
       }
     }
-  }, [lesson?.slug, lesson?.day, isCompleted]);
+  }, [lesson?.slug, lesson?.day, lesson?.vivaCheck?.options, isCompleted]);
 
-  const handleCopyCode = (text: string, type: "demo" | "git" | "starter" | "cmd" | "snippet" | "assignment", snippetId?: string) => {
-    if (navigator.clipboard) {
-      navigator.clipboard.writeText(text);
-      if (type === "demo") {
-        setCopiedCode(true);
-        setTimeout(() => setCopiedCode(false), 2000);
-      } else if (type === "git") {
-        setCopiedGit(true);
-        setTimeout(() => setCopiedGit(false), 2000);
-      } else if (type === "starter") {
-        setCopiedStarterCode(true);
-        setTimeout(() => setCopiedStarterCode(false), 2000);
-      } else if (type === "cmd") {
-        setCopiedVsCodeCmd(true);
-        setTimeout(() => setCopiedVsCodeCmd(false), 2000);
-      } else if (type === "assignment") {
-        setCopiedAssignmentCode(true);
-        setTimeout(() => setCopiedAssignmentCode(false), 2000);
-      } else if (type === "snippet" && snippetId) {
-        setCopiedSnippetId(snippetId);
-        setTimeout(() => setCopiedSnippetId(null), 2000);
-      }
+  const handleCopyCode = (text: string, type: "demo" | "starter" | "snippet" | "assignment", snippetId?: string) => {
+    // 0ms instant local copy + cloud sync across phone & laptop
+    copyAndSyncToCloud(text, `Day ${lesson.day} ${type.toUpperCase()} Code`);
+    if (type === "demo") {
+      setCopiedCode(true);
+      setTimeout(() => setCopiedCode(false), 2000);
+    } else if (type === "starter") {
+      setCopiedStarterCode(true);
+      setTimeout(() => setCopiedStarterCode(false), 2000);
+    } else if (type === "assignment") {
+      setCopiedAssignmentCode(true);
+      setTimeout(() => setCopiedAssignmentCode(false), 2000);
+    } else if (type === "snippet" && snippetId) {
+      setCopiedSnippetId(snippetId);
+      setTimeout(() => setCopiedSnippetId(null), 2000);
     }
   };
 
@@ -248,11 +283,12 @@ export default function BcaPracticalLessonClient({ lesson }: Props) {
       } else {
         setGithubFeedback({ status: "error", message: result.message });
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
+      const errMsg = err instanceof Error ? err.message : "Could not connect to GitHub. Please check your internet connection.";
       setIsVerifyingGithubCode(false);
       setGithubFeedback({
         status: "error",
-        message: `GitHub Verification Error: ${err?.message || "Could not connect to GitHub. Please check your internet connection."}`
+        message: `GitHub Verification Error: ${errMsg}`
       });
     } finally {
       setGithubSubmitting(false);
@@ -272,8 +308,8 @@ export default function BcaPracticalLessonClient({ lesson }: Props) {
       } else {
         setGateError(res.error || "Failed to log in.");
       }
-    } catch (err: any) {
-      setGateError(err?.message || "An error occurred.");
+    } catch (err: unknown) {
+      setGateError(err instanceof Error ? err.message : "An error occurred.");
     } finally {
       setGateSubmitting(false);
     }
@@ -291,8 +327,8 @@ export default function BcaPracticalLessonClient({ lesson }: Props) {
       } else {
         setGateError(res.error || "Failed to create account.");
       }
-    } catch (err: any) {
-      setGateError(err?.message || "An error occurred.");
+    } catch (err: unknown) {
+      setGateError(err instanceof Error ? err.message : "An error occurred.");
     } finally {
       setGateSubmitting(false);
     }
@@ -302,7 +338,26 @@ export default function BcaPracticalLessonClient({ lesson }: Props) {
   if (!user) {
     return (
       <div className="min-h-screen bg-white dark:bg-black text-black dark:text-white flex flex-col font-sans pb-24 transition-colors">
-        <BcaHeaderNav currentSubjectCode={`Day ${lesson.day}`} currentSubjectName={lesson.title} />
+        <BcaHeaderNav 
+          currentSubjectCode={`Day ${lesson.day}`} 
+          currentSubjectName={lesson.title}
+          showCompanionIcon={true}
+          onOpenCompanion={() => setIsCompanionModalOpen(true)}
+        />
+
+        {/* Dual-Device Mobile to PC Companion Modal (hidden by default, triggered by top navbar icon) */}
+        <MobileToPcCompanionBar
+          day={lesson.day}
+          daySlug={lesson.slug}
+          lessonTitle={lesson.title}
+          primaryFile={primaryFile}
+          targetFolder={targetFolder}
+          terminalCommand={vsCodeTerminalCommand}
+          isCompleted={false}
+          asModal={true}
+          isOpen={isCompanionModalOpen}
+          onClose={() => setIsCompanionModalOpen(false)}
+        />
 
         <main className="max-w-3xl mx-auto px-4 sm:px-6 py-8 w-full flex-1 flex flex-col items-center justify-center text-center">
           {/* Clickable Breadcrumbs */}
@@ -562,8 +617,9 @@ export default function BcaPracticalLessonClient({ lesson }: Props) {
                       setGateSubmitting(true);
                       try {
                         await signIn();
-                      } catch (err: any) {
-                        if (err?.code !== "auth/popup-closed-by-user") {
+                      } catch (err: unknown) {
+                        const errCode = (err as { code?: string })?.code;
+                        if (errCode !== "auth/popup-closed-by-user") {
                           setGateError("Google sign-in could not be completed. Please try again.");
                         }
                       } finally {
@@ -610,7 +666,7 @@ export default function BcaPracticalLessonClient({ lesson }: Props) {
           {/* Author Attribution */}
           <div className="mt-8 text-xs text-slate-500 dark:text-slate-400 flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-blue-600" />
-            <span>Curriculum &amp; Practical Systems Authored by <strong className="text-black dark:text-white font-bold">Er. Manoj Kumar</strong></span>
+            <span>Written By <strong className="text-black dark:text-white font-bold">NextSem Faculty</strong></span>
           </div>
         </main>
       </div>
@@ -624,7 +680,26 @@ export default function BcaPracticalLessonClient({ lesson }: Props) {
 
     return (
       <div className="min-h-screen bg-white dark:bg-black text-black dark:text-white flex flex-col font-sans pb-24 transition-colors">
-        <BcaHeaderNav currentSubjectCode={`Day ${lesson.day}`} currentSubjectName={lesson.title} />
+        <BcaHeaderNav 
+          currentSubjectCode={`Day ${lesson.day}`} 
+          currentSubjectName={lesson.title}
+          showCompanionIcon={true}
+          onOpenCompanion={() => setIsCompanionModalOpen(true)}
+        />
+
+        {/* Dual-Device Mobile to PC Companion Modal (hidden by default, triggered by top navbar icon) */}
+        <MobileToPcCompanionBar
+          day={lesson.day}
+          daySlug={lesson.slug}
+          lessonTitle={lesson.title}
+          primaryFile={primaryFile}
+          targetFolder={targetFolder}
+          terminalCommand={vsCodeTerminalCommand}
+          isCompleted={false}
+          asModal={true}
+          isOpen={isCompanionModalOpen}
+          onClose={() => setIsCompanionModalOpen(false)}
+        />
 
         <main className="max-w-2xl mx-auto px-4 py-8 w-full flex-1 flex flex-col items-center justify-center text-center">
           {/* Complete Clickable Breadcrumbs */}
@@ -681,23 +756,13 @@ export default function BcaPracticalLessonClient({ lesson }: Props) {
 
           {/* Author Attribution */}
           <div className="mt-12 text-[11px] text-slate-500 dark:text-slate-400">
-            Curriculum &amp; Practical Systems Authored by <strong className="text-black dark:text-white font-bold">Er. Manoj Kumar</strong>
+            Written By <strong className="text-black dark:text-white font-bold">NextSem Faculty</strong>
           </div>
         </main>
       </div>
     );
   }
 
-  const padDay = lesson.day < 10 ? `0${lesson.day}` : `${lesson.day}`;
-  const targetFolder = `bca-day-${padDay}`;
-  const primaryFile = lesson.practicalLab.language === "html" 
-    ? "index.html" 
-    : lesson.practicalLab.language === "css" 
-    ? "style.css" 
-    : lesson.practicalLab.language === "c" 
-    ? "main.c" 
-    : "script.js";
-  const vsCodeTerminalCommand = `mkdir ${targetFolder}\ncd ${targetFolder}\ncode .`;
 
   return (
     <div className="min-h-screen bg-white dark:bg-black text-black dark:text-white flex flex-col font-sans pb-24 transition-colors">
@@ -705,6 +770,22 @@ export default function BcaPracticalLessonClient({ lesson }: Props) {
       <BcaHeaderNav 
         currentSubjectCode={`Day ${lesson.day}`} 
         currentSubjectName={lesson.title} 
+        showCompanionIcon={true}
+        onOpenCompanion={() => setIsCompanionModalOpen(true)}
+      />
+
+      {/* Dual-Device Mobile to PC Companion Modal (hidden by default, triggered by top navbar icon) */}
+      <MobileToPcCompanionBar
+        day={lesson.day}
+        daySlug={lesson.slug}
+        lessonTitle={lesson.title}
+        primaryFile={primaryFile}
+        targetFolder={targetFolder}
+        terminalCommand={vsCodeTerminalCommand}
+        isCompleted={isCompleted}
+        asModal={true}
+        isOpen={isCompanionModalOpen}
+        onClose={() => setIsCompanionModalOpen(false)}
       />
 
       <main className="max-w-5xl mx-auto px-4 sm:px-6 py-6 w-full flex-1">
@@ -762,16 +843,9 @@ export default function BcaPracticalLessonClient({ lesson }: Props) {
           ) : null}
         </div>
 
-        {/* Dual-Device Mobile to PC Companion Bar */}
-        <MobileToPcCompanionBar
-          day={lesson.day}
-          daySlug={lesson.slug}
-          lessonTitle={lesson.title}
-          primaryFile={primaryFile}
-          targetFolder={targetFolder}
-          terminalCommand={vsCodeTerminalCommand}
-          isCompleted={isCompleted}
-        />
+
+        {/* ── BCA STUDENT DAILY STORIES TRAY (Instagram-format status of each student) ── */}
+        <BcaStoriesTray />
 
         {/* Top Header Bar */}
         <header className="rounded-2xl bg-white dark:bg-neutral-950 border border-slate-200 dark:border-neutral-800 p-5 sm:p-6 mb-6 shadow-sm">
@@ -812,8 +886,95 @@ export default function BcaPracticalLessonClient({ lesson }: Props) {
           </p>
         </header>
 
-        {/* Interactive Step Stepper & View Mode Switcher */}
-        <div className="mb-8">
+        {/* Day 1 Layout Switcher Bar (Keep both Old & New Layouts, Old is Default) */}
+        {lesson.day === 1 && (
+          <div className="mb-6 p-2.5 rounded-2xl bg-slate-100 dark:bg-neutral-900/70 border border-slate-200 dark:border-neutral-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs shadow-xs">
+            <div className="flex items-center gap-2 px-1.5 py-0.5">
+              <span className="text-[11px] font-black uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                Active Layout:
+              </span>
+              <span className="font-extrabold text-black dark:text-white flex items-center gap-1.5">
+                {studioMode === "reference" ? (
+                  <>
+                    <span className="w-2 h-2 rounded-full bg-blue-600 inline-block" />
+                    <span>Traditional Practical Guide (Default)</span>
+                  </>
+                ) : (
+                  <>
+                    <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block" />
+                    <span>Interactive Line-by-Line Studio</span>
+                  </>
+                )}
+              </span>
+            </div>
+
+            <div className="inline-flex p-1 rounded-xl bg-white dark:bg-neutral-950 border border-slate-200 dark:border-neutral-800 self-start sm:self-auto shadow-xs">
+              <button
+                type="button"
+                onClick={() => handleSwitchStudioMode("reference")}
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                  studioMode === "reference"
+                    ? "bg-blue-600 text-white shadow-xs"
+                    : "text-slate-600 dark:text-slate-400 hover:text-black dark:hover:text-white"
+                }`}
+              >
+                📘 Traditional Guide (Default)
+              </button>
+              <button
+                type="button"
+                onClick={() => handleSwitchStudioMode("interactive")}
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                  studioMode === "interactive"
+                    ? "bg-emerald-600 text-white shadow-xs"
+                    : "text-slate-600 dark:text-slate-400 hover:text-black dark:hover:text-white"
+                }`}
+              >
+                ⚡ Interactive Studio (New)
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Day 1 Line-by-Line Interactive Pill Studio (Zero Scroll Experience) */}
+        {lesson.day === 1 && studioMode === "interactive" ? (
+          <div className="space-y-6 mb-8">
+            <LineByLineInteractiveStudio lesson={lesson} />
+
+            <div className="pt-2 pb-6 text-center border-t border-slate-200 dark:border-neutral-800">
+              <button
+                type="button"
+                onClick={() => handleSwitchStudioMode("reference")}
+                className="text-xs font-mono text-slate-500 hover:text-blue-600 dark:hover:text-emerald-400 underline cursor-pointer"
+              >
+                « Switch to Traditional Practical Guide (Default)
+              </button>
+            </div>
+          </div>
+        ) : (
+          <>
+            {lesson.day === 1 && (
+              <div className="mb-6 p-4 rounded-2xl bg-gradient-to-r from-emerald-500/10 via-teal-500/10 to-blue-500/10 border border-emerald-500/40 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs shadow-xs">
+                <div>
+                  <div className="font-extrabold text-black dark:text-white flex items-center gap-1.5">
+                    <Sparkles size={14} className="text-emerald-500" />
+                    <span>Interactive Line-by-Line Studio Available!</span>
+                  </div>
+                  <div className="text-slate-600 dark:text-slate-300 text-[11px] mt-0.5">
+                    Build code line-by-line with clickable pills, explanations, and auto-verification.
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => handleSwitchStudioMode("interactive")}
+                  className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-xs shadow-sm transition-all self-start sm:self-auto cursor-pointer"
+                >
+                  ⚡ Launch Line-by-Line Studio
+                </button>
+              </div>
+            )}
+            {/* Interactive Step Stepper & View Mode Switcher */}
+            <div className="mb-8">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3">
             <div>
               <span className="text-[11px] font-black uppercase tracking-wider text-blue-600 dark:text-blue-400">
@@ -850,14 +1011,14 @@ export default function BcaPracticalLessonClient({ lesson }: Props) {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 text-xs font-bold">
+          <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 text-xs sm:text-sm font-bold">
             <button
               type="button"
               onClick={() => {
                 setCurrentStep(1);
                 window.scrollTo({ top: 220, behavior: "smooth" });
               }}
-              className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer flex items-center justify-between gap-1.5 ${
+              className={`p-2.5 sm:p-3 rounded-xl border text-left transition-all cursor-pointer flex items-center justify-between gap-1.5 ${
                 currentStep === 1
                   ? "bg-blue-600 text-white border-blue-600 shadow-sm"
                   : "bg-white dark:bg-neutral-950 text-black dark:text-white border-slate-200 dark:border-neutral-800 hover:border-blue-400"
@@ -865,9 +1026,9 @@ export default function BcaPracticalLessonClient({ lesson }: Props) {
             >
               <div className="flex items-center gap-1.5 truncate">
                 <span>🎯</span>
-                <span className="truncate">1. Concept & Demo</span>
+                <span className="truncate text-xs sm:text-sm font-bold">1. Concept & Demo</span>
               </div>
-              <span className="text-[10px] opacity-80 shrink-0">Step 1</span>
+              <span className="text-[11px] font-bold opacity-80 shrink-0">Step 1</span>
             </button>
 
             <button
@@ -876,7 +1037,7 @@ export default function BcaPracticalLessonClient({ lesson }: Props) {
                 setCurrentStep(2);
                 window.scrollTo({ top: 220, behavior: "smooth" });
               }}
-              className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer flex items-center justify-between gap-1.5 ${
+              className={`p-2.5 sm:p-3 rounded-xl border text-left transition-all cursor-pointer flex items-center justify-between gap-1.5 ${
                 currentStep === 2
                   ? "bg-blue-600 text-white border-blue-600 shadow-sm"
                   : "bg-white dark:bg-neutral-950 text-black dark:text-white border-slate-200 dark:border-neutral-800 hover:border-blue-400"
@@ -884,12 +1045,12 @@ export default function BcaPracticalLessonClient({ lesson }: Props) {
             >
               <div className="flex items-center gap-1.5 truncate">
                 <span>💻</span>
-                <span className="truncate">2. VS Code Lab</span>
+                <span className="truncate text-xs sm:text-sm font-bold">2. VS Code Lab</span>
               </div>
               {Object.values(vsCodeTasksChecked).filter(Boolean).length === lesson.practicalLab.tasks.length && lesson.practicalLab.tasks.length > 0 ? (
-                <span className="text-[10px] font-black text-emerald-400">✔</span>
+                <span className="text-xs font-black text-emerald-400">✔</span>
               ) : (
-                <span className="text-[10px] opacity-80 shrink-0">Step 2</span>
+                <span className="text-[11px] font-bold opacity-80 shrink-0">Step 2</span>
               )}
             </button>
 
@@ -899,7 +1060,7 @@ export default function BcaPracticalLessonClient({ lesson }: Props) {
                 setCurrentStep(3);
                 window.scrollTo({ top: 220, behavior: "smooth" });
               }}
-              className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer flex items-center justify-between gap-1.5 ${
+              className={`p-2.5 sm:p-3 rounded-xl border text-left transition-all cursor-pointer flex items-center justify-between gap-1.5 ${
                 currentStep === 3
                   ? "bg-blue-600 text-white border-blue-600 shadow-sm"
                   : "bg-white dark:bg-neutral-950 text-black dark:text-white border-slate-200 dark:border-neutral-800 hover:border-blue-400"
@@ -907,9 +1068,9 @@ export default function BcaPracticalLessonClient({ lesson }: Props) {
             >
               <div className="flex items-center gap-1.5 truncate">
                 <span>🐛</span>
-                <span className="truncate">3. Bug Hunt</span>
+                <span className="truncate text-xs sm:text-sm font-bold">3. Bug Hunt</span>
               </div>
-              <span className="text-[10px] opacity-80 shrink-0">Step 3</span>
+              <span className="text-[11px] font-bold opacity-80 shrink-0">Step 3</span>
             </button>
 
             <button
@@ -918,7 +1079,7 @@ export default function BcaPracticalLessonClient({ lesson }: Props) {
                 setCurrentStep(4);
                 window.scrollTo({ top: 220, behavior: "smooth" });
               }}
-              className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer flex items-center justify-between gap-1.5 ${
+              className={`p-2.5 sm:p-3 rounded-xl border text-left transition-all cursor-pointer flex items-center justify-between gap-1.5 ${
                 currentStep === 4
                   ? "bg-blue-600 text-white border-blue-600 shadow-sm"
                   : "bg-white dark:bg-neutral-950 text-black dark:text-white border-slate-200 dark:border-neutral-800 hover:border-blue-400"
@@ -926,12 +1087,14 @@ export default function BcaPracticalLessonClient({ lesson }: Props) {
             >
               <div className="flex items-center gap-1.5 truncate">
                 <span>🎓</span>
-                <span className="truncate">4. Viva Check</span>
+                <span className="truncate text-xs sm:text-sm font-bold">
+                  {lesson.day === 6 ? "4. Viva & Coding Test" : "4. Viva Check"}
+                </span>
               </div>
               {vivaPassed ? (
-                <span className="text-[10px] font-black text-emerald-400">✔</span>
+                <span className="text-xs font-black text-emerald-400">✔</span>
               ) : (
-                <span className="text-[10px] opacity-80 shrink-0">Step 4</span>
+                <span className="text-[11px] font-bold opacity-80 shrink-0">Step 4</span>
               )}
             </button>
 
@@ -941,7 +1104,7 @@ export default function BcaPracticalLessonClient({ lesson }: Props) {
                 setCurrentStep(5);
                 window.scrollTo({ top: 220, behavior: "smooth" });
               }}
-              className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer col-span-2 sm:col-span-1 flex items-center justify-between gap-1.5 ${
+              className={`p-2.5 sm:p-3 rounded-xl border text-left transition-all cursor-pointer col-span-2 sm:col-span-1 flex items-center justify-between gap-1.5 ${
                 currentStep === 5
                   ? "bg-blue-600 text-white border-blue-600 shadow-sm"
                   : isCompleted
@@ -951,12 +1114,12 @@ export default function BcaPracticalLessonClient({ lesson }: Props) {
             >
               <div className="flex items-center gap-1.5 truncate">
                 <span>🚀</span>
-                <span className="truncate">5. GitHub Push</span>
+                <span className="truncate text-xs sm:text-sm font-bold">5. GitHub Push</span>
               </div>
               {isCompleted ? (
-                <span className="text-[10px] font-black text-blue-400">Done</span>
+                <span className="text-xs font-black text-blue-400">Done</span>
               ) : (
-                <span className="text-[10px] opacity-80 shrink-0">Step 5</span>
+                <span className="text-[11px] font-bold opacity-80 shrink-0">Step 5</span>
               )}
             </button>
           </div>
@@ -979,6 +1142,45 @@ export default function BcaPracticalLessonClient({ lesson }: Props) {
                   </div>
                 ))}
               </div>
+
+              {/* Direct Link to Day 6 Practical Coding Test */}
+              {lesson.day === 6 && (
+                <div className="mt-4 pt-3.5 border-t border-slate-200 dark:border-neutral-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 bg-blue-50/70 dark:bg-blue-950/20 p-3.5 rounded-xl border border-blue-200 dark:border-blue-900/40">
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <div className="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center shrink-0 shadow-sm font-bold text-sm">
+                      ✍️
+                    </div>
+                    <div>
+                      <h4 className="text-xs sm:text-sm font-black text-black dark:text-white leading-tight">
+                        Interactive HTML Semantic Coding Practical Concept Test Ready
+                      </h4>
+                      <p className="text-[11px] text-slate-600 dark:text-slate-400 mt-0.5">
+                        6 real-world challenges on &lt;main&gt;, &lt;article&gt;, &lt;section&gt;, &lt;nav&gt; and accessibility with instant checking.
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2 shrink-0 flex-wrap">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setCurrentStep(4);
+                        setTimeout(() => {
+                          document.getElementById("html-coding-test")?.scrollIntoView({ behavior: "smooth" });
+                        }, 100);
+                      }}
+                      className="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-neutral-900 dark:hover:bg-neutral-800 text-black dark:text-white font-bold text-xs border border-slate-200 dark:border-neutral-800 transition-all cursor-pointer active:scale-95"
+                    >
+                      <span>Take Inline Test</span>
+                    </button>
+                    <Link
+                      href="/tests/sprint1"
+                      className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-black text-xs shadow-sm flex items-center gap-1.5 transition-all cursor-pointer active:scale-95"
+                    >
+                      <span>Open /tests/sprint1 ↗</span>
+                    </Link>
+                  </div>
+                </div>
+              )}
             </section>
 
             {/* STEP 2: Comprehensive Lesson Masterclass & Architecture */}
@@ -1296,7 +1498,7 @@ export default function BcaPracticalLessonClient({ lesson }: Props) {
                     <ul className="space-y-1.5 text-xs text-slate-700 dark:text-slate-300 list-disc list-inside">
                       {lesson.practicalLab.language === "html" || lesson.practicalLab.language === "css" || lesson.practicalLab.language === "javascript" ? (
                         <>
-                          <li>Right-click <code className="text-blue-600 dark:text-blue-400 font-mono font-bold">{primaryFile}</code> in VS Code and select <strong className="text-black dark:text-white">"Open with Live Server"</strong>.</li>
+                          <li>Right-click <code className="text-blue-600 dark:text-blue-400 font-mono font-bold">{primaryFile}</code> in VS Code and select <strong className="text-black dark:text-white">&quot;Open with Live Server&quot;</strong>.</li>
                           <li>Alternatively, open File Explorer, navigate to <code className="text-slate-600 dark:text-slate-400">{targetFolder}</code>, and double-click <code className="text-blue-600 dark:text-blue-400 font-mono font-bold">{primaryFile}</code> to view in Google Chrome or Edge.</li>
                           <li>Verify all elements and styles look correct in the browser before pushing!</li>
                         </>
@@ -1511,7 +1713,7 @@ export default function BcaPracticalLessonClient({ lesson }: Props) {
                   </span>
                 )}
               </div>
-              <p className="text-xs sm:text-sm text-black dark:text-white font-bold mb-4">
+              <p className="text-sm sm:text-base text-black dark:text-white font-extrabold mb-4 leading-relaxed">
                 {lesson.vivaCheck.question}
               </p>
 
@@ -1537,10 +1739,10 @@ export default function BcaPracticalLessonClient({ lesson }: Props) {
                       key={i}
                       disabled={isVivaSubmitted && vivaPassed}
                       onClick={() => setSelectedVivaOption(i)}
-                      className={`w-full text-left p-3.5 rounded-xl border text-xs transition-all flex items-start justify-between gap-3 cursor-pointer ${btnClass}`}
+                      className={`w-full text-left p-3.5 sm:p-4 rounded-xl border text-xs sm:text-sm transition-all flex items-start justify-between gap-3 cursor-pointer ${btnClass}`}
                     >
-                      <div className="flex items-start gap-2.5 min-w-0">
-                        <span className={`w-5 h-5 rounded-full flex items-center justify-center font-black text-[10px] shrink-0 mt-0.5 ${
+                      <div className="flex items-start gap-3 min-w-0">
+                        <span className={`w-6 h-6 rounded-full flex items-center justify-center font-black text-xs shrink-0 mt-0.5 ${
                           isVivaSubmitted && isCorrect 
                             ? "bg-white text-blue-600" 
                             : isSelected 
@@ -1549,9 +1751,9 @@ export default function BcaPracticalLessonClient({ lesson }: Props) {
                         }`}>
                           {optionLetter}
                         </span>
-                        <span className="break-words leading-relaxed">{item.text}</span>
+                        <span className="break-words leading-relaxed font-semibold text-xs sm:text-sm">{item.text}</span>
                       </div>
-                      {isVivaSubmitted && isCorrect && <CheckCircle2 size={16} className="text-white shrink-0 mt-0.5" />}
+                      {isVivaSubmitted && isCorrect && <CheckCircle2 size={18} className="text-white shrink-0 mt-0.5" />}
                     </button>
                   );
                 })}
@@ -1596,6 +1798,13 @@ export default function BcaPracticalLessonClient({ lesson }: Props) {
                 </div>
               )}
             </section>
+
+            {/* Interactive HTML Semantic Coding Practical Concept Test */}
+            {lesson.day === 6 && (
+              <div className="mb-8">
+                <HtmlSemanticCodingTest />
+              </div>
+            )}
 
             {/* Stage 4 Footer Navigator */}
             {currentStep !== "all" && (
@@ -1745,6 +1954,13 @@ export default function BcaPracticalLessonClient({ lesson }: Props) {
                     </div>
                   </div>
                 </div>
+
+                {/* Day 1 Exclusive: GitHub Repository Creation Guide with Step-by-Step Animation & Direct Link */}
+                {lesson.day === 1 && (
+                  <div className="pt-2">
+                    <Day1GitHubRepoCreationGuide />
+                  </div>
+                )}
 
                 {/* Expected GitHub Repository Structure (Cumulative up to today) */}
                 <ExpectedRepoStructureCard lesson={lesson} />
@@ -1985,6 +2201,8 @@ export default function BcaPracticalLessonClient({ lesson }: Props) {
             )}
           </div>
         </div>
+          </>
+        )}
 
         {/* Author Attribution Banner */}
         <div className="mt-12 pt-6 border-t border-slate-200 dark:border-neutral-800 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-600 dark:text-slate-400">

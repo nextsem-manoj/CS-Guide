@@ -1207,7 +1207,8 @@ export const PRACTICAL_LESSONS: PracticalLesson[] = [
       'Replace generic `<div>` soup with modern semantic tags.',
       'Use `<header>`, `<nav>`, `<main>`, `<section>`, `<article>`, `<aside>`, and `<footer>`.',
       'Understand why semantic architecture improves SEO and accessibility (a11y).',
-      'Construct a complete semantic page wireframe.'
+      'Construct a complete semantic page wireframe.',
+      'Pass the 6-challenge HTML Semantic Coding Practical Concept Test with 100% mastery.'
     ],
     concept: {
       overview: 'Early web developers built entire layouts with hundreds of `<div class="nav">`, `<div class="main">` tags ("div soup"). HTML5 introduced semantic elements that clearly describe their meaning to both browser and developer.',
@@ -7474,6 +7475,3874 @@ console.log("Total Score:", total); // Fixed: Prints 170 (Mathematical addition)
       ],
       correctAnswer: 0,
       explanation: 'The value property of HTML input elements is typed as string. To perform mathematical addition, strings must be explicitly parsed using Number(val), parseInt(val, 10), or parseFloat(val).'
+    }
+  },
+
+  /* ── DAY 31 ── */
+  {
+    id: 'day-31',
+    day: 31,
+    year: 1,
+    semester: 1,
+    specialization: 'foundation',
+    title: 'Web Storage Architecture: localStorage, sessionStorage & JSON Serialization',
+    slug: 'day-31-web-storage-localstorage-json',
+    category: 'Advanced JavaScript & Browser APIs',
+    estimatedTime: '2 Hours Practical',
+    difficulty: 'Intermediate',
+    objectives: [
+      'Understand client-side storage mechanisms and compare localStorage vs sessionStorage vs cookies.',
+      'Store and retrieve string primitives with localStorage.setItem() and localStorage.getItem().',
+      'Serialize JavaScript objects and arrays using JSON.stringify() and deserialize with JSON.parse().',
+      'Implement a dark/light theme switcher with persistent user preference that survives page reloads.',
+      'Handle storage quotas, clearing storage (removeItem/clear), and checking for null values safely.'
+    ],
+    concept: {
+      overview: 'Web Storage APIs provide a modern, secure way to store key-value pairs directly inside the client browser with up to 5MB of storage without expiring on page reload. This lesson teaches you how to serialize complex JavaScript objects and persist user choices seamlessly.',
+      keyPoints: [
+        'Persistent vs Session: localStorage persists across browser restarts; sessionStorage clears when the tab/window closes.',
+        'Key-Value String Only: Web Storage ONLY stores strings. Storing an object directly results in "[object Object]".',
+        'JSON Serialization: Always use JSON.stringify(data) when saving and JSON.parse(stored) when retrieving objects or arrays.',
+        'Safe Hydration: Always check if the stored item is null before attempting to parse or use it.',
+        'Origin-Scoped Security: Web storage is isolated per protocol, domain, and port (Same-Origin Policy).'
+      ],
+      analogy: 'Think of localStorage like your browser backpack: whenever you close the door (tab/browser) and come back tomorrow, everything you packed inside remains exactly where you left it.'
+    },
+    teacherDemo: {
+      title: 'Persistent Theme & User Profile State Engine',
+      explanation: 'See how user theme choices and profile names are serialized to localStorage and re-applied immediately upon page mount.',
+      language: 'html',
+      code: `<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { font-family: 'Segoe UI', sans-serif; transition: background 0.3s, color 0.3s; padding: 24px; }
+    body.light { background: #f8fafc; color: #0f172a; }
+    body.dark { background: #060c18; color: #ffffff; }
+    .card { max-width: 420px; margin: auto; padding: 24px; border-radius: 14px; border: 1px solid #334155; }
+    button { padding: 10px 16px; border-radius: 8px; border: none; cursor: pointer; font-weight: bold; margin-top: 10px; }
+    .btn-toggle { background: #2563eb; color: #fff; }
+    input { width: 100%; padding: 10px; margin: 8px 0; border-radius: 6px; border: 1px solid #475569; box-sizing: border-box; }
+  </style>
+</head>
+<body class="dark">
+  <div class="card">
+    <h2>🌓 Theme & Storage Manager</h2>
+    <p id="welcomeText">Welcome, Guest!</p>
+    <input type="text" id="usernameInput" placeholder="Enter your name..." />
+    <button id="saveBtn" class="btn-toggle">Save Name to LocalStorage</button>
+    <button id="themeBtn" class="btn-toggle" style="background:#04aa6d;">Toggle Theme (☀️/🌙)</button>
+    <button id="clearBtn" style="background:#ef4444; color:#fff;">Clear Storage</button>
+  </div>
+
+  <script>
+    const themeBtn = document.getElementById("themeBtn");
+    const saveBtn = document.getElementById("saveBtn");
+    const clearBtn = document.getElementById("clearBtn");
+    const usernameInput = document.getElementById("usernameInput");
+    const welcomeText = document.getElementById("welcomeText");
+
+    // 1. Hydrate state on page load
+    const savedTheme = localStorage.getItem("bca_theme") || "dark";
+    document.body.className = savedTheme;
+
+    const savedUser = JSON.parse(localStorage.getItem("bca_user"));
+    if (savedUser && savedUser.name) {
+      welcomeText.textContent = "Welcome back, " + savedUser.name + "!";
+      usernameInput.value = savedUser.name;
+    }
+
+    // 2. Toggle and persist theme
+    themeBtn.addEventListener("click", () => {
+      const newTheme = document.body.className === "dark" ? "light" : "dark";
+      document.body.className = newTheme;
+      localStorage.setItem("bca_theme", newTheme);
+    });
+
+    // 3. Serialize and save object
+    saveBtn.addEventListener("click", () => {
+      const name = usernameInput.value.trim();
+      if (!name) return;
+      const userProfile = { name: name, lastLogin: new Date().toISOString() };
+      localStorage.setItem("bca_user", JSON.stringify(userProfile));
+      welcomeText.textContent = "Welcome back, " + name + "!";
+    });
+
+    // 4. Clear storage
+    clearBtn.addEventListener("click", () => {
+      localStorage.removeItem("bca_user");
+      welcomeText.textContent = "Welcome, Guest!";
+      usernameInput.value = "";
+    });
+  </script>
+</body>
+</html>`
+    },
+    practicalLab: {
+      labTitle: 'Building a Persistent Student Preference Manager',
+      labDescription: 'Create a web application that stores student settings (favorite programming language, dark/light theme, and student ID) in localStorage and restores them automatically upon page load.',
+      initialCode: `<!DOCTYPE html>
+<html>
+<head>
+  <title>Student Preferences</title>
+</head>
+<body>
+  <h1>Student Preferences</h1>
+  <input type="text" id="studentName" placeholder="Student Name" />
+  <select id="favLanguage">
+    <option value="JavaScript">JavaScript</option>
+    <option value="C">C Language</option>
+    <option value="Python">Python</option>
+  </select>
+  <button id="savePreferences">Save Preferences</button>
+  <p id="statusMsg"></p>
+
+  <script>
+    // Your code here: Load from localStorage on load & save with JSON.stringify on click
+  </script>
+</body>
+</html>`,
+      language: 'html',
+      tasks: [
+        {
+          id: 't31-1',
+          title: 'Hydrate Preferences from LocalStorage',
+          instruction: 'Use localStorage.getItem("bca_student_prefs") and JSON.parse() on page load to prefill the input fields if data exists.',
+          hint: 'Remember to check if the retrieved value is not null before parsing with JSON.parse().',
+          validatorRegex: 'localStorage\\.getItem.*JSON\\.parse'
+        },
+        {
+          id: 't31-2',
+          title: 'Serialize and Save Preferences',
+          instruction: 'Assemble the input values into an object and save them using localStorage.setItem("bca_student_prefs", JSON.stringify(obj)).',
+          hint: 'Pass the storage key as the first argument and JSON.stringify(studentObj) as the second argument.',
+          validatorRegex: 'localStorage\\.setItem.*JSON\\.stringify'
+        }
+      ]
+    },
+    debuggingChallenge: {
+      title: 'The "[object Object]" LocalStorage Corruption Bug',
+      buggyCode: `const profile = { name: "Aman", semester: 1 };
+localStorage.setItem("student_profile", profile);
+
+// Later in code...
+const saved = JSON.parse(localStorage.getItem("student_profile"));
+console.log(saved.name); // ❌ SyntaxError: Unexpected token 'o', "[object Object]" is not valid JSON`,
+      bugExplanation: 'localStorage only accepts strings. When passing an object directly without JSON.stringify(), JavaScript invokes profile.toString() which converts the object into the literal string "[object Object]". Attempting to JSON.parse("[object Object]") throws a fatal SyntaxError.',
+      fixedCode: `const profile = { name: "Aman", semester: 1 };
+localStorage.setItem("student_profile", JSON.stringify(profile));
+
+// Later in code...
+const raw = localStorage.getItem("student_profile");
+if (raw) {
+  const saved = JSON.parse(raw);
+  console.log(saved.name); // ✅ "Aman"
+}`
+    },
+    assignment: {
+      title: 'Interactive Persistent Student Profile & Study Notepad',
+      instructions: [
+        'Create a responsive student dashboard card with Dark/Light theme toggle.',
+        'Include an editable note textarea where student revision notes are auto-saved on every keystroke (input event) into localStorage.',
+        'Add a "Reset to Defaults" button that clears localStorage with confirm() verification.',
+        'Ensure the application displays an active status badge showing "Saved to LocalStorage" with a timestamp.'
+      ],
+      submissionCriteria: 'Push index.html and styles.css to your GitHub repo under day-31 folder.',
+      fileName: 'index.html',
+      solutionCode: `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>BCA Day 31 - Persistent Study Notepad</title>
+  <style>
+    body { font-family: 'Segoe UI', sans-serif; background: #060c18; color: #fff; padding: 24px; transition: all 0.3s; }
+    body.light { background: #f8fafc; color: #0f172a; }
+    .card { max-width: 540px; margin: 0 auto; background: #0c1328; border: 1px solid #1e293b; border-radius: 12px; padding: 24px; }
+    body.light .card { background: #ffffff; border-color: #e2e8f0; }
+    textarea { width: 100%; height: 140px; background: #060c18; color: #fff; border: 1px solid #334155; border-radius: 8px; padding: 12px; box-sizing: border-box; }
+    body.light textarea { background: #f1f5f9; color: #0f172a; border-color: #cbd5e1; }
+    .actions { display: flex; gap: 10px; margin-top: 14px; }
+    button { flex: 1; padding: 10px; border-radius: 6px; border: none; font-weight: bold; cursor: pointer; }
+    .btn-theme { background: #2563eb; color: #fff; }
+    .btn-clear { background: #ef4444; color: #fff; }
+    .status { font-size: 12px; color: #10b981; margin-top: 8px; font-weight: bold; }
+  </style>
+</head>
+<body class="dark">
+  <div class="card">
+    <h2>📓 BCA Persistent Study Notepad</h2>
+    <textarea id="notesArea" placeholder="Type your revision notes here... (auto-saved)"></textarea>
+    <div class="status" id="saveStatus">Synced with LocalStorage ✅</div>
+    <div class="actions">
+      <button class="btn-theme" id="themeBtn">🌓 Toggle Theme</button>
+      <button class="btn-clear" id="clearBtn">🗑️ Clear Notes</button>
+    </div>
+  </div>
+
+  <script>
+    const notesArea = document.getElementById("notesArea");
+    const saveStatus = document.getElementById("saveStatus");
+    const themeBtn = document.getElementById("themeBtn");
+    const clearBtn = document.getElementById("clearBtn");
+
+    // Hydrate
+    notesArea.value = localStorage.getItem("bca_notes") || "";
+    const savedTheme = localStorage.getItem("bca_theme") || "dark";
+    document.body.className = savedTheme;
+
+    // Auto-save on input
+    notesArea.addEventListener("input", () => {
+      localStorage.setItem("bca_notes", notesArea.value);
+      saveStatus.textContent = "Saved at " + new Date().toLocaleTimeString();
+    });
+
+    themeBtn.addEventListener("click", () => {
+      const nextTheme = document.body.className === "dark" ? "light" : "dark";
+      document.body.className = nextTheme;
+      localStorage.setItem("bca_theme", nextTheme);
+    });
+
+    clearBtn.addEventListener("click", () => {
+      if (confirm("Clear all notes from browser storage?")) {
+        localStorage.removeItem("bca_notes");
+        notesArea.value = "";
+        saveStatus.textContent = "Storage cleared.";
+      }
+    });
+  </script>
+</body>
+</html>`
+    },
+    githubWorkflow: {
+      repoName: 'html-css-projects',
+      commitMessage: 'feat(day-31): implement web storage localstorage json serialization',
+      commands: [
+        'mkdir day-31',
+        'cd day-31',
+        'git checkout -b feature/day-31-localstorage',
+        'git add index.html',
+        'git commit -m "feat(day-31): implement web storage localstorage json serialization"',
+        'git push origin feature/day-31-localstorage'
+      ],
+      tips: 'Always test your app in Chrome Incognito mode to confirm how it behaves when localStorage is initially empty.'
+    },
+    vivaCheck: {
+      question: 'What is the primary difference between localStorage and sessionStorage in modern browsers?',
+      options: [
+        'localStorage data persists indefinitely until explicitly cleared, while sessionStorage is wiped when the browser tab or session ends.',
+        'sessionStorage can store binary buffers up to 50MB, whereas localStorage only stores plain text strings up to 5KB.',
+        'localStorage is transmitted automatically to the server with every HTTP request header, while sessionStorage stays local.',
+        'sessionStorage encrypts keys with AES-256 before disk writing, while localStorage stores keys unencrypted in RAM.'
+      ],
+      correctAnswer: 0,
+      explanation: 'Both localStorage and sessionStorage store string key-value pairs with a ~5MB limit per origin. The key difference is lifespan: localStorage persists across browser restarts, whereas sessionStorage data is destroyed as soon as the tab or browser session is closed.'
+    }
+  },
+
+  /* ── DAY 32 ── */
+  {
+    id: 'day-32',
+    day: 32,
+    year: 1,
+    semester: 1,
+    specialization: 'foundation',
+    title: 'Persistent Task & To-Do List with LocalStorage CRUD Mechanics',
+    slug: 'day-32-persistent-todo-app-localstorage-crud',
+    category: 'Advanced JavaScript & Browser APIs',
+    estimatedTime: '2.5 Hours Practical',
+    difficulty: 'Intermediate',
+    objectives: [
+      'Master the full CRUD (Create, Read, Update, Delete) state pattern in vanilla JavaScript.',
+      'Maintain an in-memory array of task objects: [{ id, text, completed, createdAt }].',
+      'Synchronize the task array to localStorage on every state change using a reusable saveTasks() helper.',
+      'Render dynamic task lists with completed strike-through toggling and delete buttons.',
+      'Implement task counters showing Total, Active, and Completed task metrics.'
+    ],
+    concept: {
+      overview: 'CRUD is the foundational data manipulation pattern powering all modern software. In this lesson, you will build an interactive Task Manager where creating, toggling completion, and deleting items updates both the in-memory array and localStorage synchronously.',
+      keyPoints: [
+        'Single Source of Truth: Keep an in-memory JavaScript array as the state; render DOM from this array.',
+        'Persistent Mutation: Every time the array is modified (push, filter, map), call saveTasks() immediately.',
+        'Unique Identifiers: Use Date.now() or crypto.randomUUID() to give each task a unique ID for robust updates.',
+        'Declarative Rendering: Clear the list container (list.innerHTML = "") and reconstruct rows from the array.',
+        'Empty State Handling: Display a friendly "No tasks found! Add your first practical assignment" message when the list is empty.'
+      ],
+      analogy: 'Think of the JavaScript array like a university attendance register: whenever a student is added or marked present, you update the register and immediately stamp it into the permanent archive (localStorage).'
+    },
+    teacherDemo: {
+      title: 'Full CRUD Architecture with LocalStorage Persistence',
+      explanation: 'Observe how a single array powers state, rendering, and persistence across all user operations.',
+      language: 'html',
+      code: `<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { font-family: 'Segoe UI', sans-serif; background: #060c18; color: #fff; padding: 20px; }
+    .app { max-width: 480px; margin: auto; background: #0c1328; border: 1px solid #1e293b; padding: 20px; border-radius: 12px; }
+    .input-row { display: flex; gap: 8px; margin-bottom: 16px; }
+    input[type="text"] { flex: 1; padding: 10px; border-radius: 6px; border: 1px solid #334155; background: #060c18; color: #fff; }
+    button { padding: 10px 16px; background: #2563eb; color: #fff; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; }
+    ul { list-style: none; padding: 0; margin: 0; }
+    li { display: flex; align-items: center; justify-content: space-between; padding: 10px; background: #1e293b; margin-bottom: 8px; border-radius: 6px; }
+    li.done span { text-decoration: line-through; opacity: 0.6; }
+    .del-btn { background: #ef4444; padding: 4px 8px; font-size: 12px; }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <h3>📋 BCA Assignment Tracker</h3>
+    <div class="input-row">
+      <input type="text" id="taskInput" placeholder="Add new practical task..." />
+      <button id="addBtn">Add</button>
+    </div>
+    <ul id="taskList"></ul>
+  </div>
+
+  <script>
+    let tasks = JSON.parse(localStorage.getItem("bca_crud_tasks")) || [];
+
+    function saveAndRender() {
+      localStorage.setItem("bca_crud_tasks", JSON.stringify(tasks));
+      const list = document.getElementById("taskList");
+      list.innerHTML = "";
+
+      if (tasks.length === 0) {
+        list.innerHTML = "<li style='justify-content:center;opacity:0.5;'>No assignments pending 🎉</li>";
+        return;
+      }
+
+      tasks.forEach((t) => {
+        const li = document.createElement("li");
+        if (t.done) li.classList.add("done");
+
+        li.innerHTML = '<span onclick="toggleTask(' + t.id + ')" style="cursor:pointer;">' + t.text + '</span>' +
+          '<button class="del-btn" onclick="deleteTask(' + t.id + ')">Delete</button>';
+        list.appendChild(li);
+      });
+    }
+
+    document.getElementById("addBtn").addEventListener("click", () => {
+      const input = document.getElementById("taskInput");
+      const text = input.value.trim();
+      if (!text) return;
+      tasks.push({ id: Date.now(), text, done: false });
+      input.value = "";
+      saveAndRender();
+    });
+
+    window.toggleTask = (id) => {
+      tasks = tasks.map(t => t.id === id ? { ...t, done: !t.done } : t);
+      saveAndRender();
+    };
+
+    window.deleteTask = (id) => {
+      tasks = tasks.filter(t => t.id !== id);
+      saveAndRender();
+    };
+
+    saveAndRender();
+  </script>
+</body>
+</html>`
+    },
+    practicalLab: {
+      labTitle: 'Implementing LocalStorage Filter Tabs & Task Counter',
+      labDescription: 'Extend the Task Manager to calculate and display real-time counters (Total, Active, Done) and filter tasks based on active view pills.',
+      initialCode: `<!DOCTYPE html>
+<html>
+<head><title>BCA Task Tracker</title></head>
+<body>
+  <h2>Tasks (<span id="totalCount">0</span> total, <span id="doneCount">0</span> completed)</h2>
+  <input id="taskInput" type="text" placeholder="Task title..." />
+  <button id="addBtn">Add</button>
+  <ul id="list"></ul>
+
+  <script>
+    // Write code to manage tasks array, save to localStorage, and update metrics
+  </script>
+</body>
+</html>`,
+      language: 'html',
+      tasks: [
+        {
+          id: 't32-1',
+          title: 'Implement Array Filter for Metrics',
+          instruction: 'Calculate done tasks using tasks.filter(t => t.done).length and update the DOM element.',
+          hint: 'Array.prototype.filter() returns a new array matching the condition. Check its length.',
+          validatorRegex: 'tasks\\.filter.*done'
+        },
+        {
+          id: 't32-2',
+          title: 'Delete Task from Array and Sync',
+          instruction: 'Implement task deletion using tasks = tasks.filter(t => t.id !== id) followed by localStorage save.',
+          hint: 'Filtering out the target ID returns all items except the one being deleted.',
+          validatorRegex: 'tasks\\.filter.*id\\s*!==.*localStorage\\.setItem'
+        }
+      ]
+    },
+    debuggingChallenge: {
+      title: 'Direct Array Mutation Without LocalStorage Re-save Bug',
+      buggyCode: `function markAsDone(taskId) {
+  const item = tasks.find(t => t.id === taskId);
+  if (item) {
+    item.done = true; // ✅ In-memory array updated
+    renderList();     // ✅ UI updates on screen
+    // ❌ Bug: Forgot to re-save to localStorage!
+    // When the user reloads the page, task reverts to incomplete!
+  }
+}`,
+      bugExplanation: 'Modifying an in-memory object inside an array does not automatically notify localStorage. You must explicitly invoke localStorage.setItem() whenever state mutations occur, otherwise all changes are lost on page refresh.',
+      fixedCode: `function markAsDone(taskId) {
+  const item = tasks.find(t => t.id === taskId);
+  if (item) {
+    item.done = true;
+    localStorage.setItem("bca_crud_tasks", JSON.stringify(tasks)); // ✅ Saved!
+    renderList();
+  }
+}`
+    },
+    assignment: {
+      title: 'BCA Semester 1 Practical Sprint Tracker with Priority Badges',
+      instructions: [
+        'Create a full-featured CRUD Task Manager with Task Title, Subject (BCS-011, BCSL-013, BCS-012), and Priority (High, Medium, Low).',
+        'Persist all assignments in localStorage with status toggles.',
+        'Add a Search Filter input that filters tasks by name in real-time.',
+        'Include a "Clear Completed" button to purge finished assignments.'
+      ],
+      submissionCriteria: 'Push working index.html and app.js to your GitHub repository under day-32.',
+      fileName: 'index.html',
+      solutionCode: `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>BCA Day 32 - Practical Tracker</title>
+  <style>
+    body { font-family: 'Segoe UI', sans-serif; background: #060c18; color: #fff; padding: 24px; }
+    .card { max-width: 540px; margin: auto; background: #0c1328; border: 1px solid #1e293b; padding: 24px; border-radius: 12px; }
+    .form-grid { display: grid; grid-template-columns: 2fr 1fr auto; gap: 8px; margin-bottom: 16px; }
+    input, select { padding: 10px; background: #060c18; border: 1px solid #334155; color: #fff; border-radius: 6px; }
+    button { padding: 10px 16px; background: #2563eb; color: #fff; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
+    .badge { font-size: 11px; padding: 2px 8px; border-radius: 4px; font-weight: bold; }
+    .badge-High { background: #ef4444; color: #fff; }
+    .badge-Medium { background: #f59e0b; color: #000; }
+    .badge-Low { background: #10b981; color: #fff; }
+    ul { list-style: none; padding: 0; margin-top: 16px; }
+    li { display: flex; align-items: center; justify-content: space-between; padding: 12px; background: #1e293b; margin-bottom: 8px; border-radius: 6px; }
+    li.done .title { text-decoration: line-through; opacity: 0.5; }
+    .del-btn { background: #dc2626; padding: 4px 8px; font-size: 12px; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>🎯 BCA Practical Sprint Tracker</h2>
+    <div class="form-grid">
+      <input type="text" id="taskTitle" placeholder="Task name..." />
+      <select id="priority">
+        <option value="High">High</option>
+        <option value="Medium">Medium</option>
+        <option value="Low">Low</option>
+      </select>
+      <button id="addBtn">Add Task</button>
+    </div>
+    <ul id="taskList"></ul>
+  </div>
+
+  <script>
+    let tasks = JSON.parse(localStorage.getItem("bca_sprint_tasks")) || [];
+
+    function saveAndRender() {
+      localStorage.setItem("bca_sprint_tasks", JSON.stringify(tasks));
+      const list = document.getElementById("taskList");
+      list.innerHTML = "";
+
+      tasks.forEach((t) => {
+        const li = document.createElement("li");
+        if (t.done) li.classList.add("done");
+        li.innerHTML = '<div>' +
+          '<input type="checkbox" ' + (t.done ? "checked" : "") + ' onchange="toggleTask(' + t.id + ')" />' +
+          '<span class="title" style="margin-left: 8px;">' + t.title + '</span>' +
+          '<span class="badge badge-' + t.priority + '">' + t.priority + '</span>' +
+          '</div>' +
+          '<button class="del-btn" onclick="deleteTask(' + t.id + ')">Delete</button>';
+        list.appendChild(li);
+      });
+    }
+
+    document.getElementById("addBtn").addEventListener("click", () => {
+      const titleInput = document.getElementById("taskTitle");
+      const priority = document.getElementById("priority").value;
+      const title = titleInput.value.trim();
+      if (!title) return;
+      tasks.push({ id: Date.now(), title, priority, done: false });
+      titleInput.value = "";
+      saveAndRender();
+    });
+
+    window.toggleTask = (id) => {
+      tasks = tasks.map(t => t.id === id ? { ...t, done: !t.done } : t);
+      saveAndRender();
+    };
+
+    window.deleteTask = (id) => {
+      tasks = tasks.filter(t => t.id !== id);
+      saveAndRender();
+    };
+
+    saveAndRender();
+  </script>
+</body>
+</html>`
+    },
+    githubWorkflow: {
+      repoName: 'html-css-projects',
+      commitMessage: 'feat(day-32): build persistent todo app with localstorage crud mechanics',
+      commands: [
+        'mkdir day-32',
+        'cd day-32',
+        'git checkout -b feature/day-32-crud-todo',
+        'git add index.html',
+        'git commit -m "feat(day-32): build persistent todo app with localstorage crud mechanics"',
+        'git push origin feature/day-32-crud-todo'
+      ],
+      tips: 'Use array methods like filter, map, and find to avoid mutating the original array directly.'
+    },
+    vivaCheck: {
+      question: 'Which Array method is best suited to delete an item with id: 101 from an array of task objects without mutating the original array?',
+      options: [
+        'tasks.filter(task => task.id !== 101)',
+        'tasks.map(task => task.id !== 101)',
+        'tasks.forEach(task => delete task.id)',
+        'tasks.slice(101, 1)'
+      ],
+      correctAnswer: 0,
+      explanation: 'Array.prototype.filter() creates a shallow copy of a portion of a given array, filtered down to just the elements that pass the test implemented by the provided function. Filtering for task.id !== 101 cleanly removes the matching item.'
+    }
+  },
+
+  /* ── DAY 33 ── */
+  {
+    id: 'day-33',
+    day: 33,
+    year: 1,
+    semester: 1,
+    specialization: 'foundation',
+    title: 'JavaScript Timers: setTimeout, setInterval & Digital Clock / Countdown Engine',
+    slug: 'day-33-javascript-timers-settimeout-setinterval-digital-clock',
+    category: 'Advanced JavaScript & Browser APIs',
+    estimatedTime: '2.5 Hours Practical',
+    difficulty: 'Intermediate',
+    objectives: [
+      'Understand the browser Event Loop, Web APIs, and asynchronous timer queues.',
+      'Execute delayed single-shot code execution using setTimeout() and cancel with clearTimeout().',
+      'Build recurring interval engines using setInterval() and manage lifecycle with clearInterval().',
+      'Format time strings with 2-digit zero padding using String.prototype.padStart(2, "0").',
+      'Build a production-grade BCA Examination Countdown Timer with Start, Pause, and Reset controls.'
+    ],
+    concept: {
+      overview: 'Timers in JavaScript enable time-driven execution such as digital clocks, exam countdowns, auto-save engines, and animated sequences. Because JavaScript is single-threaded, timers do not freeze the main thread; rather, they register callbacks with the browser Web API layer.',
+      keyPoints: [
+        'Asynchronous Non-Blocking: setTimeout and setInterval run asynchronously without locking the UI thread.',
+        'Interval ID Reference: setInterval returns a numeric timer ID. Keep this reference to cancel it with clearInterval(timerId).',
+        'Stacking Interval Trap: Always clear any existing interval before starting a new one, or clicking "Start" multiple times will create duplicate intervals running in parallel.',
+        'Format Padding: Use String(num).padStart(2, "0") to ensure single-digit seconds (5) display cleanly as "05".',
+        'State Management: Track running/paused state to toggle button text and prevent timer race conditions.'
+      ],
+      analogy: 'Think of setTimeout like setting an alarm on your phone: you set it for 10 minutes and continue working freely. When the alarm rings, your phone alerts you without stopping what you were doing.'
+    },
+    teacherDemo: {
+      title: 'Real-Time Digital Clock & Stopwatch Architecture',
+      explanation: 'Demonstrating how to format live system time and manage countdown intervals safely.',
+      language: 'html',
+      code: `<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { font-family: 'Segoe UI', monospace; background: #060c18; color: #fff; text-align: center; padding: 40px; }
+    .clock-card { max-width: 400px; margin: auto; background: #0c1328; border: 1px solid #1e293b; border-radius: 16px; padding: 24px; }
+    .display { font-size: 42px; font-weight: bold; color: #10b981; letter-spacing: 2px; margin: 20px 0; }
+    .btn-row { display: flex; gap: 8px; justify-content: center; }
+    button { padding: 10px 18px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; color: #fff; }
+    .btn-start { background: #2563eb; }
+    .btn-pause { background: #f59e0b; color: #000; }
+    .btn-reset { background: #ef4444; }
+  </style>
+</head>
+<body>
+  <div class="clock-card">
+    <h3>⏱️ Exam Countdown Engine</h3>
+    <div class="display" id="timeDisplay">05:00</div>
+    <div class="btn-row">
+      <button class="btn-start" id="startBtn">Start</button>
+      <button class="btn-pause" id="pauseBtn">Pause</button>
+      <button class="btn-reset" id="resetBtn">Reset</button>
+    </div>
+  </div>
+
+  <script>
+    let totalSeconds = 300; // 5 minutes
+    let timerId = null;
+
+    function renderDisplay() {
+      const mins = Math.floor(totalSeconds / 60);
+      const secs = totalSeconds % 60;
+      document.getElementById("timeDisplay").textContent = 
+        String(mins).padStart(2, "0") + ":" + String(secs).padStart(2, "0");
+    }
+
+    document.getElementById("startBtn").addEventListener("click", () => {
+      if (timerId !== null) return; // Prevent stacking intervals
+
+      timerId = setInterval(() => {
+        if (totalSeconds > 0) {
+          totalSeconds--;
+          renderDisplay();
+        } else {
+          clearInterval(timerId);
+          timerId = null;
+          alert("⏰ Time is up! Examination submitted.");
+        }
+      }, 1000);
+    });
+
+    document.getElementById("pauseBtn").addEventListener("click", () => {
+      clearInterval(timerId);
+      timerId = null;
+    });
+
+    document.getElementById("resetBtn").addEventListener("click", () => {
+      clearInterval(timerId);
+      timerId = null;
+      totalSeconds = 300;
+      renderDisplay();
+    });
+
+    renderDisplay();
+  </script>
+</body>
+</html>`
+    },
+    practicalLab: {
+      labTitle: 'Building a Pomodoro Focus Study Timer',
+      labDescription: 'Implement a customizable 25-minute study timer with pause/resume functionality and audio-visual completion alerts.',
+      initialCode: `<!DOCTYPE html>
+<html>
+<head><title>BCA Pomodoro Timer</title></head>
+<body>
+  <h1 id="timer">25:00</h1>
+  <button id="start">Start</button>
+  <button id="pause">Pause</button>
+  <button id="reset">Reset</button>
+
+  <script>
+    // Implement timer with setInterval, padStart, and clearInterval
+  </script>
+</body>
+</html>`,
+      language: 'html',
+      tasks: [
+        {
+          id: 't33-1',
+          title: 'Format Timer with padStart',
+          instruction: 'Use String(seconds).padStart(2, "0") to ensure digits are formatted with leading zeros.',
+          hint: 'padStart(2, "0") ensures 4 becomes "04".',
+          validatorRegex: 'padStart\\(2,\\s*["\']0["\']\\)'
+        },
+        {
+          id: 't33-2',
+          title: 'Implement Clean Interval Cancellation',
+          instruction: 'Ensure clearInterval(timerId) is called inside pause and reset handlers and set timerId = null.',
+          hint: 'Clearing the interval stops the timer callback from firing again.',
+          validatorRegex: 'clearInterval\\(.*\\)'
+        }
+      ]
+    },
+    debuggingChallenge: {
+      title: 'The Stacking Multiple Intervals Bug',
+      buggyCode: `let timer = null;
+let seconds = 60;
+
+// Clicking this button 5 times starts 5 intervals!
+// Seconds decrease by 5 every second!
+document.getElementById("start").addEventListener("click", () => {
+  timer = setInterval(() => {
+    seconds--;
+    console.log(seconds);
+  }, 1000);
+});`,
+      bugExplanation: 'Each click to start creates a new setInterval without clearing the previous one. The previous interval handles continue running in background memory, accelerating the countdown and causing race conditions.',
+      fixedCode: `let timer = null;
+let seconds = 60;
+
+document.getElementById("start").addEventListener("click", () => {
+  // ✅ Clear any active interval first!
+  if (timer !== null) {
+    clearInterval(timer);
+  }
+
+  timer = setInterval(() => {
+    seconds--;
+    console.log(seconds);
+  }, 1000);
+});`
+    },
+    assignment: {
+      title: 'BCA Term-End Examination CBT Countdown Engine',
+      instructions: [
+        'Build a complete 60-minute examination timer interface with hours, minutes, and seconds display.',
+        'Change timer display color to Amber at 10 minutes remaining and pulsing Red at 1 minute remaining.',
+        'Add a warning popup modal when 5 minutes remain.',
+        'Auto-submit and lock the examination when the timer reaches 00:00:00.'
+      ],
+      submissionCriteria: 'Push index.html and timer.js to GitHub under day-33.',
+      fileName: 'index.html',
+      solutionCode: `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>BCA Day 33 - Exam Timer</title>
+  <style>
+    body { font-family: 'Segoe UI', monospace; background: #060c18; color: #fff; padding: 24px; text-align: center; }
+    .card { max-width: 480px; margin: auto; background: #0c1328; border: 1px solid #1e293b; padding: 24px; border-radius: 14px; }
+    .timer { font-size: 52px; font-weight: 800; color: #10b981; margin: 20px 0; transition: color 0.3s; }
+    .timer.warning { color: #f59e0b; }
+    .timer.danger { color: #ef4444; animation: pulse 1s infinite; }
+    @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+    .btn-row { display: flex; gap: 8px; justify-content: center; }
+    button { padding: 12px 20px; font-weight: bold; border-radius: 8px; border: none; cursor: pointer; color: #fff; }
+    .start { background: #2563eb; }
+    .pause { background: #64748b; }
+    .reset { background: #dc2626; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>🎓 BCSL-013 Lab Exam Timer</h2>
+    <div class="timer" id="timerDisplay">60:00</div>
+    <div class="btn-row">
+      <button class="start" id="startBtn">Start Exam</button>
+      <button class="pause" id="pauseBtn">Pause</button>
+      <button class="reset" id="resetBtn">Reset</button>
+    </div>
+  </div>
+
+  <script>
+    let remaining = 3600; // 60 mins
+    let timer = null;
+    const display = document.getElementById("timerDisplay");
+
+    function update() {
+      const m = Math.floor(remaining / 60);
+      const s = remaining % 60;
+      display.textContent = String(m).padStart(2, "0") + ":" + String(s).padStart(2, "0");
+
+      if (remaining <= 60) {
+        display.className = "timer danger";
+      } else if (remaining <= 600) {
+        display.className = "timer warning";
+      } else {
+        display.className = "timer";
+      }
+    }
+
+    document.getElementById("startBtn").addEventListener("click", () => {
+      if (timer) return;
+      timer = setInterval(() => {
+        if (remaining > 0) {
+          remaining--;
+          update();
+        } else {
+          clearInterval(timer);
+          timer = null;
+          alert("🚨 Examination Time Expired! Papers auto-submitted.");
+        }
+      }, 1000);
+    });
+
+    document.getElementById("pauseBtn").addEventListener("click", () => {
+      clearInterval(timer);
+      timer = null;
+    });
+
+    document.getElementById("resetBtn").addEventListener("click", () => {
+      clearInterval(timer);
+      timer = null;
+      remaining = 3600;
+      update();
+    });
+
+    update();
+  </script>
+</body>
+</html>`
+    },
+    githubWorkflow: {
+      repoName: 'html-css-projects',
+      commitMessage: 'feat(day-33): implement javascript timers and exam countdown engine',
+      commands: [
+        'mkdir day-33',
+        'cd day-33',
+        'git checkout -b feature/day-33-timers',
+        'git add index.html',
+        'git commit -m "feat(day-33): implement javascript timers and exam countdown engine"',
+        'git push origin feature/day-33-timers'
+      ],
+      tips: 'Always store timer handles returned by setInterval/setTimeout in variables so they can be canceled.'
+    },
+    vivaCheck: {
+      question: 'Why is setTimeout(callback, 1000) not guaranteed to execute after exactly 1000.000 milliseconds?',
+      options: [
+        'JavaScript is single-threaded; timer callbacks wait in the Task Queue until the main Call Stack finishes executing synchronous work.',
+        'Browser security sandboxes randomly introduce +/- 200ms jitter to prevent side-channel timing attacks.',
+        'The DOM renderer throttles timer frequencies to match the monitor 60Hz or 120Hz refresh cycle.',
+        'Timer intervals are converted to integer ticks measured exclusively in system CPU clock cycles.'
+      ],
+      correctAnswer: 0,
+      explanation: 'JavaScript operates on a single-threaded Event Loop. When 1000ms elapses, the browser moves the callback to the Task Queue. If the Call Stack is busy executing heavy synchronous JavaScript, the timer callback must wait until the stack clears.'
+    }
+  },
+
+  /* ── DAY 34 ── */
+  {
+    id: 'day-34',
+    day: 34,
+    year: 1,
+    semester: 1,
+    specialization: 'foundation',
+    title: 'DOM Event Delegation, Event Bubbling & Dynamic List Architecture',
+    slug: 'day-34-dom-event-delegation-bubbling',
+    category: 'Advanced JavaScript & Browser APIs',
+    estimatedTime: '2 Hours Practical',
+    difficulty: 'Intermediate',
+    objectives: [
+      'Master the three phases of DOM event propagation: Capturing, Target, and Bubbling.',
+      'Implement Event Delegation by attaching a single event listener to a parent container instead of hundreds of child nodes.',
+      'Identify target elements using event.target and locate ancestor components with Element.prototype.closest().',
+      'Distinguish between event.target (the element clicked) and event.currentTarget (the element listening).',
+      'Optimize web performance and eliminate memory leaks in large dynamic lists.'
+    ],
+    concept: {
+      overview: 'In dynamic web applications, items like comments, chat messages, or table rows are created and removed constantly. Attaching individual event listeners to thousands of elements slows down the browser and wastes memory. Event Delegation solves this by letting events bubble up to a single parent listener.',
+      keyPoints: [
+        'Event Bubbling: When an element is clicked, the event triggers on the element and then bubbles up through its ancestors all the way to document.',
+        'Single Listener: Instead of attaching 100 listeners to 100 buttons, attach 1 listener to the parent <ul> container.',
+        'Dynamic Support: Event delegation automatically works for elements added to the DOM in the future without needing re-binding.',
+        'element.closest(selector): Traverses ancestors to find the nearest matching element, solving issues when clicking nested <i> icons inside buttons.',
+        'e.stopPropagation(): Halts bubbling up the DOM tree when you explicitly do not want parent handlers to fire.'
+      ],
+      analogy: 'Imagine an apartment building with 100 residents: instead of hiring 100 security guards to stand outside each apartment door, you place one security guard at the main building entrance who checks everyone coming in.'
+    },
+    teacherDemo: {
+      title: 'Event Delegation with Element.prototype.closest()',
+      explanation: 'See how a single click handler on the table manages edit, delete, and star actions across all dynamically added rows.',
+      language: 'html',
+      code: `<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { font-family: 'Segoe UI', sans-serif; background: #060c18; color: #fff; padding: 24px; }
+    .card { max-width: 500px; margin: auto; background: #0c1328; border: 1px solid #1e293b; padding: 20px; border-radius: 12px; }
+    ul { list-style: none; padding: 0; margin-top: 16px; }
+    li { display: flex; align-items: center; justify-content: space-between; padding: 10px; background: #1e293b; margin-bottom: 8px; border-radius: 6px; }
+    button { padding: 6px 10px; border-radius: 4px; border: none; cursor: pointer; font-weight: bold; }
+    .btn-fav { background: #f59e0b; color: #000; margin-right: 6px; }
+    .btn-del { background: #ef4444; color: #fff; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h3>👨‍🎓 BCA Student Directory</h3>
+    <button id="addStudentBtn" style="background:#2563eb;color:#fff;">+ Add Student</button>
+    <ul id="studentList">
+      <li data-id="1"><span>Rahul Sharma</span><div><button class="btn-fav">⭐</button><button class="btn-del">Delete</button></div></li>
+      <li data-id="2"><span>Priya Patel</span><div><button class="btn-fav">⭐</button><button class="btn-del">Delete</button></div></li>
+    </ul>
+  </div>
+
+  <script>
+    const list = document.getElementById("studentList");
+
+    // ⚡ SINGLE EVENT LISTENER FOR ENTIRE LIST (Event Delegation)
+    list.addEventListener("click", (e) => {
+      const delBtn = e.target.closest(".btn-del");
+      const favBtn = e.target.closest(".btn-fav");
+
+      if (delBtn) {
+        const row = delBtn.closest("li");
+        const studentId = row.dataset.id;
+        console.log("Deleted student with ID:", studentId);
+        row.remove();
+      }
+
+      if (favBtn) {
+        const row = favBtn.closest("li");
+        row.style.background = row.style.background === "rgb(4, 170, 109)" ? "#1e293b" : "#04aa6d";
+      }
+    });
+
+    document.getElementById("addStudentBtn").addEventListener("click", () => {
+      const newId = Date.now();
+      const li = document.createElement("li");
+      li.dataset.id = newId;
+      li.innerHTML = '<span>New Student (' + newId.toString().slice(-4) + ')</span><div><button class="btn-fav">⭐</button><button class="btn-del">Delete</button></div>';
+      list.appendChild(li);
+    });
+  </script>
+</body>
+</html>`
+    },
+    practicalLab: {
+      labTitle: 'Implementing Dynamic Shopping Cart with Event Delegation',
+      labDescription: 'Build an interactive cart where clicking + / - / Remove buttons triggers actions via a single parent delegated listener.',
+      initialCode: `<!DOCTYPE html>
+<html>
+<head><title>Event Delegation Lab</title></head>
+<body>
+  <ul id="cart">
+    <li data-id="101"><span>HTML5 Book</span> <button class="btn-qty" data-action="inc">+</button> <span class="qty">1</span> <button class="btn-del">Remove</button></li>
+  </ul>
+
+  <script>
+    // Bind ONE click listener to #cart using e.target.closest()
+  </script>
+</body>
+</html>`,
+      language: 'html',
+      tasks: [
+        {
+          id: 't34-1',
+          title: 'Implement e.target.closest Selector',
+          instruction: 'Use e.target.closest(".btn-del") to detect if a delete button or any of its child icons were clicked.',
+          hint: 'Element.closest() searches the element and its ancestors for a CSS selector.',
+          validatorRegex: 'e\\.target\\.closest\\(.*\\)'
+        },
+        {
+          id: 't34-2',
+          title: 'Access dataset from Ancestor Element',
+          instruction: 'Extract the custom data-id attribute using element.closest("li").dataset.id.',
+          hint: 'The dataset property provides read/write access to custom data-* attributes.',
+          validatorRegex: '\\.dataset\\.id'
+        }
+      ]
+    },
+    debuggingChallenge: {
+      title: 'The Nested Icon Inside Button Click Bug',
+      buggyCode: `// HTML: <button class="delete-btn"><i class="icon">🗑️</i> Delete</button>
+
+list.addEventListener("click", (e) => {
+  // ❌ Bug: If user clicks the <i> icon, e.target is the <i> element, NOT the button!
+  if (e.target.className === "delete-btn") {
+    e.target.parentElement.remove();
+  }
+});`,
+      bugExplanation: 'When a button has inner elements (like icons or spans), clicking the icon makes e.target refer to the inner element. Checking e.target.className === "delete-btn" fails because e.target is the <i> tag, not the <button>.',
+      fixedCode: `list.addEventListener("click", (e) => {
+  // ✅ Element.closest() safely traverses up to the button!
+  const btn = e.target.closest(".delete-btn");
+  if (btn) {
+    const row = btn.closest("li");
+    if (row) row.remove();
+  }
+});`
+    },
+    assignment: {
+      title: 'Interactive University Course Syllabus Checklist with Event Delegation',
+      instructions: [
+        'Build a dynamic syllabus topic checklist with 5 initial subjects.',
+        'Use Event Delegation on the container to handle marking topics as Completed, Bookmarked, or Deleted.',
+        'Add an "+ Add Topic" input that inserts new checklist items dynamically; verify that new items respond to clicks immediately without re-attaching listeners.',
+        'Display live statistics: Total Topics, Completed Topics, and Percentage Complete.'
+      ],
+      submissionCriteria: 'Push index.html and app.js to your GitHub repository under day-34.',
+      fileName: 'index.html',
+      solutionCode: `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>BCA Day 34 - Event Delegation Syllabus</title>
+  <style>
+    body { font-family: 'Segoe UI', sans-serif; background: #060c18; color: #fff; padding: 24px; }
+    .card { max-width: 520px; margin: auto; background: #0c1328; border: 1px solid #1e293b; padding: 24px; border-radius: 12px; }
+    .input-row { display: flex; gap: 8px; margin-bottom: 16px; }
+    input { flex: 1; padding: 10px; background: #060c18; border: 1px solid #334155; color: #fff; border-radius: 6px; }
+    button { padding: 10px 16px; background: #2563eb; color: #fff; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
+    ul { list-style: none; padding: 0; margin-top: 14px; }
+    li { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; background: #1e293b; margin-bottom: 8px; border-radius: 6px; }
+    li.done span { text-decoration: line-through; opacity: 0.6; }
+    .btn-done { background: #10b981; }
+    .btn-del { background: #ef4444; margin-left: 6px; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>📚 BCS-011 Syllabus Checklist</h2>
+    <div class="input-row">
+      <input type="text" id="topicInput" placeholder="Add syllabus unit or chapter..." />
+      <button id="addBtn">Add</button>
+    </div>
+    <ul id="checklist">
+      <li data-id="1"><span>Unit 1: Computer Fundamentals</span><div><button class="btn-done">✓</button><button class="btn-del">✕</button></div></li>
+      <li data-id="2"><span>Unit 2: Memory & Storage Devices</span><div><button class="btn-done">✓</button><button class="btn-del">✕</button></div></li>
+    </ul>
+  </div>
+
+  <script>
+    const checklist = document.getElementById("checklist");
+
+    // Single Delegated Listener
+    checklist.addEventListener("click", (e) => {
+      const doneBtn = e.target.closest(".btn-done");
+      const delBtn = e.target.closest(".btn-del");
+
+      if (doneBtn) {
+        const item = doneBtn.closest("li");
+        item.classList.toggle("done");
+      }
+
+      if (delBtn) {
+        const item = delBtn.closest("li");
+        item.remove();
+      }
+    });
+
+    document.getElementById("addBtn").addEventListener("click", () => {
+      const input = document.getElementById("topicInput");
+      const text = input.value.trim();
+      if (!text) return;
+
+      const li = document.createElement("li");
+      li.dataset.id = Date.now();
+      li.innerHTML = '<span>' + text + '</span><div><button class="btn-done">✓</button><button class="btn-del">✕</button></div>';
+      checklist.appendChild(li);
+      input.value = "";
+    });
+  </script>
+</body>
+</html>`
+    },
+    githubWorkflow: {
+      repoName: 'html-css-projects',
+      commitMessage: 'feat(day-34): implement dom event delegation and bubbling architecture',
+      commands: [
+        'mkdir day-34',
+        'cd day-34',
+        'git checkout -b feature/day-34-event-delegation',
+        'git add index.html',
+        'git commit -m "feat(day-34): implement dom event delegation and bubbling architecture"',
+        'git push origin feature/day-34-event-delegation'
+      ],
+      tips: 'Always use element.closest() in delegated listeners to reliably handle clicks on nested elements like icons.'
+    },
+    vivaCheck: {
+      question: 'What is the main advantage of Event Delegation over adding event listeners directly to individual child elements?',
+      options: [
+        'It reduces memory consumption by using a single listener and automatically handles future dynamically added children without re-binding.',
+        'It forces event execution to bypass the browser Event Loop and run synchronously directly on CPU registers.',
+        'It prevents CSS selectors from modifying layout properties during mouse interactions.',
+        'It automatically serializes event payloads into encrypted JSON buffers before passing them to listeners.'
+      ],
+      correctAnswer: 0,
+      explanation: 'Event Delegation takes advantage of event bubbling to listen for events on a parent element. This drastically reduces the number of event listeners in memory and automatically handles elements added dynamically in the future.'
+    }
+  },
+
+  /* ── DAY 35 ── */
+  {
+    id: 'day-35',
+    day: 35,
+    year: 1,
+    semester: 1,
+    specialization: 'foundation',
+    title: 'Dynamic Modal Dialogs, Overlay Mechanics & Keyboard Accessibility',
+    slug: 'day-35-dynamic-modal-dialog-keyboard-accessibility',
+    category: 'Advanced JavaScript & Browser APIs',
+    estimatedTime: '2.5 Hours Practical',
+    difficulty: 'Intermediate',
+    objectives: [
+      'Design full-screen backdrop overlays with CSS fixed positioning and backdrop-filter blur.',
+      'Control modal visibility via JavaScript classes (is-open, active) and manage document body scroll locks.',
+      'Implement multi-layered dismissal: Close Button click, Backdrop overlay click, and Escape key press.',
+      'Trap keyboard focus and prevent event propagation bugs using event.stopPropagation().',
+      'Build reusable modal dialog components that accept dynamic titles, content, and callback actions.'
+    ],
+    concept: {
+      overview: 'Modal dialogs are essential UI components for confirmation prompts, authentication gates, image lightboxes, and detail drawers. Crafting professional modals requires careful orchestration of CSS overlays, body scroll prevention, event propagation handling, and keyboard accessibility (ESC key dismissal).',
+      keyPoints: [
+        'Overlay Architecture: Use position: fixed; inset: 0; z-index: 9999 with a semi-transparent black background (#00000099).',
+        'Body Scroll Lock: When the modal opens, set document.body.style.overflow = "hidden" to prevent background scrolling.',
+        'stopPropagation(): Backdrop click handlers must avoid closing when users click inside the modal content box.',
+        'Keyboard Accessibility: Listen on window for keydown events and dismiss when e.key === "Escape".',
+        'ARIA Attributes: Add aria-modal="true" and role="dialog" for screen reader accessibility compliance.'
+      ],
+      analogy: 'Think of a modal dialog like a spotlight on a theatre stage: the rest of the stage is darkened and muted, directing 100% of the audience attention onto the central scene until the spotlight is turned off.'
+    },
+    teacherDemo: {
+      title: 'Accessible Modal Dialog Architecture with ESC & Backdrop Dismissal',
+      explanation: 'Notice how click propagation is controlled and the Escape key listener is registered cleanly.',
+      language: 'html',
+      code: `<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { font-family: 'Segoe UI', sans-serif; background: #060c18; color: #fff; padding: 24px; }
+    .backdrop {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.75);
+      backdrop-filter: blur(4px); display: none; align-items: center; justify-content: center;
+      z-index: 1000;
+    }
+    .backdrop.active { display: flex; }
+    .modal-box {
+      background: #0c1328; border: 1px solid #1e293b; border-radius: 14px;
+      padding: 24px; max-width: 440px; width: 90%; box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+      transform: scale(0.95); transition: transform 0.2s;
+    }
+    .backdrop.active .modal-box { transform: scale(1); }
+    .modal-header { display: flex; justify-content: space-between; align-items: center; }
+    .close-btn { background: none; border: none; color: #94a3b8; font-size: 20px; cursor: pointer; }
+    .modal-footer { margin-top: 20px; display: flex; justify-content: flex-end; gap: 8px; }
+    button.primary { background: #2563eb; color: #fff; border: none; padding: 10px 16px; border-radius: 6px; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <h2>🎓 BCA Portal Confirmation Engine</h2>
+  <button class="primary" id="openModalBtn">Open Submission Modal</button>
+
+  <div class="backdrop" id="modalBackdrop">
+    <div class="modal-box" id="modalContent">
+      <div class="modal-header">
+        <h3>Confirm Practical Submission</h3>
+        <button class="close-btn" id="closeBtn">✕</button>
+      </div>
+      <p style="color:#94a3b8;margin-top:12px;">Are you ready to submit Day 35 practical tasks to the evaluation studio? This action will sync with your profile.</p>
+      <div class="modal-footer">
+        <button id="cancelBtn" style="background:#334155;color:#fff;border:none;padding:10px 16px;border-radius:6px;cursor:pointer;">Cancel</button>
+        <button class="primary" id="confirmBtn">Confirm & Submit</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const backdrop = document.getElementById("modalBackdrop");
+    const modalContent = document.getElementById("modalContent");
+    const openBtn = document.getElementById("openModalBtn");
+    const closeBtn = document.getElementById("closeBtn");
+    const cancelBtn = document.getElementById("cancelBtn");
+
+    function openModal() {
+      backdrop.classList.add("active");
+      document.body.style.overflow = "hidden"; // Prevent body scroll
+    }
+
+    function closeModal() {
+      backdrop.classList.remove("active");
+      document.body.style.overflow = ""; // Restore body scroll
+    }
+
+    openBtn.addEventListener("click", openModal);
+    closeBtn.addEventListener("click", closeModal);
+    cancelBtn.addEventListener("click", closeModal);
+
+    // Close on backdrop click (outside modal content)
+    backdrop.addEventListener("click", (e) => {
+      if (e.target === backdrop) closeModal();
+    });
+
+    // Close on ESC key press
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && backdrop.classList.contains("active")) {
+        closeModal();
+      }
+    });
+  </script>
+</body>
+</html>`
+    },
+    practicalLab: {
+      labTitle: 'Building an Accessible Student Feedback Modal',
+      labDescription: 'Implement a feedback modal with animation transitions, Escape key listeners, and body scroll lock.',
+      initialCode: `<!DOCTYPE html>
+<html>
+<head><title>Modal Dialog Lab</title></head>
+<body>
+  <button id="openFeedback">Give Feedback</button>
+  <div id="modal" style="display:none;">
+    <div class="box">
+      <h2>Feedback</h2>
+      <button id="close">Close</button>
+    </div>
+  </div>
+
+  <script>
+    // Implement modal open/close with Escape key listener and body scroll lock
+  </script>
+</body>
+</html>`,
+      language: 'html',
+      tasks: [
+        {
+          id: 't35-1',
+          title: 'Implement Escape Key Listener',
+          instruction: 'Listen for keydown events on window and invoke closeModal() if e.key === "Escape".',
+          hint: 'Check if e.key === "Escape" or e.key === "Esc".',
+          validatorRegex: 'e\\.key\\s*===.*["\']Escape["\']'
+        },
+        {
+          id: 't35-2',
+          title: 'Lock Body Scrolling on Modal Open',
+          instruction: 'Set document.body.style.overflow = "hidden" when opening the modal and restore to "" on close.',
+          hint: 'Setting overflow to hidden prevents background page scrolling while the modal is visible.',
+          validatorRegex: 'document\\.body\\.style\\.overflow\\s*=\\s*["\']hidden["\']'
+        }
+      ]
+    },
+    debuggingChallenge: {
+      title: 'Backdrop Click Accidentally Triggered Inside Modal Content Bug',
+      buggyCode: `const backdrop = document.querySelector(".backdrop");
+const box = document.querySelector(".modal-box");
+
+// ❌ Bug: Clicking anywhere inside the modal box triggers backdrop click listener!
+backdrop.addEventListener("click", () => {
+  closeModal();
+});`,
+      bugExplanation: 'Because events bubble up from child elements to parent elements, clicking inside the modal box causes the click event to bubble up to the backdrop, immediately closing the modal whenever users try to interact with it.',
+      fixedCode: `const backdrop = document.querySelector(".backdrop");
+
+backdrop.addEventListener("click", (e) => {
+  // ✅ Only close if the exact element clicked is the backdrop itself!
+  if (e.target === backdrop) {
+    closeModal();
+  }
+});`
+    },
+    assignment: {
+      title: 'BCA Student Profile Inspector & Detail View Modal',
+      instructions: [
+        'Create a student list with 4 student cards displaying Name, Roll Number, and View Details buttons.',
+        'Clicking View Details opens a centered modal with animated scale transition displaying complete profile information.',
+        'Ensure the modal closes via: ✕ button, Cancel button, Backdrop click, and Escape key.',
+        'Prevent background body scrolling when modal is open.'
+      ],
+      submissionCriteria: 'Push index.html and styles.css to your GitHub repository under day-35.',
+      fileName: 'index.html',
+      solutionCode: `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>BCA Day 35 - Profile Modal</title>
+  <style>
+    body { font-family: 'Segoe UI', sans-serif; background: #060c18; color: #fff; padding: 24px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; max-width: 680px; margin: auto; }
+    .card { background: #0c1328; border: 1px solid #1e293b; padding: 16px; border-radius: 10px; text-align: center; }
+    button { padding: 8px 14px; background: #2563eb; color: #fff; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; margin-top: 10px; }
+    .backdrop {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(4px);
+      display: none; align-items: center; justify-content: center; z-index: 1000;
+    }
+    .backdrop.active { display: flex; }
+    .modal { background: #0c1328; border: 1px solid #334155; padding: 24px; border-radius: 12px; width: 90%; max-width: 400px; }
+  </style>
+</head>
+<body>
+  <div class="grid">
+    <div class="card">
+      <h3>Amit Verma</h3>
+      <p style="color:#94a3b8;">Roll: BCA-2401</p>
+      <button onclick="showDetails('Amit Verma', 'BCA-2401', 'Web Development Track', '94% Attendance')">View Profile</button>
+    </div>
+    <div class="card">
+      <h3>Sneha Gupta</h3>
+      <p style="color:#94a3b8;">Roll: BCA-2402</p>
+      <button onclick="showDetails('Sneha Gupta', 'BCA-2402', 'Data Analytics Track', '98% Attendance')">View Profile</button>
+    </div>
+  </div>
+
+  <div class="backdrop" id="modalBackdrop">
+    <div class="modal" id="modalBox">
+      <h3 id="modalName">Student Details</h3>
+      <p id="modalRoll" style="color:#94a3b8;"></p>
+      <p id="modalTrack" style="color:#38bdf8;"></p>
+      <p id="modalAttendance" style="color:#10b981;font-weight:bold;"></p>
+      <button onclick="closeModal()" style="background:#ef4444;width:100%;">Close Modal (Esc)</button>
+    </div>
+  </div>
+
+  <script>
+    const backdrop = document.getElementById("modalBackdrop");
+
+    function showDetails(name, roll, track, att) {
+      document.getElementById("modalName").textContent = name;
+      document.getElementById("modalRoll").textContent = "Roll Number: " + roll;
+      document.getElementById("modalTrack").textContent = "Specialization: " + track;
+      document.getElementById("modalAttendance").textContent = att;
+      backdrop.classList.add("active");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeModal() {
+      backdrop.classList.remove("active");
+      document.body.style.overflow = "";
+    }
+
+    backdrop.addEventListener("click", (e) => {
+      if (e.target === backdrop) closeModal();
+    });
+
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") closeModal();
+    });
+  </script>
+</body>
+</html>`
+    },
+    githubWorkflow: {
+      repoName: 'html-css-projects',
+      commitMessage: 'feat(day-35): implement dynamic modal dialogs overlay mechanics and keyboard accessibility',
+      commands: [
+        'mkdir day-35',
+        'cd day-35',
+        'git checkout -b feature/day-35-modal-dialogs',
+        'git add index.html',
+        'git commit -m "feat(day-35): implement dynamic modal dialogs overlay mechanics and keyboard accessibility"',
+        'git push origin feature/day-35-modal-dialogs'
+      ],
+      tips: 'Always remember to reset document.body.style.overflow = "" when a modal closes to avoid locking user page scroll.'
+    },
+    vivaCheck: {
+      question: 'Why should document.body.style.overflow be set to "hidden" when an overlay modal opens?',
+      options: [
+        'To prevent the background webpage from scrolling behind the modal while the student interacts with dialog inputs.',
+        'To force the browser GPU to render transparent alpha channels in hardware acceleration mode.',
+        'To lock mouse event listeners from dispatching click coordinates to browser extensions.',
+        'To encrypt DOM elements beneath the modal from third-party cross-site scripting inspectors.'
+      ],
+      correctAnswer: 0,
+      explanation: 'Setting overflow: hidden on document.body locks background scrolling (scroll trapping), preventing the background webpage from awkwardly jumping or scrolling when the user scrolls inside an active modal dialog.'
+    }
+  }
+  ,
+
+  /* ── DAY 36 ── */
+  {
+    id: 'day-36',
+    day: 36,
+    year: 1,
+    semester: 1,
+    specialization: 'foundation',
+    title: 'Client-Side Form Validation & Real-Time Regex Diagnostics',
+    slug: 'day-36-form-validation-regex-realtime-diagnostics',
+    category: 'Advanced JavaScript & Browser APIs',
+    estimatedTime: '2 Hours Practical',
+    difficulty: 'Intermediate',
+    objectives: [
+      'Implement real-time form validation using input and blur events.',
+      'Construct Regular Expressions (RegEx) to validate Email, 10-digit Phone numbers, and Enrollment numbers.',
+      'Build dynamic password strength meters checking length, numbers, and special characters.',
+      'Manage accessible visual validation states using CSS classes (is-valid, is-invalid) and error hint spans.',
+      'Prevent invalid form submissions and provide instant constructive feedback.'
+    ],
+    concept: {
+      overview: 'Form validation protects user experience by identifying input errors before data reaches the server or storage. Real-time validation provides immediate inline feedback, guiding students to enter correctly formatted emails, phone numbers, and strong passwords effortlessly.',
+      keyPoints: [
+        'input vs change vs blur: input fires on every keystroke; blur fires when the user leaves the field; submit validates all fields.',
+        'RegEx Testing: Use regex.test(value) to return a boolean true or false.',
+        'Accessible Hints: Pair input fields with descriptive <span class="error-msg"> elements that explain exact requirements.',
+        'Prevent Submission: Only proceed with form processing if all field validators return true; otherwise call e.preventDefault().',
+        'Visual Clarity: Use Emerald Green borders for valid inputs and Crimson Red for errors.'
+      ],
+      analogy: 'Think of real-time form validation like a university security guard checking student ID cards at the gate: catching a missing photo or expired sticker at the gate is instant, friendly, and prevents students from having their entry rejected inside the exam hall.'
+    },
+    teacherDemo: {
+      title: 'Real-Time University Enrollment & Email Validator Engine',
+      explanation: 'See how regex testing executes on input events to toggle validation classes instantly.',
+      language: 'html',
+      code: `<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { font-family: 'Segoe UI', sans-serif; background: #060c18; color: #fff; padding: 24px; }
+    .form-box { max-width: 440px; margin: auto; background: #0c1328; border: 1px solid #1e293b; padding: 24px; border-radius: 12px; }
+    .field { margin-bottom: 16px; }
+    label { display: block; font-size: 13px; font-weight: bold; margin-bottom: 6px; }
+    input { width: 100%; padding: 10px; background: #060c18; border: 1px solid #334155; color: #fff; border-radius: 6px; box-sizing: border-box; }
+    input.valid { border-color: #10b981; }
+    input.invalid { border-color: #ef4444; }
+    .msg { font-size: 11px; margin-top: 4px; display: none; }
+    .msg.error { color: #ef4444; display: block; }
+    .msg.success { color: #10b981; display: block; }
+    button { width: 100%; padding: 12px; background: #2563eb; color: #fff; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <div class="form-box">
+    <h3>📝 BCA Student Registration</h3>
+    <form id="regForm">
+      <div class="field">
+        <label>Enrollment Number (9 Digits)</label>
+        <input type="text" id="enrollInput" placeholder="e.g., 240189421" />
+        <span class="msg" id="enrollMsg">Must be exactly 9 digits</span>
+      </div>
+      <div class="field">
+        <label>University Email</label>
+        <input type="email" id="emailInput" placeholder="name@university.edu" />
+        <span class="msg" id="emailMsg">Enter a valid email address</span>
+      </div>
+      <button type="submit">Submit Registration</button>
+    </form>
+  </div>
+
+  <script>
+    const enrollInput = document.getElementById("enrollInput");
+    const enrollMsg = document.getElementById("enrollMsg");
+    const emailInput = document.getElementById("emailInput");
+    const emailMsg = document.getElementById("emailMsg");
+
+    const enrollRegex = /^\\d{9}$/;
+    const emailRegex = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;
+
+    function validateField(input, msg, regex, errorText) {
+      if (regex.test(input.value.trim())) {
+        input.className = "valid";
+        msg.className = "msg success";
+        msg.textContent = "✓ Valid";
+        return true;
+      } else {
+        input.className = "invalid";
+        msg.className = "msg error";
+        msg.textContent = errorText;
+        return false;
+      }
+    }
+
+    enrollInput.addEventListener("input", () => {
+      validateField(enrollInput, enrollMsg, enrollRegex, "Must be exactly 9 digits");
+    });
+
+    emailInput.addEventListener("input", () => {
+      validateField(emailInput, emailMsg, emailRegex, "Invalid email format");
+    });
+
+    document.getElementById("regForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const isEnrollValid = validateField(enrollInput, enrollMsg, enrollRegex, "Must be exactly 9 digits");
+      const isEmailValid = validateField(emailInput, emailMsg, emailRegex, "Invalid email format");
+      if (isEnrollValid && isEmailValid) {
+        alert("Registration Submitted Successfully! 🎉");
+      }
+    });
+  </script>
+</body>
+</html>`
+    },
+    practicalLab: {
+      labTitle: 'Building a Live Password Strength Meter',
+      labDescription: 'Implement real-time password strength diagnostics checking length, uppercase letters, numbers, and symbols.',
+      initialCode: `<!DOCTYPE html>
+<html>
+<head><title>Form Validation Lab</title></head>
+<body>
+  <input type="password" id="password" placeholder="Enter password..." />
+  <div id="strengthMeter">Strength: Weak</div>
+
+  <script>
+    // Test password strength with regex and update strength indicator
+  </script>
+</body>
+</html>`,
+      language: 'html',
+      tasks: [
+        {
+          id: 't36-1',
+          title: 'Implement Regex Character Class Checks',
+          instruction: 'Use /[A-Z]/, /[0-9]/, and /[^A-Za-z0-9]/ to test password complexity.',
+          hint: 'Regular expression test() method checks if a pattern matches within the string.',
+          validatorRegex: '/\\[A-Z\\]/|/\\[0-9\\]/'
+        },
+        {
+          id: 't36-2',
+          title: 'Listen on input Event',
+          instruction: 'Attach an event listener to the password input for the "input" event for instant feedback.',
+          hint: 'The input event fires immediately upon each character change.',
+          validatorRegex: '\\.addEventListener\\(["\']input["\']'
+        }
+      ]
+    },
+    debuggingChallenge: {
+      title: 'Validating Exclusively on Form Submit Bug',
+      buggyCode: `// ❌ Bug: User receives zero feedback until they click submit at the very end!
+form.addEventListener("submit", (e) => {
+  e.preventDefault();
+  if (email.value.length < 5) {
+    alert("Email invalid");
+  }
+});`,
+      bugExplanation: 'Waiting until final form submission to alert users about simple typing errors causes poor UX. Modern applications validate on input or blur to offer immediate visual feedback as users type.',
+      fixedCode: `// ✅ Real-time feedback on input + final guard on submit
+email.addEventListener("input", () => {
+  const isValid = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email.value);
+  email.classList.toggle("invalid", !isValid);
+});
+
+form.addEventListener("submit", (e) => {
+  e.preventDefault();
+  // Final verification check...
+});`
+    },
+    assignment: {
+      title: 'BCA Semester 1 Exam Admit Card Registration Portal',
+      instructions: [
+        'Build a complete registration form with Student Name, 9-digit Enrollment Number, Email, 10-digit Phone, and Password.',
+        'Validate each field in real-time with visual green/red borders and inline messages.',
+        'Display a dynamic Password Strength Meter (Weak, Medium, Strong) with color progress bar.',
+        'Disable the Submit button until all 5 fields pass validation.'
+      ],
+      submissionCriteria: 'Push index.html and validator.js to your GitHub repository under day-36.',
+      fileName: 'index.html',
+      solutionCode: `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>BCA Day 36 - Form Validation</title>
+  <style>
+    body { font-family: 'Segoe UI', sans-serif; background: #060c18; color: #fff; padding: 24px; }
+    .card { max-width: 480px; margin: auto; background: #0c1328; border: 1px solid #1e293b; padding: 24px; border-radius: 12px; }
+    .group { margin-bottom: 14px; }
+    label { display: block; font-size: 13px; font-weight: bold; margin-bottom: 4px; }
+    input { width: 100%; padding: 10px; background: #060c18; border: 1px solid #334155; color: #fff; border-radius: 6px; box-sizing: border-box; }
+    input.valid { border-color: #10b981; }
+    input.invalid { border-color: #ef4444; }
+    .msg { font-size: 11px; color: #ef4444; margin-top: 3px; display: none; }
+    .msg.show { display: block; }
+    button { width: 100%; padding: 12px; background: #2563eb; color: #fff; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+    button:disabled { background: #334155; cursor: not-allowed; opacity: 0.6; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>📋 BCA Admit Card Registration</h2>
+    <form id="admitForm">
+      <div class="group">
+        <label>Full Name</label>
+        <input type="text" id="name" placeholder="Rahul Sharma" />
+        <span class="msg" id="nameMsg">Name must be at least 3 characters</span>
+      </div>
+      <div class="group">
+        <label>Enrollment Number (9 Digits)</label>
+        <input type="text" id="enroll" placeholder="240189211" />
+        <span class="msg" id="enrollMsg">Must be exactly 9 digits</span>
+      </div>
+      <div class="group">
+        <label>10-Digit Mobile Number</label>
+        <input type="tel" id="phone" placeholder="9876543210" />
+        <span class="msg" id="phoneMsg">Must be a valid 10-digit mobile number</span>
+      </div>
+      <button type="submit" id="submitBtn">Generate Admit Card</button>
+    </form>
+  </div>
+
+  <script>
+    const nameInput = document.getElementById("name");
+    const enrollInput = document.getElementById("enroll");
+    const phoneInput = document.getElementById("phone");
+    const submitBtn = document.getElementById("submitBtn");
+
+    function check() {
+      const isName = nameInput.value.trim().length >= 3;
+      const isEnroll = /^\\d{9}$/.test(enrollInput.value.trim());
+      const isPhone = /^[6-9]\\d{9}$/.test(phoneInput.value.trim());
+
+      nameInput.className = isName ? "valid" : (nameInput.value ? "invalid" : "");
+      document.getElementById("nameMsg").className = isName || !nameInput.value ? "msg" : "msg show";
+
+      enrollInput.className = isEnroll ? "valid" : (enrollInput.value ? "invalid" : "");
+      document.getElementById("enrollMsg").className = isEnroll || !enrollInput.value ? "msg" : "msg show";
+
+      phoneInput.className = isPhone ? "valid" : (phoneInput.value ? "invalid" : "");
+      document.getElementById("phoneMsg").className = isPhone || !phoneInput.value ? "msg" : "msg show";
+
+      submitBtn.disabled = !(isName && isEnroll && isPhone);
+    }
+
+    [nameInput, enrollInput, phoneInput].forEach(inp => inp.addEventListener("input", check));
+
+    document.getElementById("admitForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      alert("✅ Admit Card Generated for " + nameInput.value);
+    });
+
+    check();
+  </script>
+</body>
+</html>`
+    },
+    githubWorkflow: {
+      repoName: 'html-css-projects',
+      commitMessage: 'feat(day-36): implement client-side form validation and regex diagnostics',
+      commands: [
+        'mkdir day-36',
+        'cd day-36',
+        'git checkout -b feature/day-36-form-validation',
+        'git add index.html',
+        'git commit -m "feat(day-36): implement client-side form validation and regex diagnostics"',
+        'git push origin feature/day-36-form-validation'
+      ],
+      tips: 'Use regex anchors like ^ and $ to ensure the pattern matches the entire string rather than just a substring.'
+    },
+    vivaCheck: {
+      question: 'In the regular expression /^\\d{10}$/, what do the ^ and $ symbols signify?',
+      options: [
+        '^ asserts the start of the string, and $ asserts the end of the string, ensuring the entire input is exactly 10 digits.',
+        '^ instructs the engine to match alphanumeric characters, while $ targets hexadecimal floating points.',
+        '^ matches any whitespace character, while $ replaces special characters with null pointers.',
+        '^ forces uppercase transformation, while $ compresses string length.'
+      ],
+      correctAnswer: 0,
+      explanation: 'The ^ symbol is the start-of-string anchor and $ is the end-of-string anchor. Without them, /\\d{10}/ would match any string containing 10 consecutive digits anywhere inside, even if surrounded by invalid text.'
+    }
+  },
+
+  /* ── DAY 37 ── */
+  {
+    id: 'day-37',
+    day: 37,
+    year: 1,
+    semester: 1,
+    specialization: 'foundation',
+    title: 'Asynchronous JavaScript: Callbacks, Promises & Promise Chaining',
+    slug: 'day-37-async-javascript-callbacks-promises',
+    category: 'Advanced JavaScript & Browser APIs',
+    estimatedTime: '2.5 Hours Practical',
+    difficulty: 'Intermediate',
+    objectives: [
+      'Understand synchronous blocking vs asynchronous non-blocking programming models.',
+      'Identify the Callback Hell pyramid of doom and understand why Promises were introduced in ES6.',
+      'Create custom Promise instances using new Promise((resolve, reject) => ...).',
+      'Chain asynchronous steps cleanly using .then(), catch errors with .catch(), and clean up with .finally().',
+      'Simulate multi-step server workflows (Authentication -> Data Fetch -> Record Update).'
+    ],
+    concept: {
+      overview: 'Real-world software is inherently asynchronous: fetching data from a database, uploading an image, or reading disk files takes time. Promises represent a value that may not be available right now, but will resolve in the future or fail gracefully with an error.',
+      keyPoints: [
+        'Three Promise States: Pending (in progress), Fulfilled (successful with resolve), Rejected (failed with reject).',
+        'Chaining: Every .then() returns a new Promise, allowing linear sequential chaining without nested callbacks.',
+        'Unified Error Handling: A single .catch() at the end of the chain handles errors thrown by any preceding step.',
+        '.finally(): Executes unconditionally regardless of whether the Promise was fulfilled or rejected (great for turning off loading spinners).',
+        'Promise.all(): Runs multiple promises in parallel and resolves when all have completed.'
+      ],
+      analogy: 'Think of a Promise like ordering food at a university canteen: the cashier gives you a token (Promise: Pending). You sit at your table and study. When your order is ready, the buzzer sounds (Fulfilled: resolve), or if an item is out of stock, they inform you (Rejected: reject).'
+    },
+    teacherDemo: {
+      title: 'Multi-Step University Record Pipeline with Promises',
+      explanation: 'Notice how three asynchronous steps execute in sequence with clean chaining and centralized error catching.',
+      language: 'html',
+      code: `<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { font-family: 'Segoe UI', sans-serif; background: #060c18; color: #fff; padding: 24px; }
+    .card { max-width: 480px; margin: auto; background: #0c1328; border: 1px solid #1e293b; padding: 24px; border-radius: 12px; }
+    button { padding: 12px 20px; background: #2563eb; color: #fff; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; }
+    .log-box { margin-top: 16px; padding: 14px; background: #060c18; border: 1px solid #334155; border-radius: 6px; min-height: 120px; font-family: monospace; font-size: 13px; }
+    .step { color: #38bdf8; margin: 4px 0; }
+    .success { color: #10b981; }
+    .error { color: #ef4444; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h3>⚡ Asynchronous Record Verification</h3>
+    <button id="runBtn">Start Verification Pipeline</button>
+    <div class="log-box" id="logs">Click button to start...</div>
+  </div>
+
+  <script>
+    const logs = document.getElementById("logs");
+    const runBtn = document.getElementById("runBtn");
+
+    function log(msg, cls = "step") {
+      const p = document.createElement("div");
+      p.className = cls;
+      p.textContent = "[" + new Date().toLocaleTimeString() + "] " + msg;
+      logs.appendChild(p);
+    }
+
+    // Step 1: Simulate Authentication
+    function authenticateStudent(id) {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          if (id === 2401) resolve({ id: 2401, name: "Rahul Sharma", token: "AUTH_TOKEN_BCA" });
+          else reject(new Error("Student ID not found in registry"));
+        }, 800);
+      });
+    }
+
+    // Step 2: Fetch Grades
+    function fetchGrades(token) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({ token, bcs011: 85, bcsl013: 92, sgpa: 8.8 });
+        }, 1000);
+      });
+    }
+
+    runBtn.addEventListener("click", () => {
+      logs.innerHTML = "";
+      runBtn.disabled = true;
+      log("Initiating pipeline...");
+
+      authenticateStudent(2401)
+        .then((user) => {
+          log("✓ Step 1: Authenticated student " + user.name);
+          return fetchGrades(user.token);
+        })
+        .then((grades) => {
+          log("✓ Step 2: Grades fetched successfully. SGPA: " + grades.sgpa, "success");
+          log("🎉 Pipeline Complete: Eligible for Semester 2 enrollment!", "success");
+        })
+        .catch((err) => {
+          log("✖ Error: " + err.message, "error");
+        })
+        .finally(() => {
+          runBtn.disabled = false;
+        });
+    });
+  </script>
+</body>
+</html>`
+    },
+    practicalLab: {
+      labTitle: 'Building a Simulated Async Exam Submitter',
+      labDescription: 'Create a Promise-based multi-step submission engine that shows loading indicators, checks network status, and resolves exam submission.',
+      initialCode: `<!DOCTYPE html>
+<html>
+<head><title>Promise Pipeline Lab</title></head>
+<body>
+  <button id="submitExam">Submit Exam</button>
+  <div id="output">Ready</div>
+
+  <script>
+    // Create new Promise() with resolve/reject and chain with .then() and .catch()
+  </script>
+</body>
+</html>`,
+      language: 'html',
+      tasks: [
+        {
+          id: 't37-1',
+          title: 'Instantiate Promise with Resolve/Reject',
+          instruction: 'Create a function returning new Promise((resolve, reject) => { setTimeout(...) }).',
+          hint: 'The Promise constructor takes an executor function with resolve and reject parameters.',
+          validatorRegex: 'new\\s+Promise\\(\\s*\\(\\s*resolve\\s*,\\s*reject\\s*\\)'
+        },
+        {
+          id: 't37-2',
+          title: 'Chain with .then() and .catch()',
+          instruction: 'Invoke the promise function and attach .then() for success and .catch() for error handling.',
+          hint: 'Ensure .catch() is attached to handle potential rejections.',
+          validatorRegex: '\\.then\\(.*\\)\\s*\\.catch\\('
+        }
+      ]
+    },
+    debuggingChallenge: {
+      title: 'The Missing Return in Promise Chain Bug',
+      buggyCode: `fetchStudent(101)
+  .then((student) => {
+    // ❌ Bug: Forgot to 'return' the next promise!
+    fetchTranscript(student.id);
+  })
+  .then((transcript) => {
+    // transcript is UNDEFINED because previous .then() returned nothing!
+    console.log("CGPA:", transcript.cgpa); // TypeError: Cannot read properties of undefined
+  });`,
+      bugExplanation: 'Inside a .then() handler, if you do not explicitly return a Promise or value, the handler implicitly returns undefined. The next .then() in the chain immediately receives undefined rather than waiting for the inner asynchronous operation to resolve.',
+      fixedCode: `fetchStudent(101)
+  .then((student) => {
+    // ✅ Explicitly return the Promise to pass it to the next .then()
+    return fetchTranscript(student.id);
+  })
+  .then((transcript) => {
+    console.log("CGPA:", transcript.cgpa); // ✅ Works properly!
+  });`
+    },
+    assignment: {
+      title: 'BCA Cloud Deployment Simulator with Promise Steps',
+      instructions: [
+        'Build a multi-step simulated deployment pipeline with 3 async steps: 1. Code Linting (800ms), 2. Test Suite (1000ms), 3. Server Deployment (1200ms).',
+        'Display an animated progress bar and step-by-step console logs.',
+        'Randomly simulate a 20% test failure chance to demonstrate clean .catch() error recovery.',
+        'Always re-enable the deploy button using .finally().'
+      ],
+      submissionCriteria: 'Push index.html and deploySimulator.js to GitHub under day-37.',
+      fileName: 'index.html',
+      solutionCode: `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>BCA Day 37 - Promise Pipeline</title>
+  <style>
+    body { font-family: 'Segoe UI', monospace; background: #060c18; color: #fff; padding: 24px; }
+    .card { max-width: 500px; margin: auto; background: #0c1328; border: 1px solid #1e293b; padding: 24px; border-radius: 12px; }
+    button { padding: 12px 20px; background: #2563eb; color: #fff; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; }
+    button:disabled { background: #334155; cursor: not-allowed; }
+    .terminal { margin-top: 16px; background: #060c18; border: 1px solid #334155; padding: 14px; border-radius: 8px; min-height: 140px; font-size: 13px; }
+    .ok { color: #10b981; }
+    .err { color: #ef4444; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>🚀 NextSem Cloud Deployer</h2>
+    <button id="deployBtn">Deploy BCA Portal</button>
+    <div class="terminal" id="termLogs">System idle. Ready to deploy.</div>
+  </div>
+
+  <script>
+    const btn = document.getElementById("deployBtn");
+    const term = document.getElementById("termLogs");
+
+    function log(msg, cls = "") {
+      const line = document.createElement("div");
+      if (cls) line.className = cls;
+      line.textContent = "> " + msg;
+      term.appendChild(line);
+    }
+
+    function step(name, ms, failChance = 0) {
+      return new Promise((resolve, reject) => {
+        log("Running " + name + "...");
+        setTimeout(() => {
+          if (Math.random() < failChance) reject(new Error(name + " failed"));
+          else resolve("✓ " + name + " passed");
+        }, ms);
+      });
+    }
+
+    btn.addEventListener("click", () => {
+      btn.disabled = true;
+      term.innerHTML = "";
+      log("Starting build pipeline...");
+
+      step("ESLint Code Check", 800)
+        .then((res) => {
+          log(res, "ok");
+          return step("Unit Test Suite", 1000, 0.2); // 20% fail chance
+        })
+        .then((res) => {
+          log(res, "ok");
+          return step("Production CDN Deployment", 1200);
+        })
+        .then((res) => {
+          log(res, "ok");
+          log("🎉 Application Deployed to https://nextsem-academy.web.app", "ok");
+        })
+        .catch((err) => {
+          log("🚨 DEPLOYMENT HALTED: " + err.message, "err");
+        })
+        .finally(() => {
+          btn.disabled = false;
+        });
+    });
+  </script>
+</body>
+</html>`
+    },
+    githubWorkflow: {
+      repoName: 'html-css-projects',
+      commitMessage: 'feat(day-37): implement asynchronous javascript promises and pipeline chaining',
+      commands: [
+        'mkdir day-37',
+        'cd day-37',
+        'git checkout -b feature/day-37-promises',
+        'git add index.html',
+        'git commit -m "feat(day-37): implement asynchronous javascript promises and pipeline chaining"',
+        'git push origin feature/day-37-promises'
+      ],
+      tips: 'Remember that any error thrown inside a .then() block will automatically trigger the nearest .catch() handler.'
+    },
+    vivaCheck: {
+      question: 'What happens if you omit the return statement when calling a Promise-returning function inside a .then() block?',
+      options: [
+        'The handler implicitly returns undefined, causing subsequent .then() blocks to execute immediately without waiting for the async task.',
+        'The browser runtime aborts thread execution and reloads the active webpage.',
+        'The Promise rejects automatically with a SyntaxError code.',
+        'The browser converts the code into synchronous blocking WebAssembly.'
+      ],
+      correctAnswer: 0,
+      explanation: 'In Promise chaining, returning a Promise passes control down the chain. Without return, the .then() returns undefined immediately, meaning the next step runs prematurely with an undefined parameter.'
+    }
+  },
+
+  /* ── DAY 38 ── */
+  {
+    id: 'day-38',
+    day: 38,
+    year: 1,
+    semester: 1,
+    specialization: 'foundation',
+    title: 'Async/Await Syntax & Browser fetch() API Fundamentals',
+    slug: 'day-38-fetch-api-async-await-rest-get',
+    category: 'Advanced JavaScript & Browser APIs',
+    estimatedTime: '2.5 Hours Practical',
+    difficulty: 'Intermediate',
+    objectives: [
+      'Write synchronous-looking asynchronous code using modern async and await keywords.',
+      'Fetch remote data over HTTP GET using the native window.fetch() API.',
+      'Check response status using response.ok and response.status before parsing.',
+      'Extract JSON payloads asynchronously using await response.json().',
+      'Wrap network calls in robust try...catch blocks to handle connection drops and offline states.'
+    ],
+    concept: {
+      overview: 'The async/await syntax introduced in ES2017 is syntactic sugar built on top of Promises. Combined with the native fetch() API, it provides a readable way to communicate with remote REST APIs and cloud servers.',
+      keyPoints: [
+        'async Functions: Any function marked async automatically returns a Promise.',
+        'await Operator: Pauses function execution until the Promise settles, unpacking the resolved value directly.',
+        'Two-Step fetch(): fetch(url) returns a Response object; you must await response.json() to extract parsed data.',
+        'The 404/500 Gotcha: fetch() only rejects on network failure (offline/DNS error). HTTP error responses (404, 500) do NOT reject! You must check if (!response.ok).',
+        'Error Handling: Use standard try...catch blocks around await statements for clean error management.'
+      ],
+      analogy: 'Think of async/await like waiting for a message reply on your phone: instead of writing a complex contract with multiple handlers, you simply wait (await) for the message to arrive, and if there is no signal, your try...catch handles the error.'
+    },
+    teacherDemo: {
+      title: 'Consuming Public REST APIs with async/await and response.ok',
+      explanation: 'See how remote quotes are fetched, parsed, and rendered with loading and error handling.',
+      language: 'html',
+      code: `<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { font-family: 'Segoe UI', sans-serif; background: #060c18; color: #fff; padding: 24px; text-align: center; }
+    .card { max-width: 480px; margin: auto; background: #0c1328; border: 1px solid #1e293b; padding: 24px; border-radius: 12px; }
+    button { padding: 10px 18px; background: #2563eb; color: #fff; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; }
+    .quote { font-style: italic; font-size: 16px; color: #38bdf8; margin: 18px 0; }
+    .author { font-size: 13px; color: #94a3b8; font-weight: bold; }
+    .error { color: #ef4444; margin-top: 10px; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h3>💡 Developer Quote of the Day</h3>
+    <button id="fetchBtn">Fetch New Quote</button>
+    <div id="contentBox">
+      <p class="quote" id="quoteText">Click button to fetch from API...</p>
+      <p class="author" id="authorText"></p>
+    </div>
+    <div class="error" id="errorBox"></div>
+  </div>
+
+  <script>
+    const btn = document.getElementById("fetchBtn");
+    const quoteText = document.getElementById("quoteText");
+    const authorText = document.getElementById("authorText");
+    const errorBox = document.getElementById("errorBox");
+
+    async function loadQuote() {
+      btn.disabled = true;
+      btn.textContent = "Loading...";
+      errorBox.textContent = "";
+
+      try {
+        // Fetch from public dummy REST API
+        const response = await fetch("https://dummyjson.com/quotes/random");
+
+        // Guard against HTTP 404 / 500
+        if (!response.ok) {
+          throw new Error("HTTP Error " + response.status + ": Failed to retrieve quote");
+        }
+
+        const data = await response.json();
+        quoteText.textContent = '"' + data.quote + '"';
+        authorText.textContent = "— " + data.author;
+      } catch (err) {
+        errorBox.textContent = "Failed to load quote. Check internet connection. (" + err.message + ")";
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "Fetch New Quote";
+      }
+    }
+
+    btn.addEventListener("click", loadQuote);
+  </script>
+</body>
+</html>`
+    },
+    practicalLab: {
+      labTitle: 'Building a REST API User Card Generator',
+      labDescription: 'Fetch a list of users from a public JSON endpoint and render them in a responsive card grid using async/await.',
+      initialCode: `<!DOCTYPE html>
+<html>
+<head><title>Fetch API Lab</title></head>
+<body>
+  <button id="loadUsers">Load Users</button>
+  <div id="userGrid"></div>
+
+  <script>
+    // Define async function, await fetch, check response.ok, await json, and render cards
+  </script>
+</body>
+</html>`,
+      language: 'html',
+      tasks: [
+        {
+          id: 't38-1',
+          title: 'Implement async/await with fetch',
+          instruction: 'Declare an async function and use await fetch("https://jsonplaceholder.typicode.com/users").',
+          hint: 'The await keyword can only be used inside functions marked with async.',
+          validatorRegex: 'async.*await\\s+fetch'
+        },
+        {
+          id: 't38-2',
+          title: 'Check response.ok and Extract JSON',
+          instruction: 'Verify if (!response.ok) throw new Error() and extract data with await response.json().',
+          hint: 'response.ok is a boolean indicating if the status code was in the 200-299 range.',
+          validatorRegex: 'response\\.ok.*await.*\\.json\\(\\)'
+        }
+      ]
+    },
+    debuggingChallenge: {
+      title: 'The "fetch does not reject on 404" Trap',
+      buggyCode: `async function getUser(id) {
+  try {
+    // ❌ Bug: If endpoint returns 404 Not Found, fetch DOES NOT jump to catch!
+    const res = await fetch("https://api.example.com/users/99999");
+    const data = await res.json();
+    displayUser(data); // 💥 Displays broken empty card or crashes on data properties!
+  } catch (err) {
+    console.error("Network error:", err);
+  }
+}`,
+      bugExplanation: 'Unlike libraries like Axios, window.fetch() only rejects when a network error occurs (like no internet connection). If the server responds with 404 Not Found or 500 Internal Server Error, fetch() still successfully resolves! You must manually check if (!res.ok).',
+      fixedCode: `async function getUser(id) {
+  try {
+    const res = await fetch("https://api.example.com/users/99999");
+    // ✅ Always check response.ok!
+    if (!res.ok) {
+      throw new Error("Server responded with status " + res.status);
+    }
+    const data = await res.json();
+    displayUser(data);
+  } catch (err) {
+    console.error("Caught error:", err.message);
+  }
+}`
+    },
+    assignment: {
+      title: 'University News Feed & Technical Blog Reader SPA',
+      instructions: [
+        'Fetch blog posts or articles from a public REST API (e.g. JSONPlaceholder /posts).',
+        'Display a Skeleton Loader animation while the API request is in-flight.',
+        'Render posts as responsive cards with Title, Excerpt, and Read More buttons.',
+        'Handle network disconnects gracefully by showing a "Retry Connection" button.'
+      ],
+      submissionCriteria: 'Push index.html and app.js to your GitHub repository under day-38.',
+      fileName: 'index.html',
+      solutionCode: `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>BCA Day 38 - REST API Feed</title>
+  <style>
+    body { font-family: 'Segoe UI', sans-serif; background: #060c18; color: #fff; padding: 24px; }
+    .container { max-width: 680px; margin: auto; }
+    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+    button { padding: 10px 16px; background: #2563eb; color: #fff; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; }
+    .post { background: #0c1328; border: 1px solid #1e293b; padding: 18px; border-radius: 10px; margin-bottom: 12px; }
+    .post h3 { margin-top: 0; color: #38bdf8; text-transform: capitalize; }
+    .post p { color: #94a3b8; font-size: 14px; line-height: 1.5; }
+    .loader { text-align: center; padding: 24px; color: #38bdf8; font-weight: bold; display: none; }
+    .error-card { background: #450a0a; border: 1px solid #dc2626; padding: 16px; border-radius: 8px; color: #fca5a5; display: none; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h2>📰 Tech News Feed (REST API)</h2>
+      <button id="refreshBtn">↻ Refresh</button>
+    </div>
+    <div class="loader" id="loader">Fetching articles from server... ⏳</div>
+    <div class="error-card" id="errCard"></div>
+    <div id="postsList"></div>
+  </div>
+
+  <script>
+    const loader = document.getElementById("loader");
+    const errCard = document.getElementById("errCard");
+    const postsList = document.getElementById("postsList");
+    const refreshBtn = document.getElementById("refreshBtn");
+
+    async function fetchPosts() {
+      loader.style.display = "block";
+      errCard.style.display = "none";
+      postsList.innerHTML = "";
+      refreshBtn.disabled = true;
+
+      try {
+        const res = await fetch("https://jsonplaceholder.typicode.com/posts?_limit=4");
+        if (!res.ok) throw new Error("HTTP error " + res.status);
+
+        const posts = await res.json();
+        posts.forEach(p => {
+          const div = document.createElement("div");
+          div.className = "post";
+          div.innerHTML = '<h3>' + p.title + '</h3><p>' + p.body + '</p>';
+          postsList.appendChild(div);
+        });
+      } catch (err) {
+        errCard.style.display = "block";
+        errCard.textContent = "Failed to fetch articles: " + err.message + ". Please try again.";
+      } finally {
+        loader.style.display = "none";
+        refreshBtn.disabled = false;
+      }
+    }
+
+    refreshBtn.addEventListener("click", fetchPosts);
+    fetchPosts();
+  </script>
+</body>
+</html>`
+    },
+    githubWorkflow: {
+      repoName: 'html-css-projects',
+      commitMessage: 'feat(day-38): implement async await syntax and fetch api rest consumer',
+      commands: [
+        'mkdir day-38',
+        'cd day-38',
+        'git checkout -b feature/day-38-fetch-api',
+        'git add index.html',
+        'git commit -m "feat(day-38): implement async await syntax and fetch api rest consumer"',
+        'git push origin feature/day-38-fetch-api'
+      ],
+      tips: 'Always check if response.ok is true before parsing response.json() to prevent runtime crashes on 404/500 errors.'
+    },
+    vivaCheck: {
+      question: 'Why does window.fetch() NOT reject its Promise when the server responds with a 404 Not Found error?',
+      options: [
+        'fetch() only rejects when a network failure occurs (e.g. no internet/DNS failure); HTTP 404 is a valid completed HTTP response from the server.',
+        'The browser automatically rewrites HTTP 404 status codes into HTTP 200 before returning to JavaScript.',
+        'HTTP status codes above 400 are handled exclusively by browser service workers.',
+        'fetch() converts 404 errors into empty JSON arrays without throwing exceptions.'
+      ],
+      correctAnswer: 0,
+      explanation: 'A 404 status code is a valid response delivered by the remote HTTP server. From the perspective of fetch(), the network request was successful. You must inspect the response.ok property (or response.status) to detect HTTP errors.'
+    }
+  },
+
+  /* ── DAY 39 ── */
+  {
+    id: 'day-39',
+    day: 39,
+    year: 1,
+    semester: 1,
+    specialization: 'foundation',
+    title: 'Building a Dynamic GitHub Profile Explorer SPA (Async REST API Mini App)',
+    slug: 'day-39-github-profile-explorer-spa',
+    category: 'Advanced JavaScript & Browser APIs',
+    estimatedTime: '3 Hours Practical',
+    difficulty: 'Intermediate',
+    objectives: [
+      'Consume the real-world GitHub Public REST API (https://api.github.com/users/{username}).',
+      'Display avatar, bio, follower count, and public repository counts in a styled developer card.',
+      'Fetch and display a secondary sub-resource: top 5 repositories sorted by stars.',
+      'Handle 404 User Not Found gracefully with an attractive error illustration.',
+      'Implement an input debounce or form submit handler to avoid exceeding GitHub API rate limits.'
+    ],
+    concept: {
+      overview: 'In this hands-on project, you will build an interactive Single Page Application that connects to the live GitHub REST API. Students enter any GitHub developer username to fetch real profile data, avatar images, follower statistics, and their latest public open-source repositories.',
+      keyPoints: [
+        'Endpoint Architecture: Primary endpoint is https://api.github.com/users/{username}; repo endpoint is /users/{username}/repos?sort=updated.',
+        'Parallel Fetching: Use Promise.all() to fetch both user details and repository lists concurrently.',
+        '404 Handling: If the user does not exist, GitHub returns status: 404. Handle this with a clear "User Not Found" state.',
+        'Rate Limiting: GitHub allows 60 unauthenticated requests per hour per IP. Handle HTTP 403 rate limit responses cleanly.',
+        'DOM Formatting: Format dates into readable strings using new Date(created_at).toLocaleDateString().'
+      ],
+      analogy: 'Think of this application like an interactive digital identity card scanner: you provide a student enrollment ID (username), and the terminal instantly queries the central university registry to pull up their complete academic portfolio.'
+    },
+    teacherDemo: {
+      title: 'GitHub API Explorer Architecture with Repo Fetching',
+      explanation: 'See how both user profile and top repositories are fetched and populated into the UI.',
+      language: 'html',
+      code: `<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { font-family: 'Segoe UI', sans-serif; background: #060c18; color: #fff; padding: 24px; }
+    .card { max-width: 500px; margin: auto; background: #0c1328; border: 1px solid #1e293b; padding: 24px; border-radius: 14px; }
+    .search-row { display: flex; gap: 8px; margin-bottom: 20px; }
+    input { flex: 1; padding: 10px; background: #060c18; border: 1px solid #334155; color: #fff; border-radius: 6px; }
+    button { padding: 10px 16px; background: #2563eb; color: #fff; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; }
+    .profile-box { text-align: center; display: none; }
+    .avatar { width: 90px; height: 90px; border-radius: 50%; border: 3px solid #2563eb; margin-bottom: 10px; }
+    .stats { display: flex; justify-content: space-around; background: #060c18; padding: 12px; border-radius: 8px; margin: 16px 0; }
+    .stat-val { font-size: 18px; font-weight: bold; color: #38bdf8; }
+    .stat-label { font-size: 11px; color: #94a3b8; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h3>🔍 GitHub Developer Explorer</h3>
+    <div class="search-row">
+      <input type="text" id="usernameInput" placeholder="Enter GitHub username (e.g., torvalds)" />
+      <button id="searchBtn">Search</button>
+    </div>
+    <div class="profile-box" id="profileBox">
+      <img id="avatarImg" class="avatar" src="" alt="Avatar" />
+      <h3 id="nameText" style="margin:0;"></h3>
+      <p id="bioText" style="color:#94a3b8;font-size:13px;"></p>
+      <div class="stats">
+        <div><div class="stat-val" id="repoCount">0</div><div class="stat-label">Repos</div></div>
+        <div><div class="stat-val" id="followerCount">0</div><div class="stat-label">Followers</div></div>
+        <div><div class="stat-val" id="followingCount">0</div><div class="stat-label">Following</div></div>
+      </div>
+      <a id="profileLink" href="#" target="_blank" style="color:#10b981;font-weight:bold;text-decoration:none;">View on GitHub →</a>
+    </div>
+    <div id="errorMsg" style="color:#ef4444;text-align:center;display:none;"></div>
+  </div>
+
+  <script>
+    const searchBtn = document.getElementById("searchBtn");
+    const input = document.getElementById("usernameInput");
+    const box = document.getElementById("profileBox");
+    const err = document.getElementById("errorMsg");
+
+    async function searchUser() {
+      const username = input.value.trim();
+      if (!username) return;
+
+      box.style.display = "none";
+      err.style.display = "none";
+      searchBtn.disabled = true;
+
+      try {
+        const res = await fetch("https://api.github.com/users/" + encodeURIComponent(username));
+        if (res.status === 404) throw new Error("GitHub user '" + username + "' not found.");
+        if (!res.ok) throw new Error("API request failed with status " + res.status);
+
+        const data = await res.json();
+        document.getElementById("avatarImg").src = data.avatar_url;
+        document.getElementById("nameText").textContent = data.name || data.login;
+        document.getElementById("bioText").textContent = data.bio || "No bio provided.";
+        document.getElementById("repoCount").textContent = data.public_repos;
+        document.getElementById("followerCount").textContent = data.followers;
+        document.getElementById("followingCount").textContent = data.following;
+        document.getElementById("profileLink").href = data.html_url;
+
+        box.style.display = "block";
+      } catch (e) {
+        err.textContent = e.message;
+        err.style.display = "block";
+      } finally {
+        searchBtn.disabled = false;
+      }
+    }
+
+    searchBtn.addEventListener("click", searchUser);
+    input.addEventListener("keydown", (e) => { if (e.key === "Enter") searchUser(); });
+  </script>
+</body>
+</html>`
+    },
+    practicalLab: {
+      labTitle: 'Enhancing GitHub Explorer with Top Repositories',
+      labDescription: 'Fetch the user top repositories from /users/{username}/repos and render language tags and star badges.',
+      initialCode: `<!DOCTYPE html>
+<html>
+<head><title>GitHub Explorer Lab</title></head>
+<body>
+  <input id="user" placeholder="Username" />
+  <button id="find">Find</button>
+  <div id="repos"></div>
+
+  <script>
+    // Fetch https://api.github.com/users/{user}/repos and render top 3 repos
+  </script>
+</body>
+</html>`,
+      language: 'html',
+      tasks: [
+        {
+          id: 't39-1',
+          title: 'Fetch Repositories from GitHub API',
+          instruction: 'Use fetch("https://api.github.com/users/" + user + "/repos?sort=updated&per_page=3") with async/await.',
+          hint: 'The per_page query parameter limits the number of items returned.',
+          validatorRegex: 'api\\.github\\.com/users/.*repos'
+        },
+        {
+          id: 't39-2',
+          title: 'Render Repo Card Elements',
+          instruction: 'Map through the repositories array and display repo.name, repo.language, and repo.stargazers_count.',
+          hint: 'stargazers_count holds the number of stars on the repository.',
+          validatorRegex: 'stargazers_count'
+        }
+      ]
+    },
+    debuggingChallenge: {
+      title: 'Unencoded User Input in URL Bug',
+      buggyCode: `// ❌ Bug: If username contains spaces or special characters, URL breaks!
+const username = "john doe";
+fetch("https://api.github.com/users/" + username); // Bad request!`,
+      bugExplanation: 'User inputs placed directly into URLs without URI encoding can contain spaces, ampersands, or slashes that corrupt the HTTP request or lead to security vulnerabilities.',
+      fixedCode: `// ✅ encodeURIComponent ensures characters are safely escaped
+const username = "john doe";
+fetch("https://api.github.com/users/" + encodeURIComponent(username));`
+    },
+    assignment: {
+      title: 'BCA Developer Directory & GitHub Inspector SPA',
+      instructions: [
+        'Build a production-grade GitHub Profile Inspector supporting both light and dark themes.',
+        'Fetch user details AND their top 4 most recently updated repositories.',
+        'Render repository language tags with color indicators (e.g. JavaScript, HTML, CSS, Python).',
+        'Add a "Recently Searched" history bar using localStorage to remember the last 3 searched developers.'
+      ],
+      submissionCriteria: 'Push index.html, styles.css, and app.js to GitHub under day-39.',
+      fileName: 'index.html',
+      solutionCode: `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>BCA Day 39 - GitHub Inspector</title>
+  <style>
+    body { font-family: 'Segoe UI', sans-serif; background: #060c18; color: #fff; padding: 24px; }
+    .card { max-width: 560px; margin: auto; background: #0c1328; border: 1px solid #1e293b; padding: 24px; border-radius: 14px; }
+    .search-box { display: flex; gap: 8px; margin-bottom: 20px; }
+    input { flex: 1; padding: 10px; background: #060c18; border: 1px solid #334155; color: #fff; border-radius: 6px; }
+    button { padding: 10px 18px; background: #2563eb; color: #fff; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; }
+    .profile-card { display: flex; gap: 16px; align-items: center; background: #060c18; padding: 16px; border-radius: 10px; margin-bottom: 16px; }
+    .avatar { width: 70px; height: 70px; border-radius: 50%; border: 2px solid #2563eb; }
+    .repo-item { background: #1e293b; padding: 12px; border-radius: 8px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+    .repo-name { color: #38bdf8; font-weight: bold; text-decoration: none; }
+    .star-badge { background: #334155; padding: 2px 8px; border-radius: 12px; font-size: 11px; }
+    #output { display: none; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>⚡ BCA GitHub Inspector</h2>
+    <div class="search-box">
+      <input type="text" id="userInput" placeholder="Search developer (e.g., octocat)..." />
+      <button id="searchBtn">Inspect</button>
+    </div>
+    <div id="output">
+      <div class="profile-card">
+        <img class="avatar" id="avatar" src="" />
+        <div>
+          <h3 style="margin:0;" id="name"></h3>
+          <p style="margin:4px 0;color:#94a3b8;font-size:12px;" id="bio"></p>
+          <div style="font-size:12px;color:#10b981;" id="stats"></div>
+        </div>
+      </div>
+      <h4>Top Repositories</h4>
+      <div id="reposList"></div>
+    </div>
+    <div id="errMsg" style="color:#ef4444;text-align:center;display:none;"></div>
+  </div>
+
+  <script>
+    const btn = document.getElementById("searchBtn");
+    const input = document.getElementById("userInput");
+    const output = document.getElementById("output");
+    const errMsg = document.getElementById("errMsg");
+
+    btn.addEventListener("click", async () => {
+      const u = input.value.trim();
+      if (!u) return;
+
+      output.style.display = "none";
+      errMsg.style.display = "none";
+      btn.disabled = true;
+
+      try {
+        const [uRes, rRes] = await Promise.all([
+          fetch("https://api.github.com/users/" + encodeURIComponent(u)),
+          fetch("https://api.github.com/users/" + encodeURIComponent(u) + "/repos?sort=updated&per_page=3")
+        ]);
+
+        if (uRes.status === 404) throw new Error("User not found on GitHub");
+        if (!uRes.ok) throw new Error("Failed to fetch user");
+
+        const user = await uRes.json();
+        const repos = await rRes.json();
+
+        document.getElementById("avatar").src = user.avatar_url;
+        document.getElementById("name").textContent = user.name || user.login;
+        document.getElementById("bio").textContent = user.bio || "No bio available.";
+        document.getElementById("stats").textContent = user.public_repos + " Repositories • " + user.followers + " Followers";
+
+        const reposList = document.getElementById("reposList");
+        reposList.innerHTML = "";
+        repos.forEach(r => {
+          const div = document.createElement("div");
+          div.className = "repo-item";
+          div.innerHTML = '<a class="repo-name" href="' + r.html_url + '" target="_blank">' + r.name + '</a><span class="star-badge">⭐ ' + r.stargazers_count + '</span>';
+          reposList.appendChild(div);
+        });
+
+        output.style.display = "block";
+      } catch (err) {
+        errMsg.textContent = "Error: " + err.message;
+        errMsg.style.display = "block";
+      } finally {
+        btn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>`
+    },
+    githubWorkflow: {
+      repoName: 'html-css-projects',
+      commitMessage: 'feat(day-39): build dynamic github profile explorer single page application',
+      commands: [
+        'mkdir day-39',
+        'cd day-39',
+        'git checkout -b feature/day-39-github-explorer',
+        'git add index.html',
+        'git commit -m "feat(day-39): build dynamic github profile explorer single page application"',
+        'git push origin feature/day-39-github-explorer'
+      ],
+      tips: 'Use Promise.all() when making multiple independent fetch calls concurrently to cut total loading time in half.'
+    },
+    vivaCheck: {
+      question: 'What is the advantage of using Promise.all([fetch(userUrl), fetch(reposUrl)]) over running them sequentially with two consecutive awaits?',
+      options: [
+        'Both network requests execute concurrently in parallel, reducing total loading time to the slowest single request rather than the sum of both.',
+        'Promise.all() automatically bypasses CORS security policies on the server.',
+        'Promise.all() merges the two HTTP responses into a single combined JSON buffer.',
+        'Promise.all() compresses network packets by 50% using gzip.'
+      ],
+      correctAnswer: 0,
+      explanation: 'When requests are independent, running them with Promise.all() launches them concurrently. Consecutive awaits would force the second request to wait until the first fully completes (waterfall latency).'
+    }
+  },
+
+  /* ── DAY 40 ── */
+  {
+    id: 'day-40',
+    day: 40,
+    year: 1,
+    semester: 1,
+    specialization: 'foundation',
+    title: 'Sprint 4 Capstone: University Resource Hub Single Page Application',
+    slug: 'day-40-sprint-capstone-university-resource-hub-spa',
+    category: 'Mini Project Capstone',
+    estimatedTime: '3.5 Hours Practical',
+    difficulty: 'Intermediate',
+    objectives: [
+      'Assemble Days 31–39 techniques into a complete, responsive Single Page Application (SPA).',
+      'Integrate LocalStorage for persistent bookmarks and study preferences.',
+      'Fetch dynamic course resources and syllabus data via asynchronous REST APIs or mock endpoints.',
+      'Build modal preview dialogs with backdrop dismissal, body scroll locks, and Escape key listeners.',
+      'Deploy the completed Capstone project to your personal GitHub repository and GitHub Pages.'
+    ],
+    concept: {
+      overview: 'This Sprint 4 Capstone unites everything learned in Advanced JavaScript: localStorage state persistence, async/await REST data fetching, event delegation, dynamic modals, and interactive UI state management into a complete University Resource Hub.',
+      keyPoints: [
+        'Component Orchestration: Coordinate state across search filtering, bookmarks array, modal dialogs, and storage.',
+        'Offline Resilience: Read bookmarks and preferences from localStorage so the app works even when disconnected.',
+        'Clean Separation: Separate data fetching (async API), state management (arrays & storage), and DOM rendering.',
+        'Event Delegation: Use delegated click listeners on the resource grid to handle bookmarking and viewing details.',
+        'Sprint 4 Milestone: Represents graduation from DOM manipulation to building real Single Page Web Applications.'
+      ],
+      analogy: 'Think of this project like building your own university digital library portal: students can search textbooks, bookmark papers for later study, open detailed preview cards in popups, and pick up right where they left off tomorrow.'
+    },
+    teacherDemo: {
+      title: 'Complete University Resource Hub SPA Architecture',
+      explanation: 'Examine how search filtering, modal popups, and localStorage bookmarking coordinate seamlessly.',
+      language: 'html',
+      code: `<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { font-family: 'Segoe UI', sans-serif; background: #060c18; color: #fff; padding: 24px; }
+    .app { max-width: 640px; margin: auto; }
+    .search-row { display: flex; gap: 8px; margin-bottom: 20px; }
+    input { flex: 1; padding: 10px; background: #0c1328; border: 1px solid #334155; color: #fff; border-radius: 6px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px; }
+    .card { background: #0c1328; border: 1px solid #1e293b; padding: 16px; border-radius: 10px; }
+    button { padding: 6px 12px; border-radius: 6px; border: none; font-weight: bold; cursor: pointer; }
+    .btn-view { background: #2563eb; color: #fff; }
+    .btn-bm { background: #f59e0b; color: #000; margin-left: 6px; }
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); display: none; align-items: center; justify-content: center; z-index: 1000; }
+    .modal-overlay.open { display: flex; }
+    .modal-body { background: #0c1328; border: 1px solid #334155; padding: 24px; border-radius: 12px; max-width: 440px; width: 90%; }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <h2>🎓 BCA University Resource Hub</h2>
+    <div class="search-row">
+      <input type="text" id="searchInput" placeholder="Search subjects (e.g. C, HTML, Math)..." />
+      <span id="bmCount" style="align-self:center;font-weight:bold;color:#f59e0b;">⭐ 0 Bookmarks</span>
+    </div>
+    <div class="grid" id="resourceGrid"></div>
+  </div>
+
+  <div class="modal-overlay" id="modal">
+    <div class="modal-body">
+      <h3 id="modalTitle"></h3>
+      <p id="modalDesc" style="color:#94a3b8;"></p>
+      <button onclick="closeModal()" style="background:#ef4444;color:#fff;width:100%;">Close Modal (Esc)</button>
+    </div>
+  </div>
+
+  <script>
+    const resources = [
+      { id: 1, title: "BCS-011: Computer Basics", desc: "Hardware, software, Von Neumann architecture, and OS fundamentals." },
+      { id: 2, title: "BCSL-013: PC Software Lab", desc: "Hands-on lab for Windows commands, HTML5, and Linux basics." },
+      { id: 3, title: "BCS-012: Basic Mathematics", desc: "Matrices, determinants, differential calculus, and algebra." },
+      { id: 4, title: "MCS-011: Problem Solving & C", desc: "Pointers, memory allocation, arrays, and structured programming." }
+    ];
+
+    let bookmarks = JSON.parse(localStorage.getItem("bca_hub_bookmarks")) || [];
+    const grid = document.getElementById("resourceGrid");
+    const modal = document.getElementById("modal");
+
+    function render(list) {
+      grid.innerHTML = "";
+      document.getElementById("bmCount").textContent = "⭐ " + bookmarks.length + " Bookmarks";
+      list.forEach(r => {
+        const isBm = bookmarks.includes(r.id);
+        const card = document.createElement("div");
+        card.className = "card";
+        card.dataset.id = r.id;
+        card.innerHTML = '<h4>' + r.title + '</h4>' +
+          '<p style="color:#94a3b8;font-size:13px;">' + r.desc + '</p>' +
+          '<button class="btn-view">View Details</button>' +
+          '<button class="btn-bm">' + (isBm ? "★ Saved" : "☆ Save") + '</button>';
+        grid.appendChild(card);
+      });
+    }
+
+    // Delegated listener
+    grid.addEventListener("click", (e) => {
+      const viewBtn = e.target.closest(".btn-view");
+      const bmBtn = e.target.closest(".btn-bm");
+      const card = e.target.closest(".card");
+      if (!card) return;
+      const id = parseInt(card.dataset.id, 10);
+      const res = resources.find(r => r.id === id);
+
+      if (viewBtn && res) {
+        document.getElementById("modalTitle").textContent = res.title;
+        document.getElementById("modalDesc").textContent = res.desc;
+        modal.classList.add("open");
+        document.body.style.overflow = "hidden";
+      }
+
+      if (bmBtn) {
+        if (bookmarks.includes(id)) bookmarks = bookmarks.filter(b => b !== id);
+        else bookmarks.push(id);
+        localStorage.setItem("bca_hub_bookmarks", JSON.stringify(bookmarks));
+        render(resources);
+      }
+    });
+
+    window.closeModal = () => {
+      modal.classList.remove("open");
+      document.body.style.overflow = "";
+    };
+
+    window.addEventListener("keydown", (e) => { if (e.key === "Escape") closeModal(); });
+    modal.addEventListener("click", (e) => { if (e.target === modal) closeModal(); });
+
+    document.getElementById("searchInput").addEventListener("input", (e) => {
+      const q = e.target.value.toLowerCase();
+      render(resources.filter(r => r.title.toLowerCase().includes(q) || r.desc.toLowerCase().includes(q)));
+    });
+
+    render(resources);
+  </script>
+</body>
+</html>`
+    },
+    practicalLab: {
+      labTitle: 'Building the Capstone University Resource Hub',
+      labDescription: 'Assemble search filtering, modal detail views, and localStorage bookmark persistence into a complete web app.',
+      initialCode: `<!DOCTYPE html>
+<html>
+<head><title>Capstone Hub</title></head>
+<body>
+  <h1>University Resource Hub</h1>
+  <input id="search" placeholder="Search..." />
+  <div id="grid"></div>
+
+  <script>
+    // Assemble Days 31-39 features into working SPA
+  </script>
+</body>
+</html>`,
+      language: 'html',
+      tasks: [
+        {
+          id: 't40-1',
+          title: 'Integrate LocalStorage Bookmarks',
+          instruction: 'Save bookmarks array to localStorage.setItem("bca_hub_bookmarks", JSON.stringify(bookmarks)).',
+          hint: 'Keep localStorage synced whenever bookmarks are added or removed.',
+          validatorRegex: 'localStorage\\.setItem.*bca_hub_bookmarks'
+        },
+        {
+          id: 't40-2',
+          title: 'Implement Search Filtering',
+          instruction: 'Filter resources using Array.prototype.filter() based on search input value.',
+          hint: 'Convert both query and resource strings to lowercase before checking includes().',
+          validatorRegex: '\\.filter.*\\.includes\\('
+        }
+      ]
+    },
+    debuggingChallenge: {
+      title: 'Empty LocalStorage Initialization Null Reference Bug',
+      buggyCode: `// ❌ Bug: When user visits site for the first time, localStorage is empty!
+// JSON.parse(null) returns null. Calling bookmarks.includes() crashes!
+let bookmarks = JSON.parse(localStorage.getItem("bca_bookmarks"));
+if (bookmarks.includes(101)) { // 💥 TypeError: Cannot read properties of null
+  console.log("Bookmarked!");
+}`,
+      bugExplanation: 'When an item does not exist in localStorage, getItem() returns null. JSON.parse(null) evaluates to null. Calling array methods like .includes() or .push() on null causes a fatal TypeError.',
+      fixedCode: `// ✅ Always provide a fallback empty array using || []
+let bookmarks = JSON.parse(localStorage.getItem("bca_bookmarks")) || [];
+if (bookmarks.includes(101)) {
+  console.log("Bookmarked!");
+}`
+    },
+    assignment: {
+      title: 'Sprint 4 Capstone: Production University Resource & Study Hub',
+      instructions: [
+        'Build a complete single-page resource hub featuring 6 university subjects with title, code, semester, and description.',
+        'Provide a live Search Bar that filters cards instantly on keystroke.',
+        'Implement an interactive Bookmark system that saves favorite subjects to localStorage.',
+        'Include a detail modal that displays syllabus topics and lecture links, closable with ESC key.',
+        'Deploy the finished application to GitHub Pages and share the live link.'
+      ],
+      submissionCriteria: 'Push complete index.html, styles.css, and app.js to your GitHub repository under day-40.',
+      fileName: 'index.html',
+      solutionCode: `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>BCA Day 40 - Sprint 4 Capstone</title>
+  <style>
+    body { font-family: 'Segoe UI', sans-serif; background: #060c18; color: #fff; padding: 24px; margin: 0; }
+    .container { max-width: 720px; margin: auto; }
+    .top-bar { display: flex; gap: 12px; margin-bottom: 20px; align-items: center; }
+    input { flex: 1; padding: 12px; background: #0c1328; border: 1px solid #334155; color: #fff; border-radius: 8px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
+    .card { background: #0c1328; border: 1px solid #1e293b; padding: 20px; border-radius: 12px; display: flex; flex-direction: column; justify-content: space-between; }
+    .card h3 { margin: 0 0 6px 0; color: #38bdf8; }
+    .card p { color: #94a3b8; font-size: 13px; line-height: 1.5; flex: 1; }
+    .actions { display: flex; gap: 8px; margin-top: 14px; }
+    button { flex: 1; padding: 10px; border-radius: 6px; border: none; font-weight: bold; cursor: pointer; }
+    .btn-view { background: #2563eb; color: #fff; }
+    .btn-save { background: #f59e0b; color: #000; }
+    .modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(4px); display: none; align-items: center; justify-content: center; z-index: 9999; }
+    .modal-backdrop.open { display: flex; }
+    .modal-box { background: #0c1328; border: 1px solid #334155; padding: 24px; border-radius: 14px; width: 90%; max-width: 480px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="top-bar">
+      <input type="text" id="filterInput" placeholder="🔍 Search curriculum subjects..." />
+      <span id="savedCounter" style="color:#f59e0b;font-weight:bold;white-space:nowrap;">⭐ 0 Saved</span>
+    </div>
+    <div class="grid" id="subjectsGrid"></div>
+  </div>
+
+  <div class="modal-backdrop" id="modalBackdrop">
+    <div class="modal-box">
+      <h3 id="modalHeading" style="margin-top:0;color:#38bdf8;"></h3>
+      <p id="modalBody" style="color:#cbd5e1;line-height:1.6;"></p>
+      <button onclick="closeDialog()" style="background:#ef4444;color:#fff;width:100%;margin-top:14px;">Close (Esc)</button>
+    </div>
+  </div>
+
+  <script>
+    const subjects = [
+      { id: 101, code: "BCS-011", name: "Computer Basics and PC Software", desc: "Data representation, hardware architectures, CPU registers, and Windows/Linux tools." },
+      { id: 102, code: "BCSL-013", name: "Software Lab (PC Software)", desc: "Interactive command prompt, HTML5 document structures, CSS formatting, and web labs." },
+      { id: 103, code: "BCS-012", name: "Basic Mathematics", desc: "Determinants, matrices, limits, continuity, coordinate geometry, and linear programming." },
+      { id: 104, code: "MCS-011", name: "Problem Solving and C Programming", desc: "Structured programming, memory pointers, dynamic allocation, structures, and arrays." },
+      { id: 105, code: "MCS-021", name: "Data and File Structures", desc: "Stacks, queues, linked lists, trees, binary search graphs, and hashing algorithms." },
+      { id: 106, code: "BCS-053", name: "Web Programming & Technologies", desc: "Full-stack development, JavaScript DOM, async fetch APIs, and database integration." }
+    ];
+
+    let saved = JSON.parse(localStorage.getItem("bca_capstone_saved")) || [];
+    const grid = document.getElementById("subjectsGrid");
+    const modal = document.getElementById("modalBackdrop");
+
+    function renderCards(list) {
+      grid.innerHTML = "";
+      document.getElementById("savedCounter").textContent = "⭐ " + saved.length + " Saved";
+
+      list.forEach(s => {
+        const isSaved = saved.includes(s.id);
+        const card = document.createElement("div");
+        card.className = "card";
+        card.dataset.id = s.id;
+        card.innerHTML = '<div>' +
+          '<h3>' + s.code + '</h3>' +
+          '<div style="font-weight:bold;font-size:14px;margin-bottom:6px;">' + s.name + '</div>' +
+          '<p>' + s.desc + '</p>' +
+          '</div>' +
+          '<div class="actions">' +
+          '<button class="btn-view">Details</button>' +
+          '<button class="btn-save">' + (isSaved ? "★ Saved" : "☆ Save") + '</button>' +
+          '</div>';
+        grid.appendChild(card);
+      });
+    }
+
+    grid.addEventListener("click", (e) => {
+      const card = e.target.closest(".card");
+      if (!card) return;
+      const id = parseInt(card.dataset.id, 10);
+      const sub = subjects.find(s => s.id === id);
+
+      if (e.target.closest(".btn-view") && sub) {
+        document.getElementById("modalHeading").textContent = sub.code + ": " + sub.name;
+        document.getElementById("modalBody").textContent = sub.desc + " This module is accredited by NextSem Academy under lead faculty Er. Manoj Kumar.";
+        modal.classList.add("open");
+        document.body.style.overflow = "hidden";
+      }
+
+      if (e.target.closest(".btn-save")) {
+        if (saved.includes(id)) saved = saved.filter(x => x !== id);
+        else saved.push(id);
+        localStorage.setItem("bca_capstone_saved", JSON.stringify(saved));
+        renderCards(subjects);
+      }
+    });
+
+    window.closeDialog = () => {
+      modal.classList.remove("open");
+      document.body.style.overflow = "";
+    };
+
+    window.addEventListener("keydown", (e) => { if (e.key === "Escape") closeDialog(); });
+    modal.addEventListener("click", (e) => { if (e.target === modal) closeDialog(); });
+
+    document.getElementById("filterInput").addEventListener("input", (e) => {
+      const q = e.target.value.toLowerCase();
+      renderCards(subjects.filter(s => s.code.toLowerCase().includes(q) || s.name.toLowerCase().includes(q) || s.desc.toLowerCase().includes(q)));
+    });
+
+    renderCards(subjects);
+  </script>
+</body>
+</html>`
+    },
+    githubWorkflow: {
+      repoName: 'html-css-projects',
+      commitMessage: 'feat(day-40): build sprint 4 capstone university resource hub single page application',
+      commands: [
+        'mkdir day-40',
+        'cd day-40',
+        'git checkout -b feature/day-40-sprint-capstone',
+        'git add index.html',
+        'git commit -m "feat(day-40): build sprint 4 capstone university resource hub single page application"',
+        'git push origin feature/day-40-sprint-capstone'
+      ],
+      tips: 'Test your application with empty localStorage to confirm default values and search filtering behave properly.'
+    },
+    vivaCheck: {
+      question: 'Why is it critical to provide a fallback value like || [] when parsing localStorage data with JSON.parse(localStorage.getItem(key))?',
+      options: [
+        'If the key does not exist, getItem() returns null, causing JSON.parse(null) to evaluate to null; calling array methods on null causes a fatal TypeError.',
+        'Without a fallback, the browser terminates JavaScript garbage collection on the main UI thread.',
+        'localStorage data is encrypted by default and requires an empty array key to decode.',
+        'Array methods like map and filter automatically delete localStorage entries if not initialized with an empty array.'
+      ],
+      correctAnswer: 0,
+      explanation: 'When a key does not exist in localStorage, localStorage.getItem(key) returns null. Since JSON.parse(null) returns null, calling any array method like .push() or .includes() crashes with "Cannot read properties of null". Providing || [] ensures you always work with a valid array.'
+    }
+  }
+,
+
+  /* ── DAY 41 ── */
+  {
+    "id": "day-41",
+    "day": 41,
+    "year": 1,
+    "semester": 1,
+    "specialization": "foundation",
+    "title": "Modular JavaScript Architecture (ES6 Modules, Import & Export)",
+    "slug": "day-41-modular-javascript-es6-modules-import-export",
+    "category": "Advanced JavaScript & Browser APIs",
+    "estimatedTime": "2 Hours Practical",
+    "difficulty": "Intermediate",
+    "objectives": [
+      "Understand why modern enterprise codebases split scripts into decoupled ES6 modules.",
+      "Configure the browser script tag using type=\"module\" to enable native import/export statements.",
+      "Implement Named Exports (export const add = ...) and Default Exports (export default App).",
+      "Handle module scope: understand why variables in modules are never leaked into window/global scope.",
+      "Structure a multi-file frontend architecture with utility helpers and DOM handlers."
+    ],
+    "concept": {
+      "overview": "Prior to ES6 (ECMAScript 2015), JavaScript lacked a native module system, forcing developers to use massive single script files or pollute the window global object. ES6 Modules provide clean, file-scoped boundaries where each file explicitly declares what functions or data it shares using export and what dependencies it consumes using import.",
+      "keyPoints": [
+        "Module Tag: Script tags loading ES6 modules MUST specify type=\"module\" (<script type=\"module\" src=\"app.js\"></script>).",
+        "Named Exports: You can export multiple named entities using export const or export { fnA, fnB }. They must be imported with matching names inside curly braces { fnA }.",
+        "Default Export: A module can have exactly one default export (export default function), which can be imported under any alias without curly braces.",
+        "Strict Mode by Default: All code inside ES6 modules executes in strict mode (\"use strict\") automatically.",
+        "CORS Requirement: Modern browsers only load type=\"module\" scripts via HTTP/HTTPS protocols (e.g. Live Server), not via raw file:/// protocols due to CORS security policies."
+      ],
+      "analogy": "Think of modules like individual tools in a master craftsman toolbox: instead of carrying a giant 100-pound fused metal block, each tool (hammer, screwdriver, wrench) is independent in its own slot and brought out only when specifically needed."
+    },
+    "teacherDemo": {
+      "title": "ES6 Module Multi-File Architecture Simulation",
+      "explanation": "See how math utilities and formatting functions are encapsulated in separate files and imported cleanly into the primary application runner.",
+      "language": "html",
+      "code": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>ES6 Modules Demo</title>\n  <style>\n    body { font-family: system-ui, sans-serif; background: #060c18; color: #fff; padding: 24px; }\n    .card { background: #0c1328; border: 1px solid #1e293b; padding: 20px; border-radius: 12px; max-width: 500px; margin: auto; }\n    .val { color: #38bdf8; font-weight: bold; font-family: monospace; }\n  </style>\n</head>\n<body>\n  <div class=\"card\">\n    <h2>📦 Modular Calculator</h2>\n    <p>Addition (Named Export): <span class=\"val\" id=\"resAdd\">...</span></p>\n    <p>Currency Format (Default Export): <span class=\"val\" id=\"resCur\">...</span></p>\n  </div>\n\n  <script type=\"module\">\n    const add = (a, b) => a + b;\n    const formatINR = (num) => '₹' + num.toLocaleString('en-IN');\n\n    const sum = add(1500, 2750);\n    document.getElementById(\"resAdd\").textContent = sum;\n    document.getElementById(\"resCur\").textContent = formatINR(sum);\n  </script>\n</body>\n</html>"
+    },
+    "practicalLab": {
+      "labTitle": "Building Modular Financial Calculator",
+      "labDescription": "Structure multiple decoupled script files using ES6 named and default exports.",
+      "initialCode": "<!DOCTYPE html>\n<html>\n<head><title>ES6 Modules</title></head>\n<body>\n  <div id=\"output\"></div>\n  <script type=\"module\">\n    // Practice named and default exports\n  </script>\n</body>\n</html>",
+      "language": "html",
+      "tasks": [
+        {
+          "id": "t41-1",
+          "title": "Add type=\"module\" to Script Tag",
+          "instruction": "Add type=\"module\" to the script tag to activate native browser ES6 module loading.",
+          "hint": "Use <script type=\"module\" src=\"main.js\"></script>",
+          "validatorRegex": "<script\\s+[^>]*type=[\"']module[\"']"
+        },
+        {
+          "id": "t41-2",
+          "title": "Export Named Functions from Utility File",
+          "instruction": "Export named helper functions calculateGST and calculateDiscount using the export keyword.",
+          "hint": "export function calculateGST(amount) { return amount * 0.18; }",
+          "validatorRegex": "export\\s+(function|const|let)\\s+calculateGST"
+        },
+        {
+          "id": "t41-3",
+          "title": "Import Named Functions in Main Script",
+          "instruction": "Import the calculateGST helper from the relative module path ./utils/tax.js.",
+          "hint": "import { calculateGST } from \"./utils/tax.js\";",
+          "validatorRegex": "import\\s*\\{[^}]*calculateGST[^}]*\\}\\s*from"
+        }
+      ]
+    },
+    "debuggingChallenge": {
+      "title": "Spot the Bug: Relative Path Extension Missing in ES6 Module Import",
+      "buggyCode": "// utils.js exists in the same folder\nimport { calculateTotal } from \"./utils\";\nconsole.log(calculateTotal(100));",
+      "bugExplanation": "In Node.js or bundlers like Webpack, file extensions can often be omitted. However, native browser ES6 module loaders do NOT automatically resolve .js extensions; you MUST provide the exact full relative path including .js extension.",
+      "fixedCode": "// ✅ Correct: Always specify the explicit .js extension in browser ES6 imports\nimport { calculateTotal } from \"./utils.js\";\nconsole.log(calculateTotal(100));"
+    },
+    "assignment": {
+      "title": "Modular E-Commerce Checkout Calculator Architecture",
+      "instructions": [
+        "Create three decoupled files: index.html, taxCalculator.js, and main.js.",
+        "In taxCalculator.js, export named functions for GST (18%) and Shipping fee calculation, plus default export for Invoice total.",
+        "In main.js, import the modules using relative paths with .js extensions and bind them to an interactive billing table.",
+        "Run the project using a local dev server (e.g. VS Code Live Server) to verify CORS compliance."
+      ],
+      "submissionCriteria": "Push modular index.html, taxCalculator.js, and main.js to your GitHub repository under day-41.",
+      "fileName": "index.html",
+      "solutionCode": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>BCA Day 41 - Modular Architecture</title>\n  <style>\n    body { font-family: \"Segoe UI\", sans-serif; background: #060c18; color: #fff; padding: 24px; }\n    .card { background: #0c1328; border: 1px solid #1e293b; padding: 24px; border-radius: 12px; max-width: 480px; margin: auto; }\n    .row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #1e293b; }\n    .total { font-size: 18px; font-weight: bold; color: #38bdf8; border-top: 2px solid #38bdf8; margin-top: 12px; padding-top: 12px; }\n    button { width: 100%; padding: 12px; background: #2563eb; color: #fff; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 16px; }\n  </style>\n</head>\n<body>\n  <div class=\"card\">\n    <h2>🛒 Order Summary (Modular ES6)</h2>\n    <div class=\"row\"><span>Item Subtotal:</span><span id=\"subtotal\">₹2,400</span></div>\n    <div class=\"row\"><span>GST (18%):</span><span id=\"tax\">₹0</span></div>\n    <div class=\"row\"><span>Shipping:</span><span id=\"shipping\">₹0</span></div>\n    <div class=\"row total\"><span>Grand Total:</span><span id=\"grandTotal\">₹0</span></div>\n    <button id=\"calcBtn\">Calculate Invoice</button>\n  </div>\n\n  <script type=\"module\">\n    const taxModule = {\n      getGST: (amt) => amt * 0.18,\n      getShipping: (amt) => amt > 2000 ? 0 : 150,\n      getTotal: (amt, tax, ship) => amt + tax + ship\n    };\n\n    document.getElementById(\"calcBtn\").addEventListener(\"click\", () => {\n      const sub = 2400;\n      const tax = taxModule.getGST(sub);\n      const shipping = taxModule.getShipping(sub);\n      const grand = taxModule.getTotal(sub, tax, shipping);\n\n      document.getElementById(\"tax\").textContent = \"₹\" + tax.toFixed(2);\n      document.getElementById(\"shipping\").textContent = shipping === 0 ? \"FREE\" : \"₹\" + shipping;\n      document.getElementById(\"grandTotal\").textContent = \"₹\" + grand.toFixed(2);\n    });\n  </script>\n</body>\n</html>"
+    },
+    "githubWorkflow": {
+      "repoName": "html-css-projects",
+      "commitMessage": "feat(day-41): implement es6 modular architecture with named and default exports",
+      "commands": [
+        "mkdir day-41",
+        "cd day-41",
+        "git checkout -b feature/day-41-es6-modules",
+        "git add .",
+        "git commit -m \"feat(day-41): implement es6 modular architecture with named and default exports\"",
+        "git push origin feature/day-41-es6-modules"
+      ],
+      "tips": "Always test ES6 module web projects using VS Code Live Server or python -m http.server; opening raw file:/// directly will trigger browser CORS security blocks."
+    },
+    "vivaCheck": {
+      "question": "Why does opening an ES6 module file directly from the local file system (file:///) result in a CORS error in modern browsers?",
+      "options": [
+        "The ES6 module specification strictly treats all origin requests as null on the file:/// protocol, triggering browser cross-origin policy restrictions.",
+        "Local hard drives do not support modern JavaScript syntax without installing a local C++ compiler.",
+        "The browser automatically disables the JavaScript engine whenever a file extension ends in .html.",
+        "file:/// protocols only allow inline script tags and permanently ban all external script tags."
+      ],
+      "correctAnswer": 0,
+      "explanation": "Under the HTML5 / ECMAScript security model, resources fetched with type=\"module\" are loaded using CORS. When opened via file:///, the origin is null, which fails the cross-origin origin checks. Running a local HTTP server provides an authentic HTTP origin (e.g. http://localhost:5500)."
+    }
+  },
+
+  /* ── DAY 42 ── */
+  {
+    "id": "day-42",
+    "day": 42,
+    "year": 1,
+    "semester": 1,
+    "specialization": "foundation",
+    "title": "HTML5 2D Canvas API Fundamentals (Coordinates, Shapes & Paths)",
+    "slug": "day-42-html5-canvas-api-fundamentals-coordinates-shapes-paths",
+    "category": "Advanced JavaScript & Browser APIs",
+    "estimatedTime": "2.5 Hours Practical",
+    "difficulty": "Intermediate",
+    "objectives": [
+      "Initialize an HTML5 <canvas> element and access its 2D rendering context (canvas.getContext(\"2d\")).",
+      "Master the Canvas coordinate grid system (X-axis left-to-right, Y-axis top-to-bottom from top-left origin 0,0).",
+      "Draw geometric primitives: fillRect(), strokeRect(), and clearRect().",
+      "Construct custom vector shapes using path routines: beginPath(), moveTo(), lineTo(), and stroke().",
+      "Render smooth circles and arcs using the arc(x, y, radius, startAngle, endAngle) method."
+    ],
+    "concept": {
+      "overview": "The HTML5 <canvas> element provides a resolution-dependent bitmap canvas that can be drawn on dynamically using JavaScript. Unlike regular DOM elements, canvas operates as an immediate-mode raster drawing surface, making it the industry foundation for web games, charts, signature pads, and image manipulation.",
+      "keyPoints": [
+        "Rendering Context: The <canvas> tag is simply an empty container. All visual rendering is performed through the context object obtained via const ctx = canvas.getContext(\"2d\").",
+        "Coordinate Origin: (0, 0) is situated at the TOP-LEFT corner of the canvas. Positive X extends rightwards, and positive Y extends downwards.",
+        "Fill vs Stroke: fillStyle and fillRect create solid filled shapes; strokeStyle and strokeRect render outlines.",
+        "Path Construction: Always start a new line or vector shape with ctx.beginPath(); otherwise subsequent strokes will connect to previously drawn points.",
+        "Angles in Radians: Canvas trigonometric methods expect angles in radians (radians = degrees * Math.PI / 180). A complete circle spans 0 to 2 * Math.PI."
+      ],
+      "analogy": "Think of the <canvas> element like an artist blank linen canvas mounted on an easel, and the 2D rendering context (ctx) like the artist paintbrush and palette. You command the brush where to move and when to apply paint."
+    },
+    "teacherDemo": {
+      "title": "Canvas Shapes, Gradients & Coordinate Demonstration",
+      "explanation": "See how rectangles, diagonal lines, and smooth circular badges are painted programmatically on a single canvas element.",
+      "language": "html",
+      "code": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>Canvas 2D Fundamentals</title>\n  <style>\n    body { font-family: system-ui, sans-serif; background: #060c18; color: #fff; padding: 24px; text-align: center; }\n    canvas { background: #0c1328; border: 2px solid #1e293b; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.5); }\n  </style>\n</head>\n<body>\n  <h2>🎨 HTML5 2D Canvas Primitives</h2>\n  <canvas id=\"myCanvas\" width=\"480\" height=\"280\"></canvas>\n\n  <script>\n    const canvas = document.getElementById(\"myCanvas\");\n    const ctx = canvas.getContext(\"2d\");\n\n    ctx.fillStyle = \"#2563eb\";\n    ctx.fillRect(30, 30, 100, 70);\n\n    ctx.strokeStyle = \"#38bdf8\";\n    ctx.lineWidth = 3;\n    ctx.strokeRect(160, 30, 100, 70);\n\n    ctx.beginPath();\n    ctx.moveTo(300, 100);\n    ctx.lineTo(360, 30);\n    ctx.lineTo(420, 100);\n    ctx.strokeStyle = \"#c1a648\";\n    ctx.lineWidth = 4;\n    ctx.stroke();\n\n    ctx.beginPath();\n    ctx.arc(240, 190, 50, 0, Math.PI * 2);\n    ctx.fillStyle = \"#04AA6D\";\n    ctx.fill();\n  </script>\n</body>\n</html>"
+    },
+    "practicalLab": {
+      "labTitle": "Canvas Geometric Primitives Lab",
+      "labDescription": "Practice creating 2D context, rendering rectangles, lines, and circular arcs.",
+      "initialCode": "<!DOCTYPE html>\n<html>\n<body>\n  <canvas id=\"artboard\" width=\"400\" height=\"300\"></canvas>\n  <script>\n    // Get 2D context and render shapes\n  </script>\n</body>\n</html>",
+      "language": "html",
+      "tasks": [
+        {
+          "id": "t42-1",
+          "title": "Obtain 2D Rendering Context",
+          "instruction": "Select canvas element by id \"artboard\" and retrieve its 2d context into a variable named ctx.",
+          "hint": "const ctx = canvas.getContext(\"2d\");",
+          "validatorRegex": "canvas\\.getContext\\([\"']2d[\"']\\)"
+        },
+        {
+          "id": "t42-2",
+          "title": "Draw Filled Rectangle",
+          "instruction": "Set the fillStyle to \"#38bdf8\" and draw a filled rectangle at (50, 50) with width 120 and height 80.",
+          "hint": "ctx.fillStyle = \"#38bdf8\"; ctx.fillRect(50, 50, 120, 80);",
+          "validatorRegex": "ctx\\.fillRect\\(\\s*50\\s*,\\s*50\\s*,\\s*120\\s*,\\s*80\\s*\\)"
+        },
+        {
+          "id": "t42-3",
+          "title": "Draw a Circle with arc()",
+          "instruction": "Use beginPath(), arc() with 0 to Math.PI * 2, and fill() to render a circle.",
+          "hint": "ctx.beginPath(); ctx.arc(100, 100, 40, 0, Math.PI * 2); ctx.fill();",
+          "validatorRegex": "ctx\\.arc\\(.*Math\\.PI\\s*\\*\\s*2\\)"
+        }
+      ]
+    },
+    "debuggingChallenge": {
+      "title": "Spot the Bug: Canvas Dimension Scaling Distortion",
+      "buggyCode": "<!-- HTML -->\n<canvas id=\"stage\" style=\"width: 500px; height: 400px;\"></canvas>\n\n<script>\n  const ctx = document.getElementById(\"stage\").getContext(\"2d\");\n  ctx.beginPath();\n  ctx.arc(100, 100, 50, 0, Math.PI * 2);\n  ctx.stroke();\n</script>",
+      "bugExplanation": "Canvas has TWO sizes: the drawing buffer coordinate size (defined via HTML width and height attributes) and the CSS display size. If width/height attributes are omitted, the drawing buffer defaults to 300x150 pixels. Applying CSS width/height stretches those 300x150 pixels like an image, distorting all aspect ratios.",
+      "fixedCode": "<!-- ✅ Correct: Set the internal coordinate resolution directly on HTML attributes -->\n<canvas id=\"stage\" width=\"500\" height=\"400\"></canvas>\n\n<script>\n  const ctx = document.getElementById(\"stage\").getContext(\"2d\");\n  ctx.beginPath();\n  ctx.arc(100, 100, 50, 0, Math.PI * 2);\n  ctx.stroke();\n</script>"
+    },
+    "assignment": {
+      "title": "Interactive Geometric Flag & University Badge Painter",
+      "instructions": [
+        "Initialize an HTML5 canvas with width=600 and height=400.",
+        "Paint a stylized dark background with a 3-stripe horizontal flag or banner.",
+        "In the center, construct a circular gold emblem using ctx.arc().",
+        "Add text onto the canvas using ctx.font, ctx.textAlign = \"center\", and ctx.fillText().",
+        "Provide an interactive \"Clear Canvas\" button that invokes ctx.clearRect(0, 0, canvas.width, canvas.height)."
+      ],
+      "submissionCriteria": "Push canvas-primitives.html to your GitHub repository under day-42.",
+      "fileName": "index.html",
+      "solutionCode": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>BCA Day 42 - Canvas Flag & Badge</title>\n  <style>\n    body { font-family: \"Segoe UI\", sans-serif; background: #060c18; color: #fff; text-align: center; padding: 24px; }\n    canvas { background: #0c1328; border: 2px solid #1e293b; border-radius: 12px; margin-top: 16px; }\n    .btn { padding: 10px 20px; background: #2563eb; color: #fff; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; margin: 6px; }\n  </style>\n</head>\n<body>\n  <h2>🎓 BCA Academic Badge Painter</h2>\n  <div>\n    <button class=\"btn\" id=\"drawBtn\">🎨 Draw Badge</button>\n    <button class=\"btn\" style=\"background:#dc2626;\" id=\"clearBtn\">🗑️ Clear Canvas</button>\n  </div>\n  <canvas id=\"badgeCanvas\" width=\"600\" height=\"360\"></canvas>\n\n  <script>\n    const canvas = document.getElementById(\"badgeCanvas\");\n    const ctx = canvas.getContext(\"2d\");\n\n    function drawBadge() {\n      ctx.clearRect(0, 0, canvas.width, canvas.height);\n\n      ctx.fillStyle = \"#0f172a\";\n      ctx.fillRect(40, 20, 520, 320);\n      ctx.strokeStyle = \"#38bdf8\";\n      ctx.lineWidth = 2;\n      ctx.strokeRect(40, 20, 520, 320);\n\n      ctx.beginPath();\n      ctx.arc(300, 160, 70, 0, Math.PI * 2);\n      ctx.fillStyle = \"#1e293b\";\n      ctx.fill();\n      ctx.strokeStyle = \"#c1a648\";\n      ctx.lineWidth = 4;\n      ctx.stroke();\n\n      ctx.beginPath();\n      ctx.arc(300, 160, 55, 0, Math.PI * 2);\n      ctx.fillStyle = \"#04AA6D\";\n      ctx.fill();\n\n      ctx.fillStyle = \"#ffffff\";\n      ctx.font = \"bold 20px Segoe UI\";\n      ctx.textAlign = \"center\";\n      ctx.fillText(\"IGNOU BCA ACADEMY\", 300, 166);\n    }\n\n    document.getElementById(\"drawBtn\").addEventListener(\"click\", drawBadge);\n    document.getElementById(\"clearBtn\").addEventListener(\"click\", () => {\n      ctx.clearRect(0, 0, canvas.width, canvas.height);\n    });\n\n    drawBadge();\n  </script>\n</body>\n</html>"
+    },
+    "githubWorkflow": {
+      "repoName": "html-css-projects",
+      "commitMessage": "feat(day-42): implement 2d html5 canvas geometric primitives, paths, and clearRect",
+      "commands": [
+        "mkdir day-42",
+        "cd day-42",
+        "git checkout -b feature/day-42-canvas-2d",
+        "git add index.html",
+        "git commit -m \"feat(day-42): implement 2d html5 canvas geometric primitives, paths, and clearRect\"",
+        "git push origin feature/day-42-canvas-2d"
+      ],
+      "tips": "Always set canvas width and height attributes in HTML, not in CSS, to avoid stretching and blurry rendering."
+    },
+    "vivaCheck": {
+      "question": "What happens to canvas content if you dynamically change canvas.width or canvas.height via JavaScript (e.g. canvas.width = 800)?",
+      "options": [
+        "The canvas drawing buffer is completely erased and all context state properties (like fillStyle and lineWidth) are reset to defaults.",
+        "The existing drawing is automatically scaled up using bicubic interpolation.",
+        "The browser creates a second virtual canvas in the background and merges both layers.",
+        "The canvas is converted into an SVG vector element without data loss."
+      ],
+      "correctAnswer": 0,
+      "explanation": "Modifying the width or height property of a canvas element immediately reallocates its bitmap memory buffer, which clears all existing drawing pixels and resets context properties (such as fillStyle, font, and strokeStyle) back to their initial defaults."
+    }
+  },
+
+  /* ── DAY 43 ── */
+  {
+    "id": "day-43",
+    "day": 43,
+    "year": 1,
+    "semester": 1,
+    "specialization": "foundation",
+    "title": "Building an Interactive Digital Signature & Sketch Pad (Canvas Mouse & Touch Events)",
+    "slug": "day-43-interactive-digital-signature-sketch-pad-canvas",
+    "category": "Advanced JavaScript & Browser APIs",
+    "estimatedTime": "3 Hours Practical",
+    "difficulty": "Intermediate",
+    "objectives": [
+      "Track mouse movement and drawing state with mousedown, mousemove, and mouseup events.",
+      "Accurately calculate canvas-relative cursor coordinates using e.clientX - rect.left.",
+      "Implement smooth line drawing with lineCap = \"round\" and lineJoin = \"round\".",
+      "Provide interactive toolbars: brush color picker, stroke size slider, and undo/clear options.",
+      "Export the finished canvas signature as a high-resolution PNG data URL using canvas.toDataURL()."
+    ],
+    "concept": {
+      "overview": "Digital signatures are standard in modern enterprise web applications (e-banking, delivery verification, university document approvals). In this project, students bind mouse and pointer events to canvas drawing routines, recording fluid handwriting strokes and exporting the resulting image as base64 PNG data.",
+      "keyPoints": [
+        "Drawing State Flag: A boolean flag (isDrawing = true/false) determines whether cursor movement paints strokes or simply hovers.",
+        "Bounding Rect Calculations: Never use raw e.clientX or e.pageX directly for canvas coordinates. Subtract canvas.getBoundingClientRect().left and .top to calculate accurate relative offsets.",
+        "Smooth Curves: Setting ctx.lineCap = \"round\" and ctx.lineJoin = \"round\" eliminates jagged edges between connected line segments.",
+        "Data Export: canvas.toDataURL(\"image/png\") generates a base64 encoded data URI representing the canvas image, which can be sent to backends or downloaded.",
+        "Touch Support: Touch events (touchstart, touchmove, touchend) map to e.touches[0].clientX for mobile responsiveness."
+      ],
+      "analogy": "Imagine holding a felt-tip pen over a sheet of paper. When you press the pen down (mousedown), isDrawing becomes true. As your hand moves across the surface (mousemove), ink flows. When you lift the pen up (mouseup), ink stops."
+    },
+    "teacherDemo": {
+      "title": "Digital Signature Pad with PNG Download Engine",
+      "explanation": "See how freehand drawing is captured stroke-by-stroke and exported as a clean transparent image file.",
+      "language": "html",
+      "code": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>Signature Pad Demo</title>\n  <style>\n    body { font-family: system-ui, sans-serif; background: #060c18; color: #fff; padding: 20px; text-align: center; }\n    canvas { background: #ffffff; border-radius: 8px; cursor: crosshair; touch-action: none; }\n    .toolbar { margin: 12px auto; display: flex; justify-content: center; gap: 10px; align-items: center; }\n    button { padding: 8px 16px; border-radius: 6px; font-weight: bold; border: none; cursor: pointer; }\n  </style>\n</head>\n<body>\n  <h3>✍️ Digital Signature Pad</h3>\n  <canvas id=\"pad\" width=\"450\" height=\"200\"></canvas>\n  <div class=\"toolbar\">\n    <input type=\"color\" id=\"penColor\" value=\"#000000\" />\n    <input type=\"range\" id=\"penSize\" min=\"1\" max=\"10\" value=\"2\" />\n    <button id=\"clearBtn\" style=\"background:#dc2626;color:#fff;\">Clear</button>\n    <button id=\"saveBtn\" style=\"background:#2563eb;color:#fff;\">Save PNG</button>\n  </div>\n\n  <script>\n    const canvas = document.getElementById(\"pad\");\n    const ctx = canvas.getContext(\"2d\");\n    let isDrawing = false;\n\n    ctx.lineCap = \"round\";\n    ctx.lineJoin = \"round\";\n\n    function getCoords(e) {\n      const rect = canvas.getBoundingClientRect();\n      return { x: e.clientX - rect.left, y: e.clientY - rect.top };\n    }\n\n    canvas.addEventListener(\"mousedown\", (e) => {\n      isDrawing = true;\n      const { x, y } = getCoords(e);\n      ctx.beginPath();\n      ctx.moveTo(x, y);\n    });\n\n    canvas.addEventListener(\"mousemove\", (e) => {\n      if (!isDrawing) return;\n      const { x, y } = getCoords(e);\n      ctx.strokeStyle = document.getElementById(\"penColor\").value;\n      ctx.lineWidth = document.getElementById(\"penSize\").value;\n      ctx.lineTo(x, y);\n      ctx.stroke();\n    });\n\n    window.addEventListener(\"mouseup\", () => { isDrawing = false; });\n    document.getElementById(\"clearBtn\").addEventListener(\"click\", () => {\n      ctx.clearRect(0, 0, canvas.width, canvas.height);\n    });\n    document.getElementById(\"saveBtn\").addEventListener(\"click\", () => {\n      const url = canvas.toDataURL(\"image/png\");\n      const a = document.createElement(\"a\");\n      a.href = url;\n      a.download = \"signature.png\";\n      a.click();\n    });\n  </script>\n</body>\n</html>"
+    },
+    "practicalLab": {
+      "labTitle": "Building Interactive Signature Pad Lab",
+      "labDescription": "Implement canvas mouse tracking, smoothing parameters, and data URL export.",
+      "initialCode": "<!DOCTYPE html>\n<html>\n<body>\n  <canvas id=\"pad\" width=\"400\" height=\"200\"></canvas>\n  <button id=\"export\">Export</button>\n</body>\n</html>",
+      "language": "html",
+      "tasks": [
+        {
+          "id": "t43-1",
+          "title": "Set Line Cap and Join Properties",
+          "instruction": "Configure the 2D context lineCap and lineJoin properties to \"round\" for smooth handwriting rendering.",
+          "hint": "ctx.lineCap = \"round\"; ctx.lineJoin = \"round\";",
+          "validatorRegex": "ctx\\.lineCap\\s*=\\s*[\"']round[\"']"
+        },
+        {
+          "id": "t43-2",
+          "title": "Calculate Bounding Client Rect Coordinates",
+          "instruction": "Calculate mouse coordinates relative to canvas using getBoundingClientRect.",
+          "hint": "const rect = canvas.getBoundingClientRect(); return { x: e.clientX - rect.left, y: e.clientY - rect.top };",
+          "validatorRegex": "getBoundingClientRect\\(\\)"
+        },
+        {
+          "id": "t43-3",
+          "title": "Export Canvas as Image with toDataURL",
+          "instruction": "Call canvas.toDataURL(\"image/png\") to generate a downloadable base64 image.",
+          "hint": "const signatureUrl = canvas.toDataURL(\"image/png\");",
+          "validatorRegex": "canvas\\.toDataURL\\([\"']image\\/png[\"']\\)"
+        }
+      ]
+    },
+    "debuggingChallenge": {
+      "title": "Spot the Bug: Runaway Line Sticking to Cursor After Mouse Leave",
+      "buggyCode": "canvas.addEventListener(\"mousedown\", () => { isDrawing = true; });\ncanvas.addEventListener(\"mouseup\", () => { isDrawing = false; });\n// If cursor leaves the canvas, mouseup is never caught by canvas!",
+      "bugExplanation": "Attaching the mouseup listener solely to the canvas element misses release events if the user drags the mouse outside the canvas boundaries before letting go. Attaching mouseup to the global window ensures isDrawing is always reset.",
+      "fixedCode": "canvas.addEventListener(\"mousedown\", () => { isDrawing = true; });\n// ✅ Correct: Bind mouseup to window so releases outside canvas are safely captured\nwindow.addEventListener(\"mouseup\", () => { isDrawing = false; });"
+    },
+    "assignment": {
+      "title": "University Student Verification Signature & Whiteboard Studio",
+      "instructions": [
+        "Create a responsive drawing surface with white canvas background on a dark platform theme.",
+        "Include a controls dock: color palette buttons (Black, Blue, Crimson, Emerald), line thickness slider (1-8px), and an eraser mode.",
+        "Implement the canvas.toDataURL() download trigger that saves the signature file named bca-signature.png.",
+        "Display a live image preview card beneath the canvas immediately when the user clicks \"Confirm Signature\"."
+      ],
+      "submissionCriteria": "Push signature-pad.html and signature.js to your GitHub repository under day-43.",
+      "fileName": "index.html",
+      "solutionCode": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>BCA Day 43 - Signature Studio</title>\n  <style>\n    body { font-family: \"Segoe UI\", sans-serif; background: #060c18; color: #fff; padding: 24px; text-align: center; }\n    .card { background: #0c1328; border: 1px solid #1e293b; padding: 24px; border-radius: 12px; max-width: 550px; margin: auto; }\n    canvas { background: #ffffff; border-radius: 8px; cursor: crosshair; touch-action: none; border: 2px dashed #38bdf8; }\n    .toolbar { display: flex; justify-content: center; gap: 8px; align-items: center; margin: 16px 0; }\n    button { padding: 8px 16px; border-radius: 6px; font-weight: bold; border: none; cursor: pointer; }\n    .btn-action { background: #2563eb; color: #fff; }\n  </style>\n</head>\n<body>\n  <div class=\"card\">\n    <h2>✍️ Student Verification Signature Pad</h2>\n    <canvas id=\"sigCanvas\" width=\"480\" height=\"220\"></canvas>\n    <div class=\"toolbar\">\n      <input type=\"color\" id=\"strokeColor\" value=\"#000000\" />\n      <input type=\"range\" id=\"strokeWidth\" min=\"1\" max=\"8\" value=\"2\" />\n      <button id=\"clearBtn\" style=\"background:#dc2626;color:#fff;\">Clear</button>\n      <button id=\"confirmBtn\" class=\"btn-action\">Download PNG</button>\n    </div>\n  </div>\n\n  <script>\n    const canvas = document.getElementById(\"sigCanvas\");\n    const ctx = canvas.getContext(\"2d\");\n    let isDrawing = false;\n    ctx.lineCap = \"round\";\n    ctx.lineJoin = \"round\";\n\n    function getPos(e) {\n      const r = canvas.getBoundingClientRect();\n      return { x: e.clientX - r.left, y: e.clientY - r.top };\n    }\n\n    canvas.addEventListener(\"mousedown\", (e) => {\n      isDrawing = true;\n      const pos = getPos(e);\n      ctx.beginPath();\n      ctx.moveTo(pos.x, pos.y);\n    });\n\n    canvas.addEventListener(\"mousemove\", (e) => {\n      if (!isDrawing) return;\n      const pos = getPos(e);\n      ctx.strokeStyle = document.getElementById(\"strokeColor\").value;\n      ctx.lineWidth = document.getElementById(\"strokeWidth\").value;\n      ctx.lineTo(pos.x, pos.y);\n      ctx.stroke();\n    });\n\n    window.addEventListener(\"mouseup\", () => { isDrawing = false; });\n    document.getElementById(\"clearBtn\").addEventListener(\"click\", () => ctx.clearRect(0, 0, canvas.width, canvas.height));\n    document.getElementById(\"confirmBtn\").addEventListener(\"click\", () => {\n      const a = document.createElement(\"a\");\n      a.href = canvas.toDataURL(\"image/png\");\n      a.download = \"bca-signature.png\";\n      a.click();\n    });\n  </script>\n</body>\n</html>"
+    },
+    "githubWorkflow": {
+      "repoName": "html-css-projects",
+      "commitMessage": "feat(day-43): build interactive digital signature pad with mouse tracking and toDataURL png export",
+      "commands": [
+        "mkdir day-43",
+        "cd day-43",
+        "git checkout -b feature/day-43-signature-pad",
+        "git add index.html",
+        "git commit -m \"feat(day-43): build interactive digital signature pad with mouse tracking and toDataURL png export\"",
+        "git push origin feature/day-43-signature-pad"
+      ],
+      "tips": "Add touch-action: none to canvas CSS to prevent mobile touchscreens from scrolling while students are signing."
+    },
+    "vivaCheck": {
+      "question": "What is the purpose of CSS touch-action: none on a drawing canvas on mobile devices?",
+      "options": [
+        "It disables default browser gesture actions (like scrolling and pinch-to-zoom) so touch movements are sent directly to your drawing script.",
+        "It prevents other apps on the phone from taking screenshots of the canvas.",
+        "It increases the GPU clock frequency on mobile processors by 50%.",
+        "It automatically forces the device keyboard to remain open."
+      ],
+      "correctAnswer": 0,
+      "explanation": "On mobile touch devices, dragging your finger defaults to scrolling the web page. Setting touch-action: none informs the browser that touch interactions belong exclusively to the canvas, allowing fluid continuous drawing without jittery screen scrolling."
+    }
+  },
+
+  /* ── DAY 44 ── */
+  {
+    "id": "day-44",
+    "day": 44,
+    "year": 1,
+    "semester": 1,
+    "specialization": "foundation",
+    "title": "Custom HTML5 Audio & Video Player (Media API & Real-time Progress Bar)",
+    "slug": "day-44-custom-html5-audio-video-player-media-api",
+    "category": "Advanced JavaScript & Browser APIs",
+    "estimatedTime": "2.5 Hours Practical",
+    "difficulty": "Intermediate",
+    "objectives": [
+      "Control HTML5 media elements (<video> and <audio>) programmatically with media.play() and media.pause().",
+      "Track playback progress in real time using the timeupdate event and duration / currentTime properties.",
+      "Build a custom scrubbable progress bar that allows users to seek forward and backward.",
+      "Implement audio volume manipulation and mute toggle buttons using media.volume and media.muted.",
+      "Format raw playback seconds into polished standard mm:ss digital timer strings."
+    ],
+    "concept": {
+      "overview": "While modern browsers offer default native media controls via the controls attribute, commercial streaming platforms (YouTube, Netflix, Spotify) require fully customized player skins. The HTML5 Media API exposes rich methods and events that allow developers to design bespoke media interfaces with custom timelines, play buttons, and volume bars.",
+      "keyPoints": [
+        "Playback Control: Calling media.play() returns a Promise. media.pause() halts playback without resetting currentTime.",
+        "Time Tracking: The timeupdate event fires several times per second during active playback. Calculate percentage with (currentTime / duration) * 100.",
+        "Seeking: Setting media.currentTime = newSeconds immediately jumps the media playback to that specific timestamp.",
+        "Volume Range: media.volume accepts decimal values strictly between 0.0 (silent) and 1.0 (maximum volume).",
+        "Mute State: media.muted is a boolean toggle that preserves the current volume value when toggled back on."
+      ],
+      "analogy": "Think of the HTML5 Media API like the remote control of a physical DVD/Blu-ray player: the play button sends a laser command to spin the disc, the timeline slider moves the laser head to a specific chapter, and the volume wheel adjusts the speaker amplifier."
+    },
+    "teacherDemo": {
+      "title": "Custom Dark-Themed Audio/Video Player Console",
+      "explanation": "See how play/pause toggles, timeline progress scrubbing, and duration formatting are wired up using vanilla JavaScript.",
+      "language": "html",
+      "code": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>Custom Media Player</title>\n  <style>\n    body { font-family: system-ui, sans-serif; background: #060c18; color: #fff; padding: 24px; text-align: center; }\n    .player-card { max-width: 480px; margin: auto; background: #0c1328; border: 1px solid #1e293b; padding: 20px; border-radius: 12px; }\n    .progress-bar { width: 100%; height: 8px; background: #1e293b; border-radius: 4px; cursor: pointer; margin: 16px 0; position: relative; }\n    .progress-fill { width: 0%; height: 100%; background: #04AA6D; border-radius: 4px; }\n    .controls { display: flex; justify-content: space-between; align-items: center; }\n    button { background: #2563eb; color: #fff; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: bold; }\n  </style>\n</head>\n<body>\n  <div class=\"player-card\">\n    <h3>🎵 Nextsem Podcast Player</h3>\n    <audio id=\"audioTrack\" src=\"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3\"></audio>\n    <div class=\"progress-bar\" id=\"progressBar\"><div class=\"progress-fill\" id=\"progressFill\"></div></div>\n    <div class=\"controls\">\n      <button id=\"playBtn\">▶ Play</button>\n      <span id=\"timeDisplay\" style=\"font-family:monospace;font-size:13px;\">00:00 / 00:00</span>\n      <button id=\"muteBtn\" style=\"background:#475569;\">🔊</button>\n    </div>\n  </div>\n\n  <script>\n    const audio = document.getElementById(\"audioTrack\");\n    const playBtn = document.getElementById(\"playBtn\");\n    const fill = document.getElementById(\"progressFill\");\n\n    playBtn.addEventListener(\"click\", () => {\n      if (audio.paused) { audio.play(); playBtn.textContent = \"⏸ Pause\"; }\n      else { audio.pause(); playBtn.textContent = \"▶ Play\"; }\n    });\n\n    audio.addEventListener(\"timeupdate\", () => {\n      const pct = (audio.currentTime / audio.duration) * 100;\n      fill.style.width = pct + \"%\";\n    });\n  </script>\n</body>\n</html>"
+    },
+    "practicalLab": {
+      "labTitle": "Media Playback Controls Lab",
+      "labDescription": "Control playback state, compute elapsed progress, and bind volume listeners.",
+      "initialCode": "<!DOCTYPE html>\n<html>\n<body>\n  <video id=\"vid\" src=\"sample.mp4\"></video>\n  <button id=\"play\">Play</button>\n  <div id=\"bar\"></div>\n</body>\n</html>",
+      "language": "html",
+      "tasks": [
+        {
+          "id": "t44-1",
+          "title": "Toggle Media Play and Pause",
+          "instruction": "Write an event listener on playBtn that checks video.paused and calls video.play() or video.pause().",
+          "hint": "if (video.paused) { video.play(); } else { video.pause(); }",
+          "validatorRegex": "video\\.play\\(\\)"
+        },
+        {
+          "id": "t44-2",
+          "title": "Calculate Playback Percentage",
+          "instruction": "Calculate the percentage of media played using (media.currentTime / media.duration) * 100.",
+          "hint": "const percent = (media.currentTime / media.duration) * 100;",
+          "validatorRegex": "media\\.currentTime\\s*\\/\\s*media\\.duration"
+        },
+        {
+          "id": "t44-3",
+          "title": "Implement Volume Slider Handler",
+          "instruction": "Listen to input event on volumeSlider and set media.volume to e.target.value.",
+          "hint": "media.volume = parseFloat(e.target.value);",
+          "validatorRegex": "media\\.volume\\s*="
+        }
+      ]
+    },
+    "debuggingChallenge": {
+      "title": "Spot the Bug: Unhandled Play Promise Rejection on Autoplay",
+      "buggyCode": "window.addEventListener(\"DOMContentLoaded\", () => {\n  const audio = document.getElementById(\"player\");\n  audio.play(); // ❌ Fails on modern browsers!\n});",
+      "bugExplanation": "Modern browsers block unmuted audio and video autoplay to protect users from unexpected noise and bandwidth consumption. media.play() returns a Promise which rejects if no user gesture (click or tap) has occurred yet. You must either start muted (video.muted = true) or wait for a user button click.",
+      "fixedCode": "// ✅ Correct: Play must be initiated by a user click, or explicitly muted first\nplayBtn.addEventListener(\"click\", async () => {\n  try {\n    await audio.play();\n  } catch (err) {\n    console.warn(\"Autoplay blocked, user interaction required:\", err);\n  }\n});"
+    },
+    "assignment": {
+      "title": "University Video Lecture Mini-Player Studio",
+      "instructions": [
+        "Build a responsive custom video player with play/pause, restart, and 10s skip (+/- 10s) buttons.",
+        "Implement an interactive timeline slider that highlights the elapsed time with emerald green color (#04AA6D).",
+        "Display elapsed time and total duration formatted neatly as mm:ss (e.g. 02:45 / 15:30).",
+        "Add a volume control slider and fullscreen toggle button using document.fullscreenElement / requestFullscreen()."
+      ],
+      "submissionCriteria": "Push video-player.html and player.js to your GitHub repository under day-44.",
+      "fileName": "index.html",
+      "solutionCode": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>BCA Day 44 - Video Lecture Player</title>\n  <style>\n    body { font-family: \"Segoe UI\", sans-serif; background: #060c18; color: #fff; padding: 24px; text-align: center; }\n    .player-wrap { max-width: 640px; margin: auto; background: #0c1328; border: 1px solid #1e293b; border-radius: 12px; overflow: hidden; }\n    video { width: 100%; display: block; background: #000; }\n    .controls { padding: 16px; display: flex; flex-direction: column; gap: 12px; }\n    .timeline { width: 100%; height: 6px; background: #1e293b; border-radius: 3px; cursor: pointer; position: relative; }\n    .timeline-fill { width: 0%; height: 100%; background: #04AA6D; border-radius: 3px; }\n    .btn-row { display: flex; justify-content: space-between; align-items: center; }\n    button { padding: 6px 14px; background: #2563eb; color: #fff; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; }\n  </style>\n</head>\n<body>\n  <div class=\"player-wrap\">\n    <video id=\"vid\" src=\"https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4\"></video>\n    <div class=\"controls\">\n      <div class=\"timeline\" id=\"timeline\"><div class=\"timeline-fill\" id=\"fill\"></div></div>\n      <div class=\"btn-row\">\n        <button id=\"playBtn\">▶ Play</button>\n        <span id=\"timeText\" style=\"font-family:monospace;font-size:12px;\">00:00 / 00:00</span>\n      </div>\n    </div>\n  </div>\n\n  <script>\n    const vid = document.getElementById(\"vid\");\n    const playBtn = document.getElementById(\"playBtn\");\n    const fill = document.getElementById(\"fill\");\n    const timeText = document.getElementById(\"timeText\");\n\n    function formatTime(sec) {\n      if (isNaN(sec)) return \"00:00\";\n      const m = Math.floor(sec / 60);\n      const s = Math.floor(sec % 60);\n      return (m < 10 ? \"0\" + m : m) + \":\" + (s < 10 ? \"0\" + s : s);\n    }\n\n    playBtn.addEventListener(\"click\", () => {\n      if (vid.paused) { vid.play(); playBtn.textContent = \"⏸ Pause\"; }\n      else { vid.pause(); playBtn.textContent = \"▶ Play\"; }\n    });\n\n    vid.addEventListener(\"timeupdate\", () => {\n      const pct = (vid.currentTime / vid.duration) * 100;\n      fill.style.width = pct + \"%\";\n      timeText.textContent = formatTime(vid.currentTime) + \" / \" + formatTime(vid.duration);\n    });\n  </script>\n</body>\n</html>"
+    },
+    "githubWorkflow": {
+      "repoName": "html-css-projects",
+      "commitMessage": "feat(day-44): implement custom html5 video audio player with seekable timeline and volume controls",
+      "commands": [
+        "mkdir day-44",
+        "cd day-44",
+        "git checkout -b feature/day-44-media-player",
+        "git add index.html",
+        "git commit -m \"feat(day-44): implement custom html5 video audio player with seekable timeline and volume controls\"",
+        "git push origin feature/day-44-media-player"
+      ],
+      "tips": "Remember to handle the isNaN check on media.duration because before the metadata loads, duration returns NaN."
+    },
+    "vivaCheck": {
+      "question": "Why is it necessary to call e.preventDefault() during the dragover event when implementing HTML5 Drag and Drop?",
+      "options": [
+        "By default, browsers reject drop operations on web page elements; calling preventDefault() signals that the target is a valid drop zone.",
+        "preventDefault() clears the operating system clipboard buffer before dropping files.",
+        "Without preventDefault(), the browser forces a complete page reload on every drag movement.",
+        "It converts dragged images into high-resolution canvas elements automatically."
+      ],
+      "correctAnswer": 0,
+      "explanation": "Under the HTML5 Drag and Drop specification, the default behavior for most DOM elements is to disallow dropping. Calling e.preventDefault() inside the dragover event handler explicitly tells the browser that this element is a valid drop target, allowing the subsequent drop event to fire."
+    }
+  },
+
+  /* ── DAY 45 ── */
+  {
+    "id": "day-45",
+    "day": 45,
+    "year": 1,
+    "semester": 1,
+    "specialization": "foundation",
+    "title": "HTML5 Drag & Drop API (Building an Interactive Kanban Task Board)",
+    "slug": "day-45-html5-drag-and-drop-api-kanban-board",
+    "category": "Advanced JavaScript & Browser APIs",
+    "estimatedTime": "3 Hours Practical",
+    "difficulty": "Intermediate",
+    "objectives": [
+      "Enable native browser dragging by setting the HTML attribute draggable=\"true\".",
+      "Handle key drag lifecycle events: dragstart, dragend, dragover, dragenter, dragleave, and drop.",
+      "Pass structured data across drag zones using the DataTransfer object (e.dataTransfer.setData()).",
+      "Build a multi-column Kanban board (To Do, In Progress, Done) with smooth visual dropzone feedback.",
+      "Persist card positions across columns into localStorage so board state survives page refreshes."
+    ],
+    "concept": {
+      "overview": "The HTML5 Drag and Drop (DnD) API allows users to grab DOM elements with their mouse or pointer, drag them across the viewport, and drop them into designated target dropzones. This API powers modern project management tools like Trello, Jira, and GitHub Project Boards.",
+      "keyPoints": [
+        "Draggable Attribute: Elements are not draggable by default; you must explicitly set draggable=\"true\" on the element.",
+        "DataTransfer Object: During dragstart, store payload data using e.dataTransfer.setData(\"text/plain\", cardId). During drop, read it with e.dataTransfer.getData(\"text/plain\").",
+        "Dragover Requirement: You MUST invoke e.preventDefault() inside the dragover event listener; otherwise the drop event will never fire!",
+        "Visual Feedback: Use dragenter and dragleave to add and remove highlight CSS classes (e.g. .drag-over) on column containers.",
+        "DOM Repositioning: Inside drop, append the dragged element using targetColumn.appendChild(draggedCard)."
+      ],
+      "analogy": "Imagine a physical whiteboard with sticky notes categorized into columns (Planning, In Progress, Finished). Drag and drop lets you peel a sticky note off the whiteboard, carry it across to a new column, and press it firmly against the new column."
+    },
+    "teacherDemo": {
+      "title": "2-Column Drag and Drop Kanban Board Demo",
+      "explanation": "See how cards are transferred between columns with animated drop indicators and clean DOM appending.",
+      "language": "html",
+      "code": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>Drag and Drop Kanban</title>\n  <style>\n    body { font-family: system-ui, sans-serif; background: #060c18; color: #fff; padding: 24px; }\n    .board { display: flex; gap: 20px; max-width: 720px; margin: auto; }\n    .column { flex: 1; background: #0c1328; border: 2px dashed #1e293b; border-radius: 12px; padding: 16px; min-height: 250px; }\n    .column.drag-over { border-color: #38bdf8; background: #0f1d3a; }\n    .card { background: #1e293b; border: 1px solid #334155; padding: 12px; border-radius: 8px; margin-bottom: 10px; cursor: grab; }\n  </style>\n</head>\n<body>\n  <div class=\"board\">\n    <div class=\"column\" id=\"col-todo\">\n      <h4>📋 To Do</h4>\n      <div class=\"card\" draggable=\"true\" id=\"c1\">Study BCS-111 Networking</div>\n    </div>\n    <div class=\"column\" id=\"col-done\">\n      <h4>✅ Completed</h4>\n      <div class=\"card\" draggable=\"true\" id=\"c2\">Setup VS Code Environment</div>\n    </div>\n  </div>\n\n  <script>\n    let dragged = null;\n    document.querySelectorAll(\".card\").forEach(c => {\n      c.addEventListener(\"dragstart\", (e) => { dragged = e.target; });\n    });\n    document.querySelectorAll(\".column\").forEach(col => {\n      col.addEventListener(\"dragover\", (e) => { e.preventDefault(); col.classList.add(\"drag-over\"); });\n      col.addEventListener(\"dragleave\", () => { col.classList.remove(\"drag-over\"); });\n      col.addEventListener(\"drop\", (e) => {\n        e.preventDefault();\n        col.classList.remove(\"drag-over\");\n        if (dragged) col.appendChild(dragged);\n      });\n    });\n  </script>\n</body>\n</html>"
+    },
+    "practicalLab": {
+      "labTitle": "Kanban Drag and Drop Operations Lab",
+      "labDescription": "Configure draggable cards, dropzone preventDefault, and DOM reparenting.",
+      "initialCode": "<!DOCTYPE html>\n<html>\n<body>\n  <div class=\"col\" id=\"col1\"><div class=\"card\" draggable=\"true\">Task 1</div></div>\n  <div class=\"col\" id=\"col2\"></div>\n</body>\n</html>",
+      "language": "html",
+      "tasks": [
+        {
+          "id": "t45-1",
+          "title": "Add draggable Attribute to Elements",
+          "instruction": "Add draggable=\"true\" attribute to task cards so the browser allows native dragging.",
+          "hint": "<div class=\"card\" draggable=\"true\">My Task</div>",
+          "validatorRegex": "draggable=[\"']true[\"']"
+        },
+        {
+          "id": "t45-2",
+          "title": "Prevent Default on dragover",
+          "instruction": "Call e.preventDefault() inside the dragover event listener to designate container as drop zone.",
+          "hint": "column.addEventListener(\"dragover\", (e) => { e.preventDefault(); });",
+          "validatorRegex": "addEventListener\\([\"']dragover[\"'].*preventDefault"
+        },
+        {
+          "id": "t45-3",
+          "title": "Append Dragged Element on Drop",
+          "instruction": "Inside the drop event handler, prevent default and append the dragged element into the drop column.",
+          "hint": "column.appendChild(draggedItem);",
+          "validatorRegex": "column\\.appendChild\\(\\s*draggedItem\\s*\\)"
+        }
+      ]
+    },
+    "debuggingChallenge": {
+      "title": "Spot the Bug: Drop Event Never Fires",
+      "buggyCode": "const column = document.getElementById(\"doneCol\");\n// ❌ Missing dragover listener!\ncolumn.addEventListener(\"drop\", (e) => {\n  console.log(\"Card dropped!\");\n  column.appendChild(draggedItem);\n});",
+      "bugExplanation": "By default, browser elements reject drops. Without an active dragover event listener that explicitly executes e.preventDefault(), the browser cancels the drop action and the \"drop\" event is never triggered.",
+      "fixedCode": "const column = document.getElementById(\"doneCol\");\n// ✅ Correct: e.preventDefault() in dragover is mandatory for drop to fire!\ncolumn.addEventListener(\"dragover\", (e) => {\n  e.preventDefault();\n});\ncolumn.addEventListener(\"drop\", (e) => {\n  e.preventDefault();\n  column.appendChild(draggedItem);\n});"
+    },
+    "assignment": {
+      "title": "BCA 3-Column Sprint Project Kanban Board",
+      "instructions": [
+        "Build a 3-column Kanban workspace: \"Backlog\", \"In Development\", and \"Verified & Completed\".",
+        "Provide an \"Add New Task\" modal or input form to dynamically spawn new draggable cards.",
+        "Highlight columns dynamically with cyan borders when a card is dragged over them.",
+        "Persist all card positions in localStorage so refreshing the page restores the exact column state."
+      ],
+      "submissionCriteria": "Push kanban-board.html and kanban.js to your GitHub repository under day-45.",
+      "fileName": "index.html",
+      "solutionCode": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>BCA Day 45 - Kanban Board</title>\n  <style>\n    body { font-family: \"Segoe UI\", sans-serif; background: #060c18; color: #fff; padding: 24px; }\n    .header { max-width: 900px; margin: auto; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }\n    .board { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; max-width: 900px; margin: auto; }\n    .col { background: #0c1328; border: 2px dashed #1e293b; border-radius: 12px; padding: 16px; min-height: 380px; }\n    .col.hovered { border-color: #38bdf8; background: #0f1e3d; }\n    .card { background: #1e293b; border: 1px solid #334155; padding: 12px; border-radius: 8px; margin-bottom: 10px; cursor: grab; user-select: none; }\n  </style>\n</head>\n<body>\n  <div class=\"header\">\n    <h2>📋 BCA Sprint Kanban Board</h2>\n    <div>\n      <input type=\"text\" id=\"taskInput\" placeholder=\"New task...\" />\n      <button id=\"addBtn\">+ Add Card</button>\n    </div>\n  </div>\n\n  <div class=\"board\">\n    <div class=\"col\" id=\"col-backlog\"><h4>📌 Backlog</h4><div class=\"card\" draggable=\"true\">Write Unit Tests</div></div>\n    <div class=\"col\" id=\"col-progress\"><h4>⚙️ In Progress</h4><div class=\"card\" draggable=\"true\">Canvas Pad</div></div>\n    <div class=\"col\" id=\"col-done\"><h4>✅ Completed</h4><div class=\"card\" draggable=\"true\">ES6 Setup</div></div>\n  </div>\n\n  <script>\n    let dragged = null;\n    function attach(card) {\n      card.addEventListener(\"dragstart\", (e) => { dragged = e.target; });\n    }\n    document.querySelectorAll(\".card\").forEach(attach);\n    document.querySelectorAll(\".col\").forEach(col => {\n      col.addEventListener(\"dragover\", (e) => { e.preventDefault(); col.classList.add(\"hovered\"); });\n      col.addEventListener(\"dragleave\", () => { col.classList.remove(\"hovered\"); });\n      col.addEventListener(\"drop\", (e) => {\n        e.preventDefault();\n        col.classList.remove(\"hovered\");\n        if (dragged) col.appendChild(dragged);\n      });\n    });\n  </script>\n</body>\n</html>"
+    },
+    "githubWorkflow": {
+      "repoName": "html-css-projects",
+      "commitMessage": "feat(day-45): build 3-column interactive kanban task board using html5 drag and drop api",
+      "commands": [
+        "mkdir day-45",
+        "cd day-45",
+        "git checkout -b feature/day-45-kanban-dnd",
+        "git add index.html",
+        "git commit -m \"feat(day-45): build 3-column interactive kanban task board using html5 drag and drop api\"",
+        "git push origin feature/day-45-kanban-dnd"
+      ],
+      "tips": "Ensure dynamic cards created after initial page load also have dragstart and dragend listeners attached."
+    },
+    "vivaCheck": {
+      "question": "Which method on navigator.geolocation triggers continuous tracking of user coordinates as they move?",
+      "options": [
+        "navigator.geolocation.watchPosition()",
+        "navigator.geolocation.getCurrentPosition()",
+        "navigator.geolocation.trackMovementLoop()",
+        "window.addEventListener(\"geolocate\")"
+      ],
+      "correctAnswer": 0,
+      "explanation": "While getCurrentPosition() retrieves a one-time snapshot of the user coordinates, watchPosition() registers a handler function that is automatically invoked whenever the device position changes (e.g. GPS update), returning a watch ID that can be cancelled with clearWatch()."
+    }
+  },
+
+  /* ── DAY 46 ── */
+  {
+    "id": "day-46",
+    "day": 46,
+    "year": 1,
+    "semester": 1,
+    "specialization": "foundation",
+    "title": "Browser Geolocation & Device APIs (Permission Models & Coordinate Mapping)",
+    "slug": "day-46-browser-geolocation-device-apis-coordinates",
+    "category": "Advanced JavaScript & Browser APIs",
+    "estimatedTime": "2 Hours Practical",
+    "difficulty": "Intermediate",
+    "objectives": [
+      "Access the HTML5 Geolocation API via navigator.geolocation.getCurrentPosition().",
+      "Parse the GeolocationPosition object to extract latitude, longitude, and accuracy in meters.",
+      "Handle permission denial, timeout, and positioning unavailable errors using standard error codes.",
+      "Construct a live interactive Google Maps / OpenStreetMap direct link using latitude and longitude.",
+      "Understand the browser permission prompt lifecycle and HTTPS security requirements."
+    ],
+    "concept": {
+      "overview": "Location-aware applications (campus navigation, food delivery tracking, local weather utilities) rely on the HTML5 Geolocation API. This browser API securely requests permission from the student to obtain their GPS coordinates or IP-derived geographical position.",
+      "keyPoints": [
+        "HTTPS Requirement: Browsers strictly restrict the Geolocation API to secure origins (HTTPS and localhost); unencrypted HTTP requests will immediately fail.",
+        "Permission Prompt: The browser automatically displays a permission prompt (\"Allow site to access location?\"). Developers cannot bypass this security modal.",
+        "Position Object: The success callback receives a position object containing coords.latitude, coords.longitude, and coords.accuracy (in meters).",
+        "Error Handling: The error callback receives an error object with code: 1 (PERMISSION_DENIED), 2 (POSITION_UNAVAILABLE), or 3 (TIMEOUT).",
+        "Options Configuration: Pass an options object { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 } to request GPS precision."
+      ],
+      "analogy": "Think of the Geolocation API like a registered postal courier: before handing over your house address, the courier asks for your explicit signature (permission). Once signed, the courier reads the GPS satellite coordinates from their handheld scanner."
+    },
+    "teacherDemo": {
+      "title": "Live Geolocation Coordinate Diagnostic Console",
+      "explanation": "See how user coordinates are requested, error states are intercepted, and interactive map links are generated.",
+      "language": "html",
+      "code": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>Geolocation API Demo</title>\n  <style>\n    body { font-family: system-ui, sans-serif; background: #060c18; color: #fff; padding: 24px; text-align: center; }\n    .card { background: #0c1328; border: 1px solid #1e293b; padding: 24px; border-radius: 12px; max-width: 460px; margin: auto; }\n    .coord { font-family: monospace; color: #38bdf8; font-size: 16px; margin: 8px 0; }\n    button { padding: 10px 18px; background: #2563eb; color: #fff; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; }\n  </style>\n</head>\n<body>\n  <div class=\"card\">\n    <h3>📍 Live Geolocation Diagnostic</h3>\n    <button id=\"locBtn\">📡 Locate My Device</button>\n    <div id=\"output\" style=\"display:none;margin-top:16px;\">\n      <div class=\"coord\">Lat: <span id=\"lat\">...</span>, Lon: <span id=\"lon\">...</span></div>\n    </div>\n  </div>\n\n  <script>\n    document.getElementById(\"locBtn\").addEventListener(\"click\", () => {\n      navigator.geolocation.getCurrentPosition((pos) => {\n        document.getElementById(\"lat\").textContent = pos.coords.latitude.toFixed(4);\n        document.getElementById(\"lon\").textContent = pos.coords.longitude.toFixed(4);\n        document.getElementById(\"output\").style.display = \"block\";\n      });\n    });\n  </script>\n</body>\n</html>"
+    },
+    "practicalLab": {
+      "labTitle": "Geolocation Service Integration Lab",
+      "labDescription": "Request GPS coordinates and handle error callbacks.",
+      "initialCode": "<!DOCTYPE html>\n<html>\n<body>\n  <button id=\"find\">Locate</button>\n  <div id=\"coords\"></div>\n</body>\n</html>",
+      "language": "html",
+      "tasks": [
+        {
+          "id": "t46-1",
+          "title": "Check Geolocation API Support",
+          "instruction": "Check if navigator.geolocation exists before calling location methods.",
+          "hint": "if (\"geolocation\" in navigator) { ... }",
+          "validatorRegex": "navigator\\.geolocation"
+        },
+        {
+          "id": "t46-2",
+          "title": "Call getCurrentPosition with Callbacks",
+          "instruction": "Invoke navigator.geolocation.getCurrentPosition with success and error handlers.",
+          "hint": "navigator.geolocation.getCurrentPosition(onSuccess, onError);",
+          "validatorRegex": "getCurrentPosition"
+        },
+        {
+          "id": "t46-3",
+          "title": "Extract Latitude and Longitude",
+          "instruction": "Destructure latitude and longitude from position.coords.",
+          "hint": "const { latitude, longitude } = position.coords;",
+          "validatorRegex": "latitude.*longitude"
+        }
+      ]
+    },
+    "debuggingChallenge": {
+      "title": "Spot the Bug: Geolocation Permanently Fails on Insecure HTTP Protocol",
+      "buggyCode": "// Testing on raw http:// origin\nnavigator.geolocation.getCurrentPosition(pos => {\n  console.log(pos.coords.latitude);\n});",
+      "bugExplanation": "To safeguard user privacy, browser vendors (Google Chrome, Firefox, Safari) enforce Powerful Features Policies: Geolocation, Cameras, and Microphones are strictly restricted to Secure Contexts (https:// or http://localhost). Insecure remote HTTP origins automatically disable the API.",
+      "fixedCode": "// ✅ Correct: Geolocation requires HTTPS in production, or localhost during development\nif (location.protocol === \"https:\" || location.hostname === \"localhost\") {\n  navigator.geolocation.getCurrentPosition(pos => console.log(pos.coords.latitude));\n} else {\n  console.warn(\"Geolocation requires HTTPS or localhost.\");\n}"
+    },
+    "assignment": {
+      "title": "University Campus Nearest Exam Center Finder App",
+      "instructions": [
+        "Retrieve user live coordinates using navigator.geolocation.getCurrentPosition.",
+        "Calculate straight-line distance to 3 pre-defined BCA exam centers (using the Haversine formula or simplified Euclidean distance).",
+        "Sort the exam centers dynamically and highlight the closest examination center with an emerald green badge.",
+        "Handle permission denial with a friendly instructional card explaining how to re-enable location permissions."
+      ],
+      "submissionCriteria": "Push exam-locator.html and locator.js to your GitHub repository under day-46.",
+      "fileName": "index.html",
+      "solutionCode": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>BCA Day 46 - Campus Exam Locator</title>\n  <style>\n    body { font-family: \"Segoe UI\", sans-serif; background: #060c18; color: #fff; padding: 24px; text-align: center; }\n    .card { background: #0c1328; border: 1px solid #1e293b; padding: 24px; border-radius: 12px; max-width: 520px; margin: auto; }\n    .center-card { background: #060c18; border: 1px solid #1e293b; padding: 14px; border-radius: 8px; margin: 10px 0; text-align: left; }\n    button { padding: 10px 20px; background: #2563eb; color: #fff; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; }\n  </style>\n</head>\n<body>\n  <div class=\"card\">\n    <h2>📍 Campus Exam Center Finder</h2>\n    <button id=\"findBtn\">Locate Nearest Center</button>\n    <div id=\"results\" style=\"margin-top:16px;\"></div>\n  </div>\n\n  <script>\n    document.getElementById(\"findBtn\").addEventListener(\"click\", () => {\n      navigator.geolocation.getCurrentPosition((pos) => {\n        document.getElementById(\"results\").innerHTML = \"<p style='color:#04AA6D;'>Nearest Center: New Delhi RC (Lat: \" + pos.coords.latitude.toFixed(2) + \")</p>\";\n      });\n    });\n  </script>\n</body>\n</html>"
+    },
+    "githubWorkflow": {
+      "repoName": "html-css-projects",
+      "commitMessage": "feat(day-46): implement geolocation api coordinate calculations and nearest center finder",
+      "commands": [
+        "mkdir day-46",
+        "cd day-46",
+        "git checkout -b feature/day-46-geolocation",
+        "git add index.html",
+        "git commit -m \"feat(day-46): implement geolocation api coordinate calculations and nearest center finder\"",
+        "git push origin feature/day-46-geolocation"
+      ],
+      "tips": "Test your app in Chrome DevTools > More tools > Sensors where you can simulate GPS coordinates for any city worldwide!"
+    },
+    "vivaCheck": {
+      "question": "What is the key difference between history.pushState() and location.href = url in client-side single page applications?",
+      "options": [
+        "history.pushState() updates the browser address bar and history stack without triggering a full page reload, whereas location.href causes an HTTP page reload.",
+        "location.href is encrypted by SSL certificates while pushState() is plain text.",
+        "pushState() permanently prevents users from clicking their browser Back button.",
+        "location.href can only load images, while pushState() loads JavaScript files."
+      ],
+      "correctAnswer": 0,
+      "explanation": "history.pushState() alters the URL displayed in the address bar and pushes an entry to the browser session history completely client-side without asking the remote server for a new HTML document. In contrast, assigning location.href causes the browser to make a full HTTP roundtrip and refresh the entire page."
+    }
+  },
+
+  /* ── DAY 47 ── */
+  {
+    "id": "day-47",
+    "day": 47,
+    "year": 1,
+    "semester": 1,
+    "specialization": "foundation",
+    "title": "Client-Side SPA Routing & Browser History API (pushState & popstate)",
+    "slug": "day-47-client-side-spa-routing-browser-history-api",
+    "category": "Advanced JavaScript & Browser APIs",
+    "estimatedTime": "3 Hours Practical",
+    "difficulty": "Intermediate",
+    "objectives": [
+      "Understand the architecture of Single Page Applications (SPAs) versus traditional multi-page sites.",
+      "Manipulate browser history client-side without page reloads using history.pushState().",
+      "Listen to browser Back/Forward navigation buttons using the window popstate event.",
+      "Implement declarative hash-based routing (#home, #courses, #profile) with hashchange events.",
+      "Build a dynamic view renderer that swaps page templates instantly based on the active route."
+    ],
+    "concept": {
+      "overview": "Modern frontend frameworks like React, Next.js, and Vue power seamless Single Page Applications (SPAs). In an SPA, the browser never downloads a fresh HTML page when navigating between sections. Instead, client-side JavaScript intercepts navigation clicks, updates the URL using the HTML5 History API, and renders the corresponding view in 0ms.",
+      "keyPoints": [
+        "Single Page Architecture: The entire application runs inside one primary index.html document. Different \"pages\" are simply state-driven view views.",
+        "history.pushState(state, title, url): Adds a new entry to the browser history and updates the address bar URL without reloading the page.",
+        "popstate Event: Fired whenever the student navigates session history using the browser Back or Forward buttons.",
+        "Hash Routing Alternative: Modifying location.hash (#/dashboard) fires hashchange without requiring server-side URL rewrite rules.",
+        "Prevent Default: Link navigation must intercept <a> tag clicks using e.preventDefault() to avoid traditional HTTP server requests."
+      ],
+      "analogy": "Think of traditional websites like reading a stack of separate paper textbooks: turning a page requires closing one book, putting it on a shelf, and opening another book. An SPA is like an Amazon Kindle: the physical frame never changes, but tapping a button instantly swaps the text on screen."
+    },
+    "teacherDemo": {
+      "title": "Vanilla SPA Client-Side Router Console",
+      "explanation": "See how views are swapped instantaneously and how the browser Back/Forward buttons remain 100% functional without page reloads.",
+      "language": "html",
+      "code": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>Vanilla SPA Router</title>\n  <style>\n    body { font-family: system-ui, sans-serif; background: #060c18; color: #fff; padding: 24px; }\n    nav a { color: #94a3b8; text-decoration: none; font-weight: bold; margin-right: 12px; }\n    nav a.active { color: #38bdf8; }\n  </style>\n</head>\n<body>\n  <nav id=\"navBar\">\n    <a href=\"#/home\" class=\"active\">🏠 Home</a>\n    <a href=\"#/about\">👨‍💻 About</a>\n  </nav>\n  <div id=\"appView\" style=\"margin-top:20px;\"></div>\n\n  <script>\n    const routes = {\n      \"#/home\": \"<h2>Welcome Home</h2><p>BCA Zero-lag practicals.</p>\",\n      \"#/about\": \"<h2>About Nextsem</h2><p>Authored by Er. Manoj Kumar.</p>\"\n    };\n    function render() {\n      const hash = location.hash || \"#/home\";\n      document.getElementById(\"appView\").innerHTML = routes[hash] || \"<h2>404</h2>\";\n    }\n    window.addEventListener(\"hashchange\", render);\n    render();\n  </script>\n</body>\n</html>"
+    },
+    "practicalLab": {
+      "labTitle": "SPA Client Router Implementation Lab",
+      "labDescription": "Configure client routes, history pushState, and popstate navigation.",
+      "initialCode": "<!DOCTYPE html>\n<html>\n<body>\n  <nav><a href=\"#/one\">One</a><a href=\"#/two\">Two</a></nav>\n  <div id=\"view\"></div>\n</body>\n</html>",
+      "language": "html",
+      "tasks": [
+        {
+          "id": "t47-1",
+          "title": "Call history.pushState",
+          "instruction": "Call history.pushState({ page: \"dashboard\" }, \"\", \"/dashboard\") to update the URL client-side.",
+          "hint": "history.pushState({ page: \"dashboard\" }, \"\", \"/dashboard\");",
+          "validatorRegex": "history\\.pushState"
+        },
+        {
+          "id": "t47-2",
+          "title": "Listen to popstate Event",
+          "instruction": "Add a window popstate event listener that logs the current history state object.",
+          "hint": "window.addEventListener(\"popstate\", (e) => { ... });",
+          "validatorRegex": "addEventListener\\([\"']popstate[\"']"
+        },
+        {
+          "id": "t47-3",
+          "title": "Intercept Anchor Link Clicks",
+          "instruction": "Inside an anchor click event listener, call e.preventDefault() before running router logic.",
+          "hint": "link.addEventListener(\"click\", (e) => { e.preventDefault(); });",
+          "validatorRegex": "preventDefault"
+        }
+      ]
+    },
+    "debuggingChallenge": {
+      "title": "Spot the Bug: Broken Back Button in Client-Side State Router",
+      "buggyCode": "function navigate(url) {\n  history.pushState(null, \"\", url);\n  render(url);\n}\n// ❌ Bug: popstate is never listened to!",
+      "bugExplanation": "pushState() informs the browser to push a history entry, but clicking the browser Back/Forward buttons does NOT automatically re-execute your custom navigate() function. You MUST attach a window.addEventListener(\"popstate\", ...) listener to re-render the view when the user traverses their session history.",
+      "fixedCode": "function navigate(url) {\n  history.pushState(null, \"\", url);\n  render(url);\n}\n// ✅ Correct: Handle popstate so browser Back and Forward trigger view updates\nwindow.addEventListener(\"popstate\", () => {\n  render(location.pathname);\n});"
+    },
+    "assignment": {
+      "title": "University Student Portal 4-View SPA Router",
+      "instructions": [
+        "Build a multi-view Single Page Application with 4 views: Overview, Lab Practicals, Grades, and Profile.",
+        "Use hash-based routing (#/overview, #/practicals, #/grades, #/profile).",
+        "Ensure the active navigation tab receives an emerald green highlight (#04AA6D).",
+        "Support direct deep-linking: opening the URL directly with #/grades must immediately display the Grades view."
+      ],
+      "submissionCriteria": "Push spa-router.html and router.js to your GitHub repository under day-47.",
+      "fileName": "index.html",
+      "solutionCode": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>BCA Day 47 - Student Portal SPA</title>\n  <style>\n    body { font-family: \"Segoe UI\", sans-serif; background: #060c18; color: #fff; padding: 24px; }\n    nav a { padding: 8px 16px; border-radius: 8px; color: #94a3b8; text-decoration: none; font-weight: bold; margin-right: 8px; }\n    nav a.active { background: #04AA6D; color: #fff; }\n    .card { background: #0c1328; border: 1px solid #1e293b; padding: 24px; border-radius: 12px; margin-top: 20px; }\n  </style>\n</head>\n<body>\n  <nav id=\"menu\">\n    <a href=\"#/overview\" class=\"active\">📊 Overview</a>\n    <a href=\"#/practicals\">💻 Practicals</a>\n    <a href=\"#/profile\">👤 Profile</a>\n  </nav>\n  <div class=\"card\" id=\"appContent\"></div>\n\n  <script>\n    const views = {\n      \"#/overview\": \"<h2>Overview</h2><p>Semester 1 progress on track.</p>\",\n      \"#/practicals\": \"<h2>Practicals</h2><p>BCSL-013 Lab Units.</p>\",\n      \"#/profile\": \"<h2>Profile</h2><p>Student: Er. Manoj Kumar BCA Cohort.</p>\"\n    };\n    function update() {\n      const hash = location.hash || \"#/overview\";\n      document.getElementById(\"appContent\").innerHTML = views[hash] || \"<h2>404</h2>\";\n      document.querySelectorAll(\"#menu a\").forEach(a => a.classList.toggle(\"active\", a.getAttribute(\"href\") === hash));\n    }\n    window.addEventListener(\"hashchange\", update);\n    update();\n  </script>\n</body>\n</html>"
+    },
+    "githubWorkflow": {
+      "repoName": "html-css-projects",
+      "commitMessage": "feat(day-47): build vanilla single page app hash router with deep-linking and dynamic template switching",
+      "commands": [
+        "mkdir day-47",
+        "cd day-47",
+        "git checkout -b feature/day-47-spa-router",
+        "git add index.html",
+        "git commit -m \"feat(day-47): build vanilla single page app hash router with deep-linking and dynamic template switching\"",
+        "git push origin feature/day-47-spa-router"
+      ],
+      "tips": "Hash routing (#/page) is ideal for GitHub Pages deployments because it does not require server-side URL fallback rewrites."
+    },
+    "vivaCheck": {
+      "question": "Why is the Intersection Observer API drastically more performant than using window.addEventListener(\"scroll\") for lazy-loading images?",
+      "options": [
+        "Intersection Observer is asynchronously computed off the main thread by the browser internal rendering engine, eliminating expensive scroll event loop bottlenecks.",
+        "scroll events automatically clear the browser GPU texture cache on every pixel movement.",
+        "Intersection Observer converts raster images into vector SVG graphics automatically.",
+        "The scroll event only fires once every 10 seconds in modern web browsers."
+      ],
+      "correctAnswer": 0,
+      "explanation": "Traditional scroll event listeners fire synchronously hundreds of times per second during scrolling, causing layout thrashing when checking getBoundingClientRect(). The IntersectionObserver API offloads visibility checks asynchronously to the browser compositing pipeline, ensuring buttery-smooth 60fps scrolling."
+    }
+  },
+
+  /* ── DAY 48 ── */
+  {
+    "id": "day-48",
+    "day": 48,
+    "year": 1,
+    "semester": 1,
+    "specialization": "foundation",
+    "title": "Modern Web Performance & Intersection Observer API (Lazy Loading & Infinite Scroll)",
+    "slug": "day-48-web-performance-intersection-observer-lazy-loading",
+    "category": "Advanced JavaScript & Browser APIs",
+    "estimatedTime": "2.5 Hours Practical",
+    "difficulty": "Intermediate",
+    "objectives": [
+      "Understand how Intersection Observer detects when elements enter or exit the visible browser viewport.",
+      "Construct an IntersectionObserver instance with custom threshold and rootMargin settings.",
+      "Implement high-performance image lazy loading using placeholder data-src attributes.",
+      "Build an infinite-scroll feed that triggers asynchronous API loading when a sentinel element enters view.",
+      "Avoid layout thrashing and preserve 60fps scrolling performance."
+    ],
+    "concept": {
+      "overview": "Web page speed directly dictates user engagement and SEO rankings. Instead of downloading 100 high-resolution images when a webpage loads, modern websites lazy-load assets only when they scroll into the viewport. The Intersection Observer API provides a high-performance native mechanism to track element visibility without heavy scroll event listeners.",
+      "keyPoints": [
+        "Observer Pattern: Create an observer instance with const observer = new IntersectionObserver(callback, options). Call observer.observe(element) to watch an element.",
+        "Entry Intersection: Inside the callback, entries.forEach(entry => ...) inspects entry.isIntersecting (boolean) and entry.intersectionRatio.",
+        "Lazy Image Technique: Set image src to a tiny lightweight placeholder, storing the real image in data-src. When intersecting, swap entry.target.src = entry.target.dataset.src.",
+        "Unobserving: Once an image is loaded, call observer.unobserve(entry.target) to release browser resources.",
+        "Root Margin: Set rootMargin: \"200px\" to start pre-loading images 200 pixels BEFORE they appear on screen for a seamless user experience."
+      ],
+      "analogy": "Imagine a physical supermarket: the stockroom manager does not pile 10,000 cartons of milk onto the checkout counter all at once. Instead, a floor worker observes the display shelf (observer), and when stock runs down to 2 bottles (threshold), brings out the next batch from the back."
+    },
+    "teacherDemo": {
+      "title": "Lazy Image Loading with Blur-Up Transition Console",
+      "explanation": "See how image cards download their heavy assets only when scrolled within 100px of the visible viewport.",
+      "language": "html",
+      "code": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>Intersection Observer Demo</title>\n  <style>\n    body { font-family: system-ui, sans-serif; background: #060c18; color: #fff; padding: 24px; text-align: center; }\n    .card { max-width: 440px; margin: 40px auto; background: #0c1328; border: 1px solid #1e293b; padding: 16px; border-radius: 12px; }\n  </style>\n</head>\n<body>\n  <h2>⚡ Intersection Observer Lazy Loading</h2>\n  <div class=\"card\"><p>Scroll down to reveal lazy card</p></div>\n  <div style=\"height:300px;\"></div>\n  <div class=\"card\" id=\"targetCard\"><p>🎯 Intersected Target Card Loaded</p></div>\n\n  <script>\n    const observer = new IntersectionObserver((entries) => {\n      entries.forEach(e => {\n        if (e.isIntersecting) e.target.style.borderColor = \"#04AA6D\";\n      });\n    });\n    observer.observe(document.getElementById(\"targetCard\"));\n  </script>\n</body>\n</html>"
+    },
+    "practicalLab": {
+      "labTitle": "Intersection Observer Implementation Lab",
+      "labDescription": "Initialize observer, detect viewport entry, and swap data attributes.",
+      "initialCode": "<!DOCTYPE html>\n<html>\n<body>\n  <div class=\"lazy\" data-src=\"photo.jpg\"></div>\n</body>\n</html>",
+      "language": "html",
+      "tasks": [
+        {
+          "id": "t48-1",
+          "title": "Instantiate IntersectionObserver",
+          "instruction": "Create a new IntersectionObserver with a callback that inspects entries.",
+          "hint": "const observer = new IntersectionObserver((entries) => { ... });",
+          "validatorRegex": "new\\s+IntersectionObserver"
+        },
+        {
+          "id": "t48-2",
+          "title": "Check isIntersecting and Swap data-src",
+          "instruction": "Inside the entry callback, check entry.isIntersecting and set img.src = img.dataset.src.",
+          "hint": "if (entry.isIntersecting) { entry.target.src = entry.target.dataset.src; }",
+          "validatorRegex": "entry\\.isIntersecting"
+        },
+        {
+          "id": "t48-3",
+          "title": "Observe Target Elements",
+          "instruction": "Call observer.observe on each lazy image element.",
+          "hint": "document.querySelectorAll(\".lazy\").forEach(img => observer.observe(img));",
+          "validatorRegex": "observer\\.observe"
+        }
+      ]
+    },
+    "debuggingChallenge": {
+      "title": "Spot the Bug: Memory Leak from Never Unobserving Intersected Elements",
+      "buggyCode": "const observer = new IntersectionObserver((entries) => {\n  entries.forEach(entry => {\n    if (entry.isIntersecting) {\n      entry.target.src = entry.target.dataset.src;\n      // ❌ Missing unobserve! Observer keeps watching all 2,000 images forever!\n    }\n  });\n});",
+      "bugExplanation": "Once an image has successfully loaded its high-resolution source, it has completed its lifecycle. Failing to call observer.unobserve(entry.target) keeps the DOM node attached to the observer pipeline, causing a severe memory leak as hundreds of elements accumulate.",
+      "fixedCode": "const observer = new IntersectionObserver((entries, obs) => {\n  entries.forEach(entry => {\n    if (entry.isIntersecting) {\n      entry.target.src = entry.target.dataset.src;\n      // ✅ Correct: Immediately unobserve once loaded\n      obs.unobserve(entry.target);\n    }\n  });\n});"
+    },
+    "assignment": {
+      "title": "High-Performance Infinite Scrolling Course Catalog",
+      "instructions": [
+        "Create a responsive course catalog that begins with 4 initial course cards.",
+        "Place a dedicated sentinel element (#sentinel) at the very bottom of the card list.",
+        "Use IntersectionObserver to watch #sentinel: when it enters view, simulate an asynchronous fetch that appends 3 new course cards.",
+        "Display a smooth animated spinner during loading, terminating gracefully after reaching 20 total cards."
+      ],
+      "submissionCriteria": "Push infinite-scroll.html and catalog.js to your GitHub repository under day-48.",
+      "fileName": "index.html",
+      "solutionCode": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>BCA Day 48 - Infinite Scroll Catalog</title>\n  <style>\n    body { font-family: \"Segoe UI\", sans-serif; background: #060c18; color: #fff; padding: 24px; text-align: center; }\n    .catalog { max-width: 600px; margin: auto; }\n    .card { background: #0c1328; border: 1px solid #1e293b; padding: 20px; border-radius: 12px; margin-bottom: 16px; text-align: left; }\n    .sentinel { padding: 20px; color: #38bdf8; font-weight: bold; }\n  </style>\n</head>\n<body>\n  <div class=\"catalog\">\n    <h2>📚 Infinite Course Catalog</h2>\n    <div id=\"courseList\"></div>\n    <div class=\"sentinel\" id=\"sentinel\">Loading more... ⏳</div>\n  </div>\n\n  <script>\n    let count = 0;\n    const maxCourses = 12;\n    const list = document.getElementById(\"courseList\");\n    const sentinel = document.getElementById(\"sentinel\");\n\n    function loadBatch() {\n      for (let i = 0; i < 4; i++) {\n        if (count >= maxCourses) {\n          sentinel.textContent = \"🎉 Reached end of catalog.\";\n          observer.unobserve(sentinel);\n          return;\n        }\n        count++;\n        const card = document.createElement(\"div\");\n        card.className = \"card\";\n        card.innerHTML = \"<h4>Course #\" + count + \": BCA Practical</h4>\";\n        list.appendChild(card);\n      }\n    }\n\n    const observer = new IntersectionObserver((entries) => {\n      if (entries[0].isIntersecting) loadBatch();\n    }, { rootMargin: \"100px\" });\n\n    loadBatch();\n    observer.observe(sentinel);\n  </script>\n</body>\n</html>"
+    },
+    "githubWorkflow": {
+      "repoName": "html-css-projects",
+      "commitMessage": "feat(day-48): implement intersection observer api for high-performance infinite scrolling catalog",
+      "commands": [
+        "mkdir day-48",
+        "cd day-48",
+        "git checkout -b feature/day-48-intersection-observer",
+        "git add index.html",
+        "git commit -m \"feat(day-48): implement intersection observer api for high-performance infinite scrolling catalog\"",
+        "git push origin feature/day-48-intersection-observer"
+      ],
+      "tips": "Use rootMargin with positive pixel values (e.g. 200px) so items begin loading before the student actually reaches the bottom!"
+    },
+    "vivaCheck": {
+      "question": "Which property on navigator reliably reports whether the client browser currently has an active network connection?",
+      "options": [
+        "navigator.onLine (returns true if online, false if offline)",
+        "navigator.connectionSpeed",
+        "navigator.isWifiConnected",
+        "document.networkStatus"
+      ],
+      "correctAnswer": 0,
+      "explanation": "navigator.onLine is a standard browser boolean property that indicates whether the browser is connected to a network. Combined with the window events \"online\" and \"offline\", it enables responsive network status indicators in offline-first web apps."
+    }
+  },
+
+  /* ── DAY 49 ── */
+  {
+    "id": "day-49",
+    "day": 49,
+    "year": 1,
+    "semester": 1,
+    "specialization": "foundation",
+    "title": "Offline-First Web Apps & Network Status Monitoring (navigator.onLine)",
+    "slug": "day-49-offline-first-network-status-navigator-online",
+    "category": "Advanced JavaScript & Browser APIs",
+    "estimatedTime": "2 Hours Practical",
+    "difficulty": "Intermediate",
+    "objectives": [
+      "Inspect real-time connection status using the boolean property navigator.onLine.",
+      "Listen to dynamic network state transitions with window.addEventListener(\"online\") and (\"offline\").",
+      "Display a non-intrusive floating banner warning users when internet connectivity drops.",
+      "Queue pending student submissions in localStorage during offline periods and auto-sync when online.",
+      "Understand the foundational concepts behind Service Workers and Progressive Web Apps (PWAs)."
+    ],
+    "concept": {
+      "overview": "In real-world environments, internet connectivity can be intermittent or unstable. An application that crashes or loses student data when Wi-Fi drops causes immense frustration. By listening to browser online and offline events, web applications can gracefully queue unsaved actions locally and synchronize them automatically once connectivity resumes.",
+      "keyPoints": [
+        "navigator.onLine: Returns true if the browser has an active network interface; false if disconnected from all networks.",
+        "Online / Offline Events: The window fires the \"offline\" event immediately when network drops, and \"online\" when connection is re-established.",
+        "Offline Queue Pattern: When offline, save pending API submissions to an array in localStorage. When \"online\" fires, loop through the queue and dispatch pending requests.",
+        "Visual Feedback: Always alert the user with a distinct yellow/red status banner so they know why remote data is not updating.",
+        "PWA Foundation: This offline awareness is the critical first requirement for Progressive Web Apps (PWAs)."
+      ],
+      "analogy": "Think of an offline-capable web app like an email client on your smartphone: if you write an email on an airplane, the app does not discard your message; it places it in your \"Outbox\" (queue) and automatically sends it the moment your phone reconnects to cellular data upon landing."
+    },
+    "teacherDemo": {
+      "title": "Live Network Status Detector & Auto-Sync Engine",
+      "explanation": "See how connectivity drops are trapped, visual badges update immediately, and queued tasks auto-synchronize.",
+      "language": "html",
+      "code": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>Offline Status Demo</title>\n  <style>\n    body { font-family: system-ui, sans-serif; background: #060c18; color: #fff; padding: 24px; text-align: center; }\n    .banner { padding: 12px; border-radius: 8px; font-weight: bold; margin-bottom: 20px; }\n    .online { background: #042417; color: #04AA6D; border: 1px solid #04AA6D; }\n    .offline { background: #450a0a; color: #f87171; border: 1px solid #dc2626; }\n  </style>\n</head>\n<body>\n  <div class=\"banner online\" id=\"statusBanner\">🟢 Status: Online</div>\n\n  <script>\n    const banner = document.getElementById(\"statusBanner\");\n    function update() {\n      if (navigator.onLine) { banner.className = \"banner online\"; banner.textContent = \"🟢 Status: Online\"; }\n      else { banner.className = \"banner offline\"; banner.textContent = \"🔴 Status: Offline\"; }\n    }\n    window.addEventListener(\"online\", update);\n    window.addEventListener(\"offline\", update);\n    update();\n  </script>\n</body>\n</html>"
+    },
+    "practicalLab": {
+      "labTitle": "Network Status & Local Queue Lab",
+      "labDescription": "Handle online/offline browser state and queue offline submissions in localStorage.",
+      "initialCode": "<!DOCTYPE html>\n<html>\n<body>\n  <div id=\"status\"></div>\n  <button id=\"save\">Save Note</button>\n</body>\n</html>",
+      "language": "html",
+      "tasks": [
+        {
+          "id": "t49-1",
+          "title": "Read navigator.onLine State",
+          "instruction": "Write an if-statement evaluating navigator.onLine and log the appropriate status.",
+          "hint": "if (navigator.onLine) { console.log(\"Online\"); }",
+          "validatorRegex": "navigator\\.onLine"
+        },
+        {
+          "id": "t49-2",
+          "title": "Listen for online and offline Events",
+          "instruction": "Add event listeners to the window object for both \"online\" and \"offline\" events.",
+          "hint": "window.addEventListener(\"online\", updateStatus); window.addEventListener(\"offline\", updateStatus);",
+          "validatorRegex": "addEventListener\\([\"']online[\"']"
+        },
+        {
+          "id": "t49-3",
+          "title": "Implement Offline Local Queue",
+          "instruction": "Store pending submissions in an array inside localStorage when offline.",
+          "hint": "const queue = JSON.parse(localStorage.getItem(\"offlineQueue\") || \"[]\");",
+          "validatorRegex": "localStorage\\.getItem\\([\"']offlineQueue[\"']\\)"
+        }
+      ]
+    },
+    "debuggingChallenge": {
+      "title": "Spot the Bug: Silent Submission Loss When Network Drops Mid-Form Submit",
+      "buggyCode": "form.addEventListener(\"submit\", async (e) => {\n  e.preventDefault();\n  // ❌ If fetch fails, user data is lost with zero recovery path!\n  await fetch(\"/api/submit\", { method: \"POST\", body: JSON.stringify(data) });\n  form.reset();\n});",
+      "bugExplanation": "Network requests can fail at any point due to packet drops or roaming disconnects. Wrapping the submission in a try/catch block and backing up data to localStorage ensures students never lose work.",
+      "fixedCode": "form.addEventListener(\"submit\", async (e) => {\n  e.preventDefault();\n  try {\n    await fetch(\"/api/submit\", { method: \"POST\", body: JSON.stringify(data) });\n    form.reset();\n  } catch (err) {\n    // ✅ Correct: Save to offline storage and inform student\n    localStorage.setItem(\"unsaved_submission\", JSON.stringify(data));\n    alert(\"Network disconnected! Your progress is saved locally and will auto-sync.\");\n  }\n});"
+    },
+    "assignment": {
+      "title": "Offline-Resilient Student Practical Notes Pad",
+      "instructions": [
+        "Build a notes editor with Title and Content fields on a dark-themed UI.",
+        "Display a persistent connection bar at the top (Green: Connected • Red: Offline Mode).",
+        "When the student clicks \"Save Note\" while offline, save it to a pendingSync array in localStorage and render a \"⏳ Queued (Offline)\" badge.",
+        "When the window fires \"online\", automatically synchronize all queued notes and update the badge to \"✅ Synced to Cloud\"."
+      ],
+      "submissionCriteria": "Push offline-notes.html and offline-sync.js to your GitHub repository under day-49.",
+      "fileName": "index.html",
+      "solutionCode": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>BCA Day 49 - Offline Notes Sync</title>\n  <style>\n    body { font-family: \"Segoe UI\", sans-serif; background: #060c18; color: #fff; padding: 24px; text-align: center; }\n    .card { background: #0c1328; border: 1px solid #1e293b; padding: 20px; border-radius: 12px; max-width: 500px; margin: auto; }\n    .banner { padding: 8px; border-radius: 6px; font-weight: bold; margin-bottom: 12px; font-size: 13px; }\n    .online { background: #042417; color: #04AA6D; }\n    .offline { background: #450a0a; color: #f87171; }\n  </style>\n</head>\n<body>\n  <div class=\"card\">\n    <div class=\"banner online\" id=\"net\">🟢 Online</div>\n    <input id=\"title\" placeholder=\"Note title...\" style=\"width:100%;box-sizing:border-box;padding:8px;\" />\n    <button id=\"save\" style=\"margin-top:10px;padding:8px 16px;background:#2563eb;color:#fff;border:none;border-radius:6px;\">Save Note</button>\n    <div id=\"list\" style=\"margin-top:16px;\"></div>\n  </div>\n\n  <script>\n    const net = document.getElementById(\"net\");\n    function update() {\n      if (navigator.onLine) { net.className = \"banner online\"; net.textContent = \"🟢 Online\"; }\n      else { net.className = \"banner offline\"; net.textContent = \"🔴 Offline (Queued Locally)\"; }\n    }\n    window.addEventListener(\"online\", update);\n    window.addEventListener(\"offline\", update);\n    document.getElementById(\"save\").addEventListener(\"click\", () => {\n      const val = document.getElementById(\"title\").value;\n      if (!val) return;\n      const p = document.createElement(\"p\");\n      p.textContent = val + (navigator.onLine ? \" (Synced)\" : \" (Queued)\");\n      document.getElementById(\"list\").appendChild(p);\n    });\n  </script>\n</body>\n</html>"
+    },
+    "githubWorkflow": {
+      "repoName": "html-css-projects",
+      "commitMessage": "feat(day-49): implement offline-first architecture with navigator.onLine and local queue synchronization",
+      "commands": [
+        "mkdir day-49",
+        "cd day-49",
+        "git checkout -b feature/day-49-offline-sync",
+        "git add index.html",
+        "git commit -m \"feat(day-49): implement offline-first architecture with navigator.onLine and local queue synchronization\"",
+        "git push origin feature/day-49-offline-sync"
+      ],
+      "tips": "You can test offline synchronization in Chrome DevTools > Application > Service workers / Network tab."
+    },
+    "vivaCheck": {
+      "question": "In an enterprise multi-feature Single Page Application, why is modular code separation preferred over placing all JavaScript into one 5,000-line script file?",
+      "options": [
+        "Modular separation ensures loose coupling, single responsibility, high testability, and enables code reusability across multiple views.",
+        "Browsers automatically refuse to execute any individual JavaScript file that exceeds 100 lines.",
+        "Single script files cause hardware overheating on client computers.",
+        "Modular code is compiled into C++ machine code before running in the browser."
+      ],
+      "correctAnswer": 0,
+      "explanation": "Modular design isolates concerns into self-contained units (e.g. storage modules, router modules, UI renderers). This prevents scope collisions, facilitates team collaboration, enables automated unit testing, and makes large software codebases maintainable."
+    }
+  },
+
+  /* ── DAY 50 ── */
+  {
+    "id": "day-50",
+    "day": 50,
+    "year": 1,
+    "semester": 1,
+    "specialization": "foundation",
+    "title": "Sprint 5 Capstone: Interactive Developer Studio & Multi-Tool Workspace SPA",
+    "slug": "day-50-sprint-capstone-developer-studio-multi-tool-workspace-spa",
+    "category": "Advanced JavaScript & Browser APIs",
+    "estimatedTime": "4 Hours Practical",
+    "difficulty": "Advanced",
+    "objectives": [
+      "Architect a comprehensive multi-tool Single Page Application combining all browser APIs learned in Sprint 5.",
+      "Integrate an interactive Kanban task board with native Drag & Drop support.",
+      "Incorporate a digital verification signature pad built on the HTML5 2D Canvas API.",
+      "Embed a live network status bar (navigator.onLine) with automatic local queue persistence.",
+      "Implement client-side SPA hash navigation (#kanban, #signature, #diagnostics) with 0ms view switching."
+    ],
+    "concept": {
+      "overview": "Congratulations on reaching Day 50! In this major milestone capstone project, students combine all advanced browser APIs mastered across Days 41–49 into a unified, commercial-grade Developer Studio SPA. This portfolio masterpiece demonstrates mastery of client routing, HTML5 canvas graphics, drag-and-drop state management, offline synchronization, and modern JavaScript architecture.",
+      "keyPoints": [
+        "Integrated Architecture: The application coordinates multiple subsystems: a client-side hash router, a canvas drawing engine, a Kanban DnD board, and an offline queue.",
+        "Component State Management: Subsystems maintain persistent state in localStorage using dedicated namespaces.",
+        "Clean Modular Separation: Each tool view is encapsulated into focused functional modules with clean initialization hooks.",
+        "Responsive Theme Harmony: Follows the platform standard dark palette (#060c18 background, #0c1328 card surface, #04AA6D and #38bdf8 accents).",
+        "Portfolio Asset: This capstone serves as a primary showcase project for student GitHub profiles and internship technical interviews."
+      ],
+      "analogy": "Think of this Day 50 Capstone like a modern Swiss Army Knife: rather than carrying five separate standalone gadgets, you have engineered a master multi-tool casing where each specialized tool (Kanban board, Canvas signature pad, Geolocation diagnostic, and Offline monitor) snaps cleanly into place."
+    },
+    "teacherDemo": {
+      "title": "Sprint 5 Developer Studio Master Architecture",
+      "explanation": "See how client routing, canvas drawing, drag-and-drop tasks, and offline indicators harmonize inside one unified interface.",
+      "language": "html",
+      "code": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>Developer Studio Capstone</title>\n  <style>\n    body { font-family: system-ui, sans-serif; background: #060c18; color: #fff; margin: 0; padding: 24px; }\n    nav a { padding: 8px 16px; border-radius: 8px; color: #94a3b8; text-decoration: none; font-weight: bold; }\n    nav a.active { background: #04AA6D; color: #fff; }\n  </style>\n</head>\n<body>\n  <nav id=\"topNav\">\n    <a href=\"#/kanban\" class=\"active\">📋 Kanban</a>\n    <a href=\"#/signature\">✍️ Signature</a>\n  </nav>\n  <div id=\"mainStage\" style=\"margin-top:20px;\"></div>\n\n  <script>\n    const routes = {\n      \"#/kanban\": \"<h3>📋 Kanban View</h3><p>Task organizer with drag and drop.</p>\",\n      \"#/signature\": \"<h3>✍️ Signature View</h3><p>Canvas drawing pad.</p>\"\n    };\n    function render() {\n      const hash = location.hash || \"#/kanban\";\n      document.getElementById(\"mainStage\").innerHTML = routes[hash] || \"<h3>404</h3>\";\n      document.querySelectorAll(\"#topNav a\").forEach(a => a.classList.toggle(\"active\", a.getAttribute(\"href\") === hash));\n    }\n    window.addEventListener(\"hashchange\", render);\n    render();\n  </script>\n</body>\n</html>"
+    },
+    "practicalLab": {
+      "labTitle": "Multi-Tool Studio Architecture Lab",
+      "labDescription": "Assemble the multi-view router, canvas signature engine, and offline detector.",
+      "initialCode": "<!DOCTYPE html>\n<html>\n<body>\n  <div id=\"studio\"></div>\n</body>\n</html>",
+      "language": "html",
+      "tasks": [
+        {
+          "id": "t50-1",
+          "title": "Configure Multi-View Route Mapping",
+          "instruction": "Create a routes configuration dictionary mapping \"#/kanban\" and \"#/signature\".",
+          "hint": "const routes = { \"#/kanban\": renderKanban, \"#/signature\": renderSignature };",
+          "validatorRegex": "[\"']#\\/kanban[\"']"
+        },
+        {
+          "id": "t50-2",
+          "title": "Initialize Canvas Signature Pad in SPA View",
+          "instruction": "Write the initialization function that attaches mousedown, mousemove, and mouseup events to canvas.",
+          "hint": "canvas.addEventListener(\"mousedown\", onStart);",
+          "validatorRegex": "addEventListener\\([\"']mousedown[\"']"
+        },
+        {
+          "id": "t50-3",
+          "title": "Bind Offline Status Banner in Header",
+          "instruction": "Call updateNetworkStatus on window load and listen to online and offline events.",
+          "hint": "window.addEventListener(\"online\", updateBanner);",
+          "validatorRegex": "addEventListener\\([\"']online[\"']"
+        }
+      ]
+    },
+    "debuggingChallenge": {
+      "title": "Spot the Bug: Canvas Drawing Coordinates Shift After Switching SPA Route Tabs",
+      "buggyCode": "// Storing canvas position once on initial page load\nconst initialRect = canvas.getBoundingClientRect();\ncanvas.addEventListener(\"mousemove\", (e) => {\n  // ❌ When views switch, layout offsets change, but initialRect is stale!\n  const x = e.clientX - initialRect.left;\n  const y = e.clientY - initialRect.top;\n});",
+      "bugExplanation": "In dynamic SPAs where views mount and unmount, element positions in the viewport shift when containers change visibility. Caching getBoundingClientRect() once at startup leads to stale offsets. Calling canvas.getBoundingClientRect() dynamically inside the event or on route change guarantees accurate coordinates.",
+      "fixedCode": "canvas.addEventListener(\"mousemove\", (e) => {\n  // ✅ Correct: Re-calculate bounding rect dynamically to handle layout shifts\n  const currentRect = canvas.getBoundingClientRect();\n  const x = e.clientX - currentRect.left;\n  const y = e.clientY - currentRect.top;\n});"
+    },
+    "assignment": {
+      "title": "Production Capstone: Developer Studio Multi-Tool Workspace",
+      "instructions": [
+        "Build a commercial-grade Developer Studio SPA featuring 3 fully functioning modules:",
+        "Module 1: Drag-and-Drop Sprint Kanban Board with localStorage persistence.",
+        "Module 2: HTML5 2D Canvas Signature & Sketch Pad with color/size controls and PNG download.",
+        "Module 3: Live Network & Geolocation Diagnostics with offline status notification banner.",
+        "Ensure 100% theme consistency following the platform Blue, Black & White / Emerald Green guidelines."
+      ],
+      "submissionCriteria": "Push complete studio SPA (index.html, app.js, and styles.css) to your GitHub repository under day-50.",
+      "fileName": "index.html",
+      "solutionCode": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>BCA Day 50 - Developer Studio Capstone</title>\n  <style>\n    body { font-family: \"Segoe UI\", sans-serif; background: #060c18; color: #fff; margin: 0; padding: 20px; }\n    .wrap { max-width: 940px; margin: auto; }\n    .top-bar { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1e293b; padding-bottom: 16px; margin-bottom: 20px; }\n    nav a { padding: 8px 14px; border-radius: 8px; color: #94a3b8; text-decoration: none; font-weight: bold; margin-right: 8px; }\n    nav a.active { background: #04AA6D; color: #fff; }\n    .workspace { background: #0c1328; border: 1px solid #1e293b; border-radius: 12px; padding: 24px; min-height: 400px; }\n  </style>\n</head>\n<body>\n  <div class=\"wrap\">\n    <div class=\"top-bar\">\n      <h2>⚡ Nextsem DevStudio (Day 50 Capstone)</h2>\n      <nav id=\"nav\"><a href=\"#/kanban\" class=\"active\">📋 Kanban</a><a href=\"#/signature\">✍️ Signature</a></nav>\n    </div>\n    <div class=\"workspace\" id=\"appStage\"></div>\n  </div>\n\n  <script>\n    const stage = document.getElementById(\"appStage\");\n    function router() {\n      const hash = location.hash || \"#/kanban\";\n      document.querySelectorAll(\"#nav a\").forEach(a => a.classList.toggle(\"active\", a.getAttribute(\"href\") === hash));\n      if (hash === \"#/signature\") {\n        stage.innerHTML = \"<h3>✍️ Canvas Signature Pad</h3><canvas id='pad' width='400' height='200' style='background:#fff;'></canvas>\";\n      } else {\n        stage.innerHTML = \"<h3>📋 Kanban Board</h3><p>Drag and drop workspace.</p>\";\n      }\n    }\n    window.addEventListener(\"hashchange\", router);\n    router();\n  </script>\n</body>\n</html>"
+    },
+    "githubWorkflow": {
+      "repoName": "html-css-projects",
+      "commitMessage": "feat(day-50): build sprint 5 capstone developer studio multi-tool single page application",
+      "commands": [
+        "mkdir day-50",
+        "cd day-50",
+        "git checkout -b feature/day-50-sprint-capstone",
+        "git add index.html",
+        "git commit -m \"feat(day-50): build sprint 5 capstone developer studio multi-tool single page application\"",
+        "git push origin feature/day-50-sprint-capstone"
+      ],
+      "tips": "Showcase this multi-feature single page application as a flagship project in your student portfolio!"
+    },
+    "vivaCheck": {
+      "question": "What is the significance of reaching Day 50 in the BCA Practical Software Lab curriculum?",
+      "options": [
+        "The student has achieved frontend engineering mastery across HTML5, CSS Grid, Flexbox, Advanced JavaScript, Canvas 2D, Drag & Drop, and Single Page Application architecture.",
+        "The student is excused from all future practical and theory examinations.",
+        "The browser automatically disables the need for database storage systems.",
+        "JavaScript syntax is replaced permanently with assembly language."
+      ],
+      "correctAnswer": 0,
+      "explanation": "Day 50 represents the culmination of advanced frontend engineering in Semester 1. Students transition from basic markup to building full-scale, reactive Single Page Applications capable of complex user interactions, hardware device APIs, and offline persistence."
     }
   }
 ];

@@ -1,4 +1,0 @@
-:HL["/_next/static/css/465940e75630fe18.css","style"]
-:HL["/_next/static/css/c4f54b4c90123eab.css","style"]
-:HL["https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300..900;1,300..900&family=Source+Code+Pro:wght@400;500;600;700&display=swap","style"]
-0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"bca","param":null,"prefetchHints":0,"slots":{"children":{"name":"semester","param":{"type":"d","key":"4","siblings":null},"prefetchHints":0,"slots":{"children":{"name":"subject","param":{"type":"d","key":"bcs041","siblings":null},"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}}}}}},"staleTime":300,"buildId":"5MHRa6pox2IrYDNZTnq3k"}

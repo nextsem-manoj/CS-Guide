@@ -14,6 +14,7 @@ import BottomNavigation from "@/components/layout/BottomNavigation";
 import SearchWidget from "@/components/SearchWidget";
 import GoogleOneTapPrompt from "@/components/auth/GoogleOneTapPrompt";
 import AndroidBackButtonHandler from "@/components/AndroidBackButtonHandler";
+import { CrossDeviceSyncProvider } from "@/context/CrossDeviceSyncContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -163,21 +164,23 @@ export default function RootLayout({
           <ProgressProvider>
             <GamificationProvider>
               <StudentProgressProvider>
-                <FontScaleHydrator />
-                <OfflineGuard />
-                <SplashScreen />
-                <AndroidBackButtonHandler />
+                <CrossDeviceSyncProvider>
+                  <FontScaleHydrator />
+                  <OfflineGuard />
+                  <SplashScreen />
+                  <AndroidBackButtonHandler />
 
-                {/* Global Sticky Navigation (Search bar + Subject Selector) */}
-                <GlobalNavigationWidget />
+                  {/* Global Sticky Navigation (Search bar + Subject Selector) */}
+                  <GlobalNavigationWidget />
 
-                <div className="flex-1 w-full pb-20 md:pb-0">
-                  {children}
-                </div>
+                  <div className="flex-1 w-full pb-20 md:pb-0">
+                    {children}
+                  </div>
 
-                <SearchWidget />
-                <BottomNavigation />
-                <GoogleOneTapPrompt />
+                  <SearchWidget />
+                  <BottomNavigation />
+                  <GoogleOneTapPrompt />
+                </CrossDeviceSyncProvider>
               </StudentProgressProvider>
             </GamificationProvider>
           </ProgressProvider>

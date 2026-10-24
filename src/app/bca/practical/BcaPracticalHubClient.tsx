@@ -36,13 +36,15 @@ export default function BcaPracticalHubClient() {
 
   const [selectedSemester, setSelectedSemester] = useState<number>(1);
   const [sprintViewFilter, setSprintViewFilter] = useState<number | "all">(1);
-  const [dayFilter, setDayFilter] = useState<"all" | "1-10" | "11-20" | "21-30">("all");
+  const [dayFilter, setDayFilter] = useState<"all" | "1-10" | "11-20" | "21-30" | "31-40" | "41-50">("all");
   const [lockedModalDay, setLockedModalDay] = useState<number | null>(null);
 
   const filteredLessons = PRACTICAL_LESSONS.filter((lesson) => {
     if (dayFilter === "1-10") return lesson.day <= 10;
     if (dayFilter === "11-20") return lesson.day > 10 && lesson.day <= 20;
     if (dayFilter === "21-30") return lesson.day > 20 && lesson.day <= 30;
+    if (dayFilter === "31-40") return lesson.day > 30 && lesson.day <= 40;
+    if (dayFilter === "41-50") return lesson.day > 40 && lesson.day <= 50;
     return true;
   });
 
@@ -471,7 +473,7 @@ export default function BcaPracticalHubClient() {
                 onClick={() => setDayFilter("all")}
                 className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${dayFilter === "all" ? "bg-white dark:bg-black text-black dark:text-white border border-slate-200 dark:border-neutral-700 shadow-sm" : "text-slate-600 dark:text-slate-400 hover:text-black dark:hover:text-white"}`}
               >
-                All 30 Days
+                All Live Days (1–50)
               </button>
               <button 
                 onClick={() => setDayFilter("1-10")}
@@ -489,7 +491,19 @@ export default function BcaPracticalHubClient() {
                 onClick={() => setDayFilter("21-30")}
                 className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${dayFilter === "21-30" ? "bg-white dark:bg-black text-black dark:text-white border border-slate-200 dark:border-neutral-700 shadow-sm" : "text-slate-600 dark:text-slate-400 hover:text-black dark:hover:text-white"}`}
               >
-                Days 21–30 (JavaScript)
+                Days 21–30 (JS Core)
+              </button>
+              <button 
+                onClick={() => setDayFilter("31-40")}
+                className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${dayFilter === "31-40" ? "bg-white dark:bg-black text-black dark:text-white border border-slate-200 dark:border-neutral-700 shadow-sm" : "text-slate-600 dark:text-slate-400 hover:text-black dark:hover:text-white"}`}
+              >
+                Days 31–40 (DOM &amp; Events)
+              </button>
+              <button 
+                onClick={() => setDayFilter("41-50")}
+                className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${dayFilter === "41-50" ? "bg-white dark:bg-black text-black dark:text-white border border-slate-200 dark:border-neutral-700 shadow-sm" : "text-slate-600 dark:text-slate-400 hover:text-black dark:hover:text-white"}`}
+              >
+                Days 41–50 (APIs &amp; SPA)
               </button>
             </div>
           </div>
@@ -607,6 +621,80 @@ export default function BcaPracticalHubClient() {
               );
             })}
           </div>
+
+          {/* 360-Day Degree Progression Card: Days 51–360 */}
+          <div className="mt-8 rounded-2xl bg-gradient-to-r from-blue-500/5 via-emerald-500/5 to-blue-500/5 border border-slate-200 dark:border-neutral-800 p-5 sm:p-6 shadow-sm">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+              <div>
+                <div className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-blue-600 dark:text-blue-400">
+                  <Sparkles size={13} />
+                  <span>3-YEAR / 6-SEMESTER DEGREE PROGRESSION (360 DAYS)</span>
+                </div>
+                <h3 className="text-base font-black text-black dark:text-white mt-1">
+                  Full 360-Day Curriculum Roadmap
+                </h3>
+              </div>
+              <span className="text-xs font-mono font-bold px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20 w-fit">
+                Days 1–50 Live Now • Sprints 1–12 Mapped
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 text-xs">
+              <div className="p-3.5 rounded-xl bg-white dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 space-y-1">
+                <div className="flex items-center justify-between font-extrabold text-emerald-600 dark:text-emerald-400">
+                  <span>Year 1 • Sem 1</span>
+                  <span>Days 1–60</span>
+                </div>
+                <div className="font-bold text-black dark:text-white">Web Foundation, CSS &amp; JavaScript</div>
+                <p className="text-slate-500 text-[11px] leading-relaxed">Days 1–50 active with VS Code labs, auto-validators, Git commits &amp; viva checks.</p>
+              </div>
+
+              <div className="p-3.5 rounded-xl bg-white dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 space-y-1">
+                <div className="flex items-center justify-between font-extrabold text-blue-600 dark:text-blue-400">
+                  <span>Year 1 • Sem 2</span>
+                  <span>Days 61–120</span>
+                </div>
+                <div className="font-bold text-black dark:text-white">C Programming &amp; DOM/SQL Sandbox</div>
+                <p className="text-slate-500 text-[11px] leading-relaxed">Sprints 3 &amp; 4: Pointers, memory allocation, structs &amp; terminal student record apps.</p>
+              </div>
+
+              <div className="p-3.5 rounded-xl bg-white dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 space-y-1">
+                <div className="flex items-center justify-between font-extrabold text-purple-600 dark:text-purple-400">
+                  <span>Year 2 • Sem 3</span>
+                  <span>Days 121–180</span>
+                </div>
+                <div className="font-bold text-black dark:text-white">Data Structures &amp; Relational DBMS</div>
+                <p className="text-slate-500 text-[11px] leading-relaxed">Sprints 5 &amp; 6: Linked lists, stacks, queues, trees, joins &amp; PostgreSQL architecture.</p>
+              </div>
+
+              <div className="p-3.5 rounded-xl bg-white dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 space-y-1">
+                <div className="flex items-center justify-between font-extrabold text-amber-600 dark:text-amber-400">
+                  <span>Year 2 • Sem 4</span>
+                  <span>Days 181–240</span>
+                </div>
+                <div className="font-bold text-black dark:text-white">Java OOP &amp; Backend REST APIs</div>
+                <p className="text-slate-500 text-[11px] leading-relaxed">Sprints 7 &amp; 8: Classes, polymorphism, Node.js Express servers, JWT &amp; Linux shell.</p>
+              </div>
+
+              <div className="p-3.5 rounded-xl bg-white dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 space-y-1">
+                <div className="flex items-center justify-between font-extrabold text-indigo-600 dark:text-indigo-400">
+                  <span>Year 3 • Sem 5</span>
+                  <span>Days 241–300</span>
+                </div>
+                <div className="font-bold text-black dark:text-white">Track Specialization &amp; DevOps</div>
+                <p className="text-slate-500 text-[11px] leading-relaxed">Sprints 9 &amp; 10: Deep-dive career tracks (React/Next.js, Python AI, Docker CI/CD).</p>
+              </div>
+
+              <div className="p-3.5 rounded-xl bg-white dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 space-y-1">
+                <div className="flex items-center justify-between font-extrabold text-rose-600 dark:text-rose-400">
+                  <span>Year 3 • Sem 6</span>
+                  <span>Days 301–360</span>
+                </div>
+                <div className="font-bold text-black dark:text-white">Major Capstone &amp; Job Readiness</div>
+                <p className="text-slate-500 text-[11px] leading-relaxed">Sprints 11 &amp; 12: Production app deployment, portfolio defense, resume &amp; mock viva.</p>
+              </div>
+            </div>
+          </div>
         </section>
 
         {/* BCA Peer Network & Coder Directory (Social Follower System) */}
@@ -680,7 +768,7 @@ export default function BcaPracticalHubClient() {
         <div className="mt-12 pt-6 border-t border-slate-200 dark:border-neutral-800 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-600 dark:text-slate-400">
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-blue-600" />
-            <span>Curriculum &amp; Practical Systems Authored by <strong className="text-black dark:text-white">Er. Manoj Kumar</strong></span>
+            <span>Curriculum &amp; Practical Systems Authored by <strong className="text-black dark:text-white font-bold">Er. Manoj Kumar</strong></span>
           </div>
           <div className="text-slate-500 font-mono text-[11px]">
             NextSem Academy • BCA Practical Learning Portal

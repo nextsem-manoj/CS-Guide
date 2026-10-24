@@ -328,12 +328,34 @@ export async function verifyStudentGitHubCode(githubUrl: string, lesson: Practic
     };
   }
 
-  const code = fetchedContent.trim();
+  let code = fetchedContent.trim();
   const passedItems: string[] = [];
   const missingItems: string[] = [];
 
   passedItems.push(`Public repository found: ${owner}/${repo}`);
   passedItems.push(`Detected source file: ${matchedFilePath} (${matchedBranch} branch, ${code.length} characters)`);
+
+  // Companion stylesheet check: If HTML file is found, check if a sibling style.css / styles.css exists
+  if (matchedFilePath.endsWith(".html")) {
+    const dir = matchedFilePath.includes("/") ? matchedFilePath.substring(0, matchedFilePath.lastIndexOf("/")) : "";
+    const candidateCssFiles = [
+      dir ? `${dir}/style.css` : "style.css",
+      dir ? `${dir}/styles.css` : "styles.css",
+      dir ? `${dir}/card.css` : "card.css",
+      "style.css",
+      "styles.css"
+    ];
+    for (const cssFile of candidateCssFiles) {
+      if (cssFile !== matchedFilePath) {
+        const cssRes = await tryFetchRawFile(owner, repo, matchedBranch, cssFile);
+        if (cssRes && cssRes.content && cssRes.content.trim().length > 0) {
+          code += "\n\n/* Companion Stylesheet: " + cssFile + " */\n" + cssRes.content.trim();
+          passedItems.push(`Detected linked stylesheet: ${cssFile} (${cssRes.content.trim().length} chars)`);
+          break;
+        }
+      }
+    }
+  }
 
   // Check 1: Minimum file length (avoid empty files)
   if (code.length < 35) {

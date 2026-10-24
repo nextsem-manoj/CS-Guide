@@ -9,6 +9,8 @@ import {
 } from "lucide-react";
 import { PracticalLesson } from "@/data/bcaPracticalData";
 import TerminalCommandBox from "@/components/bca/TerminalCommandBox";
+import { useCrossDeviceSync } from "@/context/CrossDeviceSyncContext";
+import { safeInstantCopy } from "@/lib/clipboard";
 
 interface Props {
   lesson: PracticalLesson;
@@ -208,6 +210,7 @@ const DAY_FILE_MANIFEST: Record<number, {
 };
 
 export default function ExpectedRepoStructureCard({ lesson }: Props) {
+  const { copyAndSyncToCloud } = useCrossDeviceSync();
   const [isExpanded, setIsExpanded] = useState<boolean>(true);
   const [showTroubleshooting, setShowTroubleshooting] = useState<boolean>(true);
   const [copiedCommands, setCopiedCommands] = useState<boolean>(false);
@@ -241,7 +244,7 @@ git commit -m "Day ${padDay}: ${lesson.title.replace(/"/g, '')}"
 git push origin main`;
 
   const handleCopyCommands = () => {
-    navigator.clipboard.writeText(terminalSnippet);
+    copyAndSyncToCloud(terminalSnippet, `Day ${padDay} Git Push Commands`);
     setCopiedCommands(true);
     setTimeout(() => setCopiedCommands(false), 2000);
   };

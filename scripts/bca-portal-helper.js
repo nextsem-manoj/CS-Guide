@@ -53,8 +53,8 @@ function analyzeDataFile() {
 
   const content = fs.readFileSync(DATA_FILE, 'utf8');
 
-  // Match all practical day entries: day: 1, day: 2 ...
-  const dayMatches = content.match(/day:\s*(\d+)/g) || [];
+  // Match all practical day entries: day: 1 or "day": 1
+  const dayMatches = content.match(/["']?day["']?:\s*(\d+)/g) || [];
   const days = dayMatches.map(m => parseInt(m.replace(/\D/g, ''), 10));
   const uniqueDays = Array.from(new Set(days)).sort((a, b) => a - b);
 
@@ -141,8 +141,9 @@ async function run() {
     console.log(`      • Days 01–10: ${C.emerald}${C.bold}COMPLETE & VERIFIED ✅${C.reset} (HTML5 Boilerplate to CSS Colors)`);
     console.log(`      • Days 11–20: ${C.emerald}${C.bold}COMPLETE & VERIFIED ✅${C.reset} (CSS Box Model, Flexbox, Grid, Responsive Mini Project)`);
     console.log(`      • Days 21–30: ${C.emerald}${C.bold}COMPLETE & VERIFIED ✅${C.reset} (JavaScript Essentials: Variables, Functions, DOM, Events)`);
-    console.log(`      • Days 31–40: ${C.yellow}${C.bold}NEXT SPRINT ⏳${C.reset} (Advanced JS & Browser APIs: Web Storage, Timers, Event Delegation)`);
-    console.log(`      • Days 41–60: ${C.dim}PENDING ⏳${C.reset} (Async Data, Fetch APIs, Git Portfolio & Semester 1 Project)`);
+    console.log(`      • Days 31–40: ${C.emerald}${C.bold}COMPLETE & VERIFIED ✅${C.reset} (Advanced JS & Browser APIs: Web Storage, Timers, Event Delegation)`);
+    console.log(`      • Days 41–50: ${C.emerald}${C.bold}COMPLETE & VERIFIED ✅${C.reset} (Canvas 2D, Drag & Drop, Media APIs, SPA Routing & Offline Sync)`);
+    console.log(`      • Days 51–60: ${C.yellow}${C.bold}NEXT SPRINT ⏳${C.reset} (Semester 1 Final Capstone: Full-Featured Web Application, Git Portfolio & Viva)`);
     console.log(`      • Days 61–120: ${C.dim}SEMESTER 2 ⏳${C.reset} (C Programming, Pointers, Memory Models, SQL Queries)`);
     console.log(`   ${C.bold}📅 YEAR 2 (Semesters 3 & 4 • Days 121–240) — Core Engineering & Specialization:${C.reset}`);
     console.log(`      • Days 121–180: ${C.dim}SEMESTER 3 ⏳${C.reset} (Data Structures & Algorithms in C/C++, RDBMS & SQL)`);

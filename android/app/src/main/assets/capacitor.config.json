@@ -1,7 +1,7 @@
 {
 	"appId": "online.nextsem.app",
 	"appName": "Nextsem Academy",
-	"webDir": "out",
+	"webDir": "mobile-shell",
 	"server": {
 		"url": "https://nextsem.online",
 		"cleartext": false,

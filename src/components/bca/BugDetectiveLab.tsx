@@ -6,6 +6,8 @@ import {
   Check, RotateCcw, ShieldAlert, Lightbulb, Eye, Code2, 
   ArrowRight, Award, Zap
 } from "lucide-react";
+import { useCrossDeviceSync } from "@/context/CrossDeviceSyncContext";
+import { safeInstantCopy } from "@/lib/clipboard";
 
 interface BugDetectiveLabProps {
   day: number;
@@ -97,12 +99,20 @@ export default function BugDetectiveLab({
     } catch (e) {}
   };
 
+  let copyAndSyncToCloud: ((text: string, label?: string) => boolean) | null = null;
+  try {
+    const sync = useCrossDeviceSync();
+    copyAndSyncToCloud = sync?.copyAndSyncToCloud || null;
+  } catch {}
+
   const handleCopyFix = () => {
-    if (navigator.clipboard) {
-      navigator.clipboard.writeText(fixedCode);
-      setCopiedFix(true);
-      setTimeout(() => setCopiedFix(false), 2000);
+    if (copyAndSyncToCloud) {
+      copyAndSyncToCloud(fixedCode, `Day ${day} Bug Hunt Fixed Code`);
+    } else {
+      safeInstantCopy(fixedCode);
     }
+    setCopiedFix(true);
+    setTimeout(() => setCopiedFix(false), 2000);
   };
 
   // Helper to format inline code formatting in explanation

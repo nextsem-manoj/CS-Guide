@@ -67,8 +67,11 @@ export default function BcaStoriesTray() {
           const uid = docItem.id;
           if (!uid || uid === user?.uid || uid === "manoj-lead" || docItem.email === user?.email) return;
 
-          const completedDaysList: number[] = docItem.bca_practical?.completedDays || [];
-          const maxDay = completedDaysList.length > 0 ? Math.max(...completedDaysList) : 1;
+          const email = (docItem.email || "").toLowerCase();
+          if (!email || !email.includes("@") || email.includes("guest") || email.endsWith("@nextsem.local") || email.includes("example.com") || email.includes("fake") || email.includes("dummy")) return;
+
+          const completedDaysList: number[] = (docItem.bca_practical?.completedDays || []).filter((d: any) => typeof d === "number" && d > 0 && d <= 90);
+          const maxDay = completedDaysList.length > 0 ? Math.max(...completedDaysList) : 0;
           const name = docItem.displayName || docItem.email?.split("@")[0] || "BCA Student";
           const lastUpdatedStr = docItem.bca_practical?.lastUpdated || docItem.lastLogin;
           const lastActiveTs = lastUpdatedStr ? new Date(lastUpdatedStr).getTime() : Date.now() - 1000 * 60 * 30;
@@ -462,7 +465,7 @@ export default function BcaStoriesTray() {
             <span className="text-[11px] font-bold text-black dark:text-white mt-1.5 truncate max-w-full group-hover:text-blue-600 dark:group-hover:text-blue-400">
               Your Story
             </span>
-            <span className="text-[9px] font-mono text-slate-500 dark:text-slate-400 truncate max-w-full">
+            <span suppressHydrationWarning className="text-[9px] font-mono text-slate-500 dark:text-slate-400 truncate max-w-full">
               {userStory.slides.length > 0 ? `Day ${userStory.latestDay} • Active` : (user ? "Share status" : "Sign in & share")}
             </span>
             {userGitHubPagesUrl && (

@@ -7,7 +7,7 @@ import { useTheme } from 'next-themes';
 import { 
   Home, ChevronDown, BookOpen, X, Sparkles, GraduationCap, 
   CheckCircle2, Search, Building2, LogIn, LogOut, Sun, Moon,
-  Code2, Lock, ArrowRight
+  Code2, Lock, ArrowRight, Smartphone, Laptop
 } from 'lucide-react';
 import { bcaSemesters, BcaSemester, BcaSubject } from '@/data/bcaCoursesData';
 import { duCsSemesters, ignouMcaSemesters, UniversitySemester, UniversitySubject } from '@/data/universityCoursesData';
@@ -22,12 +22,16 @@ interface BcaHeaderNavProps {
   currentSubjectCode?: string;
   currentSubjectName?: string;
   points?: number;
+  onOpenCompanion?: () => void;
+  showCompanionIcon?: boolean;
 }
 
 export default function BcaHeaderNav({
   currentSubjectCode = "BCA Practical",
   currentSubjectName = "Job-Oriented Training Portal",
-  points = 0
+  points = 0,
+  onOpenCompanion,
+  showCompanionIcon = false
 }: BcaHeaderNavProps) {
   const router = useRouter();
   const pathname = usePathname();
@@ -71,15 +75,29 @@ export default function BcaHeaderNav({
   return (
     <>
       <header className="h-14 sm:h-16 border-b border-slate-200 dark:border-neutral-800 bg-white/95 dark:bg-black/95 backdrop-blur-xl sticky top-0 z-40 flex items-center justify-between px-3 sm:px-6 select-none shadow-sm gap-2 sm:gap-4 w-full">
-        {/* Left: Home Navigation */}
+        {/* Left: Brand Logo & Home Navigation */}
         <div className="flex items-center gap-2 shrink-0">
           <Link
             href="/"
-            className="flex items-center justify-center gap-1.5 text-slate-700 hover:text-black dark:text-slate-300 dark:hover:text-white font-extrabold text-xs sm:text-sm bg-slate-100 hover:bg-slate-200 dark:bg-neutral-900 dark:hover:bg-neutral-800 border border-slate-200 dark:border-neutral-800 h-9 px-2.5 sm:px-3 rounded-xl transition-all active:scale-95 shrink-0"
+            className="flex items-center gap-1.5 hover:opacity-90 transition-opacity shrink-0"
+            title="NextSem Academy Home"
+          >
+            <div className="flex items-center gap-2 px-2.5 h-9 rounded-xl bg-black border border-slate-800 shadow-sm">
+              <div className="w-6 h-6 rounded-lg bg-[#0c1328] border border-blue-500 flex items-center justify-center shadow-xs">
+                <span className="font-black text-[11px] text-[#04AA6D] leading-none">N</span>
+                <span className="font-black text-[11px] text-white leading-none">S</span>
+              </div>
+              <span className="font-black text-xs text-white tracking-tight hidden xs:inline">Academy</span>
+            </div>
+          </Link>
+
+          <Link
+            href="/"
+            className="flex items-center justify-center gap-1 text-slate-700 hover:text-black dark:text-slate-300 dark:hover:text-white font-extrabold text-xs bg-slate-100 hover:bg-slate-200 dark:bg-neutral-900 dark:hover:bg-neutral-800 border border-slate-200 dark:border-neutral-800 h-9 px-2.5 rounded-xl transition-all active:scale-95 shrink-0"
             title="Home"
           >
-            <Home size={15} className="text-blue-600 dark:text-blue-400" />
-            <span className="hidden sm:inline">Home</span>
+            <Home size={14} className="text-blue-600 dark:text-blue-400" />
+            <span className="hidden md:inline">Home</span>
           </Link>
 
           {/* Practical Portal shortcut: Only rendered on academic courses, hidden when already on Practical */}
@@ -93,6 +111,15 @@ export default function BcaHeaderNav({
               <span>Practical Portal</span>
             </Link>
           )}
+
+          <Link
+            href="/dashboard"
+            className="hidden lg:flex items-center gap-1.5 px-3 h-9 rounded-xl bg-slate-900 hover:bg-slate-800 border border-blue-500/40 text-blue-300 font-extrabold text-xs shadow-sm transition-all active:scale-95 shrink-0"
+            title="Faculty & Student Evaluation Dashboard"
+          >
+            <GraduationCap size={14} className="text-[#04AA6D]" />
+            <span>Dashboard</span>
+          </Link>
         </div>
 
         {/* Center: Responsive Subject & Day Switcher */}
@@ -124,8 +151,23 @@ export default function BcaHeaderNav({
           </button>
         </div>
 
-        {/* Right: Theme Toggle & Profile */}
+        {/* Right: Companion Icon, Theme Toggle & Profile */}
         <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+          {/* Dual-Device Coding Companion Icon Button */}
+          {(showCompanionIcon || Boolean(onOpenCompanion)) && (
+            <button
+              type="button"
+              onClick={onOpenCompanion}
+              className="relative w-9 h-9 flex items-center justify-center rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 dark:bg-emerald-500/15 dark:hover:bg-emerald-500/25 border border-emerald-400/40 dark:border-emerald-500/40 text-emerald-600 dark:text-emerald-400 transition-all cursor-pointer shrink-0 active:scale-95 shadow-xs group"
+              title="Dual-Screen Coding Companion (Study on Phone ❯ Code in VS Code on PC)"
+            >
+              <Smartphone size={16} className="stroke-[2.5]" />
+              <div className="absolute -bottom-0.5 -right-0.5 w-4 h-4 rounded-md bg-black dark:bg-[#04AA6D] text-white dark:text-black flex items-center justify-center shadow-xs">
+                <Laptop size={9} className="stroke-[2.5]" />
+              </div>
+            </button>
+          )}
+
           {/* Light / Dark Mode Toggle Button */}
           {mounted && (
             <button
@@ -142,35 +184,39 @@ export default function BcaHeaderNav({
           )}
 
           {/* User Profile / Auth Button */}
-          {user ? (
-            <button
-              onClick={openProfileDashboard}
-              className="flex items-center gap-2 p-1 sm:pr-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-neutral-900 dark:hover:bg-neutral-800 border border-slate-200 dark:border-neutral-800 transition-all cursor-pointer group shrink-0 active:scale-95 shadow-sm"
-              title="Open Student Profile Dashboard"
-            >
-              {user.isGuest ? (
-                <div className="w-7 h-7 rounded-lg bg-slate-600 text-white flex items-center justify-center font-black text-[10px] shadow-sm">
-                  G
-                </div>
-              ) : user.photo ? (
-                <img src={user.photo} alt={user.name} loading="eager" decoding="async" className="w-7 h-7 rounded-lg object-cover border border-blue-500/50 shadow-sm" />
-              ) : (
-                <div className="w-7 h-7 rounded-lg bg-blue-600 text-white flex items-center justify-center font-bold text-[10px] shadow-sm">
-                  {user.name.charAt(0)}
-                </div>
-              )}
-              <span className="text-xs font-bold text-black dark:text-white hidden sm:inline max-w-[90px] truncate">
-                {user.isGuest ? "Guest" : user.name.split(" ")[0]}
-              </span>
-            </button>
+          {mounted ? (
+            user ? (
+              <button
+                onClick={openProfileDashboard}
+                className="flex items-center gap-2 p-1 sm:pr-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-neutral-900 dark:hover:bg-neutral-800 border border-slate-200 dark:border-neutral-800 transition-all cursor-pointer group shrink-0 active:scale-95 shadow-sm"
+                title="Open Student Profile Dashboard"
+              >
+                {user.isGuest ? (
+                  <div className="w-7 h-7 rounded-lg bg-slate-600 text-white flex items-center justify-center font-black text-[10px] shadow-sm">
+                    G
+                  </div>
+                ) : user.photo ? (
+                  <img src={user.photo} alt={user.name} loading="eager" decoding="async" className="w-7 h-7 rounded-lg object-cover border border-blue-500/50 shadow-sm" />
+                ) : (
+                  <div className="w-7 h-7 rounded-lg bg-blue-600 text-white flex items-center justify-center font-bold text-[10px] shadow-sm">
+                    {user.name.charAt(0)}
+                  </div>
+                )}
+                <span className="text-xs font-bold text-black dark:text-white hidden sm:inline max-w-[90px] truncate">
+                  {user.isGuest ? "Guest" : user.name.split(" ")[0]}
+                </span>
+              </button>
+            ) : (
+              <button
+                onClick={openAuthModal}
+                className="flex items-center gap-1.5 px-3 h-9 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs transition-all active:scale-95 shadow-sm cursor-pointer shrink-0"
+              >
+                <LogIn size={13} />
+                <span className="hidden xs:inline">Sign In</span>
+              </button>
+            )
           ) : (
-            <button
-              onClick={openAuthModal}
-              className="flex items-center gap-1.5 px-3 h-9 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs transition-all active:scale-95 shadow-sm cursor-pointer shrink-0"
-            >
-              <LogIn size={13} />
-              <span className="hidden xs:inline">Sign In</span>
-            </button>
+            <div className="w-20 h-9 rounded-xl bg-slate-100 dark:bg-neutral-900 animate-pulse shrink-0" />
           )}
         </div>
       </header>

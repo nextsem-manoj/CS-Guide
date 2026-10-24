@@ -6,7 +6,7 @@ import {
   X, CheckCircle2, GitBranch, ExternalLink, Award, Sparkles, 
   Terminal, LogOut, LogIn, ShieldCheck, UserCheck, 
   ChevronRight, Laptop, Calendar, Play, Code, Clock, Flame,
-  HelpCircle
+  HelpCircle, GraduationCap
 } from "lucide-react";
 import { useStudentProgress } from "@/context/StudentProgressContext";
 import { 
@@ -196,6 +196,16 @@ export default function StudentProfileDashboardModal({ isOpen, onClose }: Props)
                     <span>Live GitHub Pages</span>
                   </a>
                 )}
+
+                <Link
+                  href="/dashboard"
+                  onClick={onClose}
+                  className="inline-flex items-center gap-1 text-[11px] text-blue-600 dark:text-blue-400 hover:text-blue-500 hover:underline font-black transition-colors px-2 py-0.5 rounded-md bg-blue-50 dark:bg-blue-950/60 border border-blue-200 dark:border-blue-800/80 ml-1"
+                  title="Open Faculty & Student Evaluation Dashboard"
+                >
+                  <GraduationCap size={12} className="text-[#04AA6D]" />
+                  <span>Evaluation Dashboard</span>
+                </Link>
               </div>
             </div>
           </div>

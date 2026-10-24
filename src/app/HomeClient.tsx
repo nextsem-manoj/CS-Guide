@@ -1,840 +1,1732 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import Link from 'next/link';
 import { useTheme } from 'next-themes';
 import { useStudentProgress } from '@/context/StudentProgressContext';
 import { 
-  PRACTICAL_LESSONS, 
-  PRACTICAL_SPRINTS,
   getPracticalLessonByDay,
   getNextPracticalDayNumber,
-  getNextPracticalDayUrl 
+  PRACTICAL_LESSONS,
 } from '@/data/bcaPracticalData';
-import BcaStoriesTray from '@/components/bca/BcaStoriesTray';
-import StudentPeerNetwork from '@/components/bca/StudentPeerNetwork';
 import { 
-  Play, CheckCircle2, Lock, ArrowRight, Laptop, 
-  Terminal, Sparkles, BookOpen, ChevronRight, 
-  LogIn, LogOut, GitBranch, Award, ExternalLink,
-  Clock, ShieldCheck, ChevronDown, ChevronUp, Sun, Moon,
-  Calendar, Heart, Flame, Code2, Compass, Zap
+  BookOpen, FileText, GitBranch, Settings, LogOut, 
+  LogIn, ChevronDown, ChevronRight, Folder, 
+  Check, RefreshCw, Search, Sun, Moon, MoreHorizontal,
+  Play, CheckCircle2, XCircle, HelpCircle, Copy, 
+  Terminal, Code2, Laptop, ArrowRight, ArrowLeft,
+  Sparkles, ExternalLink
 } from 'lucide-react';
 
+// ── 3-YEAR (6-SEMESTER / 360-DAY) ACTIVE SPRINTS ARCHITECTURE ──
+export interface PracticalSprintGroup {
+  id: number;
+  name: string;
+  title: string;
+  daysRange: string;
+  icon: string;
+  startDay: number;
+  endDay: number;
+  badge: string;
+}
+
+export const ACTIVE_SPRINTS: PracticalSprintGroup[] = [
+  { id: 1, name: 'Sprint 1', title: 'Web Foundation', daysRange: 'Days 1–10', icon: '🌐', startDay: 1, endDay: 10, badge: 'HTML5 Basics' },
+  { id: 2, name: 'Sprint 2', title: 'Modern CSS & Grid', daysRange: 'Days 11–20', icon: '📦', startDay: 11, endDay: 20, badge: 'Flex & Grid' },
+  { id: 3, name: 'Sprint 3', title: 'JavaScript Core', daysRange: 'Days 21–30', icon: '⚡', startDay: 21, endDay: 30, badge: 'JS Logic' },
+  { id: 4, name: 'Sprint 4', title: 'DOM & Events', daysRange: 'Days 31–40', icon: '🎮', startDay: 31, endDay: 40, badge: 'Interactive' },
+  { id: 5, name: 'Sprint 5', title: 'APIs & SPA Studio', daysRange: 'Days 41–50', icon: '🚀', startDay: 41, endDay: 50, badge: 'Full Capstone' },
+];
+
+export const ALL_ACTIVE_DAYS = PRACTICAL_LESSONS.map((l) => ({
+  day: l.day,
+  title: l.title,
+  short: `Day ${l.day}: ${l.title.replace(/^Day \d+[:\s-]*/i, '').replace(/^Sprint \d+ Capstone[:\s-]*/i, '').slice(0, 24)}`,
+  icon: l.day <= 10 ? '🌐' : l.day <= 20 ? '📦' : l.day <= 30 ? '⚡' : l.day <= 40 ? '🎮' : '🚀',
+  tech: l.category,
+  time: l.estimatedTime || '20 mins',
+  sprintId: Math.ceil(l.day / 10),
+}));
+
+export const SPRINT_1_DAYS = ALL_ACTIVE_DAYS.filter(d => d.sprintId === 1);
+
+export const SEMESTER_PLANNED_SPRINTS: Record<number, { sprintNum: number; name: string; daysRange: string; focus: string }[]> = {
+  2: [
+    { sprintNum: 3, name: 'Sprint 3: C Programming & Computational Logic', daysRange: 'Days 61–90', focus: 'Pointers, Memory & Data Structures in C' },
+    { sprintNum: 4, name: 'Sprint 4: JavaScript DOM & Interactive Apps', daysRange: 'Days 91–120', focus: 'Event-driven Apps, DOM Tree & SQL Sandbox' },
+  ],
+  3: [
+    { sprintNum: 5, name: 'Sprint 5: Data Structures & Algorithms (DSA)', daysRange: 'Days 121–150', focus: 'Linked Lists, Stacks, Queues & Trees in C/C++' },
+    { sprintNum: 6, name: 'Sprint 6: Relational Database & SQL Architecture', daysRange: 'Days 151–180', focus: 'Normalized Tables, Joins & PostgreSQL' },
+  ],
+  4: [
+    { sprintNum: 7, name: 'Sprint 7: Object-Oriented Software Design (OOP)', daysRange: 'Days 181–210', focus: 'Classes, Polymorphism & Clean Design in Java' },
+    { sprintNum: 8, name: 'Sprint 8: Backend REST APIs & Linux Shell', daysRange: 'Days 211–240', focus: 'Node.js Express, JWT Auth & Shell Automation' },
+  ],
+  5: [
+    { sprintNum: 9, name: 'Sprint 9: Career Track Specialization Deep-Dive', daysRange: 'Days 241–270', focus: 'React/Next.js, Python Data/AI or Cloud DevOps' },
+    { sprintNum: 10, name: 'Sprint 10: Cloud Deployment, Docker & CI/CD', daysRange: 'Days 271–300', focus: 'Containers, GitHub Actions & Cloud VMs' },
+  ],
+  6: [
+    { sprintNum: 11, name: 'Sprint 11: Major Capstone Industry Product', daysRange: 'Days 301–330', focus: 'End-to-End Software Architecture & Build' },
+    { sprintNum: 12, name: 'Sprint 12: Production Portfolio & Viva Defense', daysRange: 'Days 331–360', focus: 'Live Deployment, GitHub Showcase & Job Defense' },
+  ],
+};
+
+// ── BCA SEMESTER SYLLABUS TREE STRUCTURE ──
+interface BcaSemesterNode {
+  id: number;
+  title: string;
+  tag?: string;
+  subjects: { code: string; name: string; href: string; isLab?: boolean }[];
+}
+
+const BCA_SEMESTERS_TREE: BcaSemesterNode[] = [
+  {
+    id: 1,
+    title: "Semester 1: Foundation",
+    tag: "Active Sprint",
+    subjects: [
+      { code: "BCS-111", name: "Computer Basics & PC Software", href: "/bca/semester-1/bcs-111", isLab: false },
+      { code: "BCS-012", name: "Mathematics", href: "/bca/semester-1/bcs-012", isLab: false },
+      { code: "BCSL-013", name: "Software Lab (HTML/CSS)", href: "/bca/semester-1/bcsl-013", isLab: true },
+    ]
+  },
+  {
+    id: 2,
+    title: "Semester 2: Core Programming",
+    tag: "C & Assembly",
+    subjects: [
+      { code: "ECO-02", name: "Accountancy-I", href: "/bca/semester-2/eco-02", isLab: false },
+      { code: "MCS-011", name: "Problem Solving & C Programming", href: "/bca/semester-2/mcs-011", isLab: false },
+      { code: "MCS-012", name: "Computer Organization & Assembly", href: "/bca/semester-2/mcs-012", isLab: false },
+      { code: "MCS-015", name: "Communication Skills", href: "/bca/semester-2/mcs-015", isLab: false },
+      { code: "MCSL-016", name: "C & Assembly Language Lab", href: "/bca/semester-2/mcsl-016", isLab: true },
+    ]
+  },
+  {
+    id: 3,
+    title: "Semester 3: Data Structures & C++",
+    tag: "OOP & DBMS",
+    subjects: [
+      { code: "MCS-021", name: "Data & File Structures", href: "/bca/semester-3/mcs-021", isLab: false },
+      { code: "MCS-023", name: "Database Management Systems", href: "/bca/semester-3/mcs-023", isLab: false },
+      { code: "MCS-014", name: "Systems Analysis & Design", href: "/bca/semester-3/mcs-014", isLab: false },
+      { code: "BCS-031", name: "Programming in C++", href: "/bca/semester-3/bcs-031", isLab: false },
+      { code: "BCSL-032", name: "C++ & Data Structures Lab", href: "/bca/semester-3/bcsl-032", isLab: true },
+    ]
+  },
+  {
+    id: 4,
+    title: "Semester 4: Java & Networks",
+    tag: "Java & Stats",
+    subjects: [
+      { code: "BCS-040", name: "Statistical Techniques", href: "/bca/semester-4/bcs-040", isLab: false },
+      { code: "MCS-024", name: "Object Oriented Tech & Java", href: "/bca/semester-4/mcs-024", isLab: false },
+      { code: "BCS-041", name: "Fundamentals of Computer Networks", href: "/bca/semester-4/bcs-041", isLab: false },
+      { code: "BCS-042", name: "Introduction to Algorithm Design", href: "/bca/semester-4/bcs-042", isLab: false },
+      { code: "BCSL-043", name: "Java Programming Lab", href: "/bca/semester-4/bcsl-043", isLab: true },
+    ]
+  },
+  {
+    id: 5,
+    title: "Semester 5: Web Dev & Software Eng",
+    tag: "PHP & Python",
+    subjects: [
+      { code: "BCS-051", name: "Intro to Software Engineering", href: "/bca/semester-5/bcs-051", isLab: false },
+      { code: "BCS-052", name: "Network Programming & Admin", href: "/bca/semester-5/bcs-052", isLab: false },
+      { code: "BCS-053", name: "Web Programming (PHP/MySQL)", href: "/bca/semester-5/bcs-053", isLab: false },
+      { code: "BCS-054", name: "Numerical Techniques", href: "/bca/semester-5/bcs-054", isLab: false },
+      { code: "BCSL-056", name: "Web Programming Lab", href: "/bca/semester-5/bcsl-056", isLab: true },
+    ]
+  },
+  {
+    id: 6,
+    title: "Semester 6: Final Project",
+    tag: "Major Project",
+    subjects: [
+      { code: "BCS-062", name: "E-Commerce & Internet Security", href: "/bca/semester-6/bcs-062", isLab: false },
+      { code: "BCSP-064", name: "BCA Final Year Major Project", href: "/bca/semester-6/bcsp-064", isLab: true },
+    ]
+  }
+];
+
 export default function HomeClient() {
-  const router = useRouter();
   const { theme, setTheme, resolvedTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
+  const [mounted, setMounted] = useState<boolean>(false);
   const { 
     user, 
     completedDays, 
-    isDayCompleted, 
-    isDayUnlocked, 
-    signIn, 
     signOut,
     openProfileDashboard,
     openAuthModal,
   } = useStudentProgress();
 
-  // Active semester & sprint filter tabs
+  // Desktop Activity Rail & Tree States
+  const [activeRailTab, setActiveRailTab] = useState<'syllabus' | 'notes' | 'git' | 'settings'>('syllabus');
   const [selectedSemester, setSelectedSemester] = useState<number>(1);
-  const [activeSprint, setActiveSprint] = useState<number>(1);
-  const [showTheorySection, setShowTheorySection] = useState<boolean>(false);
-  const [likedCardIds, setLikedCardIds] = useState<Record<string, boolean>>({});
-  const [cardLikesCount, setCardLikesCount] = useState<Record<string, number>>({
-    "day-1": 142,
-    "day-2": 98,
-    "day-3": 115,
-    "day-4": 164,
-    "day-5": 210,
+  const [selectedSprintId, setSelectedSprintId] = useState<number>(1);
+  const [expandedSprintId, setExpandedSprintId] = useState<number | null>(1);
+
+  // Active Lab Day (Defaults to next incomplete day or Day 1)
+  const [activeLabDay, setActiveLabDay] = useState<number>(1);
+  const nextDayToStudy = getNextPracticalDayNumber(completedDays);
+
+  // Current Sprint's active days
+  const currentSprintDays = useMemo(() => {
+    return ALL_ACTIVE_DAYS.filter(d => d.sprintId === selectedSprintId);
+  }, [selectedSprintId]);
+
+  // Per-day Interactive Checklists: { "1_1": true, "1_2": false, ... }
+  const [checkedTasks, setCheckedTasks] = useState<Record<string, boolean>>({
+    '1_1': true,
+    '1_2': true,
+    '1_3': false,
   });
 
-  const completedCount = completedDays.length;
-  const sem1CompletedCount = completedDays.filter(d => d <= 60).length;
-  const sem1Percent = Math.min(100, Math.round((sem1CompletedCount / 60) * 100));
-  const totalPercent = Math.min(100, Math.round((completedCount / 360) * 100));
+  // Hints Expanded
+  const [expandedHint, setExpandedHint] = useState<number | null>(null);
 
-  const nextDayToStudy = getNextPracticalDayNumber(completedDays);
-  const nextLessonObj = getPracticalLessonByDay(nextDayToStudy) || PRACTICAL_LESSONS[0];
-  const nextDayUrl = getNextPracticalDayUrl(completedDays);
+  // Viva Selection State: selected option index per day { [day]: optionIndex }
+  const [selectedVivaAnswers, setSelectedVivaAnswers] = useState<Record<number, number>>({});
 
-  const handleSignIn = () => {
-    sessionStorage.setItem("nextsem_login_redirect_to_next_day", "true");
-    openAuthModal();
-  };
+  // Editor Tab: 'code' | 'preview'
+  const [editorTab, setEditorTab] = useState<'code' | 'preview'>('code');
 
-  // Auto-redirect user to their next uncompleted practical day upon logging in
-  const prevUserRef = React.useRef(user);
-  useEffect(() => {
-    if (!prevUserRef.current && user) {
-      const redirectPending = sessionStorage.getItem("nextsem_login_redirect_to_next_day");
-      if (redirectPending === "true") {
-        sessionStorage.removeItem("nextsem_login_redirect_to_next_day");
-        router.push(nextDayUrl);
-      }
+  // Simulated GitHub Sync State
+  const [isSyncing, setIsSyncing] = useState<boolean>(false);
+  const [lastSyncTime, setLastSyncTime] = useState<string>("10 mins ago");
+  const [copiedCode, setCopiedCode] = useState<boolean>(false);
+  const [copiedGitCmd, setCopiedGitCmd] = useState<string | null>(null);
+
+  const handleCopyGitCmd = useCallback((cmd: string) => {
+    if (typeof navigator !== "undefined" && navigator.clipboard) {
+      navigator.clipboard.writeText(cmd);
+      setCopiedGitCmd(cmd);
+      setTimeout(() => setCopiedGitCmd(null), 1800);
     }
-    prevUserRef.current = user;
-  }, [user, nextDayUrl, router]);
+  }, []);
 
   useEffect(() => {
     setMounted(true);
-    try {
-      const savedLikes = localStorage.getItem("nextsem_card_likes");
-      if (savedLikes) setLikedCardIds(JSON.parse(savedLikes));
-    } catch {}
+    if (nextDayToStudy && nextDayToStudy <= 50) {
+      setActiveLabDay(nextDayToStudy);
+      const sprintForDay = Math.ceil(nextDayToStudy / 10);
+      setSelectedSprintId(sprintForDay);
+      setExpandedSprintId(sprintForDay);
+    }
+  }, [nextDayToStudy]);
+
+  const isDark = mounted ? (resolvedTheme === 'dark' || theme === 'dark') : true;
+  const toggleTheme = useCallback(() => {
+    setTheme(isDark ? 'light' : 'dark');
+  }, [isDark, setTheme]);
+
+  const handleSignIn = useCallback(() => {
+    openAuthModal();
+  }, [openAuthModal]);
+
+  // Retrieve current day lesson data
+  const activeLesson = useMemo(() => {
+    return getPracticalLessonByDay(activeLabDay) || PRACTICAL_LESSONS[0];
+  }, [activeLabDay]);
+
+  // Simplify day into 3 clear, beginner-friendly guided steps
+  const daySteps = useMemo(() => {
+    const labTasks = activeLesson.practicalLab?.tasks || [];
+    return [
+      {
+        id: 1,
+        title: 'Step 1: Open VS Code & File Setup',
+        detail: `Create ${activeLesson.assignment?.fileName || 'index.html'} and add the initial structure.`,
+        hint: `Open Windows Terminal or CMD, navigate to your folder and type: code . to launch VS Code.`,
+      },
+      {
+        id: 2,
+        title: `Step 2: ${labTasks[0]?.title || 'Write Core Code & Tags'}`,
+        detail: labTasks[0]?.instruction || activeLesson.concept?.keyPoints?.[0] || 'Implement the core tags for today.',
+        hint: labTasks[0]?.hint || 'Look at the Code Editor tab to see the exact syntax required.',
+      },
+      {
+        id: 3,
+        title: 'Step 3: Preview in Browser & Push to GitHub',
+        detail: `Verify output in Chrome and commit with: "${activeLesson.githubWorkflow?.commitMessage || 'Day ' + activeLabDay}"`,
+        hint: `Run: git add . && git commit -m "${activeLesson.githubWorkflow?.commitMessage || 'feat: day ' + activeLabDay}" && git push origin main`,
+      }
+    ];
+  }, [activeLesson, activeLabDay]);
+
+  // Task completion toggle
+  const toggleTask = useCallback((stepId: number) => {
+    const key = `${activeLabDay}_${stepId}`;
+    setCheckedTasks(prev => ({
+      ...prev,
+      [key]: !prev[key]
+    }));
+  }, [activeLabDay]);
+
+  // Calculate day progress
+  const completedStepsForDay = useMemo(() => {
+    return daySteps.filter(s => !!checkedTasks[`${activeLabDay}_${s.id}`]).length;
+  }, [daySteps, checkedTasks, activeLabDay]);
+  const progressPercent = Math.round((completedStepsForDay / daySteps.length) * 100);
+
+  // Viva Selection Handler
+  const handleVivaSelect = useCallback((optionIdx: number) => {
+    setSelectedVivaAnswers(prev => ({
+      ...prev,
+      [activeLabDay]: optionIdx
+    }));
+  }, [activeLabDay]);
+
+  const currentVivaSelected = selectedVivaAnswers[activeLabDay] ?? null;
+  const isVivaCorrect = currentVivaSelected !== null && currentVivaSelected === activeLesson.vivaCheck?.correctAnswer;
+
+  // GitHub Sync Handler
+  const handleSyncNow = useCallback(() => {
+    setIsSyncing(true);
+    setTimeout(() => {
+      setIsSyncing(false);
+      setLastSyncTime("Just now");
+    }, 900);
   }, []);
 
-  const handleLikeCard = (cardId: string, e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    const isCurrentlyLiked = !!likedCardIds[cardId];
-    const updatedLikes = { ...likedCardIds, [cardId]: !isCurrentlyLiked };
-    setLikedCardIds(updatedLikes);
-    setCardLikesCount(prev => ({
-      ...prev,
-      [cardId]: (prev[cardId] || 100) + (isCurrentlyLiked ? -1 : 1)
-    }));
-    try {
-      localStorage.setItem("nextsem_card_likes", JSON.stringify(updatedLikes));
-    } catch {}
-  };
-
-  const currentTheme = resolvedTheme || theme;
-  const toggleTheme = () => {
-    setTheme(currentTheme === 'dark' ? 'light' : 'dark');
-  };
-
-  // Trending Spotlight Labs for the Visual Reel-Style Feed
-  const spotlightDays = [
-    {
-      day: 1,
-      title: "HTML Setup & First Webpage",
-      category: "HTML5",
-      snippet: "<!DOCTYPE html>\n<html>\n  <head><title>My Portfolio</title></head>\n  <body><h1>Hello World!</h1></body>\n</html>",
-      estTime: "45 mins",
-      vivaScore: "100% Viva Approved",
-      slug: "day-1-html-setup-first-webpage",
-      color: "from-blue-600 to-indigo-700"
-    },
-    {
-      day: 4,
-      title: "HTML Semantic Elements & Page Structure",
-      category: "HTML5 & SEO",
-      snippet: "<header><nav><a href=\"/\">Home</a></nav></header>\n<main><article>Clean Semantic Web</article></main>\n<footer>&copy; 2026 NextSem</footer>",
-      estTime: "45 mins",
-      vivaScore: "100% Viva Approved",
-      slug: "day-4-html-semantic-elements-page-structure",
-      color: "from-cyan-600 to-blue-700"
-    },
-    {
-      day: 5,
-      title: "HTML Forms & Input Validations",
-      category: "Forms & Data",
-      snippet: "<form action=\"/submit\" method=\"POST\">\n  <input type=\"text\" required pattern=\"[0-9]{9,10}\" />\n  <button type=\"submit\">Submit BCA Record</button>\n</form>",
-      estTime: "50 mins",
-      vivaScore: "100% Viva Approved",
-      slug: "day-5-html-forms-input-elements",
-      color: "from-purple-600 to-pink-700"
+  // Copy Code Handler
+  const handleCopyCode = useCallback(() => {
+    const codeToCopy = activeLesson.teacherDemo?.code || activeLesson.practicalLab?.initialCode || "";
+    if (typeof navigator !== 'undefined' && navigator.clipboard) {
+      navigator.clipboard.writeText(codeToCopy);
+      setCopiedCode(true);
+      setTimeout(() => setCopiedCode(false), 1500);
     }
-  ];
+  }, [activeLesson]);
 
   return (
-    <div className="min-h-screen bg-white dark:bg-black text-black dark:text-white flex flex-col justify-between font-sans transition-colors duration-150 selection:bg-blue-600 selection:text-white">
+    <div className="min-h-screen bg-slate-100 dark:bg-[#070c18] text-slate-900 dark:text-slate-100 flex flex-col font-sans select-none antialiased transition-colors">
       
-      {/* ── TOP HEADER (Clean Blue, Black & White) ── */}
-      <header className="sticky top-0 z-50 bg-white/95 dark:bg-black/95 backdrop-blur-md border-b border-slate-200 dark:border-neutral-800 py-3 px-4 sm:px-8">
-        <div className="max-w-6xl mx-auto flex items-center justify-between">
-          
-          {/* Logo */}
-          <Link href="/" className="flex items-center gap-2.5 group">
-            <div className="w-9 h-9 rounded-xl bg-blue-600 flex items-center justify-center font-mono font-black text-white text-base shadow-sm group-hover:scale-105 transition-transform">
-              &lt;/&gt;
+      {/* ════════════════════════════════════════════════════════════════
+          1. TOP APP HEADER (Shared across viewports)
+      ════════════════════════════════════════════════════════════════ */}
+      <header className="w-full bg-white dark:bg-[#070c18] border-b border-slate-200 dark:border-slate-800/80 px-4 sm:px-6 h-14 flex items-center justify-between z-30 transition-colors">
+        <div className="flex items-center gap-3">
+          <Link href="/" className="flex items-center gap-2 group">
+            <div className="w-7 h-7 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-600 dark:text-emerald-400 group-hover:scale-105 transition-transform">
+              <span className="font-mono font-black text-xs">&lt;/&gt;</span>
             </div>
-            <div className="flex flex-col leading-none">
-              <span className="font-extrabold text-base sm:text-lg tracking-tight text-black dark:text-white group-hover:text-blue-600 transition-colors">
-                BCA Practical Lab
+            <div className="flex items-center gap-1.5">
+              <span className="font-extrabold text-sm sm:text-base tracking-tight text-slate-900 dark:text-white group-hover:text-emerald-500 transition-colors">
+                CS Guide
               </span>
-              <span className="text-[10px] font-mono text-blue-600 dark:text-blue-400 font-bold tracking-wider">
-                by NextSem
-              </span>
+              <span className="text-emerald-600 dark:text-emerald-400 font-bold text-xs">NextSem</span>
             </div>
           </Link>
+        </div>
 
-          {/* Header Controls: Author + Live Pages + Theme Toggle + Search + Auth */}
-          <div className="flex items-center gap-2 sm:gap-2.5">
-            <a
-              href="https://nextsemacademy-max.github.io/bca-practical/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hidden md:flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 hover:bg-slate-200 dark:bg-neutral-900 dark:hover:bg-neutral-800 border border-slate-200 dark:border-neutral-800 text-xs font-semibold text-slate-700 dark:text-slate-300 transition-all"
-              title="Open Live BCA Practical GitHub Pages by Er. Manoj Kumar"
-            >
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-              <span>By <strong className="text-black dark:text-white">Er. Manoj Kumar</strong></span>
-              <ExternalLink size={11} className="text-emerald-500 ml-0.5" />
-            </a>
+        {/* Desktop Tagline Subtitle */}
+        <div className="hidden lg:flex items-center gap-2 text-xs font-mono text-slate-500 dark:text-slate-400">
+          <span className="text-emerald-600 dark:text-emerald-400 font-bold">BCA Practical Studio</span>
+          <span>•</span>
+          <span>Semester 1 Foundation</span>
+        </div>
 
-            <a
-              href="https://nextsemacademy-max.github.io/bca-practical/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hidden xl:flex items-center gap-1 px-3 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-950/60 dark:hover:bg-emerald-900/60 border border-emerald-300 dark:border-emerald-800 text-xs font-black text-emerald-700 dark:text-emerald-400 transition-all shadow-xs"
-              title="Open Live BCA Practical GitHub Pages"
-            >
-              <ExternalLink size={12} />
-              <span>Live GitHub Pages</span>
-            </a>
-
-            {/* Dedicated Light / Dark Mode Toggle Button */}
-            {mounted && (
-              <button
-                onClick={toggleTheme}
-                className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-neutral-900 dark:hover:bg-neutral-800 border border-slate-200 dark:border-neutral-800 text-xs font-bold text-slate-800 dark:text-slate-200 transition-all cursor-pointer"
-                title={`Switch to ${currentTheme === 'dark' ? 'Light' : 'Dark'} Mode`}
-              >
-                {currentTheme === 'dark' ? (
-                  <>
-                    <Sun size={14} className="text-blue-400" />
-                    <span className="hidden sm:inline">Light</span>
-                  </>
-                ) : (
-                  <>
-                    <Moon size={14} className="text-blue-600" />
-                    <span className="hidden sm:inline">Dark</span>
-                  </>
-                )}
-              </button>
-            )}
-
-            {/* Theory Reference Link */}
-            <button
-              onClick={() => {
-                setShowTheorySection(true);
-                const el = document.getElementById('theory-reference-section');
-                if (el) el.scrollIntoView({ behavior: 'smooth' });
-              }}
-              className="hidden sm:flex items-center gap-1 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-neutral-900 dark:hover:bg-neutral-800 border border-slate-200 dark:border-neutral-800 text-xs font-semibold text-slate-700 dark:text-slate-300 transition-all cursor-pointer"
-            >
-              <BookOpen size={13} className="text-blue-600 dark:text-blue-400" />
-              <span>Theory Reference</span>
-            </button>
-
-            <Link
-              href="/cmd"
-              target="_blank"
-              className="hidden lg:flex items-center gap-1 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-neutral-900 dark:hover:bg-neutral-800 border border-slate-200 dark:border-neutral-800 text-xs font-semibold text-slate-700 dark:text-slate-300 transition-all"
-            >
-              <Terminal size={13} className="text-blue-600 dark:text-blue-400" />
-              <span>CMD</span>
-            </Link>
-
-            {user ? (
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={openProfileDashboard}
-                  className="flex items-center gap-2 bg-slate-100 hover:bg-slate-200 dark:bg-neutral-900 dark:hover:bg-neutral-800 border border-slate-200 dark:border-neutral-800 px-2.5 py-1 rounded-xl transition-all cursor-pointer group"
-                  title="Open Student Profile & Practical Record"
-                >
-                  {user.photo ? (
-                    <img src={user.photo} alt="" className="w-5 h-5 rounded-full object-cover" />
-                  ) : (
-                    <div className="w-5 h-5 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-[10px]">
-                      {user.name.charAt(0).toUpperCase()}
-                    </div>
-                  )}
-                  <span className="text-xs font-bold text-slate-900 dark:text-slate-100 hidden sm:inline max-w-[80px] truncate">
-                    {user.name.split(" ")[0]}
-                  </span>
-                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg bg-blue-600 text-white text-[10px] font-black shadow-sm group-hover:scale-105 transition-transform">
-                    <CheckCircle2 size={11} />
-                    <span>{completedCount} {completedCount === 1 ? 'Day' : 'Days'} Done</span>
-                  </span>
-                </button>
-                <button 
-                  onClick={signOut}
-                  className="p-1.5 text-slate-500 hover:text-black dark:text-slate-400 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-neutral-800 rounded-lg transition-colors cursor-pointer"
-                  title="Sign Out"
-                >
-                  <LogOut size={15} />
-                </button>
-              </div>
-            ) : (
-              <button 
-                onClick={handleSignIn}
-                className="flex items-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-white px-3 sm:px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all shadow-sm cursor-pointer"
-              >
-                <LogIn size={13} />
-                <span>Sign In</span>
-              </button>
-            )}
+        {/* Action Controls */}
+        <div className="flex items-center gap-2 sm:gap-3">
+          <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 text-xs">
+            <Search size={13} />
+            <span className="text-[11px]">Search practicals...</span>
           </div>
 
+          {/* Theme Toggle Button */}
+          {mounted && (
+            <button
+              type="button"
+              onClick={toggleTheme}
+              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-900 hover:bg-slate-200 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 transition-colors cursor-pointer text-xs font-semibold shadow-2xs"
+              title={isDark ? "Current: Dark Mode (Click to switch to Light)" : "Current: Light Mode (Click to switch to Dark)"}
+            >
+              {isDark ? (
+                <>
+                  <Moon size={13} className="text-emerald-400" />
+                  <span className="text-[11px] font-mono font-bold text-slate-300">Dark</span>
+                </>
+              ) : (
+                <>
+                  <Sun size={13} className="text-amber-500" />
+                  <span className="text-[11px] font-mono font-bold text-slate-700">Light</span>
+                </>
+              )}
+            </button>
+          )}
+
+          {/* User Profile Pill */}
+          {user ? (
+            <button
+              onClick={openProfileDashboard}
+              suppressHydrationWarning
+              className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-slate-100 dark:bg-slate-900 hover:bg-slate-200 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800 text-xs font-bold text-slate-800 dark:text-white transition-colors cursor-pointer"
+            >
+              <div className="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] font-mono">
+                {user.name.charAt(0).toUpperCase()}
+              </div>
+              <span className="hidden sm:inline max-w-[80px] truncate">{user.name.split(" ")[0]}</span>
+            </button>
+          ) : (
+            <button
+              onClick={handleSignIn}
+              className="px-3 py-1 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs transition-colors cursor-pointer"
+            >
+              Sign In
+            </button>
+          )}
         </div>
       </header>
 
-      {/* ── MAIN CONTENT ── */}
-      <main className="flex-1 max-w-6xl mx-auto w-full px-4 sm:px-6 py-6 sm:py-8 space-y-8">
-        
-        {/* ── 1. DAILY STORIES & STATUS FEED TRAY ── */}
-        <BcaStoriesTray />
 
-        {/* ── 2. HERO SECTION: 360-DAY PRACTICAL ROADMAP ── */}
-        <div className="text-center space-y-4 max-w-3xl mx-auto pt-2">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800/50 text-blue-700 dark:text-blue-400 text-xs font-bold tracking-wide">
-            <Sparkles size={13} />
-            <span>3-Year University Degree Curriculum • 6 Semesters • 360 Practical Days</span>
+      {/* ════════════════════════════════════════════════════════════════
+          2. DESKTOP VIEWPORT: TWO-PANEL SPLIT STUDIO
+          (Hidden on mobile, Visible on md & lg)
+      ════════════════════════════════════════════════════════════════ */}
+      <div className="hidden md:flex flex-1 overflow-hidden">
+        
+        {/* ── LEFT ACTIVITY RAIL (Thin Vertical Icon Dock) ── */}
+        <aside className="w-14 bg-slate-50 dark:bg-[#050914] border-r border-slate-200 dark:border-slate-800/80 flex flex-col items-center justify-between py-4 shrink-0 z-20 transition-colors">
+          <div className="flex flex-col items-center gap-4 w-full">
+            <button
+              onClick={() => setActiveRailTab('syllabus')}
+              className={`w-9 h-9 rounded-xl flex items-center justify-center transition-all cursor-pointer ${
+                activeRailTab === 'syllabus'
+                  ? 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 shadow-xs'
+                  : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/60 dark:hover:bg-slate-900'
+              }`}
+              title="Syllabus Explorer"
+            >
+              <BookOpen size={18} />
+            </button>
+
+            <button
+              onClick={() => setActiveRailTab('notes')}
+              className={`w-9 h-9 rounded-xl flex items-center justify-center transition-all cursor-pointer ${
+                activeRailTab === 'notes'
+                  ? 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 shadow-xs'
+                  : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/60 dark:hover:bg-slate-900'
+              }`}
+              title="Theory Notes"
+            >
+              <FileText size={18} />
+            </button>
+
+            <button
+              onClick={() => setActiveRailTab('git')}
+              className={`w-9 h-9 rounded-xl flex items-center justify-center transition-all cursor-pointer ${
+                activeRailTab === 'git'
+                  ? 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 shadow-xs'
+                  : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/60 dark:hover:bg-slate-900'
+              }`}
+              title="GitHub Repositories"
+            >
+              <GitBranch size={18} />
+            </button>
+
+            <button
+              onClick={() => setActiveRailTab('settings')}
+              className={`w-9 h-9 rounded-xl flex items-center justify-center transition-all cursor-pointer ${
+                activeRailTab === 'settings'
+                  ? 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 shadow-xs'
+                  : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/60 dark:hover:bg-slate-900'
+              }`}
+              title="Settings"
+            >
+              <Settings size={18} />
+            </button>
           </div>
 
-          <h1 className="text-3xl sm:text-5xl font-black text-black dark:text-white tracking-tight leading-tight">
-            Learn to Code. Build Real Projects. Defend Your Viva.
-          </h1>
-
-          <p className="text-sm sm:text-base text-slate-700 dark:text-slate-300 font-medium leading-relaxed max-w-2xl mx-auto">
-            Universal 3-year job-ready practical curriculum designed for all BCA students. Solve daily hands-on coding tasks, debug broken programs, pass technical viva checks, push code to your personal GitHub, and earn verified milestones.
-          </p>
-
-          {/* Quick Metrics Badges */}
-          <div className="pt-1 flex flex-wrap items-center justify-center gap-2.5 text-xs font-bold text-slate-700 dark:text-slate-300">
-            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800">
-              <Laptop size={14} className="text-blue-600 dark:text-blue-400" />
-              <span>360 Daily Coding Labs</span>
-            </div>
-            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800">
-              <Calendar size={14} className="text-blue-600 dark:text-blue-400" />
-              <span>3 Years • 6 Semesters</span>
-            </div>
-            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800">
-              <GitBranch size={14} className="text-blue-600 dark:text-blue-400" />
-              <span>GitHub Push Workflow</span>
-            </div>
-            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800">
-              <Award size={14} className="text-blue-600 dark:text-blue-400" />
-              <span>Viva Voce Defense Checks</span>
-            </div>
+          <div className="w-full flex justify-center">
             {user ? (
               <button
-                type="button"
-                onClick={openProfileDashboard}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-600 text-white border border-blue-500 font-extrabold hover:bg-blue-700 transition-colors shadow-sm cursor-pointer"
-                title="View your verified days and practical submissions"
+                onClick={signOut}
+                suppressHydrationWarning
+                className="w-9 h-9 rounded-xl text-slate-500 hover:text-rose-400 hover:bg-slate-200/60 dark:hover:bg-slate-900 flex items-center justify-center transition-colors cursor-pointer"
+                title="Sign Out"
               >
-                <CheckCircle2 size={14} />
-                <span>{completedCount} of 360 Days Completed ({totalPercent}%)</span>
+                <LogOut size={16} />
               </button>
             ) : (
               <button
-                type="button"
                 onClick={handleSignIn}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 text-slate-700 dark:text-slate-300 hover:border-blue-600 dark:hover:border-blue-500 transition-colors cursor-pointer"
+                className="w-9 h-9 rounded-xl text-emerald-600 dark:text-emerald-400 hover:bg-slate-200/60 dark:hover:bg-slate-900 flex items-center justify-center transition-colors cursor-pointer"
+                title="Sign In"
               >
-                <CheckCircle2 size={14} className="text-blue-600 dark:text-blue-400" />
-                <span>Track Daily Progress (Sign In)</span>
+                <LogIn size={16} />
               </button>
             )}
           </div>
+        </aside>
 
-          {/* Primary Action Buttons */}
-          <div className="pt-3 flex flex-wrap items-center justify-center gap-3">
-            <Link
-              href={nextDayUrl}
-              className="inline-flex items-center gap-2 px-6 sm:px-8 py-3.5 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-black text-sm sm:text-base shadow-xl shadow-blue-600/25 transition-all hover:scale-[1.02] active:scale-95"
-            >
-              <Play size={16} className="fill-current" />
-              <span>
-                {completedCount > 0 
-                  ? `Continue Day ${nextDayToStudy}: ${nextLessonObj?.title || 'Next Practical'} »`
-                  : 'Start Day 1 Practical »'}
-              </span>
-            </Link>
-
-            <Link
-              href="/bca/practical"
-              className="inline-flex items-center gap-2 px-5 sm:px-6 py-3.5 rounded-2xl bg-slate-100 hover:bg-slate-200 dark:bg-neutral-900 dark:hover:bg-neutral-800 border border-slate-200 dark:border-neutral-800 text-black dark:text-white font-bold text-sm sm:text-base transition-all active:scale-95"
-            >
-              <Compass size={16} />
-              <span>Explore All 6 Semesters</span>
-            </Link>
-          </div>
-        </div>
-
-        {/* ── 2.5 ACTIVE STUDENT PROGRESS & QUICK RESUME BANNER ── */}
-        <section aria-label="Student Practical Progress" className="rounded-3xl bg-slate-50/80 dark:bg-neutral-950 border border-slate-200 dark:border-neutral-800 p-5 sm:p-7 shadow-sm transition-all backdrop-blur-sm">
-          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5">
-            
-            {/* Left: Progress info & Stats */}
-            <div className="space-y-3 flex-1">
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="px-2.5 py-0.5 rounded-full bg-blue-600 text-white text-[11px] font-black uppercase tracking-wider">
-                  {user ? "Your Practical Journey" : "Live Learning Portal"}
-                </span>
-                <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">
-                  {user ? `Logged in as ${user.name}` : "Sign in to track verified GitHub code & viva"}
+        {/* ── LEFT PANEL: DYNAMIC ACTIVITY CONTENT (Width: ~280-320px) ── */}
+        <aside className="w-72 xl:w-80 bg-slate-50/80 dark:bg-[#090e1c] border-r border-slate-200 dark:border-slate-800/80 flex flex-col p-4 shrink-0 overflow-y-auto transition-colors">
+          
+          {/* 1. SYLLABUS EXPLORER VIEW */}
+          {activeRailTab === 'syllabus' && (
+            <>
+              <div className="flex items-center justify-between mb-3">
+                <h2 className="text-sm font-extrabold text-slate-900 dark:text-white tracking-tight flex items-center gap-1.5">
+                  <BookOpen size={14} className="text-emerald-600 dark:text-emerald-400" />
+                  <span>Syllabus: BCA</span>
+                </h2>
+                <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20">
+                  {selectedSemester > 0 ? `Sem ${selectedSemester}` : 'BCA Hub'}
                 </span>
               </div>
 
-              <div>
-                <h3 className="text-lg sm:text-xl font-black text-black dark:text-white">
-                  {completedCount > 0 
-                    ? `You've completed ${completedCount} of 360 Practical Days` 
-                    : "Begin Your 3-Year BCA Practical Journey"}
-                </h3>
-                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-0.5">
-                  Semester 1 (Common Foundation): <strong className="text-black dark:text-white">{sem1CompletedCount} of 60 Days</strong> finished ({sem1Percent}%).
-                </p>
-              </div>
-
-              {/* Progress Bar */}
-              <div className="space-y-1.5 max-w-xl">
-                <div className="flex items-center justify-between text-[11px] font-bold text-slate-600 dark:text-slate-400">
-                  <span>Semester 1 Progress</span>
-                  <span>{sem1CompletedCount}/60 Days ({sem1Percent}%)</span>
-                </div>
-                <div className="w-full bg-slate-200 dark:bg-neutral-800 h-2.5 rounded-full overflow-hidden">
-                  <div 
-                    className="bg-blue-600 h-full rounded-full transition-all duration-500 ease-out" 
-                    style={{ width: `${Math.max(sem1Percent, sem1CompletedCount > 0 ? 5 : 0)}%` }}
-                  />
-                </div>
-              </div>
-            </div>
-
-            {/* Right: Next Day CTA Button */}
-            <div className="flex flex-col sm:flex-row lg:flex-col items-stretch sm:items-center lg:items-end gap-2.5 shrink-0">
+              {/* 360-Day Practical Portal Gateway Card */}
               <Link
-                href={nextDayUrl}
-                className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-black text-xs sm:text-sm shadow-lg shadow-blue-600/20 transition-all hover:scale-[1.02] active:scale-95 text-center"
+                href="/bca/practical"
+                className="block mb-3 p-2.5 rounded-2xl bg-gradient-to-r from-emerald-500/10 via-blue-500/10 to-emerald-500/10 hover:from-emerald-500/20 hover:to-blue-500/20 border border-emerald-500/30 text-left transition-all group shadow-2xs"
+                title="Open 3-Year / 360-Day Practical Learning Portal"
               >
-                <Play size={14} className="fill-current shrink-0" />
-                <span>
-                  {completedCount > 0 
-                    ? `Continue Day ${nextDayToStudy}: ${nextLessonObj?.title || 'Next Lab'}` 
-                    : "Start Day 01: First Webpage"} »
-                </span>
+                <div className="flex items-center justify-between mb-1">
+                  <div className="flex items-center gap-1.5 text-xs font-black text-emerald-700 dark:text-emerald-400">
+                    <Sparkles size={13} className="text-emerald-600 dark:text-emerald-400 shrink-0" />
+                    <span>360 Days Practical Portal</span>
+                  </div>
+                  <span className="text-[9px] font-mono px-1.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-800 dark:text-emerald-300 font-extrabold">
+                    12 Sprints
+                  </span>
+                </div>
+                <p className="text-[11px] text-slate-600 dark:text-slate-400 line-clamp-1 leading-snug">
+                  Full 3-Year Degree Curriculum (Days 1–360)
+                </p>
+                <div className="mt-1.5 flex items-center justify-between text-[10px] font-mono font-bold text-emerald-600 dark:text-emerald-400 group-hover:underline">
+                  <span>Explore All 360 Days</span>
+                  <ArrowRight size={11} className="group-hover:translate-x-0.5 transition-transform" />
+                </div>
               </Link>
 
-              {user ? (
+              {/* Tree View Navigation (Full 6 Semesters Collapsible Accordion) */}
+              <div className="space-y-1.5 text-xs">
+                {BCA_SEMESTERS_TREE.map((sem) => {
+                  const isExpanded = selectedSemester === sem.id;
+                  return (
+                    <div key={sem.id} className="space-y-1">
+                      {/* Semester Header: Chevron toggles accordion, Title & External Icon link to Semester Page */}
+                      <div
+                        className={`w-full flex items-center justify-between py-1 px-1.5 rounded-lg transition-all select-none ${
+                          isExpanded
+                            ? 'bg-slate-200/80 dark:bg-slate-800/80 text-slate-900 dark:text-white border border-slate-300 dark:border-slate-700/80 shadow-2xs'
+                            : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-slate-800/40 border border-transparent'
+                        }`}
+                      >
+                        {/* 1. Accordion Toggle Arrow */}
+                        <button
+                          type="button"
+                          onClick={() => setSelectedSemester(prev => (prev === sem.id ? 0 : sem.id))}
+                          className="p-1 rounded hover:bg-slate-300/50 dark:hover:bg-slate-700/50 text-slate-500 dark:text-slate-400 transition-colors cursor-pointer shrink-0"
+                          title={isExpanded ? `Collapse ${sem.title}` : `Expand ${sem.title}`}
+                        >
+                          {isExpanded ? (
+                            <ChevronDown size={14} className="text-emerald-600 dark:text-emerald-400" />
+                          ) : (
+                            <ChevronRight size={14} />
+                          )}
+                        </button>
+
+                        {/* 2. Direct Navigation Link (Clicking the semester title opens that semester page) */}
+                        <Link
+                          href={`/bca/semester-${sem.id}`}
+                          className="flex-1 px-1.5 py-0.5 text-left font-bold truncate hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors text-xs"
+                          title={`Open Semester ${sem.id} Hub`}
+                        >
+                          <span>{sem.title}</span>
+                        </Link>
+
+                        {/* 3. Direct Link Button / Badge */}
+                        <div className="flex items-center gap-1 shrink-0">
+                          {sem.id === 1 && (
+                            <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 font-bold">
+                              5 Sprints Live
+                            </span>
+                          )}
+                          <Link
+                            href={`/bca/semester-${sem.id}`}
+                            className="p-1 text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
+                            title={`Open Semester ${sem.id} Page`}
+                          >
+                            <ExternalLink size={12} />
+                          </Link>
+                        </div>
+                      </div>
+
+                      {/* Accordion Content — Strictly rendered ONLY when this semester is open! */}
+                      {isExpanded && (
+                        <div className="pl-2 space-y-2 border-l-2 border-emerald-500/30 ml-2.5 pt-1">
+                          {/* Semester 1 Practical Container (Active Sprints 1–5 • Days 1–50) */}
+                          {sem.id === 1 && (
+                            <div className="space-y-1.5">
+                              <div className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 px-1 pt-0.5 flex items-center justify-between">
+                                <span>Active Practical Labs</span>
+                                <span className="text-emerald-600 dark:text-emerald-400">50 Days Live</span>
+                              </div>
+
+                              {ACTIVE_SPRINTS.map((sprint) => {
+                                const isSprintOpen = expandedSprintId === sprint.id;
+                                const sprintDays = ALL_ACTIVE_DAYS.filter(d => d.sprintId === sprint.id);
+                                const sprintCompletedCount = sprintDays.filter(d => completedDays.includes(d.day)).length;
+
+                                return (
+                                  <div key={sprint.id} className="rounded-xl p-2 bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/90 shadow-2xs">
+                                    <button
+                                      type="button"
+                                      onClick={() => {
+                                        setExpandedSprintId(prev => prev === sprint.id ? null : sprint.id);
+                                        setSelectedSprintId(sprint.id);
+                                      }}
+                                      className="w-full flex items-center justify-between text-left text-slate-800 dark:text-slate-200 font-bold hover:text-slate-900 dark:hover:text-white cursor-pointer py-0.5"
+                                    >
+                                      <div className="flex items-center gap-1.5 truncate">
+                                        <span className="text-xs">{sprint.icon}</span>
+                                        <span className="truncate text-xs">{sprint.name}: {sprint.title}</span>
+                                      </div>
+                                      <div className="flex items-center gap-1 shrink-0">
+                                        <span className="font-mono text-[9px] text-emerald-600 dark:text-emerald-400 font-bold">
+                                          {sprintCompletedCount > 0 ? `${sprintCompletedCount}/10` : sprint.daysRange}
+                                        </span>
+                                        {isSprintOpen ? (
+                                          <ChevronDown size={12} className="text-slate-400" />
+                                        ) : (
+                                          <ChevronRight size={12} className="text-slate-400" />
+                                        )}
+                                      </div>
+                                    </button>
+
+                                    {/* Days Quick List */}
+                                    {isSprintOpen && (
+                                      <div className="pt-1.5 mt-1 space-y-1 border-t border-slate-100 dark:border-slate-800/60">
+                                        {sprintDays.map((d) => {
+                                          const isActive = activeLabDay === d.day;
+                                          const isDone = completedDays.includes(d.day);
+                                          return (
+                                            <button
+                                              key={d.day}
+                                              type="button"
+                                              onClick={() => {
+                                                setActiveLabDay(d.day);
+                                                setSelectedSprintId(sprint.id);
+                                                setEditorTab('code');
+                                              }}
+                                              className={`w-full flex items-center justify-between px-2 py-1.5 rounded-lg text-left transition-all cursor-pointer ${
+                                                isActive
+                                                  ? 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 font-bold border border-emerald-500/30 shadow-xs'
+                                                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/50'
+                                              }`}
+                                            >
+                                              <div className="flex items-center gap-2 truncate">
+                                                <span className="text-xs">{d.icon}</span>
+                                                <span className="truncate text-[11px]">{d.short}</span>
+                                              </div>
+                                              {isDone ? (
+                                                <Check size={12} className="text-emerald-600 dark:text-emerald-400 shrink-0 stroke-[3]" />
+                                              ) : isActive ? (
+                                                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0 animate-pulse" />
+                                              ) : null}
+                                            </button>
+                                          );
+                                        })}
+                                      </div>
+                                    )}
+                                  </div>
+                                );
+                              })}
+
+                              {/* All 360 Days Portal Direct Link Under Semester 1 */}
+                              <Link
+                                href="/bca/practical"
+                                className="w-full flex items-center justify-between p-2 rounded-xl bg-gradient-to-r from-emerald-500/10 to-blue-500/10 hover:from-emerald-500/20 hover:to-blue-500/20 border border-emerald-500/30 text-emerald-700 dark:text-emerald-400 text-xs font-bold transition-all shadow-2xs"
+                              >
+                                <div className="flex items-center gap-1.5 truncate">
+                                  <Sparkles size={12} className="shrink-0 text-emerald-600 dark:text-emerald-400" />
+                                  <span className="truncate text-[11px] font-mono">View All 360 Days (Sprints 1–12) »</span>
+                                </div>
+                                <ExternalLink size={12} className="shrink-0" />
+                              </Link>
+                            </div>
+                          )}
+
+                          {/* Semesters 2 to 6 Practical Sprints List */}
+                          {sem.id > 1 && SEMESTER_PLANNED_SPRINTS[sem.id] && (
+                            <div className="rounded-xl p-2 bg-slate-100/70 dark:bg-slate-900/40 border border-slate-200 dark:border-slate-800/80 space-y-1.5">
+                              <div className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 px-0.5 flex items-center justify-between">
+                                <span>Practical Roadmap</span>
+                                <span className="text-blue-600 dark:text-blue-400 font-bold">60 Days</span>
+                              </div>
+                              {SEMESTER_PLANNED_SPRINTS[sem.id].map((ps) => (
+                                <Link
+                                  key={ps.sprintNum}
+                                  href="/bca/practical"
+                                  className="block p-1.5 rounded-lg bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 hover:border-emerald-500/40 transition-colors group"
+                                >
+                                  <div className="flex items-center justify-between text-xs font-bold text-slate-800 dark:text-slate-200 group-hover:text-emerald-600 dark:group-hover:text-emerald-400">
+                                    <span className="truncate text-[11px]">{ps.name}</span>
+                                    <span className="text-[9px] font-mono font-bold text-emerald-600 dark:text-emerald-400 shrink-0">{ps.daysRange}</span>
+                                  </div>
+                                  <p className="text-[10px] text-slate-500 dark:text-slate-400 truncate mt-0.5">{ps.focus}</p>
+                                </Link>
+                              ))}
+                              <Link
+                                href="/bca/practical"
+                                className="flex items-center justify-between py-1 px-1 rounded text-[10px] font-mono font-bold text-blue-600 dark:text-blue-400 hover:underline"
+                              >
+                                <span>Open Semester {sem.id} Practical Hub »</span>
+                                <ExternalLink size={10} />
+                              </Link>
+                            </div>
+                          )}
+
+                          {/* Subject Theory & Lab Links */}
+                          <div className="space-y-0.5 pt-1">
+                            <div className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 px-1">
+                              Theory &amp; Lab Courses
+                            </div>
+                            {sem.subjects.map((sub) => (
+                              <Link
+                                key={sub.code}
+                                href={sub.href}
+                                className="flex items-center justify-between py-1 px-2 rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/60 dark:hover:bg-slate-800/40 transition-colors group"
+                              >
+                                <div className="flex items-center gap-1.5 truncate">
+                                  <FileText size={12} className="text-emerald-600 dark:text-emerald-400 shrink-0" />
+                                  <span className="truncate text-[11px] font-medium">{sub.code}: {sub.name}</span>
+                                </div>
+                                {sub.isLab && (
+                                  <span className="text-[9px] font-mono px-1 rounded bg-blue-500/10 text-blue-600 dark:text-blue-400 shrink-0">Lab</span>
+                                )}
+                              </Link>
+                            ))}
+                          </div>
+
+                          {/* Full Semester Hub Jump Link */}
+                          <Link
+                            href={`/bca/semester-${sem.id}`}
+                            className="flex items-center justify-between py-1 px-2 rounded-lg text-emerald-700 dark:text-emerald-400 hover:underline text-[11px] font-mono font-bold"
+                          >
+                            <span>Open Semester {sem.id} Hub »</span>
+                            <ChevronRight size={12} />
+                          </Link>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </>
+          )}
+
+          {/* 2. THEORY NOTES VIEW */}
+          {activeRailTab === 'notes' && (
+            <div className="space-y-4">
+              <div className="flex items-center justify-between mb-1">
+                <h2 className="text-sm font-extrabold text-slate-900 dark:text-white tracking-tight flex items-center gap-1.5">
+                  <FileText size={14} className="text-emerald-600 dark:text-emerald-400" />
+                  <span>Theory Notes: BCA</span>
+                </h2>
+                <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-blue-500/10 text-blue-700 dark:text-blue-400 border border-blue-500/20">
+                  IGNOU Curated
+                </span>
+              </div>
+
+              {/* Subject 1: BCS-111 / BCS-011 */}
+              <div className="rounded-xl p-3 bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 space-y-2 shadow-xs">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-bold text-slate-900 dark:text-white">BCS-111 Computer Basics</span>
+                  <span className="text-[10px] font-mono text-emerald-600 dark:text-emerald-400 font-bold">Sem 1</span>
+                </div>
+                <div className="space-y-1 text-xs">
+                  <Link
+                    href="/bca/notes/bcs-011-block-3-unit-1-networking-and-internet"
+                    className="flex items-center gap-1.5 p-1.5 rounded-lg text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                  >
+                    <span className="text-emerald-600 dark:text-emerald-400 text-[10px]">●</span>
+                    <span className="truncate">Unit 1: Networking & Internet</span>
+                  </Link>
+                  <Link
+                    href="/bca/notes/bcs-011-unit-2-operating-system"
+                    className="flex items-center gap-1.5 p-1.5 rounded-lg text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                  >
+                    <span className="text-emerald-600 dark:text-emerald-400 text-[10px]">●</span>
+                    <span className="truncate">Unit 2: Operating System Basics</span>
+                  </Link>
+                  <Link
+                    href="/bca/notes/bcs-011-unit-3-programming-languages"
+                    className="flex items-center gap-1.5 p-1.5 rounded-lg text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                  >
+                    <span className="text-emerald-600 dark:text-emerald-400 text-[10px]">●</span>
+                    <span className="truncate">Unit 3: Programming Languages</span>
+                  </Link>
+                  <Link
+                    href="/bca/notes/bcs-011-unit-5"
+                    className="flex items-center gap-1.5 p-1.5 rounded-lg text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                  >
+                    <span className="text-emerald-600 dark:text-emerald-400 text-[10px]">●</span>
+                    <span className="truncate">Unit 5: Information Security</span>
+                  </Link>
+                </div>
+              </div>
+
+              {/* Subject 2: BCSL-013 Lab Manual */}
+              <div className="rounded-xl p-3 bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 space-y-2 shadow-xs">
+                <span className="text-xs font-bold text-slate-900 dark:text-white block">BCSL-013 Software Lab</span>
+                <div className="space-y-1 text-xs">
+                  <Link
+                    href="/cli"
+                    className="flex items-center gap-1.5 p-1.5 rounded-lg text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                  >
+                    <Terminal size={12} className="text-emerald-600 dark:text-emerald-400" />
+                    <span>Windows CMD Simulator</span>
+                  </Link>
+                  <Link
+                    href="/html"
+                    className="flex items-center gap-1.5 p-1.5 rounded-lg text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                  >
+                    <Code2 size={12} className="text-emerald-600 dark:text-emerald-400" />
+                    <span>HTML5 Tag Reference</span>
+                  </Link>
+                </div>
+              </div>
+
+              <Link
+                href="/bca/semester-1"
+                className="w-full py-2 px-3 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 text-emerald-700 dark:text-emerald-400 font-bold text-xs flex items-center justify-center gap-1.5 transition-colors"
+              >
+                <span>Browse All Semester 1 Notes</span>
+                <ArrowRight size={13} />
+              </Link>
+            </div>
+          )}
+
+          {/* 3. GIT WORKFLOWS VIEW */}
+          {activeRailTab === 'git' && (
+            <div className="space-y-4">
+              <div className="flex items-center justify-between mb-1">
+                <h2 className="text-sm font-extrabold text-slate-900 dark:text-white tracking-tight flex items-center gap-1.5">
+                  <GitBranch size={14} className="text-emerald-600 dark:text-emerald-400" />
+                  <span>GitHub Workflows</span>
+                </h2>
+                <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20">
+                  Day {activeLabDay}
+                </span>
+              </div>
+
+              {/* Connected Target Repo Card */}
+              <div className="rounded-xl p-3 bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 space-y-1.5 text-xs shadow-xs">
+                <div className="flex items-center justify-between text-slate-500 dark:text-slate-400">
+                  <span>Target Repository</span>
+                  <span className="text-emerald-600 dark:text-emerald-400 font-mono font-bold">main</span>
+                </div>
+                <div className="font-mono text-slate-900 dark:text-white font-bold bg-slate-100 dark:bg-black/60 px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-800">
+                  html-css-projects
+                </div>
+                <div className="text-[11px] text-slate-500 dark:text-slate-400 flex items-center gap-1 pt-0.5">
+                  <Folder size={11} className="text-emerald-600 dark:text-emerald-400" />
+                  <span>Folder: <code className="text-emerald-700 dark:text-emerald-300 font-mono">bca-day-{activeLabDay < 10 ? '0' + activeLabDay : activeLabDay}</code></span>
+                </div>
+              </div>
+
+              {/* 4 Essential Push Commands */}
+              <div className="space-y-2 text-xs">
+                <span className="text-slate-500 dark:text-slate-400 font-bold block text-[11px] uppercase tracking-wider">Terminal Push Commands</span>
+                
+                {[
+                  `git checkout -b feature/day-${activeLabDay}`,
+                  `git add .`,
+                  `git commit -m "feat(day-${activeLabDay}): complete ${activeLesson.title.toLowerCase().slice(0, 28)}"`,
+                  `git push origin feature/day-${activeLabDay}`
+                ].map((cmd, idx) => (
+                  <div key={idx} className="group flex items-center justify-between bg-slate-100 dark:bg-black/60 border border-slate-200 dark:border-slate-800 rounded-lg p-2 font-mono text-[11px]">
+                    <span className="text-slate-800 dark:text-slate-300 truncate pr-2">{cmd}</span>
+                    <button
+                      type="button"
+                      onClick={() => handleCopyGitCmd(cmd)}
+                      className="text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 p-1 rounded transition-colors shrink-0 cursor-pointer"
+                      title="Copy command"
+                    >
+                      {copiedGitCmd === cmd ? <Check size={12} className="text-emerald-600 dark:text-emerald-400" /> : <Copy size={12} />}
+                    </button>
+                  </div>
+                ))}
+              </div>
+
+              <Link
+                href="/bca/practical/how-it-works"
+                className="w-full py-2 px-3 rounded-xl bg-slate-100 dark:bg-slate-900 hover:bg-slate-200 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-colors"
+              >
+                <span>GitHub Verification Guide</span>
+                <ExternalLink size={12} />
+              </Link>
+            </div>
+          )}
+
+          {/* 4. SETTINGS VIEW */}
+          {activeRailTab === 'settings' && (
+            <div className="space-y-4">
+              <div className="flex items-center justify-between mb-1">
+                <h2 className="text-sm font-extrabold text-slate-900 dark:text-white tracking-tight flex items-center gap-1.5">
+                  <Settings size={14} className="text-emerald-600 dark:text-emerald-400" />
+                  <span>Studio Settings</span>
+                </h2>
+                <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
+                  Preferences
+                </span>
+              </div>
+
+              {/* User Account / Profile Card */}
+              <div className="rounded-xl p-3 bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 space-y-2 text-xs shadow-xs">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-9 h-9 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-bold text-sm">
+                    {user ? user.name.charAt(0).toUpperCase() : "G"}
+                  </div>
+                  <div className="truncate flex-1">
+                    <div className="text-slate-900 dark:text-white font-bold truncate">{user ? user.name : "Guest Student"}</div>
+                    <div className="text-slate-500 dark:text-slate-400 text-[11px] truncate">{user ? user.email : "Not signed in"}</div>
+                  </div>
+                </div>
+
+                {user ? (
+                  <button
+                    type="button"
+                    onClick={openProfileDashboard}
+                    className="w-full py-1.5 px-2.5 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/30 text-emerald-700 dark:text-emerald-400 font-bold text-[11px] flex items-center justify-center gap-1 transition-colors cursor-pointer"
+                  >
+                    <span>Open Student Dashboard</span>
+                    <ExternalLink size={12} />
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={handleSignIn}
+                    className="w-full py-1.5 px-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs transition-colors cursor-pointer"
+                  >
+                    Sign In with Google
+                  </button>
+                )}
+              </div>
+
+              {/* Theme Settings */}
+              <div className="rounded-xl p-3 bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 space-y-2 text-xs shadow-xs">
+                <span className="text-slate-500 dark:text-slate-400 font-bold block text-[11px] uppercase tracking-wider">Appearance Theme</span>
+                <div className="grid grid-cols-2 gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setTheme('dark')}
+                    className={`p-2 rounded-lg font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
+                      isDark 
+                        ? 'bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 border border-emerald-500/50 shadow-xs ring-1 ring-emerald-500/30' 
+                        : 'bg-slate-100 dark:bg-black/60 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                    }`}
+                  >
+                    <Moon size={13} className={isDark ? "text-emerald-700 dark:text-emerald-400" : ""} />
+                    <span>Dark</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setTheme('light')}
+                    className={`p-2 rounded-lg font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
+                      !isDark 
+                        ? 'bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 border border-emerald-500/50 shadow-xs ring-1 ring-emerald-500/30' 
+                        : 'bg-slate-100 dark:bg-black/60 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                    }`}
+                  >
+                    <Sun size={13} className={!isDark ? "text-amber-500" : ""} />
+                    <span>Light</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Practical Progress Summary */}
+              <div className="rounded-xl p-3 bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 space-y-1.5 text-xs shadow-xs">
+                <span className="text-slate-500 dark:text-slate-400 font-bold block text-[11px] uppercase tracking-wider">Practical Progress</span>
+                <div className="flex items-center justify-between text-slate-700 dark:text-slate-300">
+                  <span>Completed Labs:</span>
+                  <span className="font-mono font-bold text-emerald-600 dark:text-emerald-400">{completedDays.length} / 360</span>
+                </div>
+                <div className="flex items-center justify-between text-slate-700 dark:text-slate-300">
+                  <span>Current Sprint:</span>
+                  <span className="font-semibold text-slate-800 dark:text-slate-200">Sprint 1 (Days 1–10)</span>
+                </div>
+              </div>
+
+              {user && (
                 <button
                   type="button"
-                  onClick={openProfileDashboard}
-                  className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-white dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 hover:border-blue-600 dark:hover:border-blue-500 text-black dark:text-white font-bold text-xs transition-colors cursor-pointer"
+                  onClick={signOut}
+                  className="w-full py-2 px-3 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 text-rose-500 dark:text-rose-400 font-bold text-xs flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
                 >
-                  <Award size={13} className="text-blue-600 dark:text-blue-400 shrink-0" />
-                  <span>View Completed Record &amp; GitHub</span>
-                </button>
-              ) : (
-                <button
-                  type="button"
-                  onClick={handleSignIn}
-                  className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-white dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 hover:border-blue-600 dark:hover:border-blue-500 text-black dark:text-white font-bold text-xs transition-colors cursor-pointer"
-                >
-                  <LogIn size={13} className="text-blue-600 dark:text-blue-400 shrink-0" />
-                  <span>Sign In to Sync Cloud Progress</span>
+                  <LogOut size={13} />
+                  <span>Sign Out of CS Guide</span>
                 </button>
               )}
             </div>
+          )}
 
-          </div>
-        </section>
+        </aside>
 
-
-        {/* ── 3. FEATURED DAILY MILESTONES (Engaging Feed-Style Cards) ── */}
-        <section aria-label="Featured Daily Coding Milestones" className="border-t border-slate-200 dark:border-neutral-800 pt-8">
-          <div className="flex items-center justify-between mb-4">
-            <div>
+        {/* ── RIGHT MAIN PANEL: CODING PLAYGROUND STUDIO ── */}
+        <main className="flex-1 bg-slate-100/70 dark:bg-[#070c18] p-5 xl:p-6 overflow-y-auto space-y-4 transition-colors">
+          
+          {/* Header Row & Day Switcher Bar */}
+          <div className="flex flex-col gap-3">
+            <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-blue-600" />
-                <h2 className="text-base sm:text-lg font-black text-black dark:text-white">
-                  Trending Practical Milestones
-                </h2>
+                <h1 className="text-xl font-black text-slate-900 dark:text-white tracking-tight">
+                  Day {activeLabDay}: {activeLesson.title}
+                </h1>
+                <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20">
+                  {activeLesson.category}
+                </span>
               </div>
-              <p className="text-xs text-slate-500 dark:text-slate-400">
-                Top rated coding tasks completed by BCA peers this week
-              </p>
-            </div>
 
-            <Link
-              href="/bca/practical"
-              className="text-xs font-bold text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1"
-            >
-              <span>View All 360 Days</span>
-              <ChevronRight size={14} />
-            </Link>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {spotlightDays.map((item) => {
-              const cardId = `day-${item.day}`;
-              const isLiked = !!likedCardIds[cardId];
-              const likes = cardLikesCount[cardId] || 120;
-
-              return (
-                <div
-                  key={item.day}
-                  className="rounded-3xl bg-slate-50/70 dark:bg-neutral-950 border border-slate-200 dark:border-neutral-800/90 p-5 flex flex-col justify-between hover:shadow-xl hover:border-blue-500/50 transition-all group backdrop-blur-sm"
+              <div className="flex items-center gap-2">
+                <Link
+                  href={`/bca/practical/${activeLesson.slug}`}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-black font-black text-xs font-mono shadow-xs transition-transform active:scale-95"
                 >
-                  <div className="space-y-3">
-                    {/* Header: Day Badge & Micro Kudos */}
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <span className="px-2.5 py-1 rounded-xl bg-blue-600 text-white font-black text-xs shadow-sm">
-                          Day {item.day}
-                        </span>
-                        <span className="text-[11px] font-bold text-slate-600 dark:text-slate-400 bg-white dark:bg-neutral-900 px-2 py-0.5 rounded-lg border border-slate-200 dark:border-neutral-800">
-                          {item.category}
-                        </span>
-                      </div>
-
-                      {/* Heart Button */}
-                      <button
-                        onClick={(e) => handleLikeCard(cardId, e)}
-                        className={`flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold font-mono transition-all active:scale-125 cursor-pointer ${
-                          isLiked 
-                            ? "bg-rose-50 dark:bg-rose-950/50 text-rose-600 border border-rose-300 dark:border-rose-800" 
-                            : "bg-white dark:bg-neutral-900 text-slate-500 hover:text-rose-500 border border-slate-200 dark:border-neutral-800"
-                        }`}
-                        title="Cheer with kudos"
-                      >
-                        <Heart size={13} className={isLiked ? "fill-rose-500 text-rose-500" : ""} />
-                        <span>{likes}</span>
-                      </button>
-                    </div>
-
-                    {/* Title */}
-                    <h3 className="text-base font-black text-black dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-1">
-                      {item.title}
-                    </h3>
-
-                    {/* Syntax Snippet Preview */}
-                    <div className="rounded-2xl bg-black/90 border border-neutral-800 p-3 font-mono text-[11px] text-emerald-400 overflow-x-auto shadow-inner">
-                      <pre className="whitespace-pre">{item.snippet}</pre>
-                    </div>
-                  </div>
-
-                  {/* Footer Meta & Action */}
-                  <div className="pt-4 border-t border-slate-200 dark:border-neutral-800/80 mt-4 flex items-center justify-between">
-                    <div className="flex items-center gap-1.5 text-xs text-slate-500 font-medium">
-                      <Clock size={12} className="text-blue-500" />
-                      <span>{item.estTime}</span>
-                      <span>•</span>
-                      <span className="text-emerald-500 font-bold">100% Viva</span>
-                    </div>
-
-                    <Link
-                      href={`/bca/practical/${item.slug}`}
-                      className="inline-flex items-center gap-1 px-3.5 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs transition-all shadow-sm active:scale-95"
-                    >
-                      <span>Start Lab</span>
-                      <ChevronRight size={13} />
-                    </Link>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </section>
-
-        {/* ── 4. COMPLETE 6-SEMESTER ROADMAP & SPRINTS ── */}
-        <div className="border-t border-slate-200 dark:border-neutral-800 pt-8">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
-            <div>
-              <h2 className="text-xl sm:text-2xl font-black text-black dark:text-white">
-                3-Year Day-by-Day Practical Roadmap
-              </h2>
-              <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400">
-                Structured across all 6 semesters (360 Days). Follow sequentially and push verified code to GitHub.
-              </p>
+                  <Sparkles size={12} />
+                  <span>{activeLabDay === 1 ? "Interactive Studio »" : "Open Full Lesson »"}</span>
+                </Link>
+                <button className="p-1 rounded-lg text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/60 dark:hover:bg-slate-800 transition-colors">
+                  <MoreHorizontal size={18} />
+                </button>
+              </div>
             </div>
 
-            {/* 6-Semester Switcher */}
-            <div className="flex items-center gap-1.5 overflow-x-auto pb-1 max-w-full">
-              {Array.from({ length: 6 }).map((_, idx) => {
-                const sem = idx + 1;
-                const isSelected = selectedSemester === sem;
-                const year = Math.ceil(sem / 2);
-                return (
+            {/* Quick Multi-Sprint & Day Pill Strip */}
+            <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none">
+              {/* Sprint Badges */}
+              <div className="flex items-center gap-1 shrink-0 p-0.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+                {ACTIVE_SPRINTS.map((sprint) => (
                   <button
-                    key={sem}
+                    key={sprint.id}
                     type="button"
                     onClick={() => {
-                      setSelectedSemester(sem);
-                      setActiveSprint((sem - 1) * 2 + 1);
+                      setSelectedSprintId(sprint.id);
+                      setExpandedSprintId(sprint.id);
+                      setActiveLabDay(sprint.startDay);
+                      setEditorTab('code');
                     }}
-                    className={`px-3 py-1.5 rounded-xl text-xs font-black transition-all cursor-pointer whitespace-nowrap ${
-                      isSelected
-                        ? 'bg-blue-600 text-white shadow-sm'
-                        : 'bg-slate-100 hover:bg-slate-200 dark:bg-neutral-900 dark:hover:bg-neutral-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-neutral-800'
+                    className={`px-2.5 py-1 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer flex items-center gap-1 ${
+                      selectedSprintId === sprint.id
+                        ? 'bg-emerald-500 text-black shadow-xs font-black'
+                        : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                    }`}
+                    title={`${sprint.name}: ${sprint.title} (${sprint.daysRange})`}
+                  >
+                    <span>{sprint.icon}</span>
+                    <span className="hidden sm:inline">{sprint.name}</span>
+                    <span className="sm:hidden">S{sprint.id}</span>
+                  </button>
+                ))}
+              </div>
+
+              <span className="w-px h-5 bg-slate-300 dark:bg-slate-700 shrink-0 mx-0.5" />
+
+              {/* Days for Current Active Sprint */}
+              {currentSprintDays.map((d) => {
+                const isActive = activeLabDay === d.day;
+                const isDone = completedDays.includes(d.day);
+                return (
+                  <button
+                    key={d.day}
+                    onClick={() => {
+                      setActiveLabDay(d.day);
+                      setEditorTab('code');
+                    }}
+                    className={`px-2.5 py-1 rounded-xl text-xs font-mono font-bold shrink-0 transition-all cursor-pointer flex items-center gap-1.5 ${
+                      isActive
+                        ? 'bg-emerald-500 text-black shadow-md shadow-emerald-500/20'
+                        : isDone
+                        ? 'bg-white dark:bg-slate-900 border border-emerald-500/40 text-emerald-700 dark:text-emerald-400 shadow-2xs'
+                        : 'bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800 shadow-2xs'
                     }`}
                   >
-                    Sem {sem} (Yr {year})
+                    <span>Day {d.day}</span>
+                    {isDone && <Check size={11} className="stroke-[3]" />}
                   </button>
                 );
               })}
+
+              <Link
+                href="/bca/practical"
+                className="px-3 py-1 rounded-xl text-xs font-mono font-bold text-blue-600 dark:text-blue-400 hover:underline bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-900/60 shrink-0 shadow-2xs transition-colors flex items-center gap-1.5"
+                title="View All 360 Days Across All 6 Semesters"
+              >
+                <Sparkles size={11} />
+                <span>All 360 Days »</span>
+              </Link>
             </div>
           </div>
 
-          {/* Sprints Switcher Buttons for Active Semester */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
-            {PRACTICAL_SPRINTS.filter(s => s.semester === selectedSemester).map((sprint) => {
-              const isActive = activeSprint === sprint.sprintNumber;
+          {/* User-Friendly Terminal Banner with Goal */}
+          <div className="p-3.5 rounded-2xl bg-white dark:bg-[#090e1c] border border-slate-200 dark:border-slate-800 flex items-center justify-between gap-4 shadow-xs transition-colors">
+            <div className="space-y-0.5">
+              <div className="font-mono text-xs text-emerald-700 dark:text-emerald-400 font-bold flex items-center gap-1.5">
+                <Terminal size={13} />
+                <span>~/bca/sem1/{activeLesson.slug.replace(/^day-\d+-/, '')} $</span>
+              </div>
+              <div className="text-xs text-slate-700 dark:text-slate-300 font-medium line-clamp-1">
+                <strong className="text-slate-900 dark:text-white">Goal:</strong> {activeLesson.concept?.overview || 'Build and verify your practical code today.'}
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2 shrink-0 text-xs font-mono">
+              <span className="text-slate-500 dark:text-slate-400">Time: <strong className="text-slate-900 dark:text-white">~20 mins</strong></span>
+              <span className="text-slate-300 dark:text-slate-600">•</span>
+              <span className="text-emerald-700 dark:text-emerald-400 font-bold">{activeLesson.difficulty}</span>
+            </div>
+          </div>
+
+          {/* Two-Column Middle Grid: 3 Simple Guided Tasks (Left) vs Code Editor & Output (Right) */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
+            
+            {/* Left 6 Columns: 3 SIMPLE GUIDED ACTION TASKS + VIVA CHECK */}
+            <div className="lg:col-span-6 space-y-4 flex flex-col justify-between">
+              
+              {/* Box 1: 3 SIMPLE GUIDED TASKS */}
+              <div className="rounded-2xl bg-white dark:bg-[#0b1224] border border-slate-200 dark:border-slate-800 p-4 space-y-3 shadow-xs transition-colors">
+                <div className="flex items-center justify-between text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-wider">
+                  <span className="flex items-center gap-1.5 text-slate-900 dark:text-white">
+                    <Laptop size={14} className="text-emerald-600 dark:text-emerald-400" />
+                    <span>Today&apos;s 3 Guided Steps</span>
+                  </span>
+                  <span className="text-emerald-700 dark:text-emerald-400 font-mono text-[11px] font-bold">
+                    {completedStepsForDay} / 3 Complete ({progressPercent}%)
+                  </span>
+                </div>
+
+                {/* Progress bar */}
+                <div className="w-full bg-slate-200 dark:bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                  <div 
+                    className="bg-emerald-500 h-full rounded-full transition-all duration-300"
+                    style={{ width: `${progressPercent}%` }}
+                  />
+                </div>
+
+                {/* Steps List */}
+                <div className="space-y-2.5 pt-1">
+                  {daySteps.map((step) => {
+                    const isDone = !!checkedTasks[`${activeLabDay}_${step.id}`];
+                    const isHintOpen = expandedHint === step.id;
+                    return (
+                      <div 
+                        key={step.id}
+                        className={`rounded-xl p-2.5 border transition-all ${
+                          isDone 
+                            ? 'bg-slate-50/60 dark:bg-slate-900/30 border-slate-200/80 dark:border-slate-800/60' 
+                            : 'bg-slate-50/90 dark:bg-slate-900/70 border-slate-200 dark:border-slate-800'
+                        }`}
+                      >
+                        <div className="flex items-start gap-2.5">
+                          <button
+                            type="button"
+                            onClick={() => toggleTask(step.id)}
+                            className={`mt-0.5 w-4 h-4 rounded-full flex items-center justify-center shrink-0 cursor-pointer transition-all ${
+                              isDone 
+                                ? 'bg-emerald-500 text-black shadow-xs' 
+                                : 'border border-slate-400 dark:border-slate-600 hover:border-emerald-500 text-transparent'
+                            }`}
+                          >
+                            <Check size={11} className="stroke-[3]" />
+                          </button>
+
+                          <div className="flex-1 space-y-0.5">
+                            <div className="flex items-center justify-between">
+                              <span className={`text-xs font-bold ${isDone ? 'text-slate-400 dark:text-slate-500 line-through' : 'text-slate-900 dark:text-slate-100'}`}>
+                                {step.title}
+                              </span>
+                              <button
+                                type="button"
+                                onClick={() => setExpandedHint(isHintOpen ? null : step.id)}
+                                className="text-[10px] font-mono text-emerald-700 dark:text-emerald-400 hover:text-emerald-600 dark:hover:text-emerald-300 flex items-center gap-0.5 cursor-pointer"
+                              >
+                                <HelpCircle size={10} />
+                                <span>{isHintOpen ? 'Hide' : 'Hint'}</span>
+                              </button>
+                            </div>
+
+                            <p className="text-[11px] text-slate-600 dark:text-slate-300 leading-snug">
+                              {step.detail}
+                            </p>
+
+                            {/* Collapsible Hint */}
+                            {isHintOpen && (
+                              <div className="mt-1.5 p-2 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-500/30 text-[10px] font-mono text-emerald-800 dark:text-emerald-300 leading-relaxed">
+                                💡 <strong>Tip:</strong> {step.hint}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Box 2: INSTANT VIVA KNOWLEDGE CHECK */}
+              <div className="rounded-2xl bg-white dark:bg-[#0b1224] border border-slate-200 dark:border-slate-800 p-4 space-y-2.5 shadow-xs transition-colors">
+                <div className="flex items-center justify-between text-[10px] font-black uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                  <span className="flex items-center gap-1 text-slate-900 dark:text-white">
+                    <span>🎓</span> Instant Viva Voce Check
+                  </span>
+                  <span className="font-mono text-emerald-700 dark:text-emerald-400 font-bold">1 Click Exam Prep</span>
+                </div>
+
+                <p className="text-xs font-bold text-slate-900 dark:text-slate-200 leading-snug">
+                  {activeLesson.vivaCheck?.question || 'Why is proper structure important in web development?'}
+                </p>
+
+                {/* 4 Clickable Options */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
+                  {(activeLesson.vivaCheck?.options || [
+                    'Standard compliance & browser stability',
+                    'Increases server bandwidth overhead',
+                    'Forces legacy rendering mode',
+                    'Required only for mobile apps'
+                  ]).map((opt, optIdx) => {
+                    const isSelected = currentVivaSelected === optIdx;
+                    const isCorrect = optIdx === activeLesson.vivaCheck?.correctAnswer;
+                    return (
+                      <button
+                        key={optIdx}
+                        type="button"
+                        onClick={() => handleVivaSelect(optIdx)}
+                        className={`flex items-start gap-2 p-2 rounded-xl text-left text-xs transition-all cursor-pointer border ${
+                          isSelected
+                            ? isCorrect
+                              ? 'bg-emerald-500/15 dark:bg-emerald-500/20 border-emerald-500 text-emerald-800 dark:text-emerald-300 font-bold'
+                              : 'bg-rose-500/15 border-rose-500 text-rose-800 dark:text-rose-300 font-bold'
+                            : 'bg-slate-50 dark:bg-slate-900/60 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:border-slate-300 dark:hover:border-slate-700 hover:bg-slate-100/60 dark:hover:bg-slate-900'
+                        }`}
+                      >
+                        <span className={`w-4 h-4 rounded-full border flex items-center justify-center shrink-0 mt-0.5 text-[10px] font-mono ${
+                          isSelected 
+                            ? isCorrect ? 'border-emerald-400 bg-emerald-500 text-black font-bold' : 'border-rose-400 bg-rose-500 text-white font-bold'
+                            : 'border-slate-300 dark:border-slate-600 text-slate-500 dark:text-slate-400'
+                        }`}>
+                          {['A', 'B', 'C', 'D'][optIdx]}
+                        </span>
+                        <span className="line-clamp-2 text-[11px] leading-tight">{opt}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* Instant Feedback Alert */}
+                {currentVivaSelected !== null && (
+                  <div className={`p-2.5 rounded-xl border text-xs leading-snug flex items-start gap-2 ${
+                    isVivaCorrect 
+                      ? 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-200 dark:border-emerald-500/50 text-emerald-800 dark:text-emerald-300' 
+                      : 'bg-amber-50 dark:bg-amber-950/40 border-amber-200 dark:border-amber-500/50 text-amber-800 dark:text-amber-300'
+                  }`}>
+                    {isVivaCorrect ? <CheckCircle2 size={15} className="shrink-0 text-emerald-600 dark:text-emerald-400 mt-0.5" /> : <XCircle size={15} className="shrink-0 text-amber-600 dark:text-amber-400 mt-0.5" />}
+                    <div className="space-y-0.5">
+                      <div className="font-bold">
+                        {isVivaCorrect ? '🎉 Correct Answer!' : '💡 Keep trying! Check the clue:'}
+                      </div>
+                      <div className="text-[11px] text-slate-600 dark:text-slate-300">
+                        {activeLesson.vivaCheck?.explanation || 'Inspect the core concepts of this lesson.'}
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+            </div>
+
+            {/* Right 6 Columns: CODE EDITOR & LIVE OUTPUT STUDIO */}
+            <div className="lg:col-span-6 space-y-4 flex flex-col justify-between">
+              
+              {/* CODE STUDIO BOX */}
+              <div className="rounded-2xl bg-white dark:bg-[#090e1c] border border-slate-200 dark:border-slate-800 overflow-hidden flex flex-col flex-1 shadow-xs transition-colors">
+                {/* Editor Action Header */}
+                <div className="flex items-center justify-between px-4 py-2 bg-slate-50 dark:bg-slate-900/90 border-b border-slate-200 dark:border-slate-800">
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => setEditorTab('code')}
+                      className={`px-2.5 py-1 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                        editorTab === 'code'
+                          ? 'bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 border border-emerald-500/40'
+                          : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                      }`}
+                    >
+                      <Code2 size={13} />
+                      <span>Starter Code</span>
+                    </button>
+
+                    <button
+                      onClick={() => setEditorTab('preview')}
+                      className={`px-2.5 py-1 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                        editorTab === 'preview'
+                          ? 'bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 border border-emerald-500/40'
+                          : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                      }`}
+                    >
+                      <Play size={12} className="fill-emerald-500 dark:fill-emerald-400 text-emerald-500 dark:text-emerald-400" />
+                      <span>Live Output</span>
+                    </button>
+                  </div>
+
+                  <div className="flex items-center gap-2 text-xs font-mono">
+                    <button
+                      type="button"
+                      onClick={handleCopyCode}
+                      className="text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white font-bold transition-colors cursor-pointer flex items-center gap-1 px-2 py-0.5 rounded bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700/60 shadow-2xs"
+                      title="Copy Starter Code"
+                    >
+                      <Copy size={11} />
+                      <span>{copiedCode ? "Copied!" : "Copy"}</span>
+                    </button>
+                    <Link
+                      href={`/bca/practical/${activeLesson.slug}`}
+                      className="text-emerald-700 dark:text-emerald-400 hover:text-emerald-600 dark:hover:text-emerald-300 font-bold transition-colors cursor-pointer"
+                    >
+                      [Full Guide »]
+                    </Link>
+                  </div>
+                </div>
+
+                {/* Tab 1: Code View with Syntax Styling */}
+                {editorTab === 'code' ? (
+                  <div className="p-4 font-mono text-xs leading-relaxed flex items-start gap-3 overflow-x-auto text-slate-200 bg-slate-950 dark:bg-[#070c18] flex-1 min-h-[220px]">
+                    {/* Line numbers */}
+                    <div className="text-slate-600 select-none text-right shrink-0">
+                      1<br />2<br />3<br />4<br />5<br />6<br />7<br />8<br />9<br />10
+                    </div>
+
+                    <pre className="text-slate-200">
+                      <code>
+                        {activeLesson.day === 1 ? (
+                          <>
+                            <span className="text-purple-400 font-bold">&lt;!DOCTYPE html&gt;</span><br />
+                            <span className="text-cyan-400 font-bold">&lt;html <span className="text-yellow-300">lang</span>=<span className="text-emerald-400">&quot;en&quot;</span>&gt;</span><br />
+                            <span className="text-cyan-400 font-bold">&lt;head&gt;</span><br />
+                            &nbsp;&nbsp;<span className="text-cyan-400">&lt;meta <span className="text-yellow-300">charset</span>=<span className="text-emerald-400">&quot;UTF-8&quot;</span>&gt;</span><br />
+                            &nbsp;&nbsp;<span className="text-cyan-400">&lt;title&gt;</span><span className="text-white">NextSem Day 1</span><span className="text-cyan-400">&lt;/title&gt;</span><br />
+                            <span className="text-cyan-400 font-bold">&lt;/head&gt;</span><br />
+                            <span className="text-cyan-400 font-bold">&lt;body&gt;</span><br />
+                            &nbsp;&nbsp;<span className="text-emerald-400 font-bold">&lt;h1&gt;</span>Hello Nextsem Developer<span className="text-emerald-400 font-bold">&lt;/h1&gt;</span><br />
+                            &nbsp;&nbsp;<span className="text-emerald-400 font-bold">&lt;p&gt;</span>My first valid HTML5 webpage!<span className="text-emerald-400 font-bold">&lt;/p&gt;</span><br />
+                            <span className="text-cyan-400 font-bold">&lt;/body&gt;</span><br />
+                            <span className="text-cyan-400 font-bold">&lt;/html&gt;</span>
+                          </>
+                        ) : (
+                          <>
+                            <span className="text-slate-400">{"// Starter Code for Day " + activeLesson.day}</span><br />
+                            <span className="text-white">{activeLesson.teacherDemo?.code || activeLesson.practicalLab?.initialCode}</span>
+                          </>
+                        )}
+                      </code>
+                    </pre>
+                  </div>
+                ) : (
+                  /* Tab 2: Rendered Live Output / Mini Browser View */
+                  <div className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white rounded-b-2xl overflow-hidden flex-1 flex flex-col min-h-[220px]">
+                    <div className="bg-slate-100 dark:bg-slate-950 border-b border-slate-200 dark:border-slate-800 px-3 py-1.5 flex items-center gap-2 text-[11px] font-mono text-slate-500">
+                      <div className="flex items-center gap-1">
+                        <span className="w-2.5 h-2.5 rounded-full bg-rose-400" />
+                        <span className="w-2.5 h-2.5 rounded-full bg-amber-400" />
+                        <span className="w-2.5 h-2.5 rounded-full bg-emerald-400" />
+                      </div>
+                      <span className="px-2 py-0.5 rounded bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 truncate flex-1">
+                        http://localhost:3000/{activeLesson.assignment?.fileName || 'index.html'}
+                      </span>
+                    </div>
+
+                    <div className="p-4 bg-white dark:bg-slate-900 flex-1 space-y-2">
+                      <h1 className="text-lg font-black text-slate-900 dark:text-white">
+                        {activeLesson.day === 1 ? 'Hello Nextsem Developer' : activeLesson.title}
+                      </h1>
+                      <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
+                        {activeLesson.concept?.overview || 'Your practical output runs seamlessly in standards mode.'}
+                      </p>
+                      <div className="pt-2 border-t border-slate-200 dark:border-slate-800 text-[10px] text-slate-400 dark:text-slate-500 font-mono">
+                        ✓ HTML5 W3C Standards Mode Active • Viewport verified
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Box 3: STUDENT GITHUB SYNC & WORKFLOW */}
+              <div className="rounded-2xl bg-white dark:bg-[#0b1224] border border-slate-200 dark:border-slate-800 p-4 space-y-2.5 shadow-xs transition-colors">
+                <div className="flex items-center justify-between text-[10px] font-black uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                  <span className="flex items-center gap-1.5 text-slate-900 dark:text-white">
+                    <GitBranch size={13} className="text-emerald-600 dark:text-emerald-400" />
+                    <span>Student GitHub Push</span>
+                  </span>
+                  <span className="font-mono text-slate-500">{lastSyncTime}</span>
+                </div>
+
+                <div className="p-2 rounded-xl bg-slate-50 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 font-mono text-xs text-slate-700 dark:text-slate-300 flex items-center justify-between gap-2">
+                  <span className="truncate text-emerald-700 dark:text-emerald-400">
+                    git commit -m &quot;{activeLesson.githubWorkflow?.commitMessage || 'Day ' + activeLabDay}&quot;
+                  </span>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={handleSyncNow}
+                    disabled={isSyncing}
+                    className="flex-1 py-1.5 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-all shadow-xs cursor-pointer active:scale-95"
+                  >
+                    {isSyncing ? <RefreshCw size={12} className="animate-spin" /> : <GitBranch size={12} />}
+                    <span>{isSyncing ? "Verifying..." : "[Sync & Verify]"}</span>
+                  </button>
+
+                  <Link
+                    href={`/bca/practical/${activeLesson.slug}`}
+                    className="py-1.5 px-3 rounded-xl bg-slate-100 hover:bg-slate-200/80 dark:bg-slate-900 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 text-xs font-mono transition-colors flex items-center gap-1"
+                  >
+                    <span>Full Lab</span>
+                    <ArrowRight size={12} />
+                  </Link>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
+          {/* Desktop Bottom Day Navigation */}
+          <div className="flex items-center justify-between pt-2 border-t border-slate-200 dark:border-slate-800/80 text-xs font-mono">
+            <button
+              onClick={() => setActiveLabDay(Math.max(1, activeLabDay - 1))}
+              disabled={activeLabDay <= 1}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border transition-colors cursor-pointer ${
+                activeLabDay <= 1
+                  ? 'border-slate-200/50 dark:border-slate-800/50 text-slate-400 dark:text-slate-600 cursor-not-allowed'
+                  : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800 shadow-2xs'
+              }`}
+            >
+              <ArrowLeft size={13} />
+              <span>Previous Day</span>
+            </button>
+
+            <span className="text-slate-500 text-[11px]">
+              Authored by <strong className="text-slate-700 dark:text-slate-400">Er. Manoj Kumar</strong> • Nextsem Academy
+            </span>
+
+            <button
+              onClick={() => setActiveLabDay(Math.min(30, activeLabDay + 1))}
+              disabled={activeLabDay >= 30}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border transition-colors cursor-pointer ${
+                activeLabDay >= 30
+                  ? 'border-slate-200/50 dark:border-slate-800/50 text-slate-400 dark:text-slate-600 cursor-not-allowed'
+                  : 'border-emerald-500/40 bg-emerald-600 hover:bg-emerald-500 text-white font-bold shadow-xs'
+              }`}
+            >
+              <span>Next Day</span>
+              <ArrowRight size={13} />
+            </button>
+          </div>
+
+        </main>
+
+      </div>
+
+
+      {/* ════════════════════════════════════════════════════════════════
+          3. MOBILE VIEWPORT: SIMPLIFIED DAILY PRACTICAL STUDIO
+          (Visible on mobile < md, Hidden on desktop)
+      ════════════════════════════════════════════════════════════════ */}
+      <div className="block md:hidden flex-1 p-4 pb-28 space-y-4 bg-slate-100 dark:bg-transparent transition-colors">
+        
+        {/* Mobile Header Title & Active Semester Pill */}
+        <div className="flex items-center justify-between pt-1">
+          <div>
+            <h1 className="text-xl font-black text-slate-900 dark:text-white tracking-tight">
+              BCA Practical Studio
+            </h1>
+            <p className="text-[11px] text-slate-600 dark:text-slate-400 font-mono">
+              Day {activeLabDay} of 360 • Semester 1
+            </p>
+          </div>
+
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-emerald-500/40 text-xs font-bold text-slate-800 dark:text-slate-200 shadow-2xs">
+            <span className="text-emerald-700 dark:text-emerald-400 text-[10px] font-bold">Active</span>
+            <span>Sem 1</span>
+            <ChevronDown size={13} className="text-emerald-700 dark:text-emerald-400" />
+          </div>
+        </div>
+
+        {/* Mobile Swipeable Sprint Switcher & Day Pill Carousel */}
+        <div className="space-y-1.5">
+          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none">
+            {ACTIVE_SPRINTS.map((sprint) => (
+              <button
+                key={sprint.id}
+                type="button"
+                onClick={() => {
+                  setSelectedSprintId(sprint.id);
+                  setExpandedSprintId(sprint.id);
+                  setActiveLabDay(sprint.startDay);
+                  setEditorTab('code');
+                }}
+                className={`px-2.5 py-1 rounded-full text-[10px] font-mono font-bold shrink-0 transition-all cursor-pointer flex items-center gap-1 ${
+                  selectedSprintId === sprint.id
+                    ? 'bg-emerald-500 text-black shadow-xs font-black'
+                    : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400'
+                }`}
+              >
+                <span>{sprint.icon}</span>
+                <span>{sprint.name}</span>
+              </button>
+            ))}
+            <Link
+              href="/bca/practical"
+              className="px-2.5 py-1 rounded-full text-[10px] font-mono font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-900/60 shrink-0"
+            >
+              All 360 Days »
+            </Link>
+          </div>
+
+          <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
+            {currentSprintDays.map((d) => {
+              const isActive = activeLabDay === d.day;
+              const isDone = completedDays.includes(d.day);
               return (
                 <button
-                  key={sprint.sprintNumber}
-                  type="button"
-                  onClick={() => setActiveSprint(sprint.sprintNumber)}
-                  className={`p-4 rounded-2xl border text-left transition-all cursor-pointer ${
-                    isActive 
-                      ? 'bg-blue-50 dark:bg-neutral-900 border-blue-600 ring-2 ring-blue-600/20 shadow-md' 
-                      : 'bg-white dark:bg-neutral-950 border-slate-200 dark:border-neutral-800 hover:border-slate-400 dark:hover:border-neutral-700'
+                  key={d.day}
+                  onClick={() => {
+                    setActiveLabDay(d.day);
+                    setEditorTab('code');
+                  }}
+                  className={`px-3 py-1 rounded-full text-xs font-mono font-bold shrink-0 transition-all cursor-pointer flex items-center gap-1.5 ${
+                    isActive
+                      ? 'bg-emerald-500 text-black shadow-md shadow-emerald-500/30'
+                      : isDone
+                      ? 'bg-white dark:bg-slate-900 border border-emerald-500/40 text-emerald-700 dark:text-emerald-400 shadow-2xs'
+                      : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 shadow-2xs'
                   }`}
                 >
-                  <div className="flex items-center justify-between mb-1.5">
-                    <span className={`text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full ${
-                      isActive ? 'bg-blue-600 text-white' : 'bg-slate-100 dark:bg-neutral-800 text-slate-600 dark:text-slate-400'
-                    }`}>
-                      {sprint.daysRange}
-                    </span>
-                    <span className="text-xs font-mono text-slate-500 font-bold">
-                      Sprint {sprint.sprintNumber}
-                    </span>
-                  </div>
-                  <h3 className="text-sm font-black text-black dark:text-white line-clamp-1 mb-1">
-                    {sprint.title.replace(/^Sprint \d+: /, '')}
-                  </h3>
-                  <p className="text-[11px] text-slate-600 dark:text-slate-400 line-clamp-1">
-                    {sprint.milestoneProject}
-                  </p>
+                  <span>{d.icon} Day {d.day}</span>
+                  {isDone && <Check size={11} className="stroke-[3]" />}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Card 1: Daily Guided Practical Lab */}
+        <div className="rounded-3xl bg-white dark:bg-[#0c1328] border border-slate-200 dark:border-slate-800 p-4 space-y-3 shadow-md transition-colors">
+          <div className="flex items-center justify-between text-slate-500 dark:text-slate-400 text-xs">
+            <span className="text-emerald-700 dark:text-emerald-400 font-bold font-mono">Day {activeLabDay} Lab</span>
+            <span className="text-[10px] font-mono">{activeLesson.category}</span>
+          </div>
+
+          <div className="flex items-center justify-between">
+            <h2 className="text-sm font-black text-slate-900 dark:text-white line-clamp-1">
+              {activeLesson.title}
+            </h2>
+            <span className="text-emerald-700 dark:text-emerald-400 font-black font-mono text-xs">{progressPercent}%</span>
+          </div>
+
+          {/* Simple Progress Bar */}
+          <div className="w-full bg-slate-200 dark:bg-slate-800 h-1.5 rounded-full overflow-hidden">
+            <div 
+              className="bg-emerald-500 h-full rounded-full transition-all duration-300"
+              style={{ width: `${progressPercent}%` }}
+            />
+          </div>
+
+          <div className="text-[11px] text-slate-600 dark:text-slate-300 font-medium">
+            {completedStepsForDay} of 3 Tasks Done
+          </div>
+
+          {/* 3 Step Sequence Pills */}
+          <div className="grid grid-cols-3 gap-2">
+            {[1, 2, 3].map((stepNum) => {
+              const isDone = !!checkedTasks[`${activeLabDay}_${stepNum}`];
+              return (
+                <button
+                  key={stepNum}
+                  type="button"
+                  onClick={() => toggleTask(stepNum)}
+                  className={`py-1.5 text-center font-mono font-bold text-xs rounded-xl transition-all cursor-pointer flex items-center justify-center gap-1 ${
+                    isDone 
+                      ? 'bg-emerald-500 text-black shadow-xs' 
+                      : 'bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400'
+                  }`}
+                >
+                  <span>Step {stepNum}</span>
+                  {isDone && <Check size={11} className="stroke-[3]" />}
                 </button>
               );
             })}
           </div>
 
-          {/* ── DAY-WISE PRACTICAL CARDS GRID (Blue, Black & White) ── */}
-          {activeSprint === 1 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {PRACTICAL_LESSONS.map((lesson) => {
-                const completed = isDayCompleted(lesson.day);
-                const unlocked = isDayUnlocked(lesson.day);
-
-                return (
-                  <Link
-                    key={lesson.id}
-                    href={`/bca/practical/${lesson.slug}`}
-                    className={`rounded-2xl p-5 bg-white dark:bg-neutral-950 border transition-all flex flex-col justify-between group hover:shadow-xl hover:-translate-y-1 ${
-                      completed
-                        ? 'border-blue-600/70 dark:border-blue-500/70 ring-1 ring-blue-600/30'
-                        : unlocked
-                        ? 'border-slate-200 dark:border-neutral-800 hover:border-blue-600 dark:hover:border-blue-500'
-                        : 'border-slate-200 dark:border-neutral-900 opacity-75 hover:opacity-100'
-                    }`}
-                  >
-                    <div>
-                      {/* Day Header Badge */}
-                      <div className="flex items-center justify-between mb-3">
-                        <span className="px-2.5 py-0.5 rounded-lg bg-slate-100 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 text-xs font-mono font-black text-blue-600 dark:text-blue-400">
-                          Day {lesson.day < 10 ? `0${lesson.day}` : lesson.day}
-                        </span>
-
-                        {completed ? (
-                          <span className="flex items-center gap-1 text-[11px] font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/60 px-2 py-0.5 rounded-full border border-blue-200 dark:border-blue-800">
-                            <CheckCircle2 size={12} />
-                            <span>Done</span>
-                          </span>
-                        ) : unlocked ? (
-                          <span className="flex items-center gap-1 text-[11px] font-bold text-black dark:text-white bg-slate-100 dark:bg-neutral-900 px-2 py-0.5 rounded-full border border-slate-300 dark:border-neutral-700">
-                            <Play size={11} className="fill-current" />
-                            <span>Ready</span>
-                          </span>
-                        ) : (
-                          <span className="flex items-center gap-1 text-[11px] font-bold text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-neutral-900 px-2 py-0.5 rounded-full border border-slate-200 dark:border-neutral-800">
-                            <Lock size={11} />
-                            <span>Locked</span>
-                          </span>
-                        )}
-                      </div>
-
-                      {/* Lesson Title */}
-                      <h4 className="text-base font-black text-black dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors mb-1.5">
-                        {lesson.title}
-                      </h4>
-
-                      {/* Lesson Overview */}
-                      <p className="text-xs text-slate-600 dark:text-slate-400 line-clamp-2 leading-relaxed mb-4">
-                        {lesson.concept.overview}
-                      </p>
-
-                      {/* Feature Tags */}
-                      <div className="flex flex-wrap gap-1.5 mb-4 text-[10px] font-semibold text-slate-600 dark:text-slate-400">
-                        <span className="bg-slate-100 dark:bg-neutral-900 px-2 py-0.5 rounded border border-slate-200 dark:border-neutral-800">
-                          💻 {lesson.practicalLab.tasks.length} Coding Tasks
-                        </span>
-                        <span className="bg-slate-100 dark:bg-neutral-900 px-2 py-0.5 rounded border border-slate-200 dark:border-neutral-800">
-                          🐛 Spot the Bug
-                        </span>
-                        <span className="bg-slate-100 dark:bg-neutral-900 px-2 py-0.5 rounded border border-slate-200 dark:border-neutral-800">
-                          🎓 Viva MCQ
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* Launch Action */}
-                    <div className="pt-3 border-t border-slate-200 dark:border-neutral-800 flex items-center justify-between text-xs font-bold">
-                      <span className="text-slate-500 text-[11px]">
-                        ⏱️ {lesson.estimatedTime}
-                      </span>
-                      <span className="text-blue-600 dark:text-blue-400 group-hover:translate-x-1 transition-transform flex items-center gap-1">
-                        <span>Launch Lab</span>
-                        <ChevronRight size={14} />
-                      </span>
-                    </div>
-                  </Link>
-                );
-              })}
+          {/* Embedded Output / Starter Code Box */}
+          <div className="rounded-2xl bg-slate-950 dark:bg-[#070c18] border border-slate-800 p-3.5 space-y-2">
+            <div className="flex items-center justify-between text-xs font-bold text-slate-300">
+              <span className="flex items-center gap-1.5">
+                <Terminal size={12} className="text-emerald-400" />
+                <span>Live Browser &amp; Terminal</span>
+              </span>
+              <button
+                onClick={() => setEditorTab(editorTab === 'code' ? 'preview' : 'code')}
+                className="text-[10px] font-mono text-emerald-400 font-bold hover:underline"
+              >
+                [{editorTab === 'code' ? 'View Output' : 'View Code'}]
+              </button>
             </div>
-          ) : (
-            <div className="rounded-3xl bg-white dark:bg-neutral-950 border border-slate-200 dark:border-neutral-800 p-8 text-center space-y-4">
-              <div className="w-12 h-12 rounded-2xl bg-blue-100 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center mx-auto text-xl font-black">
-                {activeSprint === 2 ? 'JS' : 'FS'}
+
+            {editorTab === 'code' ? (
+              <pre className="font-mono text-[11px] leading-relaxed text-slate-300 overflow-x-auto p-1 max-h-36">
+                <code>
+                  {activeLesson.day === 1 ? (
+                    <>
+                      <span className="text-purple-400 font-bold">&lt;!DOCTYPE html&gt;</span><br />
+                      <span className="text-cyan-400">&lt;html lang=&quot;en&quot;&gt;</span><br />
+                      <span className="text-emerald-400 font-bold">&lt;h1&gt;</span>Hello Nextsem<span className="text-emerald-400 font-bold">&lt;/h1&gt;</span><br />
+                      <span className="text-emerald-400 font-bold">&lt;p&gt;</span>My first webpage!<span className="text-emerald-400 font-bold">&lt;/p&gt;</span>
+                    </>
+                  ) : (
+                    activeLesson.teacherDemo?.code || activeLesson.practicalLab?.initialCode
+                  )}
+                </code>
+              </pre>
+            ) : (
+              <div className="p-3 bg-white dark:bg-slate-900 text-slate-900 dark:text-white rounded-xl space-y-1">
+                <div className="text-xs font-black text-slate-900 dark:text-white">
+                  {activeLesson.day === 1 ? 'Hello Nextsem Developer' : activeLesson.title}
+                </div>
+                <div className="text-[10px] text-slate-600 dark:text-slate-400">
+                  Rendered live in W3C Standards mode (Chrome / WebView)
+                </div>
               </div>
-              <h4 className="text-lg font-black text-black dark:text-white">
-                Sprint {activeSprint}: {PRACTICAL_SPRINTS[activeSprint - 1]?.title}
-              </h4>
-              <p className="text-sm text-slate-600 dark:text-slate-400 max-w-lg mx-auto">
-                {PRACTICAL_SPRINTS[activeSprint - 1]?.description}
-              </p>
-              <div className="inline-block text-xs font-bold text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-950/40 px-3 py-1 rounded-full border border-blue-200 dark:border-blue-800">
-                Milestone Project: {PRACTICAL_SPRINTS[activeSprint - 1]?.milestoneProject}
-              </div>
-              <div>
-                <Link
-                  href="/bca/practical/day-1-html-setup-first-webpage"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs"
+            )}
+          </div>
+        </div>
+
+        {/* Card 2: Daily Viva Voce MCQ */}
+        <div className="rounded-3xl bg-white dark:bg-[#0c1328] border border-slate-200 dark:border-slate-800 p-4 space-y-3 shadow-md transition-colors">
+          <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+            <span className="font-bold text-slate-900 dark:text-white flex items-center gap-1">
+              <span>🎓</span> Instant Viva Check (Day {activeLabDay})
+            </span>
+            <span className="font-mono text-emerald-700 dark:text-emerald-400 text-[10px]">Exam Prep</span>
+          </div>
+
+          <p className="text-xs font-semibold text-slate-900 dark:text-slate-200 leading-snug">
+            {activeLesson.vivaCheck?.question || 'Why is <!DOCTYPE html> required at the first line?'}
+          </p>
+
+          {/* Radio Options */}
+          <div className="space-y-1.5 pt-1 text-xs">
+            {(activeLesson.vivaCheck?.options || [
+              'Signals standards mode rendering',
+              'Forces stylesheet compilation',
+              'Injects TLS certificates',
+              'Required only on Android'
+            ]).map((opt, idx) => {
+              const isSelected = currentVivaSelected === idx;
+              const isCorrect = idx === activeLesson.vivaCheck?.correctAnswer;
+              return (
+                <button
+                  key={idx}
+                  type="button"
+                  onClick={() => handleVivaSelect(idx)}
+                  className={`w-full flex items-center gap-2.5 p-2 rounded-xl text-left transition-all ${
+                    isSelected
+                      ? isCorrect
+                        ? "bg-emerald-500/20 text-emerald-800 dark:text-emerald-300 font-bold border border-emerald-500/40"
+                        : "bg-rose-500/20 text-rose-800 dark:text-rose-300 font-bold border border-rose-500/40"
+                      : "text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-transparent"
+                  }`}
                 >
-                  <span>Complete Days 1–10 to Unlock Sprint {activeSprint}</span>
-                  <ArrowRight size={14} />
-                </Link>
-              </div>
+                  <div className={`w-4 h-4 rounded-full border flex items-center justify-center shrink-0 ${
+                    isSelected 
+                      ? isCorrect ? "border-emerald-400 bg-emerald-500 text-black" : "border-rose-400 bg-rose-500 text-white" 
+                      : "border-slate-300 dark:border-slate-600"
+                  }`}>
+                    {isSelected && <span className="text-[10px] font-bold">✓</span>}
+                  </div>
+                  <span className="text-[11px] leading-tight">{['A', 'B', 'C', 'D'][idx]}. {opt}</span>
+                </button>
+              );
+            })}
+          </div>
+
+          {currentVivaSelected !== null && (
+            <div className={`p-2 rounded-xl text-[11px] border ${
+              isVivaCorrect 
+                ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border-emerald-200 dark:border-emerald-500/30' 
+                : 'bg-amber-50 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300 border-amber-200 dark:border-amber-500/30'
+            }`}>
+              {isVivaCorrect ? '🎉 Correct! ' : '💡 Tip: '}
+              {activeLesson.vivaCheck?.explanation}
             </div>
           )}
         </div>
 
-        {/* ── REGISTERED BCA PEER COMMUNITY (FOLLOW & FOLLOWING) ── */}
-        <section id="peer-network-section" className="border-t border-slate-200 dark:border-neutral-800 pt-8">
-          <StudentPeerNetwork />
-        </section>
+        {/* Card 3: Floating / Sticky Bottom Sheet: Student GitHub Sync */}
+        <div className="rounded-3xl bg-white/95 dark:bg-[#0c1328]/95 border border-slate-200 dark:border-slate-800/90 p-4 space-y-2.5 shadow-2xl backdrop-blur-md transition-colors">
+          <div className="w-8 h-1 rounded-full bg-slate-300 dark:bg-slate-700 mx-auto" />
 
-        {/* ── 5. THEORETICAL PART (Secondary Reference Section) ── */}
-        <section id="theory-reference-section" className="border-t border-slate-200 dark:border-neutral-800 pt-8">
-          <div className="rounded-3xl bg-white dark:bg-neutral-950 border border-slate-200 dark:border-neutral-800 p-6 sm:p-8">
-            <button
-              onClick={() => setShowTheorySection(!showTheorySection)}
-              className="w-full flex items-center justify-between text-left cursor-pointer group"
-            >
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-blue-50 dark:bg-neutral-900 border border-blue-200 dark:border-neutral-800 text-blue-600 dark:text-blue-400 flex items-center justify-center">
-                  <BookOpen size={20} />
-                </div>
-                <div>
-                  <span className="text-[10px] font-black uppercase tracking-wider text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-neutral-900 px-2 py-0.5 rounded-full border border-blue-200 dark:border-neutral-800">
-                    Secondary Reference
-                  </span>
-                  <h3 className="text-lg sm:text-xl font-black text-black dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors mt-0.5">
-                    Theory, Textbook Notes &amp; Degree Syllabi
-                  </h3>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-2 text-xs font-bold text-slate-500 dark:text-slate-400 group-hover:text-black dark:group-hover:text-white transition-colors">
-                <span>{showTheorySection ? 'Hide Reference' : 'Expand Reference'}</span>
-                {showTheorySection ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-              </div>
-            </button>
-
-            {showTheorySection && (
-              <div className="mt-6 pt-6 border-t border-slate-200 dark:border-neutral-800 grid grid-cols-1 sm:grid-cols-3 gap-4 animate-in fade-in duration-200">
-                
-                {/* 1. BCA Semester 1 Theory */}
-                <div className="p-4 rounded-2xl bg-slate-50 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 space-y-2">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400">
-                    BCA Semester 1 Theory
-                  </span>
-                  <h4 className="text-sm font-black text-black dark:text-white">
-                    Textbook Units &amp; Subject Notes
-                  </h4>
-                  <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                    BCS-111 (Computer Basics), BCS-012 (Mathematics), BEGLA-136, and BEVAE-181.
-                  </p>
-                  <Link 
-                    href="/bca/semester-1" 
-                    className="inline-flex items-center gap-1 text-xs font-bold text-blue-600 dark:text-blue-400 hover:underline pt-1"
-                  >
-                    <span>Open Semester 1 Theory Hub »</span>
-                  </Link>
-                </div>
-
-                {/* 2. All 6 BCA Semesters Syllabus */}
-                <div className="p-4 rounded-2xl bg-slate-50 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 space-y-2">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400">
-                    University Degree
-                  </span>
-                  <h4 className="text-sm font-black text-black dark:text-white">
-                    Complete 6-Semester BCA Syllabus
-                  </h4>
-                  <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                    Course outlines, credit distribution, and theory exam patterns across all 6 semesters.
-                  </p>
-                  <Link 
-                    href="/bca" 
-                    className="inline-flex items-center gap-1 text-xs font-bold text-blue-600 dark:text-blue-400 hover:underline pt-1"
-                  >
-                    <span>View All 6 Semesters »</span>
-                  </Link>
-                </div>
-
-                {/* 3. MCA Master Degree Reference */}
-                <div className="p-4 rounded-2xl bg-slate-50 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 space-y-2">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400">
-                    Postgraduate Reference
-                  </span>
-                  <h4 className="text-sm font-black text-black dark:text-white">
-                    MCA Master Curriculum
-                  </h4>
-                  <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                    AI/ML, Cloud Computing, Big Data, and Major Dissertation guides for MCA students.
-                  </p>
-                  <Link 
-                    href="/mca" 
-                    className="inline-flex items-center gap-1 text-xs font-bold text-blue-600 dark:text-blue-400 hover:underline pt-1"
-                  >
-                    <span>Open MCA Reference Hub »</span>
-                  </Link>
-                </div>
-
-              </div>
-            )}
-          </div>
-        </section>
-
-      </main>
-
-      {/* ── FOOTER ── */}
-      <footer className="bg-slate-100 dark:bg-neutral-950 border-t border-slate-200 dark:border-neutral-800 py-6 px-4 text-center">
-        <div className="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-600 dark:text-slate-400">
-          <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-blue-600" />
-            <span>Curriculum &amp; Practical Systems Authored by <strong className="text-black dark:text-white">Er. Manoj Kumar</strong></span>
+          <div className="flex items-center justify-between">
+            <h3 className="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+              <GitBranch size={13} className="text-emerald-600 dark:text-emerald-400" />
+              <span>Student GitHub Push</span>
+            </h3>
+            <span className="text-[10px] font-mono text-emerald-700 dark:text-emerald-400 font-bold">Verified</span>
           </div>
 
-          <div className="flex items-center gap-4 text-slate-600 dark:text-slate-400 font-medium">
-            <Link href="/bca/practical" className="hover:text-blue-600 transition-colors">3-Year Practical (360 Days)</Link>
-            <Link href="/bca/semester-1" className="hover:text-blue-600 transition-colors">Theory Notes</Link>
-            <Link href="/cmd" target="_blank" className="hover:text-blue-600 transition-colors">Windows CMD</Link>
-            <Link href="/about" className="hover:text-blue-600 transition-colors">About</Link>
-            <Link href="/contact" className="hover:text-blue-600 transition-colors">Support</Link>
+          <div className="text-[11px] font-mono text-slate-700 dark:text-slate-300 truncate">
+            Commit: <span className="text-emerald-700 dark:text-emerald-400 font-bold">&quot;{activeLesson.githubWorkflow?.commitMessage || 'feat: day ' + activeLabDay}&quot;</span>
           </div>
+
+          {/* Action Link to Full Practical Day */}
+          <Link
+            href={`/bca/practical/${activeLesson.slug}`}
+            className="w-full py-3 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-400 text-black font-black text-xs flex items-center justify-center gap-1.5 shadow-lg shadow-emerald-500/30 transition-transform active:scale-95 cursor-pointer"
+          >
+            <span>{activeLabDay === 1 ? "⚡ Launch Day 1 Interactive Studio" : `Open Day ${activeLabDay} Full Lesson`}</span>
+            <ArrowRight size={14} />
+          </Link>
         </div>
-      </footer>
+
+      </div>
+
+
+      {/* ════════════════════════════════════════════════════════════════
+          4. MOBILE BOTTOM NAVIGATION (Matches exact mockup icons)
+      ════════════════════════════════════════════════════════════════ */}
+      <nav className="fixed left-0 right-0 bottom-0 z-40 md:hidden bg-white/95 dark:bg-[#070c18]/95 border-t border-slate-200 dark:border-slate-800 backdrop-blur-xl py-2 px-4 transition-colors">
+        <div className="flex items-center justify-around max-w-md mx-auto text-[10px] font-semibold text-slate-600 dark:text-slate-400">
+          <Link href="/" className="flex flex-col items-center gap-1 hover:text-slate-900 dark:hover:text-white transition-colors">
+            <span className="text-sm">🏠</span>
+            <span>Home</span>
+          </Link>
+
+          <Link href="/bca" className="flex flex-col items-center gap-1 hover:text-slate-900 dark:hover:text-white transition-colors">
+            <span className="text-sm">📁</span>
+            <span>Projects</span>
+          </Link>
+
+          {/* Active *Coding Lab Tab */}
+          <Link href="/bca/practical" className="flex flex-col items-center gap-1 text-emerald-600 dark:text-emerald-400 font-bold">
+            <span className="text-base text-emerald-600 dark:text-emerald-400 font-black">✳️</span>
+            <span>*Coding</span>
+          </Link>
+
+          <Link href="/cbt" className="flex flex-col items-center gap-1 hover:text-slate-900 dark:hover:text-white transition-colors">
+            <span className="text-sm">🤍</span>
+            <span>Viva</span>
+          </Link>
+
+          <button onClick={openProfileDashboard} className="flex flex-col items-center gap-1 hover:text-slate-900 dark:hover:text-white transition-colors">
+            <span className="text-sm">👤</span>
+            <span>Profile</span>
+          </button>
+        </div>
+      </nav>
 
     </div>
   );

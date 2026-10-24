@@ -57,6 +57,7 @@ firebase-debug.log*
 .flutter-plugins*
 android/build/
 android/app/build/
+android/capacitor-cordova-android-plugins/build/
 
 # External cloned repos & scratch
 Must-Know-about-computing-/

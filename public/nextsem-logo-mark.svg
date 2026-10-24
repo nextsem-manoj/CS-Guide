@@ -13,11 +13,11 @@
     </filter>
   </defs>
 
-  <!-- Container Box with Rounded Corners -->
-  <rect x="4" y="4" width="152" height="152" rx="36" fill="url(#nsCardGrad)" stroke="#04AA6D" stroke-width="4" stroke-opacity="0.8"/>
+  <!-- Container Box with Rounded Corners (Electric Blue Border matching official logo) -->
+  <rect x="4" y="4" width="152" height="152" rx="36" fill="url(#nsCardGrad)" stroke="#2563eb" stroke-width="5" stroke-opacity="0.95"/>
 
   <!-- Inner Ambient Glow Layer -->
-  <rect x="12" y="12" width="136" height="136" rx="28" fill="none" stroke="#10b981" stroke-width="1" stroke-opacity="0.3"/>
+  <rect x="12" y="12" width="136" height="136" rx="28" fill="none" stroke="#38bdf8" stroke-width="1" stroke-opacity="0.25"/>
 
   <!-- BOLD N (Emerald Green with Glow) -->
   <path d="M 28 120 V 40 L 72 120 V 40" 

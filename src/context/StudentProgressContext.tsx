@@ -87,6 +87,7 @@ interface StudentProgressContextType {
   setGithubUsername: (username: string) => Promise<void>;
   socialLinks: StudentSocialLinks;
   updateSocialLinks: (links: Partial<StudentSocialLinks>) => Promise<void>;
+  removeDayProgress: (day: number, targetEmail?: string, targetUid?: string) => Promise<{ success: boolean; message: string }>;
 }
 
 const StudentProgressContext = createContext<StudentProgressContextType | undefined>(undefined);
@@ -858,6 +859,101 @@ export function StudentProgressProvider({ children }: { children: ReactNode }) {
     }
   }, [user, socialLinks]);
 
+  const removeDayProgress = useCallback(async (day: number, targetEmail?: string, targetUid?: string): Promise<{ success: boolean; message: string }> => {
+    const emailToUse = (targetEmail || user?.email || "guest").toLowerCase();
+    const uidToUse = targetUid || user?.uid || `user_${emailToUse.replace(/[^a-zA-Z0-9]/g, "_")}`;
+
+    // 1. If currently logged-in user matches or target is self, update state
+    if (!targetEmail || (user && user.email.toLowerCase() === emailToUse)) {
+      const updatedDays = completedDays.filter((d) => d !== day);
+      const updatedUrls = { ...githubRepoUrls };
+      delete updatedUrls[day.toString()];
+      setCompletedDays(updatedDays);
+      setGithubRepoUrls(updatedUrls);
+    }
+
+    // 2. Clear localStorage keys
+    try {
+      const savedDaysRaw = localStorage.getItem(`nextsem_practical_completed_${emailToUse}`);
+      if (savedDaysRaw) {
+        const parsed = JSON.parse(savedDaysRaw);
+        if (Array.isArray(parsed)) {
+          const filtered = parsed.filter((d: any) => d !== day);
+          localStorage.setItem(`nextsem_practical_completed_${emailToUse}`, JSON.stringify(filtered));
+        }
+      }
+      const savedUrlsRaw = localStorage.getItem(`nextsem_practical_github_urls_${emailToUse}`);
+      if (savedUrlsRaw) {
+        const parsed = JSON.parse(savedUrlsRaw);
+        if (parsed && typeof parsed === "object") {
+          delete parsed[day.toString()];
+          localStorage.setItem(`nextsem_practical_github_urls_${emailToUse}`, JSON.stringify(parsed));
+        }
+      }
+      localStorage.removeItem(`nextsem_practical_day_${day}_done_${emailToUse}`);
+      localStorage.removeItem(`nextsem_vscode_tasks_bca_practical_day_${day}`);
+    } catch (e) {
+      console.warn("Could not update local storage for removed day:", e);
+    }
+
+    // 3. Sync to Firestore users_progress & notify student
+    try {
+      if (uidToUse && !uidToUse.startsWith("guest")) {
+        const userDocRef = doc(db, "users_progress", uidToUse);
+        const userDocSnap = await getDoc(userDocRef);
+        let existingDays: number[] = [];
+        let existingUrls: Record<string, string> = {};
+        if (userDocSnap.exists()) {
+          const data = userDocSnap.data();
+          existingDays = Array.isArray(data?.bca_practical?.completedDays) ? data.bca_practical.completedDays : [];
+          existingUrls = data?.bca_practical?.githubRepoUrls || {};
+        } else {
+          existingDays = completedDays;
+          existingUrls = githubRepoUrls;
+        }
+
+        const newDays = existingDays.filter((d) => d !== day);
+        const newUrls = { ...existingUrls };
+        delete newUrls[day.toString()];
+
+        await setDoc(userDocRef, {
+          bca_practical: {
+            completedDays: newDays,
+            githubRepoUrls: newUrls,
+            lastUpdated: new Date().toISOString()
+          }
+        }, { merge: true });
+
+        // Update evaluation record as reset for redo
+        const evalId = `${uidToUse}_day_${day}`;
+        await setDoc(doc(db, "student_evaluations", evalId), {
+          status: "revision_requested",
+          grade: "Needs Revision",
+          isResetForRedo: true,
+          resetAt: Date.now(),
+          evaluatedBy: "Er. Manoj Kumar (Lead Faculty)"
+        }, { merge: true });
+
+        // Push alert notification to the student
+        await setDoc(doc(db, "student_notifications", evalId), {
+          studentId: uidToUse,
+          studentEmail: emailToUse,
+          day,
+          status: "revision_requested",
+          grade: "Needs Revision",
+          feedback: "Day's work was reset by Er. Manoj Kumar for revision. Please review your code, redo the lesson, and re-submit.",
+          evaluatorName: "Er. Manoj Kumar (Lead Faculty)",
+          createdAt: Date.now(),
+          read: false
+        }, { merge: true });
+      }
+      return { success: true, message: `Day ${day} work removed successfully. Student can now redo this lesson.` };
+    } catch (err: any) {
+      console.warn("Firestore update error on removeDayProgress:", err);
+      return { success: false, message: err?.message || "Failed to update Firestore." };
+    }
+  }, [completedDays, githubRepoUrls, user]);
+
   const saveCbtScore = useCallback(async (scoreData: CbtScoreData): Promise<{ success: boolean; message: string }> => {
     setCbtScore(scoreData);
 
@@ -920,7 +1016,8 @@ export function StudentProgressProvider({ children }: { children: ReactNode }) {
     isDayUnlocked,
     completeDayWithGitHub,
     setSelectedTrack,
-    setGithubUsername
+    setGithubUsername,
+    removeDayProgress
   }), [
     user,
     loading,
@@ -930,6 +1027,7 @@ export function StudentProgressProvider({ children }: { children: ReactNode }) {
     selectedTrack,
     socialLinks,
     updateSocialLinks,
+    removeDayProgress,
     isCloudSynced,
     cbtScore,
     saveCbtScore,

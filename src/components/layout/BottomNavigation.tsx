@@ -428,10 +428,10 @@ const BottomNavigation = () => {
 
       {/* Full-width Pinned Edge-to-Edge Bottom Navigation Bar (Visible on Mobile) */}
       <nav 
-        className={`fixed left-4 right-4 bottom-2 z-[999] md:hidden select-none bg-white/95 dark:bg-neutral-950/95 backdrop-blur-2xl border-2 border-blue-600/50 rounded-3xl shadow-[0_8px_30px_rgba(37,99,235,0.25)] transition-transform duration-300 ${
+        className={`fixed left-4 right-4 bottom-2 z-[999] md:hidden select-none bg-white/95 dark:bg-[#0c1328]/95 backdrop-blur-2xl border-2 border-emerald-500/50 rounded-3xl shadow-[0_8px_30px_rgba(4,170,109,0.25)] transition-transform duration-300 ${
           navVisible ? 'translate-y-0' : 'translate-y-full'
         }`}
-        style={{ paddingBottom: 'calc(0.5rem + env(safe-area-inset-bottom))', paddingTop: '0.5rem' }}
+        style={{ paddingBottom: 'calc(0.6rem + env(safe-area-inset-bottom))', paddingTop: '0.6rem' }}
       >
         <div className="px-3 py-1 flex items-center justify-around w-full max-w-lg mx-auto">
           {navTabs.map((tab) => {
@@ -445,16 +445,16 @@ const BottomNavigation = () => {
                   href={tab.path}
                   className="relative flex flex-col items-center justify-center -translate-y-2.5 transition-transform duration-200 active:scale-95 group focus:outline-none"
                 >
-                  <div className="p-[2.5px] rounded-2xl bg-gradient-to-tr from-[#f9ce34] via-[#ee2a7b] to-[#6228d7] shadow-[0_4px_16px_rgba(238,42,123,0.35)]">
-                    <div className="w-10 h-10 rounded-[13px] bg-white dark:bg-black flex items-center justify-center text-blue-600 dark:text-blue-400 group-hover:scale-105 transition-transform">
-                      <Sparkles size={18} className="text-amber-400 fill-amber-400" />
+                  <div className="p-[2.5px] rounded-2xl bg-gradient-to-tr from-emerald-500 via-teal-500 to-emerald-600 shadow-[0_4px_16px_rgba(4,170,109,0.35)]">
+                    <div className="w-10 h-10 rounded-[13px] bg-white dark:bg-[#060c18] flex items-center justify-center text-emerald-500 group-hover:scale-105 transition-transform">
+                      <Sparkles size={18} className="text-emerald-400 fill-emerald-400" />
                     </div>
                   </div>
                   <span className="text-[10px] font-black tracking-tight mt-0.5 text-black dark:text-white">
                     {tab.label}
                   </span>
                   {active && (
-                    <span className="absolute -bottom-1 w-1 h-1 bg-rose-500 rounded-full shadow-[0_0_6px_#f43f5e]" />
+                    <span className="absolute -bottom-1 w-1 h-1 bg-emerald-500 rounded-full shadow-[0_0_6px_#04AA6D]" />
                   )}
                 </Link>
               );
@@ -467,12 +467,12 @@ const BottomNavigation = () => {
                   onClick={tab.onClick}
                   className={`relative flex flex-col items-center justify-center py-1 px-3 rounded-xl transition-all duration-200 active:scale-90 cursor-pointer focus:outline-none focus-visible:outline-none ${
                     active 
-                      ? 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-neutral-900 border border-blue-200 dark:border-neutral-800' 
+                      ? 'text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800' 
                       : 'text-slate-600 hover:text-black dark:text-slate-400 dark:hover:text-white'
                   }`}
                 >
                   {(tab as any).photoUrl ? (
-                    <img src={(tab as any).photoUrl} alt="" loading="eager" decoding="async" className={`w-5 h-5 rounded-full object-cover border ${active ? 'border-blue-600' : 'border-slate-300 dark:border-neutral-700'}`} />
+                    <img src={(tab as any).photoUrl} alt="" loading="eager" decoding="async" className={`w-5 h-5 rounded-full object-cover border ${active ? 'border-emerald-500' : 'border-slate-300 dark:border-neutral-700'}`} />
                   ) : (
                     <Icon size={20} className={active ? "stroke-[2.5]" : "stroke-[1.75]"} />
                   )}
@@ -489,12 +489,12 @@ const BottomNavigation = () => {
                 href={tab.path}
                 className={`relative flex flex-col items-center justify-center py-1 px-3 rounded-xl transition-all duration-200 active:scale-90 focus:outline-none focus-visible:outline-none ${
                   active 
-                    ? 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-neutral-900 border border-blue-200 dark:border-neutral-800' 
+                    ? 'text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800' 
                     : 'text-slate-600 hover:text-black dark:text-slate-400 dark:hover:text-white'
                 }`}
               >
                 {(tab as any).photoUrl ? (
-                  <img src={(tab as any).photoUrl} alt="" loading="eager" decoding="async" className={`w-5 h-5 rounded-full object-cover border ${active ? 'border-blue-600' : 'border-slate-300 dark:border-neutral-700'}`} />
+                  <img src={(tab as any).photoUrl} alt="" loading="eager" decoding="async" className={`w-5 h-5 rounded-full object-cover border ${active ? 'border-emerald-500' : 'border-slate-300 dark:border-neutral-700'}`} />
                 ) : (
                   <Icon size={20} className={active ? "stroke-[2.5]" : "stroke-[1.75]"} />
                 )}
@@ -504,7 +504,7 @@ const BottomNavigation = () => {
 
                 {/* Active Indicator Glow Dot */}
                 {active && (
-                  <span className="absolute -top-0.5 w-1 h-1 bg-blue-600 rounded-full shadow-[0_0_6px_#2563eb]" />
+                  <span className="absolute -top-0.5 w-1 h-1 bg-emerald-500 rounded-full shadow-[0_0_6px_#04AA6D]" />
                 )}
               </Link>
             );

@@ -1,6 +1,0 @@
-1:"$Sreact.fragment"
-2:I[47699,["1674","static/chunks/1674-adca1a21a64925d4.js","7805","static/chunks/7805-81484b40a96f7735.js","4875","static/chunks/4875-55d39c904767397a.js","9919","static/chunks/9919-6fcf5999b09fc17a.js","8326","static/chunks/8326-9db79b514e5b1936.js","1135","static/chunks/1135-8b9b484975154aff.js","6105","static/chunks/app/gemini-ai/page-299031b430bb5ec7.js"],"default"]
-3:I[90484,[],"OutletBoundary"]
-4:"$Sreact.suspense"
-0:{"rsc":["$","$1","c",{"children":[["$","$L2",null,{}],null,["$","$L3",null,{"children":["$","$4",null,{"name":"Next.MetadataOutlet","children":"$@5"}]}]]}],"isPartial":false,"staleTime":300,"varyParams":null,"buildId":"5MHRa6pox2IrYDNZTnq3k"}
-5:null

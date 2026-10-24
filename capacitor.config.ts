@@ -1,13 +1,13 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'online.nextsem.app',
-  appName: 'Nextsem Academy',
-  webDir: 'out',
+  appId: 'online.nextsem.csguide',
+  appName: 'CSguide by Nextsem',
+  webDir: 'mobile-shell',
   server: {
     // Load content from live production server instead of bundling 100MB+ of web assets
     // This keeps the AAB under 10MB while all features remain fully functional
-    url: 'https://nextsem.online',
+    url: 'https://ignou-study-notes-by-nextsem.web.app',
     cleartext: false,
     androidScheme: 'https',
   },

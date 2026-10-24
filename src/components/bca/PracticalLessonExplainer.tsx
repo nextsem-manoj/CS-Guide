@@ -21,6 +21,8 @@ import {
   ArrowRight
 } from "lucide-react";
 import { PracticalLesson } from "@/data/bcaPracticalData";
+import { useCrossDeviceSync } from "@/context/CrossDeviceSyncContext";
+import { safeInstantCopy } from "@/lib/clipboard";
 
 export interface PracticalLessonExplainerProps {
   lesson: PracticalLesson;
@@ -58,6 +60,229 @@ const TOPIC_DEEP_DIVES: Record<number, {
   pitfalls: { titleEn: string; titleHi: string; badCode: string; goodCode: string; explanationEn: string; explanationHi: string }[];
   vivaPrep: { questionEn: string; questionHi: string; answerEn: string; answerHi: string }[];
 }> = {
+  // ── DAY 6: HTML SEMANTIC ELEMENTS & PAGE ARCHITECTURE ──
+  6: {
+    subtitleEn: "Transform messy generic div soup into high-performance, accessible, and SEO-optimized semantic page architectures.",
+    subtitleHi: "Purani generic <div> soup ko high-performance, accessible aur Google SEO friendly semantic structure mein badlein.",
+    realWorldContextEn: "In early web development, pages were constructed using hundreds of nested <div> tags with arbitrary class names ('div soup'). HTML5 introduced semantic elements (<header>, <nav>, <main>, <article>, <section>, <aside>, <footer>) that provide explicit programmatic meaning to web browsers, search engine indexers, and screen readers.",
+    realWorldContextHi: "Pehle developers saara layout <div class='header'>, <div class='nav'> se banate the jise 'div soup' kehte hain. HTML5 ne semantic tags diye jo browser, Google crawler aur blind users ke screen readers ko saaf batate hain ki page ka kaunsa hissa kya kaam karta hai.",
+    pipelineTitleEn: "W3C HTML5 Document Landmark & Outline Architecture",
+    pipelineTitleHi: "HTML5 Document Ka Landmark Aur Outline Architecture (Kaunsa Tag Kahan Aata Hai)",
+    pipelineSteps: [
+      {
+        step: "1",
+        titleEn: "Top Banner & Identity (<header>)",
+        titleHi: "Top Banner Aur Branding",
+        descEn: "Houses college/brand logo, site h1 title, and global search bar. Represents introductory navigational context.",
+        descHi: "Website ka logo, main H1 title aur top branding rakhta hai. Page ka introductory area hota hai."
+      },
+      {
+        step: "2",
+        titleEn: "Navigation Landmark (<nav>)",
+        titleHi: "Primary Navigation Menu",
+        descEn: "Houses primary list of hyperlink destinations. Assistive screen readers allow users to jump directly to this landmark.",
+        descHi: "Primary navigation links ko <ul> aur <li> ke sath group karta hai. Screen readers is landmark par direct jump karte hain."
+      },
+      {
+        step: "3",
+        titleEn: "Unique Page Body (<main>)",
+        titleHi: "Primary Unique Content (<main>)",
+        descEn: "CRITICAL: Strictly ONE visible <main> per document containing the central topic. Never nest inside <header> or <footer>.",
+        descHi: "SABSE ZAROORI: Poore page par sirf 1 visible <main> tag hota hai jo page ka unique content rakhta hai. Isko kabhi header ya footer mein mat daalo."
+      },
+      {
+        step: "4",
+        titleEn: "Footer & Legal (<footer>)",
+        titleHi: "Footer, Copyright & Contact",
+        descEn: "Houses copyright notice, author attribution, address, and secondary legal/privacy links at the bottom of the section or page.",
+        descHi: "Page ke aakhir mein copyright, author attribution, address aur privacy policy links rakhta hai."
+      }
+    ],
+    tags: [
+      {
+        tag: "<main>",
+        name: "Primary Page Content Landmark",
+        category: "Landmark Container",
+        englishPurpose: "Wraps the dominant, unique central content of the document. Helps screen readers skip past repeated headers and menus.",
+        hinglishPurpose: "Page ke mukhya unique content ko wrap karta hai taaki screen readers repeated header aur navigation ko skip karke seedhe content par aa sakein.",
+        attributes: [
+          { name: "id", required: false, descEn: "Used for 'Skip to main content' accessibility jump links (e.g. href='#main-content').", descHi: "'Skip to main content' link ke target anchor ke roop mein use hota hai." },
+          { name: "role", required: false, descEn: "HTML5 implicitly assigns role='main'; explicit ARIA role is optional.", descHi: "HTML5 mein role='main' automatically apply hota hai." }
+        ],
+        codeSnippet: `<main id="main-content">\n  <h1>BCA Semester 1 Practical Hub</h1>\n  <p>Learn semantic HTML5 coding with hands-on VS Code labs.</p>\n</main>`,
+        previewType: "generic",
+        examTipEn: "CRITICAL EXAM RULE: There can only be ONE visible <main> tag per HTML document. Multiple <main> tags cause validation errors.",
+        examTipHi: "EXAM SECRET: Ek HTML document mein sirf 1 visible <main> tag allow hota hai! Do <main> tag likhna W3C validator mein error deta hai.",
+        seniorTrapEn: "Nesting <main> inside <header>, <nav>, <article>, or <footer>. The specification forbids <main> as a child of any landmark.",
+        seniorTrapHi: "<main> ko <header> ya <article> ke andar nest karna illegal hai. <main> direct <body> ke andar aana chahiye."
+      },
+      {
+        tag: "<header>",
+        name: "Introductory Header Landmark",
+        category: "Landmark Container",
+        englishPurpose: "Represents introductory content, typically containing headings, branding logos, search forms, and author metadata.",
+        hinglishPurpose: "Page ya kisi article ka introductory top section, jisme website ka logo, main heading aur top search bar hota hai.",
+        attributes: [
+          { name: "class", required: false, descEn: "Styling class for CSS layout (e.g. sticky header).", descHi: "Sticky header ya CSS layout styling ke liye class." }
+        ],
+        codeSnippet: `<header>\n  <img src="/logo.png" alt="NextSem Logo" width="50" height="50">\n  <h1>NextSem Developer Digest</h1>\n  <nav>\n    <a href="/home">Home</a>\n  </nav>\n</header>`,
+        previewType: "generic",
+        examTipEn: "A webpage can have multiple <header> tags: one for the page body, and separate <header> elements inside each <article>.",
+        examTipHi: "Yaad rakhein: Poore page ka ek main <header> hota hai, par har individual <article> ke andar bhi uska apna <header> ho sakta hai!",
+        seniorTrapEn: "Confusing <header> with the invisible document <head> tag. <header> is visible UI; <head> is for metadata.",
+        seniorTrapHi: "<header> aur <head> mein confuse hona: <head> invisible metadata ke liye hai, jabki <header> screen par dikhne wala UI hai!"
+      },
+      {
+        tag: "<nav>",
+        name: "Navigation Links Landmark",
+        category: "Landmark Container",
+        englishPurpose: "Section containing primary navigation links to other pages or parts within the current page.",
+        hinglishPurpose: "Website ke primary menus aur links ka container jisse user doosre pages pe jump kar sake.",
+        attributes: [
+          { name: "aria-label", required: false, descEn: "RECOMMENDED when multiple <nav> elements exist (e.g. 'Main Nav' vs 'Footer Nav').", descHi: "Jab page par ek se zyada menu hon to dono par alag-alag aria-label lagana zaroori hai." }
+        ],
+        codeSnippet: `<nav aria-label="Main Navigation">\n  <ul>\n    <li><a href="#home">Home</a></li>\n    <li><a href="#labs">Labs</a></li>\n    <li><a href="#viva">Viva</a></li>\n  </ul>\n</nav>`,
+        previewType: "list",
+        examTipEn: "Not all links belong in <nav>! Only major navigation link blocks belong in <nav>; small inline links in paragraphs do not.",
+        examTipHi: "Har link ko <nav> mein nahi daala jata! Sirf primary menu link blocks ko hi <nav> tag mein rakha jata hai.",
+        seniorTrapEn: "Placing plain loose <a> tags inside <nav> without an unordered list <ul>. Lists provide assistive tech with link counts.",
+        seniorTrapHi: "<nav> ke andar bina <ul>/<li> ke direct <a> likhna: screen reader users ko links ki total ginti nahi pata chal pati."
+      },
+      {
+        tag: "<article>",
+        name: "Self-Contained Syndicatable Content",
+        category: "Content Container",
+        englishPurpose: "Represents a complete, self-contained composition that makes sense on its own if distributed or syndicated.",
+        hinglishPurpose: "Standalone, self-contained content jo bina baaki website ke bhi poora sense banaye (jaise blog post, news story, product card).",
+        attributes: [
+          { name: "id", required: false, descEn: "Unique identifier for deep linking.", descHi: "Direct anchor link karne ke liye id." }
+        ],
+        codeSnippet: `<article id="post-1">\n  <h2>HTML5 Semantic Architecture</h2>\n  <p>Learn how modern elements replace legacy div soup.</p>\n  <footer>\n    <p>Written by Er. Manoj Kumar</p>\n  </footer>\n</article>`,
+        previewType: "generic",
+        examTipEn: "Viva favorite: 'How do you decide between <article> and <section>?' If it can be shared in an RSS feed by itself, it's an <article>.",
+        examTipHi: "Viva check: Agar content ko akele RSS feed ya newspaper mein print kar sakein to wo <article> hai; agar wo sirf ek topic group hai to <section> hai.",
+        seniorTrapEn: "Using <article> for generic visual column wrappers that have no standalone meaning.",
+        seniorTrapHi: "Generic column wrapper ke liye <article> lagana galat hai; uske liye <div> ya <section> use karein."
+      },
+      {
+        tag: "<section>",
+        name: "Thematic Content Grouping",
+        category: "Content Container",
+        englishPurpose: "Represents a generic standalone thematic grouping of content, typically introduced by a heading.",
+        hinglishPurpose: "Ek hi topic se jude content ka thematic group, jiske shuru mein ek heading (h2/h3) zaroor honi chahiye.",
+        attributes: [
+          { name: "id", required: false, descEn: "Section bookmark target for anchor navigation.", descHi: "Page bookmark navigation ke liye anchor id." }
+        ],
+        codeSnippet: `<section id="curriculum">\n  <h2>Course Syllabus</h2>\n  <p>Semester 1 focuses on C programming, HTML5, and PC Software.</p>\n</section>`,
+        previewType: "generic",
+        examTipEn: "W3C Best Practice: Every <section> should ideally contain a heading element (h2, h3, h4) defining its theme.",
+        examTipHi: "W3C Rule: Har <section> ke andar ek heading tag (h2/h3) hona chahiye jo us section ka topic batata ho.",
+        seniorTrapEn: "Using <section> purely as a CSS styling wrapper. If you only need styling without semantic meaning, use <div>.",
+        seniorTrapHi: "Sirf CSS color ya padding lagane ke liye <section> use karna: agar semantic meaning nahi hai to plain <div> use karein."
+      },
+      {
+        tag: "<aside>",
+        name: "Complementary Sidebar / Callout",
+        category: "Complementary Landmark",
+        englishPurpose: "Represents content tangentially related to the content around it, such as sidebars, author bios, or related link widgets.",
+        hinglishPurpose: "Main content se related extra ya secondary jankari (jaise sidebars, related posts, author bio, exam notices).",
+        attributes: [
+          { name: "aria-label", required: false, descEn: "Labels the sidebar for screen readers (e.g. 'Campus Notices').", descHi: "Screen reader ke liye sidebar ka label." }
+        ],
+        codeSnippet: `<aside aria-label="Related Topics">\n  <h3>Upcoming Practical Dates</h3>\n  <p>Dec 15: Computer Basics Viva Voce</p>\n</aside>`,
+        previewType: "generic",
+        examTipEn: "If placed inside an <article>, <aside> content must be related to that specific article (e.g. a glossary or author card).",
+        examTipHi: "Agar <aside> kisi <article> ke andar hai, to wo usi article se related hona chahiye (jaise author card ya glossary).",
+        seniorTrapEn: "Placing the primary page content inside <aside>. Assistive tech allows users to skip past <aside> as optional.",
+        seniorTrapHi: "Main content ko <aside> ke andar daal dena: screen reader users ise secondary samajh kar skip kar dete hain!"
+      },
+      {
+        tag: "<footer>",
+        name: "Footer & Metadata Landmark",
+        category: "Landmark Container",
+        englishPurpose: "Represents footer metadata for its nearest sectioning parent or the entire page (copyright, authors, legal links).",
+        hinglishPurpose: "Page ya kisi article ke end mein aane wali metadata, copyright notices, author details aur contact links.",
+        attributes: [
+          { name: "class", required: false, descEn: "CSS class for styling.", descHi: "CSS layout styling class." }
+        ],
+        codeSnippet: `<footer>\n  <p>&copy; 2026 NextSem Academy. All rights reserved.</p>\n  <p>Author: Er. Manoj Kumar</p>\n</footer>`,
+        previewType: "generic",
+        examTipEn: "Like <header>, you can have multiple <footer> tags: one for the whole page and one inside each <article>.",
+        examTipHi: "Header ki tarah footer bhi multiple ho sakte hain: ek poori website ka footer aur har article ka apna mini footer.",
+        seniorTrapEn: "Putting primary navigation menus in <footer> without wrapping them inside a semantic <nav> tag.",
+        seniorTrapHi: "Footer ke navigation links ko bina <nav> tag ke plain chhod dena."
+      },
+      {
+        tag: "<figure> & <figcaption>",
+        name: "Media & Code Listing with Caption",
+        category: "Paired Semantic Container",
+        englishPurpose: "Encapsulates self-contained media (photos, diagrams, code listings) with its explicit descriptive caption.",
+        hinglishPurpose: "Kisi photo, diagram ya code block ko uske official caption ke sath ek cohesive unit mein bind karta hai.",
+        attributes: [
+          { name: "class", required: false, descEn: "CSS class for styling border and caption padding.", descHi: "Styling class." }
+        ],
+        codeSnippet: `<figure>\n  <pre><code>printf("Hello World\\n");</code></pre>\n  <figcaption>Listing 1.1: Basic C program output</figcaption>\n</figure>`,
+        previewType: "generic",
+        examTipEn: "<figcaption> can be placed as either the FIRST or the LAST direct child of <figure>.",
+        examTipHi: "<figcaption> ko <figure> ke shuru mein ya aakhir mein likha ja sakta hai, dono valid hain.",
+        seniorTrapEn: "Using a plain <p> tag instead of <figcaption>. Screen readers won't know the text is the image's caption.",
+        seniorTrapHi: "Caption ke liye plain <p> likh dena: screen reader caption ko alag samajh leta hai aur image se link nahi kar pata."
+      }
+    ],
+    pitfalls: [
+      {
+        titleEn: "The 'Div Soup' Trap: Generic Containers vs Meaningful Landmarks",
+        titleHi: "Div Soup Mistake: Har Cheez Ke Liye Generic <div> Use Karna",
+        badCode: `<!-- ❌ WRONG: Obsolete div soup (Zero semantic meaning) -->\n<div id="header">\n  <div id="nav"><a href="/">Home</a></div>\n</div>\n<div id="content">\n  <div class="post"><h2>Title</h2><p>Body</p></div>\n</div>\n<div id="footer"><p>&copy; 2026</p></div>`,
+        goodCode: `<!-- ✅ PRODUCTION STANDARD: 100% Clean Semantic Architecture -->\n<header>\n  <nav aria-label="Main Navigation"><a href="/">Home</a></nav>\n</header>\n<main>\n  <article><h2>Title</h2><p>Body</p></article>\n</main>\n<footer><p>&copy; 2026</p></footer>`,
+        explanationEn: "Generic <div> tags provide zero information to search crawlers and screen readers. Semantic elements communicate document structure clearly, boosting SEO ranking and achieving WCAG 2.1 accessibility compliance.",
+        explanationHi: "Generic <div> tags se Google crawler aur blind students ke screen readers ko kuch samajh nahi aata. Semantic tags lagane se website ka SEO score 100 hota hai aur code clean banta hai."
+      },
+      {
+        titleEn: "The Cardinal Rule Violation: Multiple Visible <main> Elements",
+        titleHi: "Cardinal Rule Violation: Ek Page Par Multiple <main> Tags Likhna",
+        badCode: `<!-- ❌ WRONG: W3C HTML5 validator violation! -->\n<body>\n  <main><h1>Dashboard</h1></main>\n  <main><h2>Recent Notices</h2></main>\n</body>`,
+        goodCode: `<!-- ✅ PRODUCTION STANDARD: Exactly ONE <main> with <aside> -->\n<body>\n  <main>\n    <h1>Dashboard</h1>\n    <aside aria-label="Notices"><h2>Recent Notices</h2></aside>\n  </main>\n</body>`,
+        explanationEn: "The W3C specification strictly permits only ONE visible <main> element per HTML document. Main represents the dominant unique content; secondary sidebars must be placed in <aside> or <section>.",
+        explanationHi: "W3C standard ke mutabiq ek page par sirf EK visible <main> tag allow hai. Extra content ko <aside> ya <section> mein rakha jata hai."
+      },
+      {
+        titleEn: "The Article vs Section Confusion",
+        titleHi: "Article Aur Section Ko Galat Tarike Se Mix Karna",
+        badCode: `<!-- ❌ WRONG: Blog post wrapped in generic section -->\n<section id="post-101">\n  <h2>How to Learn Flexbox</h2>\n  <p>By Er. Manoj Kumar</p>\n</section>`,
+        goodCode: `<!-- ✅ PRODUCTION STANDARD: Standalone content belongs in <article> -->\n<article id="post-101">\n  <header><h2>How to Learn Flexbox</h2><p>By Er. Manoj Kumar</p></header>\n  <p>Content body...</p>\n</article>`,
+        explanationEn: "<article> is specifically intended for standalone, self-contained content that could be syndicated in an RSS feed or printed alone. Use <section> only for thematic divisions within a document.",
+        explanationHi: "Independent blog posts, news stories aur comment cards ke liye <article> use karein. <section> sirf broad topic grouping ke liye hota hai."
+      }
+    ],
+    vivaPrep: [
+      {
+        questionEn: "Why should developers write semantic HTML5 elements instead of <div> tags?",
+        questionHi: "Developers ko <div> tags ki jagah semantic HTML5 tags kyu use karne chahiye?",
+        answerEn: "Semantic tags (<header>, <nav>, <main>, <article>, <footer>) provide programmatic meaning to the browser DOM. They enable search engine crawlers (Google, Bing) to index content accurately for higher SEO ranking, and allow assistive technologies (screen readers) to provide accessible landmark navigation for visually impaired users.",
+        answerHi: "Semantic tags browser, search engines aur screen readers ko saaf batate hain ki page ka kaunsa part header hai aur kaunsa content. Isse Google SEO ranking boost hoti hai aur blind users easily navigate kar sakte hain."
+      },
+      {
+        questionEn: "How many <main> tags are legally allowed in a single HTML document?",
+        questionHi: "Ek HTML document mein legally kitne <main> tags allow hote hain?",
+        answerEn: "The W3C HTML5 specification allows exactly ONE visible <main> element per document. It must encapsulate the central unique content of the page and cannot be nested inside <header>, <nav>, <aside>, or <footer>.",
+        answerHi: "W3C standard ke hisaab se ek document mein sirf aur sirf EK visible <main> tag allow hota hai jo page ka main unique content rakhta hai."
+      },
+      {
+        questionEn: "What is the primary difference between <article> and <section>?",
+        questionHi: "<article> aur <section> mein kya difference hota hai?",
+        answerEn: "An <article> represents a self-contained, independently syndicatable composition (such as a blog post, news story, or forum post) that makes complete sense on its own. A <section> represents a generic thematic grouping of related content under a heading.",
+        answerHi: "<article> standalone, self-contained content hota hai jo bina baaki website ke bhi poora sense banaye (jaise blog post ya news article). <section> ek broad thematic grouping hoti hai jisme ek heading zaroori hoti hai."
+      },
+      {
+        questionEn: "Why is `aria-label` recommended when using multiple <nav> elements?",
+        questionHi: "Page par multiple <nav> hone par `aria-label` kyu zaroori hai?",
+        answerEn: "When multiple <nav> elements exist (e.g. primary header nav and secondary footer nav), screen readers announce both simply as 'navigation landmark'. Adding aria-label='Primary Navigation' and aria-label='Footer Legal' disambiguates the menus for visually impaired users.",
+        answerHi: "Jab header aur footer dono mein <nav> hota hai, to screen reader dono ko sirf 'navigation' bolta hai. `aria-label` lagane se screen reader 'Primary Menu' ya 'Footer Menu' bolkar clear identify karata hai."
+      }
+    ]
+  },
+
   // ── DAY 5: HTML FORMS & INPUT ELEMENTS ──
   5: {
     subtitleEn: "Transform static web pages into interactive two-way data applications.",
@@ -432,6 +657,7 @@ const TOPIC_DEEP_DIVES: Record<number, {
 };
 
 export function PracticalLessonExplainer({ lesson }: PracticalLessonExplainerProps) {
+  const { copyAndSyncToCloud } = useCrossDeviceSync();
   const [lang, setLang] = useState<LangMode>("hinglish");
   const [selectedTagIndex, setSelectedTagIndex] = useState<number>(0);
   const [copiedSnippet, setCopiedSnippet] = useState<boolean>(false);
@@ -440,12 +666,10 @@ export function PracticalLessonExplainer({ lesson }: PracticalLessonExplainerPro
   const deepDive = TOPIC_DEEP_DIVES[lesson.day];
   const activeTag = deepDive?.tags[selectedTagIndex] ?? deepDive?.tags[0];
 
-  const handleCopy = async (code: string) => {
-    try {
-      await navigator.clipboard.writeText(code);
-      setCopiedSnippet(true);
-      setTimeout(() => setCopiedSnippet(false), 2000);
-    } catch {}
+  const handleCopy = (code: string) => {
+    copyAndSyncToCloud(code, `${activeTag?.tag || "HTML"} Snippet`);
+    setCopiedSnippet(true);
+    setTimeout(() => setCopiedSnippet(false), 2000);
   };
 
   const toggleViva = (index: number) => {

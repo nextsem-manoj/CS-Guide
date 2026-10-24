@@ -65,11 +65,14 @@ html.dark {
 
 html, body {
   font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.5;
   padding: 0 !important;
   margin: 0 !important;
-  touch-action: manipulation;
+  touch-action: auto !important; /* Full 2-finger pinch-to-zoom enabled */
   -webkit-tap-highlight-color: rgba(37, 99, 235, 0.2);
   transition: background-color 0.15s ease, color 0.15s ease;
+  -webkit-text-size-adjust: 100%;
 }
 
 html.dark, html.dark body {
@@ -195,24 +198,24 @@ body {
   box-shadow: none !important;
 }
 
-/* ── BLUE COLOR NORMALIZATION: Map legacy green/gold utility classes to Blue ── */
-.bg-\[\#04AA6D\], .bg-\[\#04aa6d\], .bg-\[\#c1a648\] {
-  background-color: #2563eb !important;
+/* ── STRICT BRAND COLORS: Vibrant Emerald Green (#04AA6D) & Pure White (#ffffff) ── */
+.bg-\[\#04AA6D\], .bg-\[\#04aa6d\] {
+  background-color: #04AA6D !important;
 }
-.hover\:bg-\[\#039861\]:hover, .hover\:bg-emerald-600:hover {
-  background-color: #1d4ed8 !important;
+.hover\:bg-\[\#04AA6D\]\/90:hover, .hover\:bg-\[\#039861\]:hover {
+  background-color: #039861 !important;
 }
-.text-\[\#04AA6D\], .text-\[\#04aa6d\], .text-\[\#c1a648\] {
-  color: #2563eb !important;
+.text-\[\#04AA6D\], .text-\[\#04aa6d\] {
+  color: #04AA6D !important;
 }
-html.dark .text-\[\#04AA6D\], html.dark .text-\[\#04aa6d\], html.dark .text-\[\#c1a648\] {
-  color: #3b82f6 !important;
+html.dark .text-\[\#04AA6D\], html.dark .text-\[\#04aa6d\] {
+  color: #04AA6D !important;
 }
-.border-\[\#04AA6D\], .border-\[\#04aa6d\], .border-\[\#c1a648\] {
-  border-color: #2563eb !important;
+.border-\[\#04AA6D\], .border-\[\#04aa6d\] {
+  border-color: #04AA6D !important;
 }
-.border-l-\[\#04aa6d\] {
-  border-left-color: #2563eb !important;
+.border-l-\[\#04AA6D\], .border-l-\[\#04aa6d\] {
+  border-left-color: #04AA6D !important;
 }
 
 /* Focus Mode: Hide top bar when reading a book chapter, but keep bottom navigation active */

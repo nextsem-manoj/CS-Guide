@@ -58,4 +58,16 @@ This version has breaking changes — APIs, conventions, and file structure may 
   3. **Android App Bundle (.aab) Architecture Splitting**: Always package and release using Google Play App Bundles (`.aab`). Google Play dynamically generates device-specific split APKs, delivering only the necessary native CPU architecture (`arm64-v8a` or `armeabi-v7a`) and screen density to the user's device, cutting user download size by up to 60%.
   4. **Dynamic Cloud Delivery for Heavy Educational Media**: Never bundle offline curriculum PDFs, uncompressed audio/video, or multi-megabyte image assets directly inside the native APK/AAB binary. Always stream heavy textbook PDFs dynamically from Firebase Storage / CDN with on-demand local caching.
   5. **Vector & WebP Asset Compression**: All static app assets, illustrations, and icons must strictly use SVG vectors or WebP compressed raster formats. Never bundle uncompressed PNGs or RAW images.
+- **Real Registered Users Only & Zero Fake/AI-Made Profiles Standard (PERMANENT RULE)**:
+  1. Show strictly only actual users who have registered with real accounts via Firebase Auth / Firestore (`users_progress`).
+  2. Completely hide and eliminate all fake, AI-made, synthetic, guest (`guest@nextsem.local`), or placeholder demo users across all dashboards, student trays, evaluation studios, and community feeds.
+  3. Never fabricate or auto-generate fake completed days or dummy submissions for any user. If a student has 0 completed days, display their true 0-day status without inventing submissions.
+  4. If no submissions exist, display a clean, authentic "No Submissions Yet" empty state rather than injecting placeholder or demo data.
+- **Strict 2-Color Theme Standard (Vibrant Emerald Green & Pure White - PERMANENT RULE)**:
+  Exclusively use Vibrant Emerald Green (`#04AA6D`) and Pure White (`#ffffff`), adapted cleanly for both Dark (`#000000` / `#05080f`) and Light (`#ffffff` / `#f8fafc`) themes with zero extraneous rainbow/blue/purple colors.
+- **Exact Code & Demo Links Standard (PERMANENT RULE)**:
+  Code and Demo links must always point to the exact repository folder (`bca-day-${padDay}`) and matching live GitHub Pages deployment for that specific day as provided during lesson completion.
+- **Instant WhatsApp & Email Evaluation Notification Standard (PERMANENT RULE)**:
+  When evaluating any student submission, generate instant WhatsApp and Email notification dispatches to inform the student on their registered email and WhatsApp immediately upon evaluation.
+
 

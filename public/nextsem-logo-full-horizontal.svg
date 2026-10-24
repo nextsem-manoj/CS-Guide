@@ -13,9 +13,9 @@
     </filter>
   </defs>
 
-  <!-- Left Icon Emblem Container -->
-  <rect x="10" y="10" width="100" height="100" rx="24" fill="url(#nsHCardGrad)" stroke="#04AA6D" stroke-width="3" stroke-opacity="0.9"/>
-  <rect x="16" y="16" width="88" height="88" rx="18" fill="none" stroke="#10b981" stroke-width="1" stroke-opacity="0.3"/>
+  <!-- Left Icon Emblem Container (Electric Blue Border matching official logo) -->
+  <rect x="10" y="10" width="100" height="100" rx="24" fill="url(#nsHCardGrad)" stroke="#2563eb" stroke-width="4" stroke-opacity="0.95"/>
+  <rect x="16" y="16" width="88" height="88" rx="18" fill="none" stroke="#38bdf8" stroke-width="1" stroke-opacity="0.3"/>
 
   <!-- BOLD N in Icon -->
   <path d="M 28 85 V 35 L 56 85 V 35" fill="none" stroke="url(#nsHGreenGrad)" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" filter="url(#nsHGlow)"/>

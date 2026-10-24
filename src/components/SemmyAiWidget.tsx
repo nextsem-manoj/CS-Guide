@@ -24,11 +24,6 @@ const GREETINGS = [
 ];
 
 export default function SemmyAiWidget() {
-  // ❌ Do NOT render Semmy AI chatbot on native Android/iOS app
-  if (typeof window !== 'undefined' && Capacitor.isNativePlatform()) {
-    return null;
-  }
-
   const [isOpen, setIsOpen] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
   const [input, setInput] = useState('');

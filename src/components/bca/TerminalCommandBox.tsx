@@ -12,6 +12,8 @@ import {
   Sparkles,
   Folder
 } from "lucide-react";
+import { useCrossDeviceSync } from "@/context/CrossDeviceSyncContext";
+import { safeInstantCopy } from "@/lib/clipboard";
 
 export interface TerminalCommandBoxProps {
   /** Single command string or array of commands to display */
@@ -150,31 +152,36 @@ export function TerminalCommandBox({
   const executableCommands = commandList.filter((c) => !c.trim().startsWith("#"));
   const oneLinerCommand = executableCommands.join(" && ");
 
-  const handleCopyAll = async () => {
+  let copyAndSyncToCloud: ((text: string, label?: string) => boolean) | null = null;
+  try {
+    const sync = useCrossDeviceSync();
+    copyAndSyncToCloud = sync?.copyAndSyncToCloud || null;
+  } catch {
+    // outside provider
+  }
+
+  const handleCopyAll = () => {
     const textToCopy = activeTab === "oneliner" 
       ? oneLinerCommand 
       : commandList.join("\n");
       
-    try {
-      await navigator.clipboard.writeText(textToCopy);
-      setCopiedAll(true);
-      setTimeout(() => setCopiedAll(false), 2000);
-    } catch {
-      // Fallback
-      setCopiedAll(true);
-      setTimeout(() => setCopiedAll(false), 2000);
+    if (copyAndSyncToCloud) {
+      copyAndSyncToCloud(textToCopy, title || "Terminal Command");
+    } else {
+      safeInstantCopy(textToCopy);
     }
+    setCopiedAll(true);
+    setTimeout(() => setCopiedAll(false), 2000);
   };
 
-  const handleCopySingle = async (cmd: string, index: number) => {
-    try {
-      await navigator.clipboard.writeText(cmd.trim());
-      setCopiedSingleIndex(index);
-      setTimeout(() => setCopiedSingleIndex(null), 1800);
-    } catch {
-      setCopiedSingleIndex(index);
-      setTimeout(() => setCopiedSingleIndex(null), 1800);
+  const handleCopySingle = (cmd: string, index: number) => {
+    if (copyAndSyncToCloud) {
+      copyAndSyncToCloud(cmd.trim(), "Terminal Command");
+    } else {
+      safeInstantCopy(cmd.trim());
     }
+    setCopiedSingleIndex(index);
+    setTimeout(() => setCopiedSingleIndex(null), 1800);
   };
 
   return (
