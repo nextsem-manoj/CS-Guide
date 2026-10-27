@@ -19,12 +19,14 @@ import BugDetectiveLab from "@/components/bca/BugDetectiveLab";
 import TerminalCommandBox from "@/components/bca/TerminalCommandBox";
 import PracticalLessonExplainer from "@/components/bca/PracticalLessonExplainer";
 import HtmlSemanticCodingTest from "@/components/bca/HtmlSemanticCodingTest";
+import PracticalTaskLiveCodingStudio from "@/components/bca/PracticalTaskLiveCodingStudio";
 import MobileToPcCompanionBar from "@/components/bca/MobileToPcCompanionBar";
 import LineByLineInteractiveStudio from "@/components/bca/LineByLineInteractiveStudio";
 import Day1GitHubRepoCreationGuide from "@/components/bca/Day1GitHubRepoCreationGuide";
 import BcaStoriesTray from "@/components/bca/BcaStoriesTray";
 import { useCrossDeviceSync } from "@/context/CrossDeviceSyncContext";
 import { safeInstantCopy } from "@/lib/clipboard";
+import { Zap } from "lucide-react";
 
 interface Props {
   lesson: PracticalLesson;
@@ -53,7 +55,7 @@ export default function BcaPracticalLessonClient({ lesson }: Props) {
   const [currentStep, setCurrentStep] = useState<number | "all">("all");
   // Layout View Mode: 'reference' is the Traditional / Old Layout (Default), 'interactive' is the New Line-by-Line Studio
   const [studioMode, setStudioMode] = useState<"interactive" | "reference">("reference");
-  const [labTab, setLabTab] = useState<"guide" | "preview">("guide");
+  const [labTab, setLabTab] = useState<"test" | "guide" | "preview">("test");
   const [copiedCode, setCopiedCode] = useState<boolean>(false);
 
   // Local VS Code Checklist & Copy States
@@ -794,14 +796,26 @@ export default function BcaPracticalLessonClient({ lesson }: Props) {
                 </div>
 
                 <div className="flex flex-wrap items-center gap-2 shrink-0">
-                  {/* View Mode Tabs: Guide vs Live Preview */}
+                  {/* View Mode Tabs: Live Test vs Guide vs Live Preview */}
                   <div className="flex items-center bg-slate-100 dark:bg-neutral-900 p-1 rounded-xl border border-slate-200 dark:border-neutral-800 text-xs font-bold">
+                    <button
+                      type="button"
+                      onClick={() => setLabTab("test")}
+                      className={`px-3 py-1 rounded-lg transition-all cursor-pointer flex items-center gap-1.5 ${
+                        labTab === "test"
+                          ? "bg-blue-600 text-white shadow-sm"
+                          : "text-slate-600 dark:text-slate-400 hover:text-black dark:hover:text-white"
+                      }`}
+                    >
+                      <Zap size={13} className={labTab === "test" ? "text-amber-300 fill-amber-300" : "text-amber-500"} />
+                      <span>Live Coding Test</span>
+                    </button>
                     <button
                       type="button"
                       onClick={() => setLabTab("guide")}
                       className={`px-3 py-1 rounded-lg transition-all cursor-pointer flex items-center gap-1.5 ${
                         labTab === "guide"
-                          ? "bg-white dark:bg-neutral-950 text-blue-600 dark:text-blue-400 shadow-sm"
+                          ? "bg-blue-600 text-white shadow-sm"
                           : "text-slate-600 dark:text-slate-400 hover:text-black dark:hover:text-white"
                       }`}
                     >
@@ -828,8 +842,22 @@ export default function BcaPracticalLessonClient({ lesson }: Props) {
                 </div>
               </div>
 
-              {/* Lab Tab 1: Live Expected Browser Preview */}
-              {labTab === "preview" ? (
+              {/* Lab Tab 1: Live Interactive HTML/CSS Test Studio (Left Side Test & Code, Right Side Live Browser, Auto-Advance) */}
+              {labTab === "test" ? (
+                <PracticalTaskLiveCodingStudio
+                  lesson={lesson}
+                  nextLesson={nextLesson}
+                  onAllTasksPassed={() => {
+                    setVsCodeTasksChecked((prev) => {
+                      const updated = { ...prev };
+                      lesson.practicalLab.tasks.forEach((_, idx) => {
+                        updated[idx] = true;
+                      });
+                      return updated;
+                    });
+                  }}
+                />
+              ) : labTab === "preview" ? (
                 <div className="space-y-4">
                   <div className="rounded-2xl border border-slate-200 dark:border-neutral-800 bg-slate-100 dark:bg-neutral-900 overflow-hidden shadow-inner">
                     {/* Simulated Browser Chrome Header */}

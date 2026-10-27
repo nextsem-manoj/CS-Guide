@@ -83,6 +83,7 @@ interface StudentProgressContextType {
   isDayCompleted: (day: number) => boolean;
   isDayUnlocked: (day: number) => boolean;
   completeDayWithGitHub: (day: number, githubUrl: string) => Promise<{ success: boolean; message: string }>;
+  completeDayWithCodingTest: (day: number) => Promise<{ success: boolean; message: string }>;
   setSelectedTrack: (track: string) => Promise<void>;
   setGithubUsername: (username: string) => Promise<void>;
   socialLinks: StudentSocialLinks;
@@ -822,6 +823,36 @@ export function StudentProgressProvider({ children }: { children: ReactNode }) {
     return { success: true, message: `Day ${day} successfully submitted! Story status published to community feed.` };
   }, [user, completedDays, githubRepoUrls, githubUsername, selectedTrack]);
 
+  const completeDayWithCodingTest = useCallback(async (day: number): Promise<{ success: boolean; message: string }> => {
+    const activeEmail = user ? user.email : "guest";
+    const newCompletedDays = Array.from(new Set([...completedDays, day])).sort((a, b) => a - b);
+    setCompletedDays(newCompletedDays);
+
+    try {
+      localStorage.setItem(`nextsem_practical_completed_${activeEmail}`, JSON.stringify(newCompletedDays));
+      localStorage.setItem(`nextsem_practical_day_${day}_done_${activeEmail}`, "true");
+    } catch {
+      // ignore
+    }
+
+    if (user && !user.isGuest) {
+      setDoc(doc(db, "users_progress", user.uid), {
+        email: user.email,
+        displayName: user.name || "BCA Student",
+        photoURL: user.photo || null,
+        bca_practical: {
+          completedDays: newCompletedDays,
+          selectedTrack,
+          lastUpdated: new Date().toISOString()
+        }
+      }, { merge: true })
+      .then(() => setIsCloudSynced(true))
+      .catch((err) => console.warn("Firestore sync warning:", err));
+    }
+
+    return { success: true, message: `Day ${day} practical coding test verified!` };
+  }, [user, completedDays, selectedTrack]);
+
   const setSelectedTrack = useCallback(async (track: string) => {
     setSelectedTrackState(track);
     const email = user ? user.email : "guest";
@@ -1015,6 +1046,7 @@ export function StudentProgressProvider({ children }: { children: ReactNode }) {
     isDayCompleted,
     isDayUnlocked,
     completeDayWithGitHub,
+    completeDayWithCodingTest,
     setSelectedTrack,
     setGithubUsername,
     removeDayProgress
@@ -1047,6 +1079,7 @@ export function StudentProgressProvider({ children }: { children: ReactNode }) {
     isDayCompleted,
     isDayUnlocked,
     completeDayWithGitHub,
+    completeDayWithCodingTest,
     setSelectedTrack,
     setGithubUsername
   ]);
