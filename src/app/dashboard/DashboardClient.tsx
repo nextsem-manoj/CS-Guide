@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import Link from "next/link";
@@ -565,7 +565,7 @@ export default function DashboardClient() {
       `💬 *Faculty Remarks:*\n"${evaluatedFeedback}"\n\n` +
       `🌐 *Live Project Demo:* ${evaluatingSubmission.githubPagesUrl}\n` +
       `💻 *Source Code:* ${evaluatingSubmission.githubRepoUrl}\n\n` +
-      `🚀 *NextSem Academy Verified Practical Portal:*\nhttps://ignou-study-notes-by-nextsem.web.app/dashboard`;
+      `🚀 *NextSem Academy Verified Practical Portal:*\nhttps://cs.nextsem.online/dashboard`;
 
     if (notifyWhatsapp) {
       const cleanPhone = studentPhone.replace(/[^0-9]/g, "");
@@ -587,7 +587,7 @@ export default function DashboardClient() {
         `Live Demo: ${evaluatingSubmission.githubPagesUrl}\n` +
         `Source Code: ${evaluatingSubmission.githubRepoUrl}\n\n` +
         `View your verified transcript anytime on the portal:\n` +
-        `https://ignou-study-notes-by-nextsem.web.app/dashboard\n\n` +
+        `https://cs.nextsem.online/dashboard\n\n` +
         `Best regards,\n` +
         `Er. Manoj Kumar\n` +
         `Lead Evaluator & Curriculum Author\n` +
@@ -713,7 +713,7 @@ export default function DashboardClient() {
         `2. Apply the requested corrections.\n` +
         `3. Push your updated code to your GitHub repo.\n` +
         `4. Re-submit your project link on the practical lesson page:\n` +
-        `https://ignou-study-notes-by-nextsem.web.app/bca/practical/day-${sub.day}\n\n` +
+        `https://cs.nextsem.online/bca/practical/day-${sub.day}\n\n` +
         `Er. Manoj Kumar will review your updated submission once you re-submit! 🚀`;
 
       const cleanPhone = studentPhone.replace(/[^0-9]/g, "");
@@ -731,7 +731,7 @@ export default function DashboardClient() {
         `Your submission for Day ${sub.day}: "${sub.lessonTitle}" has been reviewed by Er. Manoj Kumar and reset for revisions.\n\n` +
         `Faculty Instructions:\n${reasonText}\n\n` +
         `Please practice and update your code in VS Code, push your commits to GitHub, and re-submit your repository URL at:\n` +
-        `https://ignou-study-notes-by-nextsem.web.app/bca/practical/day-${sub.day}\n\n` +
+        `https://cs.nextsem.online/bca/practical/day-${sub.day}\n\n` +
         `Er. Manoj Kumar will evaluate your new submission as soon as you re-submit.\n\n` +
         `Best regards,\n` +
         `Er. Manoj Kumar\n` +

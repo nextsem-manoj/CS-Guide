@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --webpack -p 3001",
+    "server": "next dev --webpack -p 3001",
     "build": "node scripts/generate-search-index.js && next build --webpack && node scripts/verify-sitemap.js",
     "start": "next start -p 3001",
     "lint": "eslint",

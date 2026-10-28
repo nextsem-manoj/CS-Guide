@@ -42,7 +42,7 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://ignou-study-notes-by-nextsem.web.app"),
+  metadataBase: new URL("https://cs.nextsem.online"),
   title: "CS Guide by NextSem | University Computer Science (BCA & MCA) | Er. Manoj Kumar",
   description: "Universal University Computer Science curriculum, line-by-line textbook units, practical coding labs, and interactive simulators for all CS students by Er. Manoj Kumar.",
   manifest: "/manifest.json",
@@ -66,7 +66,7 @@ export const metadata: Metadata = {
     "ignou bca syllabus semester wise",
     "ignou online learning free"
   ],
-  authors: [{ name: "Er. Manoj Kumar", url: "https://ignou-study-notes-by-nextsem.web.app" }],
+  authors: [{ name: "Er. Manoj Kumar", url: "https://cs.nextsem.online" }],
   creator: "Er. Manoj Kumar",
   publisher: "Nextsem Academy",
   formatDetection: {
@@ -77,7 +77,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "CS Guide by NextSem | University Computer Science (BCA & MCA)",
     description: "Universal University Computer Science curriculum, textbook units, practical labs, and interactive simulators by Er. Manoj Kumar.",
-    url: "https://ignou-study-notes-by-nextsem.web.app",
+    url: "https://cs.nextsem.online",
     siteName: "Nextsem Academy",
     images: [
       {

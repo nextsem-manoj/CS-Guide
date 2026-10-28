@@ -24,6 +24,7 @@ import MobileToPcCompanionBar from "@/components/bca/MobileToPcCompanionBar";
 import LineByLineInteractiveStudio from "@/components/bca/LineByLineInteractiveStudio";
 import Day1GitHubRepoCreationGuide from "@/components/bca/Day1GitHubRepoCreationGuide";
 import BcaStoriesTray from "@/components/bca/BcaStoriesTray";
+import BcaPracticalSidebar from "@/components/bca/BcaPracticalSidebar";
 import { useCrossDeviceSync } from "@/context/CrossDeviceSyncContext";
 import { safeInstantCopy } from "@/lib/clipboard";
 import { Zap } from "lucide-react";
@@ -295,12 +296,13 @@ export default function BcaPracticalLessonClient({ lesson }: Props) {
 
   return (
     <div className="min-h-screen bg-white dark:bg-black text-black dark:text-white flex flex-col font-sans pb-24 transition-colors">
-      {/* Top Header */}
+      {/* Top Header (center day dropdown hidden on desktop because sidebar is active) */}
       <BcaHeaderNav 
         currentSubjectCode={`Day ${lesson.day}`} 
         currentSubjectName={lesson.title} 
         showCompanionIcon={true}
         onOpenCompanion={() => setIsCompanionModalOpen(true)}
+        hideCenterDropdownOnDesktop={true}
       />
 
       {/* Dual-Device Mobile to PC Companion Modal (hidden by default, triggered by top navbar icon) */}
@@ -317,7 +319,16 @@ export default function BcaPracticalLessonClient({ lesson }: Props) {
         onClose={() => setIsCompanionModalOpen(false)}
       />
 
-      <main className="max-w-5xl mx-auto px-4 sm:px-6 py-6 w-full flex-1">
+      {/* Responsive Container: Sticky Left Sidebar on Desktop + Centered Main Stage */}
+      <div className="flex-1 w-full max-w-[1720px] mx-auto flex flex-col lg:flex-row items-start">
+        {/* Desktop Sticky Left Sidebar (All Sprints & Lessons) */}
+        <BcaPracticalSidebar 
+          currentDay={lesson.day} 
+          className="hidden lg:flex w-72 xl:w-80 shrink-0 sticky top-14 h-[calc(100vh-3.5rem)]"
+        />
+
+        {/* Center / Main Lesson Content */}
+        <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 w-full flex-1 min-w-0">
         {/* Clickable Breadcrumbs */}
         <nav aria-label="Breadcrumbs" className="flex flex-wrap items-center gap-2 text-xs text-slate-600 dark:text-slate-400 font-bold py-1 mb-4">
           <Link href="/" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors flex items-center gap-1">
@@ -1778,7 +1789,7 @@ export default function BcaPracticalLessonClient({ lesson }: Props) {
           <div className="flex flex-wrap items-center gap-2.5">
             {/* WhatsApp Share Button */}
             <a
-              href={`https://api.whatsapp.com/send?text=${encodeURIComponent(`🚀 Practicing Day ${lesson.day}: ${lesson.title} on NextSem BCA Practical Portal! 💻 Check out the lesson: https://ignou-study-notes-by-nextsem.web.app/bca/practical/${lesson.slug}`)}`}
+              href={`https://api.whatsapp.com/send?text=${encodeURIComponent(`🚀 Practicing Day ${lesson.day}: ${lesson.title} on NextSem BCA Practical Portal! 💻 Check out the lesson: https://cs.nextsem.online/bca/practical/${lesson.slug}`)}`}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs transition-all active:scale-95 shadow-sm shrink-0"
@@ -1833,6 +1844,7 @@ export default function BcaPracticalLessonClient({ lesson }: Props) {
           </div>
         </div>
       </main>
+      </div>
     </div>
   );
 }

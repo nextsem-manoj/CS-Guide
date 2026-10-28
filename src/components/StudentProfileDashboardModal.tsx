@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
@@ -606,7 +606,7 @@ export default function StudentProfileDashboardModal({ isOpen, onClose }: Props)
           </Link>
 
           <a
-            href={`https://api.whatsapp.com/send?text=${encodeURIComponent("🚀 Check out my BCA Practical Learning Progress on NextSem: https://ignou-study-notes-by-nextsem.web.app/bca/practical")}`}
+            href={`https://api.whatsapp.com/send?text=${encodeURIComponent("🚀 Check out my BCA Practical Learning Progress on NextSem: https://cs.nextsem.online/bca/practical")}`}
             target="_blank"
             rel="noopener noreferrer"
             className="flex-1 min-w-[140px] px-3.5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center justify-center gap-2 transition-all active:scale-95 shadow-sm"

@@ -15,7 +15,7 @@ import { Capacitor } from "@capacitor/core";
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY || "AIzaSyDBoWw_8QOA_S_UfTRQQcNc-CGLBbctMAQ",
-  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN || "ignou-study-notes-by-nextsem.firebaseapp.com",
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN || "cs.nextsem.online",
   projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || "ignou-study-notes-by-nextsem",
   storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET || "ignou-study-notes-by-nextsem.firebasestorage.app",
   messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID || "498697546118",
@@ -31,7 +31,7 @@ googleProvider.setCustomParameters({
 });
 const db = getFirestore(app);
 
-// In-app Google Authentication with seamless popup & redirect fallback
+// In-app Google Authentication without popup windows (same-tab redirect)
 async function signInWithGoogle() {
   if (Capacitor.isNativePlatform()) {
     const { GoogleAuth } = await import("@codetrix-studio/capacitor-google-auth");
@@ -45,17 +45,8 @@ async function signInWithGoogle() {
     const credential = GoogleAuthProvider.credential(googleUser.authentication.idToken);
     return signInWithCredential(auth, credential);
   } else {
-    // Try signInWithPopup first (fast, avoids cross-origin storage partitioning issues on modern browsers)
-    try {
-      return await signInWithPopup(auth, googleProvider);
-    } catch (popupErr: any) {
-      // If popup was explicitly blocked by the browser, fallback to redirect
-      if (popupErr?.code === "auth/popup-blocked" || popupErr?.code === "auth/cancelled-popup-request") {
-        console.warn("Popup blocked by browser, falling back to signInWithRedirect");
-        return await signInWithRedirect(auth, googleProvider);
-      }
-      throw popupErr;
-    }
+    // Zero popup windows: Use seamless same-tab redirect
+    return await signInWithRedirect(auth, googleProvider);
   }
 }
 

@@ -20,21 +20,28 @@ try {
   }
 
   // Define critical URLs to verify
-  const requiredUrls = [
-    'https://ignou-study-notes-by-nextsem.web.app/',
-    'https://ignou-study-notes-by-nextsem.web.app/about',
-    'https://ignou-study-notes-by-nextsem.web.app/bca',
-    'https://ignou-study-notes-by-nextsem.web.app/bca/semester-1',
-    'https://ignou-study-notes-by-nextsem.web.app/profile'
+  const requiredPaths = [
+    '',
+    '/about',
+    '/bca',
+    '/bca/semester-1',
+    '/profile'
   ];
 
   let missingCount = 0;
-  requiredUrls.forEach((url) => {
-    if (!content.includes(url)) {
-      console.error(`❌ Error: sitemap is missing required URL: ${url}`);
+  requiredPaths.forEach((subpath) => {
+    const primaryUrl = `https://cs.nextsem.online${subpath}`;
+    const primaryUrlWithSlash = subpath === '' ? 'https://cs.nextsem.online/' : primaryUrl;
+    const legacyUrl = `https://ignou-study-notes-by-nextsem.web.app${subpath}`;
+    const legacyUrlWithSlash = subpath === '' ? 'https://ignou-study-notes-by-nextsem.web.app/' : legacyUrl;
+
+    const found = content.includes(primaryUrl) || content.includes(primaryUrlWithSlash) || content.includes(legacyUrl) || content.includes(legacyUrlWithSlash);
+
+    if (!found) {
+      console.error(`❌ Error: sitemap is missing required URL for path: "${subpath || '/'}"`);
       missingCount++;
     } else {
-      console.log(`  ✓ Found URL: ${url}`);
+      console.log(`  ✓ Found URL for path: ${subpath || '/'}`);
     }
   });
 

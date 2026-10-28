@@ -18,6 +18,7 @@ import { triggerCelebration } from "@/lib/celebration";
 import StudentProfileDashboardModal from "@/components/StudentProfileDashboardModal";
 import InAppAuthModal from "@/components/auth/InAppAuthModal";
 import { getLessonTitleByDay } from "@/data/bcaStoriesData";
+import { getNextPracticalDayUrl } from "@/data/bcaPracticalData";
 
 export interface StudentProfile {
   uid: string;
@@ -403,6 +404,15 @@ export function StudentProgressProvider({ children }: { children: ReactNode }) {
           localStorage.setItem("nextsem_user", JSON.stringify(profile));
           loadLocalProgress(profile.email);
           syncWithFirestore(fbUser).catch(() => {});
+
+          // Auto-redirect to latest lesson on successful Google redirect return
+          if (typeof window !== "undefined" && sessionStorage.getItem("nextsem_login_redirect_to_next_day") === "true") {
+            sessionStorage.removeItem("nextsem_login_redirect_to_next_day");
+            const saved = localStorage.getItem(`nextsem_practical_completed_${profile.email}`);
+            const completed: number[] = saved ? JSON.parse(saved) : [];
+            const targetUrl = getNextPracticalDayUrl(completed);
+            window.location.href = targetUrl;
+          }
         }
       })
       .catch((err) => {
@@ -427,6 +437,15 @@ export function StudentProgressProvider({ children }: { children: ReactNode }) {
 
         // Background non-blocking sync
         syncWithFirestore(firebaseUser).catch(() => {});
+
+        // Auto-redirect to latest lesson if login triggered
+        if (typeof window !== "undefined" && sessionStorage.getItem("nextsem_login_redirect_to_next_day") === "true") {
+          sessionStorage.removeItem("nextsem_login_redirect_to_next_day");
+          const saved = localStorage.getItem(`nextsem_practical_completed_${profile.email}`);
+          const completed: number[] = saved ? JSON.parse(saved) : [];
+          const targetUrl = getNextPracticalDayUrl(completed);
+          window.location.href = targetUrl;
+        }
       } else {
         // Fallback to active saved session in localStorage (guest, email, or local login)
         try {

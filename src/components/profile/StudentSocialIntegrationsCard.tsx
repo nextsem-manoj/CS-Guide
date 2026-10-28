@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useState, useEffect } from "react";
 import { useStudentProgress } from "@/context/StudentProgressContext";
@@ -49,7 +49,7 @@ export default function StudentSocialIntegrationsCard() {
   const shareMessage = encodeURIComponent(
     `🚀 Hi! I am practicing full-stack BCA coding on NextSem Academy.\n` +
     `✅ Completed: ${completedDays.length} Practical Coding Days with real GitHub pushes!\n` +
-    `Check out the BCA Practical Portal: https://ignou-study-notes-by-nextsem.web.app/bca/practical`
+    `Check out the BCA Practical Portal: https://cs.nextsem.online/bca/practical`
   );
   const shareUrl = `https://api.whatsapp.com/send?text=${shareMessage}`;
 

@@ -398,7 +398,7 @@ const masterIndexHtml = `<!DOCTYPE html>
       </div>
 
       <div>
-        <a href="https://ignou-study-notes-by-nextsem.web.app/bca/practical/" target="_blank" class="portal-link-btn">
+        <a href="https://cs.nextsem.online/bca/practical/" target="_blank" class="portal-link-btn">
           <span>Explore NextSem BCA Practical Learning Portal</span>
           <span>→</span>
         </a>
@@ -434,7 +434,7 @@ ${renderLessonCards(sprint3Lessons)}
 
     <footer>
       <p>
-        Curriculum and practical architecture followed via <a href="https://ignou-study-notes-by-nextsem.web.app/bca/practical/" target="_blank">NextSem Academy BCA Practical Portal</a> • Authored by <strong>Er. Manoj Kumar</strong>
+        Curriculum and practical architecture followed via <a href="https://cs.nextsem.online/bca/practical/" target="_blank">NextSem Academy BCA Practical Portal</a> • Authored by <strong>Er. Manoj Kumar</strong>
       </p>
     </footer>
   </div>

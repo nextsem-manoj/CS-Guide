@@ -1,4 +1,4 @@
-import React from "react";
+﻿import React from "react";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getBcaLesson, bcaLessons } from "@/data/bcaLessonsData";
@@ -28,13 +28,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     openGraph: {
       title: `${lesson.title} — IGNOU BCA Semester 1`,
       description: lesson.seoDescription,
-      url: `https://ignou-study-notes-by-nextsem.web.app/bca/semester-1/${subjectSlug}/${lessonSlug}`,
+      url: `https://cs.nextsem.online/bca/semester-1/${subjectSlug}/${lessonSlug}`,
       siteName: "Nextsem Academy",
       images: [{ url: "/og-image.png", width: 1200, height: 630 }],
       type: "article",
     },
     alternates: {
-      canonical: `https://ignou-study-notes-by-nextsem.web.app/bca/semester-1/${subjectSlug}/${lessonSlug}`,
+      canonical: `https://cs.nextsem.online/bca/semester-1/${subjectSlug}/${lessonSlug}`,
     },
   };
 }

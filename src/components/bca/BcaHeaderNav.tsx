@@ -24,6 +24,7 @@ interface BcaHeaderNavProps {
   points?: number;
   onOpenCompanion?: () => void;
   showCompanionIcon?: boolean;
+  hideCenterDropdownOnDesktop?: boolean;
 }
 
 export default function BcaHeaderNav({
@@ -31,7 +32,8 @@ export default function BcaHeaderNav({
   currentSubjectName = "Job-Oriented Training Portal",
   points = 0,
   onOpenCompanion,
-  showCompanionIcon = false
+  showCompanionIcon = false,
+  hideCenterDropdownOnDesktop = false
 }: BcaHeaderNavProps) {
   const router = useRouter();
   const pathname = usePathname();
@@ -123,7 +125,7 @@ export default function BcaHeaderNav({
         </div>
 
         {/* Center: Responsive Subject & Day Switcher */}
-        <div className="flex-1 min-w-0 max-w-sm sm:max-w-md mx-1 sm:mx-3 flex justify-center">
+        <div className={`flex-1 min-w-0 max-w-sm sm:max-w-md mx-1 sm:mx-3 flex justify-center ${hideCenterDropdownOnDesktop ? 'lg:hidden' : ''}`}>
           <button
             onClick={() => setDropdownOpen(!dropdownOpen)}
             className="flex items-center justify-between gap-2 px-3 py-1.5 sm:py-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-neutral-900 dark:hover:bg-neutral-800 border border-slate-200 dark:border-neutral-800 text-black dark:text-white text-xs sm:text-sm font-extrabold shadow-sm transition-all active:scale-95 w-full cursor-pointer max-w-full"

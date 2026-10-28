@@ -6,7 +6,7 @@ import { PRACTICAL_LESSONS } from "../data/bcaPracticalData";
 export const dynamic = "force-static";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://ignou-study-notes-by-nextsem.web.app";
+  const baseUrl = "https://cs.nextsem.online";
 
   // Base paths
   const baseRoutes = [

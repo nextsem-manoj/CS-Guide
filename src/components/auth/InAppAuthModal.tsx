@@ -36,22 +36,18 @@ export default function InAppAuthModal({ isOpen, onClose, defaultTab = "login" }
 
   const checkAndRedirectToNextDay = (userEmail?: string) => {
     if (typeof window === "undefined") return;
-    const isPending = sessionStorage.getItem("nextsem_login_redirect_to_next_day") === "true";
-    const isHome = window.location.pathname === "/";
-    if (isPending || isHome) {
-      sessionStorage.removeItem("nextsem_login_redirect_to_next_day");
-      try {
-        const emailVal = userEmail || (() => {
-          const userRaw = localStorage.getItem("nextsem_user");
-          return userRaw ? JSON.parse(userRaw).email : "guest";
-        })();
-        const saved = localStorage.getItem(`nextsem_practical_completed_${emailVal}`);
-        const completed: number[] = saved ? JSON.parse(saved) : [];
-        const targetUrl = getNextPracticalDayUrl(completed);
-        window.location.href = targetUrl;
-      } catch {
-        window.location.href = "/bca/practical/day-1-html-setup-first-webpage";
-      }
+    sessionStorage.removeItem("nextsem_login_redirect_to_next_day");
+    try {
+      const emailVal = userEmail || (() => {
+        const userRaw = localStorage.getItem("nextsem_user");
+        return userRaw ? JSON.parse(userRaw).email : "guest";
+      })();
+      const saved = localStorage.getItem(`nextsem_practical_completed_${emailVal}`);
+      const completed: number[] = saved ? JSON.parse(saved) : [];
+      const targetUrl = getNextPracticalDayUrl(completed);
+      window.location.href = targetUrl;
+    } catch {
+      window.location.href = "/bca/practical/day-1-html-setup-first-webpage";
     }
   };
 

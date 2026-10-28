@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+﻿import type { Metadata } from 'next';
 import React, { Suspense } from 'react';
 import Sprint1TestClient from './Sprint1TestClient';
 
@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Sprint 1: HTML Coding Practical Concept Test | NextSem BCA Practical',
     description: 'Test your practical HTML coding skills with 12 real-world code snippet challenges, instant W3C standard feedback, and verified certification.',
-    url: 'https://ignou-study-notes-by-nextsem.web.app/tests/sprint1',
+    url: 'https://cs.nextsem.online/tests/sprint1',
   },
   twitter: {
     card: 'summary_large_image',

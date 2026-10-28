@@ -21,6 +21,26 @@ export interface JobListing {
 
 export const JOBS_DATA: JobListing[] = [
   {
+    id: "job-cdot-001",
+    title: "Young Professional (Product Engineering & Sustenance)",
+    company: "Centre for Development of Telematics (C-DOT), Govt. of India",
+    logo: "🏛️",
+    location: "New Delhi (Pan-India Deployment)",
+    workType: "On-Site",
+    type: "Contract",
+    experience: "Freshers",
+    salary: "₹12.0 LPA (₹12 Lakh / Annum)",
+    degrees: ["BCA", "MCA", "B.Tech"],
+    category: "Govt IT",
+    postedDate: "Oct 2026",
+    skills: ["TRINETRA Cyber Security", "Python", "AI/ML Features", "C++", "Linux", "Bug Fixing & Testing", "Threat Detection"],
+    description: "Official recruitment for 5 Young Professionals on TRINETRA Cyber Security Platform at C-DOT (Telecom R&D Centre, Govt. of India). Contractual engagement for 2 years (extendable by 1 year). Fresher to 2 years experience eligible.",
+    applyUrl: "https://www.cdot.in/career",
+    pdfUrl: "/pdf/jobs/cdot-young-professional-product-engineering.pdf",
+    pdfFileName: "C-DOT_Young_Professional_Cyber_Security.pdf",
+    featured: true
+  },
+  {
     id: "job-000",
     title: "IT Consultant & Systems Analyst",
     company: "Accenture & Global Tech Advisory",

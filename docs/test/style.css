@@ -1,0 +1,23 @@
+body {
+    background-color: rgb(117, 116, 116);
+    color: white;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 10px solid black;
+}
+
+td,
+th {
+    border: 1px solid black;
+    padding: 8px;
+    text-align: center;
+}
+
+img {
+    width: 50%;
+    height: 60%;
+    float: left;
+}

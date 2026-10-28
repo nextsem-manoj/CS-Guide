@@ -9,6 +9,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: '/',
       disallow: ['/profile'],
     },
-    sitemap: 'https://ignou-study-notes-by-nextsem.web.app/sitemap.xml',
+    sitemap: 'https://cs.nextsem.online/sitemap.xml',
   };
 }

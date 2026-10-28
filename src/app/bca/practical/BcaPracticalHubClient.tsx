@@ -254,6 +254,33 @@ export default function BcaPracticalHubClient() {
           </div>
         </section>
 
+        {/* Featured .NET Practical Portal Banner */}
+        <div className="rounded-2xl p-4 sm:p-5 mb-8 bg-gradient-to-r from-blue-600/10 via-purple-600/10 to-indigo-600/10 border-2 border-blue-600/40 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex items-center gap-3.5">
+            <div className="w-12 h-12 rounded-2xl bg-blue-600 text-white flex items-center justify-center font-black text-xl shadow-md shrink-0">
+              🟣
+            </div>
+            <div>
+              <div className="inline-flex items-center gap-1.5 text-[10px] font-black uppercase text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/40 px-2 py-0.5 rounded-full mb-1">
+                ⭐ New Specialization Portal
+              </div>
+              <h3 className="text-sm sm:text-base font-black text-black dark:text-white">
+                .NET 9 &amp; C# Enterprise Practical Portal
+              </h3>
+              <p className="text-xs text-slate-600 dark:text-slate-400">
+                50-day job-oriented bootcamp: C# 12, Entity Framework Core 9, Minimal APIs, Blazor, Docker &amp; Azure Cloud.
+              </p>
+            </div>
+          </div>
+          <Link
+            href="/practical/dotnet"
+            className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs transition-all shadow-md active:scale-95 shrink-0"
+          >
+            <span>Open .NET Portal</span>
+            <ArrowRight size={14} />
+          </Link>
+        </div>
+
         {/* 4 Career Specialization Tracks */}
         <section className="mb-10">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">

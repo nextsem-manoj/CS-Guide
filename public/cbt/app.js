@@ -77,7 +77,7 @@
   // Firebase Configuration (NextSem CS-Guide ignou-study-notes-by-nextsem)
   const firebaseConfig = {
     apiKey: "AIzaSyDBoWw_8QOA_S_UfTRQQcNc-CGLBbctMAQ",
-    authDomain: "ignou-study-notes-by-nextsem.firebaseapp.com",
+    authDomain: "cs.nextsem.online",
     projectId: "ignou-study-notes-by-nextsem",
     storageBucket: "ignou-study-notes-by-nextsem.firebasestorage.app",
     messagingSenderId: "498697546118",

@@ -47,7 +47,7 @@ npx firebase-tools hosting:channel:deploy feature-my-new-feature --expires 7d --
 
 ## Production Deploy
 
-**Live URL:** https://nextsem.online (also: https://bca-nextsem.web.app)
+**Live URL:** https://cs.nextsem.online (also: https://ignou-study-notes-by-nextsem.web.app)
 
 ### Deploy to Production
 ```bash

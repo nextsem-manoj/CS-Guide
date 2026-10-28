@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+﻿import type { Metadata } from 'next';
 import CbtClient from './CbtClient';
 
 export const metadata: Metadata = {
@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "National Computer Competency Assessment (100 MCQs) | NextSem CS-Guide",
     description: "Complete 100-question computer science exam with instant grading, question-by-question analysis, and Google profile verification.",
-    url: "https://ignou-study-notes-by-nextsem.web.app/cbt",
+    url: "https://cs.nextsem.online/cbt",
   },
   twitter: {
     card: "summary_large_image",

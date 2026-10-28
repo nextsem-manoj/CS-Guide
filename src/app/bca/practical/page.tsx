@@ -17,12 +17,12 @@ export const metadata: Metadata = {
     "du bca practicals"
   ],
   alternates: {
-    canonical: "https://ignou-study-notes-by-nextsem.web.app/bca/practical/"
+    canonical: "https://cs.nextsem.online/bca/practical/"
   },
   openGraph: {
     title: "BCA Practical Learning Portal | NextSem Academy",
     description: "Hands-on, job-oriented practical coding portal for BCA students. Foundation ➔ Specialization ➔ Projects ➔ GitHub ➔ Portfolio.",
-    url: "https://ignou-study-notes-by-nextsem.web.app/bca/practical/",
+    url: "https://cs.nextsem.online/bca/practical/",
     type: "website"
   },
   twitter: {

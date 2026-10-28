@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Nextsem Academy - PDF Download Generator Utility
  * Uses jsPDF to generate a real .pdf binary file — no window.open(), no print dialogs.
  * Works on Android WebView, iOS, and all mobile browsers without popup blockers.
@@ -54,7 +54,7 @@ export function generateAndDownloadLessonPdf(data: LessonPdfPayload): void {
   if (typeof window === "undefined") return;
 
   const authorName = data.author || "Nextsem";
-  const lessonUrl = data.canonicalUrl || "https://ignou-study-notes-by-nextsem.web.app/bca/semester-1";
+  const lessonUrl = data.canonicalUrl || "https://cs.nextsem.online/bca/semester-1";
   const unit = data.unit || "";
 
   // ── Init jsPDF ─────────────────────────────────────────────────────────────

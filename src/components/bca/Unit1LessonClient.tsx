@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
@@ -122,7 +122,7 @@ export default function Unit1LessonClient({ lessonId }: Props) {
 
   const triggerPdfDownload = () => {
     const contentText = lesson.content[selectedLang];
-    const canonical = `https://ignou-study-notes-by-nextsem.web.app/bca/semester-1/computer-basics-and-pc-software/${lesson.id}`;
+    const canonical = `https://cs.nextsem.online/bca/semester-1/computer-basics-and-pc-software/${lesson.id}`;
     const titleStr = selectedLang === 'hinglish' ? lesson.hinglishTitle : lesson.title;
     generateAndDownloadLessonPdf({
       title: titleStr,
@@ -770,7 +770,7 @@ export default function Unit1LessonClient({ lessonId }: Props) {
         <PdfReaderPromptModal
           isOpen={showReaderPrompt}
           onClose={() => setShowReaderPrompt(false)}
-          pdfUrl={`https://ignou-study-notes-by-nextsem.web.app/bca/semester-1/computer-basics-and-pc-software/${lesson.id}`}
+          pdfUrl={`https://cs.nextsem.online/bca/semester-1/computer-basics-and-pc-software/${lesson.id}`}
         />
       </main>
     </div>

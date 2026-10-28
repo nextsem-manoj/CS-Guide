@@ -1,4 +1,4 @@
-import React from "react";
+﻿import React from "react";
 import { Metadata } from "next";
 import CVisualLogicSimulator from "@/components/CVisualLogicSimulator";
 
@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   description: "Master C programming language from absolute scratch through interactive visual logic, memory pointer simulation, arrays, loops, and step-by-step algorithms.",
   keywords: ["C Language Visual Simulator", "Learn C Language", "C Programming Memory Pointers", "C Language Interactive", "Nextsem Academy C Course"],
   alternates: {
-    canonical: "https://ignou-study-notes-by-nextsem.web.app/c",
+    canonical: "https://cs.nextsem.online/c",
   },
 };
 

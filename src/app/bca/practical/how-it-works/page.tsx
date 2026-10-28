@@ -1,4 +1,4 @@
-import React from "react";
+﻿import React from "react";
 import { Metadata } from "next";
 import Link from "next/link";
 import { 
@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   title: "How BCA Practical & Data Sync Works | Architecture & Roadmap Guide | NextSem Academy",
   description: "Complete student guide to NextSem's zero-lag local-first browser storage, Google Cloud Firestore backup, and 360-Day (6 Semesters × 60 Practical Days) BCA industry roadmap.",
   alternates: {
-    canonical: "https://ignou-study-notes-by-nextsem.web.app/bca/practical/how-it-works"
+    canonical: "https://cs.nextsem.online/bca/practical/how-it-works"
   }
 };
 

@@ -16,11 +16,11 @@ export const metadata: Metadata = {
     "web development practicals",
     "nextsem computer science"
   ],
-  alternates: { canonical: "https://ignou-study-notes-by-nextsem.web.app" },
+  alternates: { canonical: "https://cs.nextsem.online" },
   openGraph: {
     title: "CS Guide by NextSem | University Computer Science (BCA & MCA)",
     description: "Free university computer science study materials, syllabi, interactive units, MCQs, and lab simulators.",
-    url: "https://ignou-study-notes-by-nextsem.web.app",
+    url: "https://cs.nextsem.online",
     siteName: "CS Guide by NextSem",
     type: "website",
   },
@@ -37,8 +37,8 @@ export default function Home() {
     "@graph": [
       {
         "@type": "WebSite",
-        "@id": "https://ignou-study-notes-by-nextsem.web.app/#website",
-        "url": "https://ignou-study-notes-by-nextsem.web.app",
+        "@id": "https://cs.nextsem.online/#website",
+        "url": "https://cs.nextsem.online",
         "name": "CS Guide by NextSem",
         "description": "University Computer Science Courses, Syllabi, Textbook Notes & Practical Simulators",
         "publisher": {
@@ -46,15 +46,15 @@ export default function Home() {
           "name": "CS Guide • Nextsem Online",
           "logo": {
             "@type": "ImageObject",
-            "url": "https://ignou-study-notes-by-nextsem.web.app/icon.svg"
+            "url": "https://cs.nextsem.online/icon.svg"
           }
         }
       },
       {
         "@type": "EducationalOrganization",
-        "@id": "https://ignou-study-notes-by-nextsem.web.app/#organization",
+        "@id": "https://cs.nextsem.online/#organization",
         "name": "CS Guide by NextSem",
-        "url": "https://ignou-study-notes-by-nextsem.web.app",
+        "url": "https://cs.nextsem.online",
         "founder": {
           "@type": "Person",
           "name": "Er. Manoj Kumar"
@@ -67,7 +67,7 @@ export default function Home() {
         "provider": {
           "@type": "EducationalOrganization",
           "name": "NextSem Academy CS Guide",
-          "url": "https://ignou-study-notes-by-nextsem.web.app"
+          "url": "https://cs.nextsem.online"
         }
       },
       {
@@ -77,7 +77,7 @@ export default function Home() {
         "provider": {
           "@type": "EducationalOrganization",
           "name": "NextSem Academy CS Guide",
-          "url": "https://ignou-study-notes-by-nextsem.web.app"
+          "url": "https://cs.nextsem.online"
         }
       },
       {
@@ -88,7 +88,7 @@ export default function Home() {
             "name": "Where can university computer science students access free BCA & MCA study materials?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "Students can access 100% free university Computer Science study materials, line-by-line textbook notes, interactive MCQs, and 3-Year Practical Lab (360 Days) simulators directly on https://ignou-study-notes-by-nextsem.web.app created by Er. Manoj Kumar."
+              "text": "Students can access 100% free university Computer Science study materials, line-by-line textbook notes, interactive MCQs, and 3-Year Practical Lab (360 Days) simulators directly on https://cs.nextsem.online created by Er. Manoj Kumar."
             }
           },
           {

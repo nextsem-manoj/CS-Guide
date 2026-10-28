@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useState, useEffect } from "react";
 import { 
@@ -63,7 +63,7 @@ export default function MobileToPcCompanionBar({
   // Exact canonical URL for this lesson
   const lessonUrl = typeof window !== "undefined"
     ? `${window.location.origin}/bca/practical/${daySlug}`
-    : `https://ignou-study-notes-by-nextsem.web.app/bca/practical/${daySlug}`;
+    : `https://cs.nextsem.online/bca/practical/${daySlug}`;
 
   // WhatsApp share link for student to send to their own laptop/PC WhatsApp Web
   const whatsappShareText = encodeURIComponent(
